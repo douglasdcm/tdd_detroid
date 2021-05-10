@@ -19,18 +19,15 @@ class TestMateria:
         assert actual == expected
 
     def test_materias_curso_devem_ter_identificadores_unicos(self):
-        expected = None
         gerenciador_curso = GerenciadorCurso()
-        curso = Curso()
+        curso = Curso("pedagogia")
         gerenciador_curso.atualiza_cursos(curso)
         gerenciador_curso.atualiza_cursos(curso)
         gerenciador_curso.atualiza_cursos(curso)
         curso = gerenciador_curso.pega_lista_cursos()[0]
-        materia_1 = Materia("mat")
-        materia_2 = Materia("hist")
-        curso.atualiza_materias(materia_1)
-        curso.atualiza_materias(materia_2)
-        curso.atualiza_materias(materia_2)
+        curso.atualiza_materias(Materia("mat"))
+        curso.atualiza_materias(Materia("hist"))
+        curso.atualiza_materias(Materia("vet"))
         materias = curso.pega_lista_materias()
         actual_1 = materias[0].pega_identificador_unico()
         actual_2 = materias[1].pega_identificador_unico()
