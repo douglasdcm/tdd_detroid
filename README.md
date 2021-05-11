@@ -20,9 +20,11 @@ O aplicativo simula o controle de notas dos alunos de uma universidade. Abaixo s
 ## Entrega 4 - finalizado
 1. A nota máxima de um aluno em uma matéria é 10
 2. A nota mínima de um aluno em uma matéria é 0
-## Entrega 5
+## Entrega 5 - finalizado
 1. O aluno pode trancar o curso e neste caso não pode atualizar suas notas ou matérias cursadas
 2. O coordenador do curso pode listar os alunos, notas em cada matéria e cr dos alunos
+3. O Aluno pode destrancar o curso e sua situação volta para a anterior
+4. Os alunos devem ter nomes
 ## Entrega 6
 3. O coordenador geral pode listar de todos os curso os alunos e notas em cada matéria e cr de cada aluno
 ## Entrega 7
@@ -31,3 +33,26 @@ O aplicativo simula o controle de notas dos alunos de uma universidade. Abaixo s
 ## Entrega 8
 1. O nome dos cursos e materias tem que ter no máximo 10 letras
 2. Os cursos podem ter nomes iguais se forem de unidades diferentes
+## Entrega 9
+1. O aluno só pode se increver em um curso
+2. O coordenador pode ser corrdenador de mais de um curso
+3. O coordenador pode listar os alunos, materias e notas, e crs de todos os seus cursos (coordenador de mais de um curso)
+## Entrega 10
+1. O curso pode ser cancelado
+2. Os cursos cancelados não podem aceitar increições de alunos
+3. Os cursos cancelados não pode ter coordenadores
+## Entrega 11
+1. O coordenador só pode ser coordenador de 3 cursos no máximo
+2. O coordenador geral não pode ser coordenador de cursos
+## Entrega 12
+1. O aluno tem 10 semetres para se formar
+2. Caso o aluno exceda os 10 semestres, ele é automaticamente reprovado
+## Entrega 13
+1. Cada matéria pode ter no máximo 30 alunos inscritos
+2. O aluno tem que se inscrever em 3 matérias no mínimo
+3. Caso o número de matérias faltantes de um aluno seja menor do que 3, ele pode se inscrever em 1 matéria
+## Entrega 14
+1. Caso o aluno não se increva no número mínimo de matérias por semestre, ele será automaticamente reprovado
+## Entrega 15
+1. O aluno deve ter CPF validado no sistema externo de validação de CPFs (sistema do governo)
+

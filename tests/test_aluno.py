@@ -7,7 +7,7 @@ class TestAluno():
     aluno = None
 
     def setup_method(self, method):
-        self.aluno = Aluno()
+        self.aluno = Aluno("joao")
         curso = Curso("pedagogia")
         curso.atualiza_materias(Materia("mat"))
         curso.atualiza_materias(Materia("hist"))
@@ -17,16 +17,66 @@ class TestAluno():
     def teardown_method(self, method):
         self.aluno = None
 
+    def test_aluno_deve_ter_nome(self):
+        expected = "joao"
+        actual = self.aluno.pega_nome()
+        assert actual == expected
+
+    def test_aluno_noa_pode_increver_curso_sem_materias(self):
+        curso = Curso("agricultura")
+        aluno = Aluno("jose")
+        with pytest.raises(Exception, match="Número mínimo que matérias é três. Adicione mais 3"):
+            aluno.inscreve_curso(curso)
+
+    def test_aluno_reprovado_curso_nao_pode_trancar_curso(self):
+        materias = {"mat": 0, "hist": 0, "geo": 0}
+        self.aluno.atualiza_materias_cursadas(materias)
+        with pytest.raises(Exception, match="Aluno reprovado não pode trancar o curso."):
+            self.aluno.tranca_curso(True)
+
+    def test_aluno_aprovado_curso_nao_pode_trancar_curso(self):
+        materias = {"mat": 10, "hist": 10, "geo": 10}
+        self.aluno.atualiza_materias_cursadas(materias)
+        with pytest.raises(Exception, match="Aluno aprovado não pode trancar o curso."):
+            self.aluno.tranca_curso(True)
+
+    def test_aluno_destranca_curso_situacao_volta_para_anterior(self):
+        expected = "em curso"
+        self.aluno.tranca_curso(True)
+        self.aluno.tranca_curso(False)
+        actual = self.aluno.pega_situacao()
+        assert actual == expected
+
+    def test_aluno_nao_cursou_nenhuma_materia_retorna_situacao_em_curso(self):
+        expected = "em curso"
+        self.aluno.calcula_situacao()
+        actual = self.aluno.pega_situacao()
+        assert actual == expected
+
+    def test_aluno_nao_inscrito_curso_situacao_retorna_aluno_inexistente(self):
+        expected = "aluno inexistente"
+        aluno = Aluno("marta")
+        aluno.calcula_situacao()
+        actual = aluno.pega_situacao()
+        assert actual == expected
+
+    def test_aluno_trancado_quando_calcula_situacao_retorna_trancado(self):
+        expected = "trancado"
+        self.aluno.tranca_curso(True)
+        self.aluno.calcula_situacao()
+        actual = self.aluno.pega_situacao()
+        assert actual == expected
+
     def test_aluno_curso_trancado_nao_pode_atualizar_materias_cursadas(self):
         materias = {"mat": 9}
-        self.aluno.tranca_curso()
+        self.aluno.tranca_curso(True)
         with pytest.raises(Exception, match="Aluno com curso trancado não pode fazer atualizações no sistema."):
             self.aluno.atualiza_materias_cursadas(materias)
 
     def test_aluno_curso_trancado_nao_pode_atualizar_notas(self):
         materias = {"mat": 0}
         self.aluno.atualiza_materias_cursadas(materias)
-        self.aluno.tranca_curso()
+        self.aluno.tranca_curso(True)
         materias = {"mat": 8}
         with pytest.raises(Exception, match="Aluno com curso trancado não pode fazer atualizações no sistema."):
             self.aluno.atualiza_materias_cursadas(materias)

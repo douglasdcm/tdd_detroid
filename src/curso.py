@@ -7,6 +7,7 @@ class Curso:
         self._minimo_materia = 3
         self._identificador_unico = time.time()
         self._nome = nome
+        self._lista_alunos = list()
         
     def pega_nome(self):
         return self._nome
@@ -30,6 +31,12 @@ class Curso:
             return self._lista_materias
         delta = self._minimo_materia - quantidade_materias
         raise Exception(f"Número mínimo que matérias é três. Adicione mais {delta}.")
+
+    def pega_lista_alunos(self):
+        return self._lista_alunos
+
+    def adiciona_aluno(self, aluno):
+        self._lista_alunos.append(aluno)
     
 
             
