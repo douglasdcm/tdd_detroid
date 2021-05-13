@@ -1,3 +1,4 @@
+from src.catalogo_curso import CatalogoCurso
 from src.aluno import Aluno
 from src.curso import Curso
 from src.coordenador import Coordenador
@@ -5,7 +6,10 @@ from src.materia import Materia
 
 class TestCoordenador:
     coordenador = None
+
     def setup_method(self, method):
+        self.catalogo = CatalogoCurso()
+        self.catalogo.limpa_catalogo()
         self.curso = Curso("direito")
         self.curso.atualiza_materias(Materia("civil"))
         self.curso.atualiza_materias(Materia("penal"))
@@ -13,9 +17,11 @@ class TestCoordenador:
         self.coordenador = Coordenador(self.curso)
 
     def tear_down(self, method):
+        self.catalogo.limpa_catalogo()
         self.curso = None
         self.coordenador = None
-
+        
+    
     def test_coordenador_curso_2_nao_pode_listar_alunos_curso_1(self):
         expected = {"alunos":[]}
         aluno = Aluno("maria")

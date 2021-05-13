@@ -1,4 +1,5 @@
 import time
+from src.catalogo_curso import CatalogoCurso
 
 class Curso:
 
@@ -7,8 +8,13 @@ class Curso:
         self._minimo_materia = 3
         self._identificador_unico = time.time()
         self._nome = nome
-        self._lista_alunos = list()
+        self._lista_alunos = list()        
+        self._adiciona_catalogo_cursos()        
         
+    def _adiciona_catalogo_cursos(self):
+        catalogo = CatalogoCurso()
+        catalogo.adiciona_curso(self)
+
     def pega_nome(self):
         return self._nome
     
@@ -37,6 +43,7 @@ class Curso:
 
     def adiciona_aluno(self, aluno):
         self._lista_alunos.append(aluno)
+
     
 
             

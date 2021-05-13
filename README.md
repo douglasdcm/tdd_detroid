@@ -25,11 +25,11 @@ O aplicativo simula o controle de notas dos alunos de uma universidade. Abaixo s
 2. O coordenador do curso pode listar os alunos, notas em cada matéria e cr dos alunos
 3. O Aluno pode destrancar o curso e sua situação volta para a anterior
 4. Os alunos devem ter nomes
-## Entrega 6
+## Entrega 6 - finalizado
 3. O coordenador geral pode listar de todos os curso os alunos e notas em cada matéria e cr de cada aluno
 ## Entrega 7
-1. O coordenador do curso pode eleminar matérias e neste caso os alunos não podem atualizar suas notas nesta matéria
-## Os alunos só podem atualizar suas notas na matérias em que estão inscritos
+1. O coordenador do curso pode eliminar matérias e neste caso os alunos não podem atualizar suas notas nesta matéria
+2. Os alunos só podem atualizar suas notas na matérias em que estão inscritos
 ## Entrega 8
 1. O nome dos cursos e materias tem que ter no máximo 10 letras
 2. Os cursos podem ter nomes iguais se forem de unidades diferentes
@@ -55,4 +55,7 @@ O aplicativo simula o controle de notas dos alunos de uma universidade. Abaixo s
 1. Caso o aluno não se increva no número mínimo de matérias por semestre, ele será automaticamente reprovado
 ## Entrega 15
 1. O aluno deve ter CPF validado no sistema externo de validação de CPFs (sistema do governo)
-
+## Entrega 16
+1. Adicionar o nome do curso nos relatórios dos coordenadores
+## Entrega 17
+1. O Aluno só é aprovado se tirar a nota mínima em todas as matérias do curso, mesmo se seu cr seja acima do mínimo
