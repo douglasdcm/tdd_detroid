@@ -1,3 +1,4 @@
+from time import process_time_ns, sleep
 import pytest
 from src.catalogo_curso import CatalogoCurso
 from src.aluno import Aluno
@@ -48,7 +49,7 @@ class TestCoordenadorGeral:
         actual = coordenador.listar_detalhe_alunos()
         assert actual == expected
 
-    def test_coordenador_geral_lista_detalhes_2_cursos_2_alunos_com_notas(self):
+    def test_coordenador_geral_lista_detalhes_dois_cursos_dois_alunos_com_notas(self):
         nome_1 = "joao"
         nome_2 = "maria"
         materias_1 = {"penal": 3}

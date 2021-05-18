@@ -17,8 +17,7 @@ class Coordenador:
                 raise Exception("Coordenador geral não pode especificar um curso.")
 
     def _pega_alunos(self, curso):
-        self._alunos = list()
-        for aluno in curso.pega_lista_alunos(): 
+        for aluno in curso.pega_lista_alunos():
             alunos = {
                     "nome": aluno.pega_nome(),
                     "materias": aluno.pega_materias_cursadas(),
@@ -27,10 +26,10 @@ class Coordenador:
             self._alunos.append(alunos)
         return self._alunos
 
-    def listar_detalhe_alunos(self):        
+    def listar_detalhe_alunos(self):          
         if isinstance(self._curso, list):
             for curso in self._curso:            
                 self._pega_alunos(curso)
         else:
-            self._pega_alunos(self._curso)
+            self._pega_alunos(self._curso)        
         return {"alunos": self._alunos}
