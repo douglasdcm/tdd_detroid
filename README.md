@@ -2,7 +2,8 @@
 ## Introdução
 Este projeto tem o objetivo de exercitar os "code smells" relacionados a testes unitários utilizando um aplicativo que simula um negócio real.
 O aplicativo simula o controle de notas dos alunos de uma universidade. Abaixo segue a especificação do aplicativo:
-<br>
+# Fase 1
+Construção das funções básicas do sistema
 ## Entrega 1 - finalizada
 1. Cada aluno terá um controle de notas chamado "coeficiente de rendimento" (CR)
 2. O CR é a média das notas do aluno nas disciplinas já cursadas
@@ -59,3 +60,10 @@ O aplicativo simula o controle de notas dos alunos de uma universidade. Abaixo s
 1. Adicionar o nome do curso nos relatórios dos coordenadores
 ## Entrega 17
 1. O Aluno só é aprovado se tirar a nota mínima em todas as matérias do curso, mesmo se seu cr seja acima do mínimo
+# Fase 2
+Construção da interface de comandos 
+## Entrega 1 - fianlizada
+1. O usuário deve ser capaz de criar alunos com informações básicas
+## Entrega 2
+1. O usuário deve ser capaz de inscrever o aluno em um curso
+2. O usuário deve ser capaz de criar cursos com o número mínimo de matérias
