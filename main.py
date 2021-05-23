@@ -1,4 +1,4 @@
-import sys
+import sys, sqlite3
 from src.aluno import Aluno
 from src.curso import Curso
 from src.materia import Materia
@@ -53,14 +53,6 @@ def _inscreve_aluno_curso(aluno, curso):
 def _cria_aluno(nome):
     try:
         aluno = Aluno(nome)
-        bd = BancoDados()
-        items = bd.cria_conexao()
-        con = items[0]
-        cur = items[1]
-        cur.execute("create table if not exists alunos (nome, materia)")
-        cur.execute(f"insert into alunos values ('{nome}', 1)")
-        con.commit()
-        con.close()
         print(f"Aluno {aluno.pega_nome()} criado com sucesso.")
     except(Exception):
         raise Exception(f"Aluno {nome} não pôde ser criado.")

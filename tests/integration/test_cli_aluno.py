@@ -1,8 +1,16 @@
-from os import extsep
+import sqlite3
 from tests.helper import executa_comando
 from src.banco_dados import BancoDados
 
 class TestCliAluno:
+
+    bd = None
+
+    def setup_method(self, method):
+        self.bd = BancoDados(sqlite3.connect(":memory:"))
+
+    def teardown_method(self, method):
+        self.bd.fecha_conexao_existente()
 
     def test_aluno_pode_ser_incrito_em_curso(self):
         expected = "Aluno José inscrito no curso de Matemática."
@@ -44,15 +52,11 @@ class TestCliAluno:
         assert actual == expected
 
     def test_criacao_um_aluno_com_informacoes_basicas(self):
+        bd = BancoDados(sqlite3.connect(":memory:")) 
         expected = "Aluno jose criado com sucesso."
         expected_2 = ('jose', 1)
-        comando = ["python", "main.py", "cria-aluno", "--nome", "jose"]
-        bd = BancoDados()
-        items = bd.cria_conexao()
-        cur = items[1]
-        cur.execute("drop table alunos")
+        comando = ["python", "main.py", "cria-aluno", "--nome", "jose"]               
         actual = executa_comando(comando)
-        cur.execute("select * from alunos")
-        actual_2 = cur.fetchone()
+        actual_2 = bd.pega_todos_registros("alunos")
         assert actual == expected
         assert actual_2 == expected_2

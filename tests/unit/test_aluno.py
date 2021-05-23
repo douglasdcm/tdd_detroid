@@ -1,12 +1,15 @@
-import pytest
+import pytest, sqlite3
 from src.aluno import Aluno
 from src.curso import Curso
 from src.materia import Materia
+from src.banco_dados import BancoDados
 
 class TestAluno():
     aluno = None
+    bd = None
 
     def setup_method(self, method):
+        self.bd = BancoDados(sqlite3.connect(":memory:"))
         self.aluno = Aluno("joao")
         curso = Curso("pedagogia")
         curso.atualiza_materias(Materia("mat"))
@@ -16,13 +19,14 @@ class TestAluno():
 
     def teardown_method(self, method):
         self.aluno = None
+        self.bd.fecha_conexao_existente()
 
     def test_aluno_deve_ter_nome(self):
         expected = "joao"
         actual = self.aluno.pega_nome()
         assert actual == expected
 
-    def test_aluno_noa_pode_increver_curso_sem_materias(self):
+    def test_aluno_nao_pode_increver_curso_sem_materias(self):
         curso = Curso("agricultura")
         aluno = Aluno("jose")
         with pytest.raises(Exception, match="Número mínimo que matérias é três. Adicione mais 3"):

@@ -1,13 +1,17 @@
+import sqlite3
 from src.catalogo_curso import CatalogoCurso
 from src.aluno import Aluno
 from src.curso import Curso
 from src.coordenador import Coordenador
 from src.materia import Materia
+from src.banco_dados import BancoDados
 
 class TestCoordenador:
     coordenador = None
+    bd = None
 
     def setup_method(self, method):
+        self.bd = BancoDados(sqlite3.connect(":memory:"))
         self.catalogo = CatalogoCurso()
         self.catalogo.limpa_catalogo()
         self.curso = Curso("direito")
@@ -20,6 +24,7 @@ class TestCoordenador:
         self.catalogo.limpa_catalogo()
         self.curso = None
         self.coordenador = None
+        self.bd.fecha_conexao_existente()
         
     
     def test_coordenador_curso_2_nao_pode_listar_alunos_curso_1(self):

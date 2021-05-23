@@ -1,3 +1,5 @@
+from src.banco_dados import BancoDados
+
 class Aluno:
     def __init__(self, nome):
         self._coeficiente_rendimento = 0
@@ -8,6 +10,13 @@ class Aluno:
         self._nota_maxima = 10
         self._nota_minima = 0
         self._nome = nome
+        self._salva_registro()
+
+    def _salva_registro(self):
+        bd = BancoDados()
+        tabela = "alunos"
+        bd.cria_tabela(tabela, "nome")
+        bd.salva_registro(tabela, f"'{self._nome}'")
 
     def tranca_curso(self, decisao):
         self.calcula_situacao()
