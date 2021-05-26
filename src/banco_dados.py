@@ -9,6 +9,15 @@ class BancoDados:
             else:
                 raise Exception("Uma conexão precisa ser informada.")            
 
+    def deleta_tabela(self, tabela):
+        try:
+            items = self._cria_conexao()
+            con = items[0]
+            cur = items[1] 
+            cur.execute(f"drop table if exists {tabela}")
+        except Exception:
+            raise Exception("Não foi possível deletar a tabela.")
+
     def fecha_conexao_existente(self):
         try:
             con = type(self)._conexao
@@ -40,8 +49,7 @@ class BancoDados:
         try:
             items = self._cria_conexao()
             con = items[0]
-            cur = items[1]   
-            print(f"insert into {tabela} values ({valores})")     
+            cur = items[1]    
             cur.execute(f"insert into {tabela} values ({valores})")
             con.commit()
         except Exception:
@@ -49,10 +57,11 @@ class BancoDados:
 
     def pega_todos_registros(self, tabela):
         try:
+            print(type(self)._conexao)
             items = self._cria_conexao()
             cur = items[1]
             cur.execute(f"select * from {tabela}")
-            return cur.fetchmany()
+            return cur.fetchall()
         except Exception:
             raise Exception("Não foi possível pegar os registros.")
 

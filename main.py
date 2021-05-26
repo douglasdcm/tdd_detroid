@@ -1,8 +1,12 @@
+# -*- coding: utf-8 -*-
 import sys, sqlite3
 from src.aluno import Aluno
 from src.curso import Curso
 from src.materia import Materia
 from src.banco_dados import BancoDados
+
+# banco de dados
+BancoDados(sqlite3.connect("sample.db"))
 
 # aluno
 cria_aluno = "cria-aluno"
@@ -22,7 +26,9 @@ def main(*args):
             else:
                 raise Exception("Lista de argumentos inválida.")
         elif inscreve_aluno_curso in argumentos:
-            return _inscreve_aluno_curso("aluno", "curso")
+            if "--aluno" in argumentos and "--curso" in argumentos:
+                return _inscreve_aluno_curso(argumentos[argumentos.index("--aluno") + 1],
+                                             argumentos[argumentos.index("--curso") + 1])
         elif cria_curso in argumentos:
             if "--nome" in argumentos or "-n" in argumentos:
                 if "--materias" in argumentos or "-m" in argumentos:
@@ -48,7 +54,9 @@ def _cria_curso(nome, materia_1, materia_2, materia_3):
     print(f"Curso de {curso.pega_nome()} criado.")
 
 def _inscreve_aluno_curso(aluno, curso):
-    print("Aluno inscrito no curso")
+    curso = Curso(curso)
+    curso.adiciona_aluno(aluno)
+    print(f"Aluno {aluno} inscrito no curso de {curso.pega_nome()}.")
 
 def _cria_aluno(nome):
     try:

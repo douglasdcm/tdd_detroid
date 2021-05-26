@@ -1,11 +1,10 @@
-from typing import Coroutine
 from src.coordenador import Coordenador
 from src.materia import Materia
 from src.curso import Curso
 from src.aluno import Aluno
 from src.catalogo_curso import CatalogoCurso
 
-class TestCenarioTresAlunosCincoCursos():
+class TestCenarioTresAlunosCincoCursos:
 
     def test_faculdade_com_dois_alunos_aprovados_e_um_reprovado_no_curso(self):
         '''

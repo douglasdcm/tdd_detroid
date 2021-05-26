@@ -1,20 +1,27 @@
-import sqlite3
+import pytest, sqlite3
 from tests.helper import executa_comando
 from src.banco_dados import BancoDados
 
 class TestCliAluno:
 
-    bd = None
+    tabela = "alunos"
+    aluno_1 = "maria"
+    aluno_2 = "joao"
+    aluno_3 = "jose"
 
-    def setup_method(self, method):
-        self.bd = BancoDados(sqlite3.connect(":memory:"))
+    def setup_method(self, method):        
+        self.bd = BancoDados(sqlite3.connect("sample.db"))
+        self.bd.deleta_tabela(self.tabela)
 
     def teardown_method(self, method):
         self.bd.fecha_conexao_existente()
+        self.bd = None
 
     def test_aluno_pode_ser_incrito_em_curso(self):
-        expected = "Aluno José inscrito no curso de Matemática."
-        comando = ["python", "main.py", "--inscreve-aluno-curso", "--aluno",
+        aluno = "José"
+        curso = "Matemática"
+        expected = f"Aluno {aluno} inscrito no curso de {curso}."
+        comando = ["python", "main.py", "inscreve-aluno-curso", "--aluno",
                      "José", "--curso", "Matemática"]
         actual = executa_comando(comando)
         assert actual == expected
@@ -32,31 +39,32 @@ class TestCliAluno:
         assert expected in actual
 
     def test_criacao_tres_alunos_distintos_com_informacoes_basicas(self):
-        expected_1 = "Aluno maria criado com sucesso."
-        expected_2 = "Aluno jose criado com sucesso."
-        expected_3 = "Aluno pedro criado com sucesso."
-        comando_1 = ["python", "main.py", "cria-aluno", "--nome", "maria"]
-        comando_2 = ["python", "main.py", "cria-aluno", "--nome", "jose"]
-        comando_3 = ["python", "main.py", "cria-aluno", "--nome", "pedro"]
-        actual_1 = executa_comando(comando_1)
-        actual_2 = executa_comando(comando_2)
-        actual_3 = executa_comando(comando_3)
+        expected_1 = f"Aluno {self.aluno_1} criado com sucesso."
+        expected_2 = f"Aluno {self.aluno_2} criado com sucesso."
+        expected_3 = f"Aluno {self.aluno_3} criado com sucesso."
+        expected_4 = [(self.aluno_1,), (self.aluno_2,), (self.aluno_3,)]
+        actual_1 = self._cria_aluno(self.aluno_1)
+        actual_2 = self._cria_aluno(self.aluno_2)
+        actual_3 = self._cria_aluno(self.aluno_3)
+        actual_4 = self.bd.pega_todos_registros(self.tabela)
         assert actual_1 == expected_1
         assert actual_2 == expected_2
         assert actual_3 == expected_3
+        assert actual_4 == expected_4
 
     def test_criacao_um_aluno_com_informacoes_basicas_usando_parametro__n(self):
-        expected = "Aluno jose criado com sucesso."
-        comando = ["python", "main.py", "cria-aluno", "-n", "jose"]
-        actual = executa_comando(comando)
+        expected = f"Aluno {self.aluno_1} criado com sucesso."
+        actual = self._cria_aluno(self.aluno_1)
         assert actual == expected
 
     def test_criacao_um_aluno_com_informacoes_basicas(self):
-        bd = BancoDados(sqlite3.connect(":memory:")) 
-        expected = "Aluno jose criado com sucesso."
-        expected_2 = ('jose', 1)
-        comando = ["python", "main.py", "cria-aluno", "--nome", "jose"]               
-        actual = executa_comando(comando)
-        actual_2 = bd.pega_todos_registros("alunos")
+        expected = f"Aluno {self.aluno_1} criado com sucesso."
+        expected_2 = [tuple((self.aluno_1,)),]              
+        actual = self._cria_aluno(self.aluno_1)
+        actual_2 = self.bd.pega_todos_registros("alunos")
         assert actual == expected
         assert actual_2 == expected_2
+
+    def _cria_aluno(self, nome, tag="--nome"):
+        comando_1 = ["python", "main.py", "cria-aluno", tag, nome]
+        return executa_comando(comando_1)

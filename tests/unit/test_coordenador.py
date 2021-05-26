@@ -2,7 +2,7 @@ import sqlite3
 from src.catalogo_curso import CatalogoCurso
 from src.aluno import Aluno
 from src.curso import Curso
-from src.coordenador import Coordenador
+from src.coordenador_curso import CoordenadorCurso
 from src.materia import Materia
 from src.banco_dados import BancoDados
 
@@ -18,7 +18,7 @@ class TestCoordenador:
         self.curso.atualiza_materias(Materia("civil"))
         self.curso.atualiza_materias(Materia("penal"))
         self.curso.atualiza_materias(Materia("filosofia"))
-        self.coordenador = Coordenador(self.curso)
+        self.coordenador = CoordenadorCurso(self.curso)
 
     def tear_down(self, method):
         self.catalogo.limpa_catalogo()
@@ -34,7 +34,7 @@ class TestCoordenador:
         curso.atualiza_materias(Materia("optica"))
         curso.atualiza_materias(Materia("mecanica"))
         curso.atualiza_materias(Materia("eletrica"))
-        coordenador_2 = Coordenador(curso)        
+        coordenador_2 = CoordenadorCurso(curso)        
         aluno.inscreve_curso(self.curso)
         actual = coordenador_2.listar_detalhe_alunos()        
         assert actual == expected
@@ -59,12 +59,8 @@ class TestCoordenador:
             },
             ]
         }
-        aluno_1 = Aluno(nome_1)
-        aluno_2 = Aluno(nome_2)
-        aluno_1.inscreve_curso(self.curso)
-        aluno_2.inscreve_curso(self.curso)
-        aluno_1.atualiza_materias_cursadas(materias_1)
-        aluno_2.atualiza_materias_cursadas(materias_2)
+        self._cria_aluno_no_curso(nome_1, self.curso, materias_1)
+        self._cria_aluno_no_curso(nome_2, self.curso, materias_2)
         actual = self.coordenador.listar_detalhe_alunos()
         assert actual == expected 
 
@@ -73,13 +69,16 @@ class TestCoordenador:
         materias = {"civil":5}
         cr = 5
         expected = {"alunos": [{"nome": nome, "materias": materias, "coeficiente rendimento": cr}]}       
-        aluno = Aluno(nome)
-        aluno.inscreve_curso(self.curso)
-        aluno.atualiza_materias_cursadas(materias)
+        self._cria_aluno_no_curso(nome, self.curso, materias)
         actual = self.coordenador.listar_detalhe_alunos()
         assert actual == expected 
     
     def test_coordenador_curso_pode_listar_alunos_curso_quando_zero_alunos(self):
         expected = {"alunos": []}
         actual = self.coordenador.listar_detalhe_alunos()
-        assert actual == expected
+        assert actual == expected    
+
+    def _cria_aluno_no_curso(self, nome_aluno, curso, materias):
+        aluno = Aluno(nome_aluno)
+        aluno.inscreve_curso(curso)
+        aluno.atualiza_materias_cursadas(materias)

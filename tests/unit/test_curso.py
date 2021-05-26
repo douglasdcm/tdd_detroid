@@ -1,9 +1,23 @@
+from typing import cast
 import pytest
 from src.curso import Curso
 from src.gerenciador_curso import GerenciadorCurso
 from src.materia import Materia
 
 class TestCurso:
+
+    def setup_method(self, method):
+        self.curso = Curso("Administração")
+        self.curso.atualiza_materias(Materia("Política"))
+        self.curso.atualiza_materias(Materia("Trabalho"))
+        self.curso.atualiza_materias(Materia("Pessoas"))
+
+    def teardown_method(self, method):
+        self.curso = None
+
+    def test_curso_nao_deve_adicionar_aluno_sem_nome(self):
+        failed
+
 
     def test_curso_deve_ter_todas_materias_com_nomes_diferentes(self):
         curso = Curso("mat")

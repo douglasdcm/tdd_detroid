@@ -1,14 +1,16 @@
 from time import process_time_ns, sleep
-import pytest
+import sqlite3
 from src.catalogo_curso import CatalogoCurso
 from src.aluno import Aluno
 from src.curso import Curso
-from src.coordenador import Coordenador
+from src.coordenador_geral import CoordenadorGeral
 from src.materia import Materia
+from src.banco_dados import BancoDados
 
 class TestCoordenadorGeral:
 
     def setup_method(self, method):
+        BancoDados(sqlite3.connect(":memory:"))
         self.catalogo = CatalogoCurso()
         self.catalogo.limpa_catalogo()
         self.curso_1 = Curso("direito")
@@ -30,16 +32,12 @@ class TestCoordenadorGeral:
         self.curso_2 = None
         self.curso_3 = None
 
-    def test_coordenador_geral_nao_pode_especificar_curso(self):
-        with pytest.raises(Exception, match="Coordenador geral não pode especificar um curso."):
-            Coordenador(curso=self.curso_1, geral=True)    
-
     def test_coordenador_geral_lista_detalhes_novo_curso(self):
         nome = "mario"
         aluno = Aluno(nome)
         materias = {"virus": 6}
         expected = {"alunos": [{"nome": nome, "coeficiente rendimento": 6, "materias": materias}]}
-        coordenador = Coordenador(geral=True)
+        coordenador = CoordenadorGeral()
         curso_novo = Curso("patologia")
         curso_novo.atualiza_materias(Materia("bacterias"))
         curso_novo.atualiza_materias(Materia("virus"))
@@ -65,7 +63,7 @@ class TestCoordenadorGeral:
         aluno_2.inscreve_curso(self.curso_2)
         aluno_1.atualiza_materias_cursadas(materias_1)
         aluno_2.atualiza_materias_cursadas(materias_2)
-        coordenador = Coordenador(geral=True)
+        coordenador = CoordenadorGeral()
         actual = coordenador.listar_detalhe_alunos()
         assert actual == expected
 
@@ -80,13 +78,13 @@ class TestCoordenadorGeral:
         aluno_2 = Aluno(nome_2)
         aluno_1.inscreve_curso(self.curso_1)
         aluno_2.inscreve_curso(self.curso_2)
-        coordenador = Coordenador(geral=True)
+        coordenador = CoordenadorGeral()
         actual = coordenador.listar_detalhe_alunos()
         assert actual == expected
 
     def test_coordenador_geral_lista_detalhes_quando_dois_cursos(self):
         expected = {"alunos": []}
-        coordenador = Coordenador(geral=True)
+        coordenador = CoordenadorGeral()
         actual = coordenador.listar_detalhe_alunos()
         assert actual == expected
 
@@ -102,7 +100,7 @@ class TestCoordenadorGeral:
         aluno_2 = Aluno(nome_2)
         aluno_1.inscreve_curso(self.curso_1)
         aluno_2.inscreve_curso(self.curso_1)
-        coordenador = Coordenador(geral=True)
+        coordenador = CoordenadorGeral()
         actual = coordenador.listar_detalhe_alunos()
         assert actual == expected
 
@@ -121,12 +119,12 @@ class TestCoordenadorGeral:
         aluno = Aluno("maria")
         aluno.inscreve_curso(self.curso_1)
         aluno.atualiza_materias_cursadas(materias)
-        coordenador = Coordenador(geral=True)
+        coordenador = CoordenadorGeral()
         actual = coordenador.listar_detalhe_alunos()
         assert actual == expected
 
     def test_cooredenador_geral_lista_detalhes_quando_zero_alunos(self):
         expected = {"alunos": []}
-        coordenador = Coordenador(geral=True)
+        coordenador = CoordenadorGeral()
         actual = coordenador.listar_detalhe_alunos()
         assert actual == expected
