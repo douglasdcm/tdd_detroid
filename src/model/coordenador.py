@@ -1,5 +1,5 @@
-from src.curso import Curso
-from src.catalogo_curso import CatalogoCurso
+from src.model.curso import Curso
+from src.model.catalogo_curso import CatalogoCurso
 
 
 class Coordenador:

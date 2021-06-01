@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 import sys, sqlite3
-from src.aluno import Aluno
-from src.curso import Curso
-from src.materia import Materia
-from src.banco_dados import BancoDados
+from src.model.aluno import Aluno
+from src.model.curso import Curso
+from src.model.materia import Materia
+from src.dao.dao_fabrica import DaoFabrica
+from src.utils.messagens import LISTA_PARAMETROS_INVALIDA
 
 # banco de dados
-BancoDados(sqlite3.connect("sample.db"))
+bd = sqlite3.connect("sample.db")
 
 # aluno
 cria_aluno = "cria-aluno"
@@ -18,52 +19,67 @@ cria_curso = "cria-curso"
 def main(*args):
     for argumentos in args:
         if cria_aluno in argumentos:
-            if "--nome" in argumentos or "-n" in argumentos:
-                try:
-                    return _cria_aluno(argumentos[argumentos.index(cria_aluno) + 2])
-                except (Exception):
-                    raise Exception("Lista de argumentos inválida.")
-            else:
-                raise Exception("Lista de argumentos inválida.")
+            _cria_aluno(argumentos)        
         elif inscreve_aluno_curso in argumentos:
-            if "--aluno" in argumentos and "--curso" in argumentos:
-                return _inscreve_aluno_curso(argumentos[argumentos.index("--aluno") + 1],
-                                             argumentos[argumentos.index("--curso") + 1])
+            _inscreve_aluno_curso(argumentos)
         elif cria_curso in argumentos:
-            if "--nome" in argumentos or "-n" in argumentos:
-                if "--materias" in argumentos or "-m" in argumentos:
-                    try:
-                        _cria_curso(argumentos[argumentos.index(cria_curso) + 2], 
-                                    argumentos[argumentos.index(cria_curso) + 4],
-                                    argumentos[argumentos.index(cria_curso) + 5],
-                                    argumentos[argumentos.index(cria_curso) + 6])
-                    except(Exception):
-                        raise Exception("Lista de parâmetros inválida.")
-                else:
-                    raise Exception("Esperado por parâmetro --materias ou -m.")
-            else:
-                raise Exception("Esperado por parâmetro --nome ou -n.")
+            _cria_curso(argumentos)
         else:
             raise Exception("Commando inválido.")
 
-def _cria_curso(nome, materia_1, materia_2, materia_3):
-    curso = Curso(nome)
-    curso.atualiza_materias(Materia(materia_1))
-    curso.atualiza_materias(Materia(materia_2))
-    curso.atualiza_materias(Materia(materia_3))
-    print(f"Curso de {curso.pega_nome()} criado.")
+def _cria_curso(argumentos):
+    nome_parametro = "--nome"
+    materias_parametro = "--materias"
+    numero_argumentos = 8
+    if nome_parametro in argumentos \
+        and materias_parametro in argumentos \
+        and len(argumentos) == numero_argumentos:
+        nome = _pega_valor(argumentos, nome_parametro)
+        materia_1 = _pega_valor(argumentos, materias_parametro)
+        materia_2 = _pega_valor(argumentos, materias_parametro, 2)
+        materia_3 = _pega_valor(argumentos, materias_parametro, 3)
+        curso = Curso(nome) 
+        curso.atualiza_materias(Materia(materia_1))
+        curso.atualiza_materias(Materia(materia_2))
+        curso.atualiza_materias(Materia(materia_3))
+        dao = DaoFabrica(curso, bd)
+        dao.fabrica_objetos_dao().salva()
+        print(f"Curso de {curso.pega_nome()} criado.")
+    else:
+        raise Exception(LISTA_PARAMETROS_INVALIDA)
 
-def _inscreve_aluno_curso(aluno, curso):
-    curso = Curso(curso)
-    curso.adiciona_aluno(aluno)
-    print(f"Aluno {aluno} inscrito no curso de {curso.pega_nome()}.")
 
-def _cria_aluno(nome):
-    try:
+def _inscreve_aluno_curso(argumentos):
+    aluno_parametro = "--aluno"
+    curso_parametro = "--curso"
+    numero_parametros = 6
+    if aluno_parametro in argumentos \
+        and curso_parametro in argumentos \
+        and len(argumentos) == numero_parametros:
+        curso = _pega_valor(argumentos, curso_parametro)
+        aluno = _pega_valor(argumentos, aluno_parametro)
+        curso = Curso(curso)
+        aluno = Aluno(aluno)
+        curso.adiciona_aluno(aluno)
+        print(f"Aluno {aluno.pega_nome()} inscrito no curso de {curso.pega_nome()}.")
+    else:
+        raise Exception(LISTA_PARAMETROS_INVALIDA)
+
+def _cria_aluno(argumentos):
+    nome_parametro = "--nome"
+    numero_parametros = 4
+    if nome_parametro in argumentos \
+        and len(argumentos) == numero_parametros:
+        nome = _pega_valor(argumentos, nome_parametro)
         aluno = Aluno(nome)
+        dao = DaoFabrica(aluno, bd)
+        dao.fabrica_objetos_dao().salva()
         print(f"Aluno {aluno.pega_nome()} criado com sucesso.")
-    except(Exception):
-        raise Exception(f"Aluno {nome} não pôde ser criado.")
+    else:
+        raise Exception(LISTA_PARAMETROS_INVALIDA)
+
+def _pega_valor(argumentos, parametro, incremento = 1):
+    return argumentos[argumentos.index(parametro) + incremento]
 
 if __name__ == '__main__':
     main(sys.argv)

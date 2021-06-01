@@ -1,6 +1,6 @@
 import pytest
 import sqlite3
-from src.banco_dados import BancoDados
+from src.model.banco_dados import BancoDados
 
 class TestBancoDados:
 
@@ -16,7 +16,7 @@ class TestBancoDados:
         campo = "campo_1"
         valor = f"'valor_1'"
         bd.cria_tabela(tabela, campo)
-        bd.salva_registro(tabela, valor)
+        bd.salva_registro(tabela, campo, valor)
         bd.deleta_tabela(tabela)
 
     def test_conexao_nao_criada_se_existe(self):
@@ -26,9 +26,9 @@ class TestBancoDados:
         tabela = "test"
         campos = "campo_1"
         valor = "'valor_1'"
-        expected = [('valor_1',)]
+        expected = [(1, 'valor_1',)]
         bd_1.cria_tabela(tabela, campos)
-        bd_1.salva_registro(tabela, valor) 
+        bd_1.salva_registro(tabela, campos, valor) 
         actual = bd_2.pega_todos_registros(tabela)
         assert actual == expected
 
@@ -56,7 +56,7 @@ class TestBancoDados:
         bd = BancoDados(sqlite3.connect(self.IN_MEMORY_DB))
         tabela = "nao_existe"
         with pytest.raises(Exception, match="Não foi possiível salvar o registro."):
-            bd.salva_registro(tabela, "quaisquer_valores")
+            bd.salva_registro(tabela, "campos", "quaisquer_valores")
 
     def test_api_banco_dados_cria_registro(self):
         bd = BancoDados(sqlite3.connect(self.IN_MEMORY_DB))
@@ -64,9 +64,9 @@ class TestBancoDados:
         valor_1 = "valor_1"
         valor_2 = "valor_2"
         valores = f"'{valor_1}', '{valor_2}'"
-        expected = [(valor_1, valor_2)]
+        expected = [(1, valor_1, valor_2)]
         tabela = "test"
         bd.cria_tabela(tabela, campos)
-        bd.salva_registro(tabela, valores)
+        bd.salva_registro(tabela, campos, valores)
         actual = bd.pega_todos_registros(tabela)
         assert actual == expected

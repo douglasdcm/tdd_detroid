@@ -1,8 +1,8 @@
-from src.coordenador import Coordenador
-from src.materia import Materia
-from src.curso import Curso
-from src.aluno import Aluno
-from src.catalogo_curso import CatalogoCurso
+from src.model.coordenador_geral import CoordenadorGeral
+from src.model.materia import Materia
+from src.model.curso import Curso
+from src.model.aluno import Aluno
+from src.model.catalogo_curso import CatalogoCurso
 
 class TestCenarioTresAlunosCincoCursos:
 
@@ -15,37 +15,37 @@ class TestCenarioTresAlunosCincoCursos:
         pedro = Aluno("Pedro")
         jose = Aluno("Jose")
         tiago = Aluno("Tiago")
-        coordenador_geral = Coordenador(geral=True)
+        coordenador_geral = CoordenadorGeral()
 
         fisica = Curso("Fisica")
         fisica.atualiza_materias(Materia("Ótica"))
         fisica.atualiza_materias(Materia("Mecânica"))
         fisica.atualiza_materias(Materia("Elátrica"))
-        coordenador_fisica = Coordenador(fisica)
+        coordenador_fisica = CoordenadorGeral(fisica)
 
         matematica = Curso("Matematica")
         matematica.atualiza_materias(Materia("Geometria"))
         matematica.atualiza_materias(Materia("Cálculo"))
         matematica.atualiza_materias(Materia("Algebra"))
-        coordenador_matematica = Coordenador(matematica)
+        coordenador_matematica = CoordenadorGeral(matematica)
 
         informatica = Curso("Informatica")
         informatica.atualiza_materias(Materia("Programação"))
         informatica.atualiza_materias(Materia("Dados"))
         informatica.atualiza_materias(Materia("Hardware"))
-        coordenador_informatica = Coordenador(informatica)
+        coordenador_informatica = CoordenadorGeral(informatica)
 
         engenharia_civil = Curso("Engenharia Civil")
         engenharia_civil.atualiza_materias(Materia("Estrutura"))
         engenharia_civil.atualiza_materias(Materia("Concreto armado"))
         engenharia_civil.atualiza_materias(Materia("Hidráulica"))
-        coordenador_engenharia_civil = Coordenador(engenharia_civil)
+        coordenador_engenharia_civil = CoordenadorGeral(engenharia_civil)
 
         eletronica = Curso("Eletrônica")
         eletronica.atualiza_materias(Materia("Robótica"))
         eletronica.atualiza_materias(Materia("Chips"))
         eletronica.atualiza_materias(Materia("Circuitos"))
-        coordenador_eletronica = Coordenador(eletronica)
+        coordenador_eletronica = CoordenadorGeral(eletronica)
 
         pedro.inscreve_curso(eletronica)
         jose.inscreve_curso(eletronica)

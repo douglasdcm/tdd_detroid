@@ -1,5 +1,6 @@
 import time
-from src.catalogo_curso import CatalogoCurso
+from src.model.catalogo_curso import CatalogoCurso
+from src.model.aluno import Aluno
 
 class Curso:
 
@@ -42,7 +43,11 @@ class Curso:
         return self._lista_alunos
 
     def adiciona_aluno(self, aluno):
-        self._lista_alunos.append(aluno)
+        if isinstance(aluno, Aluno):
+            self._lista_alunos.append(aluno)
+        else:
+            raise Exception(f"Não foi possível adicionar o aluno ao curso de {self.pega_nome()}.")
+
 
     
 

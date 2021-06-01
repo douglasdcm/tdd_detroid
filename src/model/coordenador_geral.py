@@ -1,5 +1,5 @@
-from src.catalogo_curso import CatalogoCurso
-from src.coordenador import Coordenador
+from src.model.catalogo_curso import CatalogoCurso
+from src.model.coordenador import Coordenador
 
 class CoordenadorGeral(Coordenador):
     def __init__(self):

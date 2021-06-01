@@ -12,7 +12,6 @@ class BancoDados:
     def deleta_tabela(self, tabela):
         try:
             items = self._cria_conexao()
-            con = items[0]
             cur = items[1] 
             cur.execute(f"drop table if exists {tabela}")
         except Exception:
@@ -40,24 +39,24 @@ class BancoDados:
             items = self._cria_conexao()
             con = items[0]
             cur = items[1] 
-            cur.execute(f"create table if not exists {tabela} ({campos})")
+            query = f"create table if not exists {tabela} (id INTEGER NOT NULL PRIMARY KEY, {campos})"
+            cur.execute(query)
             con.commit()
         except Exception:
             raise Exception("Não foi possível criar a tabela.")
 
-    def salva_registro(self, tabela, valores):
+    def salva_registro(self, tabela, campos, valores):
         try:
             items = self._cria_conexao()
             con = items[0]
             cur = items[1]    
-            cur.execute(f"insert into {tabela} values ({valores})")
+            cur.execute(f"insert into {tabela} ({campos}) values ({valores})")
             con.commit()
         except Exception:
             raise Exception("Não foi possiível salvar o registro.")
 
     def pega_todos_registros(self, tabela):
         try:
-            print(type(self)._conexao)
             items = self._cria_conexao()
             cur = items[1]
             cur.execute(f"select * from {tabela}")

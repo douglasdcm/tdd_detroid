@@ -429,7 +429,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
 }
 </script>
     <h1>report.html</h1>
-    <p>Report generated on 25-May-2021 at 17:47:11 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v3.1.1</p>
+    <p>Report generated on 26-May-2021 at 00:44:50 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v3.1.1</p>
     <h2>Environment</h2>
     <table id="environment">
       <tr>
@@ -445,8 +445,8 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <td>Python</td>
         <td>3.8.5</td></tr></table>
     <h2>Summary</h2>
-    <p>72 tests ran in 2.16 seconds. </p>
-    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="passed">71 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="failed">1 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
+    <p>0 tests ran in 0.22 seconds. </p>
+    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="passed">0 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="failed">0 failed</span>, <input checked="true" class="filter" data-test-result="error" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="error">8 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
     <h2>Results</h2>
     <table id="results-table">
       <thead id="results-table-head">
@@ -457,657 +457,75 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
           <th class="sortable links" col="links">Links</th></tr>
         <tr hidden="true" id="not-found-message">
           <th colspan="4">No results found. Try to check the filters</th></tr></thead>
-      <tbody class="failed results-table-row">
+      <tbody class="error results-table-row">
         <tr>
-          <td class="col-result">Failed</td>
-          <td class="col-name">tests/integration/test_cli_aluno.py::TestCliAluno::test_aluno_pode_ser_incrito_em_curso</td>
-          <td class="col-duration">0.14</td>
+          <td class="col-result">Error</td>
+          <td class="col-name">tests/integration/test_bd_alunos.py::collect</td>
+          <td class="col-duration"></td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;tests.integration.test_cli_aluno.TestCliAluno object at 0x7f9378897b50&gt;<br/><br/>    def test_aluno_pode_ser_incrito_em_curso(self):<br/>        expected = &quot;Aluno José inscrito no curso de Matemática.&quot;<br/>        comando = [&quot;python&quot;, &quot;main.py&quot;, &quot;--inscreve-aluno-curso&quot;, &quot;--aluno&quot;,<br/>                     &quot;José&quot;, &quot;--curso&quot;, &quot;Matemática&quot;]<br/>        actual = executa_comando(comando)<br/>&gt;       assert actual == expected<br/><span class="error">E       assert &#x27;Traceback (m...ndo inválido.&#x27; == &#x27;Aluno José i...e Matemática.&#x27;</span><br/><span class="error">E         - Aluno José inscrito no curso de Matemática.</span><br/><span class="error">E         + Traceback (most recent call last):</span><br/><span class="error">E         +   File &quot;main.py&quot;, line 65, in &lt;module&gt;</span><br/><span class="error">E         +     main(sys.argv)</span><br/><span class="error">E         +   File &quot;main.py&quot;, line 45, in main</span><br/><span class="error">E         +     raise Exception(&quot;Commando inválido.&quot;)</span><br/><span class="error">E         + Exception: Commando inválido.</span><br/><br/>tests/integration/test_cli_aluno.py:26: AssertionError<br/></div></td></tr></tbody>
-      <tbody class="passed results-table-row">
+            <div class="log">ImportError while importing test module &#x27;/home/douglas/repo/tdd_detroid/tests/integration/test_bd_alunos.py&#x27;.<br/>Hint: make sure your test modules/packages have valid Python names.<br/>Traceback:<br/>/usr/lib/python3.8/importlib/__init__.py:127: in import_module<br/>    return _bootstrap._gcd_import(name[level:], package, level)<br/>tests/integration/test_bd_alunos.py:2: in &lt;module&gt;<br/>    from src.dao.dao_aluno import DaoAluno<br/>src/dao/dao_aluno.py:2: in &lt;module&gt;<br/>    from src.controller.aluno import Aluno<br/>src/controller/aluno.py:1: in &lt;module&gt;<br/>    from src.dao.dao_aluno import DaoAluno<br/><span class="error">E   ImportError: cannot import name &#x27;DaoAluno&#x27; from partially initialized module &#x27;src.dao.dao_aluno&#x27; (most likely due to a circular import) (/home/douglas/repo/tdd_detroid/src/dao/dao_aluno.py)</span><br/></div></td></tr></tbody>
+      <tbody class="error results-table-row">
         <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/integration/test_bd_alunos.py::TestBdAlunos::test_aluno_criado_foi_salvo_banco_dados</td>
-          <td class="col-duration">0.00</td>
+          <td class="col-result">Error</td>
+          <td class="col-name">tests/unit/controller/test_aluno.py::collect</td>
+          <td class="col-duration"></td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>&lt;sqlite3.Connection object at 0x7f9378a9b4e0&gt;
-<br/></div></td></tr></tbody>
-      <tbody class="passed results-table-row">
+            <div class="log">ImportError while importing test module &#x27;/home/douglas/repo/tdd_detroid/tests/unit/controller/test_aluno.py&#x27;.<br/>Hint: make sure your test modules/packages have valid Python names.<br/>Traceback:<br/>/usr/lib/python3.8/importlib/__init__.py:127: in import_module<br/>    return _bootstrap._gcd_import(name[level:], package, level)<br/>tests/unit/controller/test_aluno.py:2: in &lt;module&gt;<br/>    from src.controller.aluno import Aluno<br/>src/controller/aluno.py:1: in &lt;module&gt;<br/>    from src.dao.dao_aluno import DaoAluno<br/>src/dao/dao_aluno.py:2: in &lt;module&gt;<br/>    from src.controller.aluno import Aluno<br/><span class="error">E   ImportError: cannot import name &#x27;Aluno&#x27; from partially initialized module &#x27;src.controller.aluno&#x27; (most likely due to a circular import) (/home/douglas/repo/tdd_detroid/src/controller/aluno.py)</span><br/></div></td></tr></tbody>
+      <tbody class="error results-table-row">
         <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/integration/test_cli_aluno.py::TestCliAluno::test_criacao_alunos_sem_nome_retorna_excecao</td>
-          <td class="col-duration">0.02</td>
+          <td class="col-result">Error</td>
+          <td class="col-name">tests/unit/controller/test_catalogo.py::collect</td>
+          <td class="col-duration"></td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
+            <div class="log">ImportError while importing test module &#x27;/home/douglas/repo/tdd_detroid/tests/unit/controller/test_catalogo.py&#x27;.<br/>Hint: make sure your test modules/packages have valid Python names.<br/>Traceback:<br/>/usr/lib/python3.8/importlib/__init__.py:127: in import_module<br/>    return _bootstrap._gcd_import(name[level:], package, level)<br/>tests/unit/controller/test_catalogo.py:2: in &lt;module&gt;<br/>    from src.controller.curso import Curso<br/>src/controller/curso.py:3: in &lt;module&gt;<br/>    from src.controller.aluno import Aluno<br/>src/controller/aluno.py:1: in &lt;module&gt;<br/>    from src.dao.dao_aluno import DaoAluno<br/>src/dao/dao_aluno.py:2: in &lt;module&gt;<br/>    from src.controller.aluno import Aluno<br/><span class="error">E   ImportError: cannot import name &#x27;Aluno&#x27; from partially initialized module &#x27;src.controller.aluno&#x27; (most likely due to a circular import) (/home/douglas/repo/tdd_detroid/src/controller/aluno.py)</span><br/></div></td></tr></tbody>
+      <tbody class="error results-table-row">
         <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/integration/test_cli_aluno.py::TestCliAluno::test_criacao_alunos_sem_parametro__nome__retorna_excecao</td>
-          <td class="col-duration">0.02</td>
+          <td class="col-result">Error</td>
+          <td class="col-name">tests/unit/controller/test_coordenador.py::collect</td>
+          <td class="col-duration"></td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
+            <div class="log">ImportError while importing test module &#x27;/home/douglas/repo/tdd_detroid/tests/unit/controller/test_coordenador.py&#x27;.<br/>Hint: make sure your test modules/packages have valid Python names.<br/>Traceback:<br/>/usr/lib/python3.8/importlib/__init__.py:127: in import_module<br/>    return _bootstrap._gcd_import(name[level:], package, level)<br/>tests/unit/controller/test_coordenador.py:3: in &lt;module&gt;<br/>    from src.controller.aluno import Aluno<br/>src/controller/aluno.py:1: in &lt;module&gt;<br/>    from src.dao.dao_aluno import DaoAluno<br/>src/dao/dao_aluno.py:2: in &lt;module&gt;<br/>    from src.controller.aluno import Aluno<br/><span class="error">E   ImportError: cannot import name &#x27;Aluno&#x27; from partially initialized module &#x27;src.controller.aluno&#x27; (most likely due to a circular import) (/home/douglas/repo/tdd_detroid/src/controller/aluno.py)</span><br/></div></td></tr></tbody>
+      <tbody class="error results-table-row">
         <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/integration/test_cli_aluno.py::TestCliAluno::test_criacao_tres_alunos_distintos_com_informacoes_basicas</td>
-          <td class="col-duration">0.53</td>
+          <td class="col-result">Error</td>
+          <td class="col-name">tests/unit/controller/test_coordenador_geral.py::collect</td>
+          <td class="col-duration"></td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>&lt;sqlite3.Connection object at 0x7f9378a9b4e0&gt;
-<br/></div></td></tr></tbody>
-      <tbody class="passed results-table-row">
+            <div class="log">ImportError while importing test module &#x27;/home/douglas/repo/tdd_detroid/tests/unit/controller/test_coordenador_geral.py&#x27;.<br/>Hint: make sure your test modules/packages have valid Python names.<br/>Traceback:<br/>/usr/lib/python3.8/importlib/__init__.py:127: in import_module<br/>    return _bootstrap._gcd_import(name[level:], package, level)<br/>tests/unit/controller/test_coordenador_geral.py:4: in &lt;module&gt;<br/>    from src.controller.aluno import Aluno<br/>src/controller/aluno.py:1: in &lt;module&gt;<br/>    from src.dao.dao_aluno import DaoAluno<br/>src/dao/dao_aluno.py:2: in &lt;module&gt;<br/>    from src.controller.aluno import Aluno<br/><span class="error">E   ImportError: cannot import name &#x27;Aluno&#x27; from partially initialized module &#x27;src.controller.aluno&#x27; (most likely due to a circular import) (/home/douglas/repo/tdd_detroid/src/controller/aluno.py)</span><br/></div></td></tr></tbody>
+      <tbody class="error results-table-row">
         <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/integration/test_cli_aluno.py::TestCliAluno::test_criacao_um_aluno_com_informacoes_basicas_usando_parametro__n</td>
-          <td class="col-duration">0.34</td>
+          <td class="col-result">Error</td>
+          <td class="col-name">tests/unit/controller/test_curso.py::collect</td>
+          <td class="col-duration"></td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
+            <div class="log">ImportError while importing test module &#x27;/home/douglas/repo/tdd_detroid/tests/unit/controller/test_curso.py&#x27;.<br/>Hint: make sure your test modules/packages have valid Python names.<br/>Traceback:<br/>/usr/lib/python3.8/importlib/__init__.py:127: in import_module<br/>    return _bootstrap._gcd_import(name[level:], package, level)<br/>tests/unit/controller/test_curso.py:3: in &lt;module&gt;<br/>    from src.controller.curso import Curso<br/>src/controller/curso.py:3: in &lt;module&gt;<br/>    from src.controller.aluno import Aluno<br/>src/controller/aluno.py:1: in &lt;module&gt;<br/>    from src.dao.dao_aluno import DaoAluno<br/>src/dao/dao_aluno.py:2: in &lt;module&gt;<br/>    from src.controller.aluno import Aluno<br/><span class="error">E   ImportError: cannot import name &#x27;Aluno&#x27; from partially initialized module &#x27;src.controller.aluno&#x27; (most likely due to a circular import) (/home/douglas/repo/tdd_detroid/src/controller/aluno.py)</span><br/></div></td></tr></tbody>
+      <tbody class="error results-table-row">
         <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/integration/test_cli_aluno.py::TestCliAluno::test_criacao_um_aluno_com_informacoes_basicas</td>
-          <td class="col-duration">0.34</td>
+          <td class="col-result">Error</td>
+          <td class="col-name">tests/unit/controller/test_materia.py::collect</td>
+          <td class="col-duration"></td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>&lt;sqlite3.Connection object at 0x7f9378a9b4e0&gt;
-<br/></div></td></tr></tbody>
-      <tbody class="passed results-table-row">
+            <div class="log">ImportError while importing test module &#x27;/home/douglas/repo/tdd_detroid/tests/unit/controller/test_materia.py&#x27;.<br/>Hint: make sure your test modules/packages have valid Python names.<br/>Traceback:<br/>/usr/lib/python3.8/importlib/__init__.py:127: in import_module<br/>    return _bootstrap._gcd_import(name[level:], package, level)<br/>tests/unit/controller/test_materia.py:2: in &lt;module&gt;<br/>    from src.controller.gerenciador_curso import GerenciadorCurso<br/>src/controller/gerenciador_curso.py:1: in &lt;module&gt;<br/>    from src.controller.curso import Curso<br/>src/controller/curso.py:3: in &lt;module&gt;<br/>    from src.controller.aluno import Aluno<br/>src/controller/aluno.py:1: in &lt;module&gt;<br/>    from src.dao.dao_aluno import DaoAluno<br/>src/dao/dao_aluno.py:2: in &lt;module&gt;<br/>    from src.controller.aluno import Aluno<br/><span class="error">E   ImportError: cannot import name &#x27;Aluno&#x27; from partially initialized module &#x27;src.controller.aluno&#x27; (most likely due to a circular import) (/home/douglas/repo/tdd_detroid/src/controller/aluno.py)</span><br/></div></td></tr></tbody>
+      <tbody class="error results-table-row">
         <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/integration/test_cli_curso.py::TestCliCurso::test_criacao_de_curso_com_menos_materias_que_o_minimo_retorna_excecao</td>
-          <td class="col-duration">0.03</td>
+          <td class="col-result">Error</td>
+          <td class="col-name">tests/unit/dao/test_dao_aluno.py::collect</td>
+          <td class="col-duration"></td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/integration/test_cli_curso.py::TestCliCurso::test_criacao_de_curso_sem_materias_retorna_excecao</td>
-          <td class="col-duration">0.02</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/integration/test_cli_curso.py::TestCliCurso::test_criacao_de_curso_sem_nome_retorna_excecao</td>
-          <td class="col-duration">0.02</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/integration/test_cli_curso.py::TestCliCurso::test_criacao_de_curso_usando_tag__m__para_lista_das_materias</td>
-          <td class="col-duration">0.02</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/integration/test_cli_curso.py::TestCliCurso::test_criacao_de_curso_usando_tag__n__para_nome_do_curso</td>
-          <td class="col-duration">0.02</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/integration/test_cli_curso.py::TestCliCurso::test_criacao_de_curso_com_numero_minimo_de_materias</td>
-          <td class="col-duration">0.02</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_aluno.py::TestAluno::test_aluno_deve_ter_nome</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_aluno.py::TestAluno::test_aluno_nao_pode_increver_curso_sem_materias</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_aluno.py::TestAluno::test_aluno_reprovado_curso_nao_pode_trancar_curso</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_aluno.py::TestAluno::test_aluno_aprovado_curso_nao_pode_trancar_curso</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_aluno.py::TestAluno::test_aluno_destranca_curso_situacao_volta_para_anterior</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_aluno.py::TestAluno::test_aluno_nao_cursou_nenhuma_materia_retorna_situacao_em_curso</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_aluno.py::TestAluno::test_aluno_nao_inscrito_curso_situacao_retorna_aluno_inexistente</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_aluno.py::TestAluno::test_aluno_trancado_quando_calcula_situacao_retorna_trancado</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_aluno.py::TestAluno::test_aluno_curso_trancado_nao_pode_atualizar_materias_cursadas</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_aluno.py::TestAluno::test_aluno_curso_trancado_nao_pode_atualizar_notas</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_aluno.py::TestAluno::test_nota_minima_aluno_deve_ser_zero</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_aluno.py::TestAluno::test_nota_maxima_aluno_deve_ser_dez</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_aluno.py::TestAluno::test_aluno_so_pode_cursar_materias_do_seu_curso</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_aluno.py::TestAluno::test_calcula_situacao_aluno_baseado_nas_materias_reais</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_aluno.py::TestAluno::test_lista_materias_pode_ser_atualizada_quando_aluno_nao_cursou_nada</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_aluno.py::TestAluno::test_aluno_aprovado_em_segunda_tentativa_entao_nova_nota_entra_no_cr</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_aluno.py::TestAluno::test_aluno_com_nota_sete_ao_fim_do_curso_esta_aprovado</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_aluno.py::TestAluno::test_aluno_com_quantidade_materias_cursadas_menor_que_em_curso_esta_com_situacao_em_curso</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_aluno.py::TestAluno::test_aluno_cr_menor_sete_fim_curso_esta_reprovado</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_aluno.py::TestAluno::test_aluno_com_cr_maior_que_sete_ao_fim_do_curso_esta_aprovado</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_aluno.py::TestAluno::test_coeficiente_rendimento_calculado_com_decimais</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_aluno.py::TestAluno::test_aluno_cursou_mais_de_duas_materias_tem_cr_igual_a_media</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_aluno.py::TestAluno::test_aluno_cursou_duas_materias_tem_coeficiente_rendimento_igual_media_simples</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_aluno.py::TestAluno::test_aluno_cursou_uma_materia_tem_coeficiente_rendimento_igual_nota</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_aluno.py::TestAluno::test_coeficiente_rendimento_aluno_novo_tem_que_ser_zero</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_banco_dados.py::TestBancoDados::test_tabela_pode_ser_deletada</td>
-          <td class="col-duration">0.28</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_banco_dados.py::TestBancoDados::test_conexao_nao_criada_se_existe</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>&lt;sqlite3.Connection object at 0x7f9378a9b4e0&gt;
-<br/></div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_banco_dados.py::TestBancoDados::test_criacao_tabela_sem_nome_retorna_excecao</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_banco_dados.py::TestBancoDados::test_criacao_tabela_sem_campos_retorna_excecao</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_banco_dados.py::TestBancoDados::test_api_banco_dados_pega_registros_de_tabela_inexixtente_retorna_erro</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>&lt;sqlite3.Connection object at 0x7f9378a9b4e0&gt;
-<br/></div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_banco_dados.py::TestBancoDados::test_api_banco_dados_nao_salva_registro_se_tabela_nao_existe</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_banco_dados.py::TestBancoDados::test_api_banco_dados_cria_registro</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>&lt;sqlite3.Connection object at 0x7f9378a9b4e0&gt;
-<br/></div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_catalogo.py::TestCatalogo::test_singleton_funciona</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_catalogo.py::TestCatalogo::test_limpa_catalogo</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_catalogo.py::TestCatalogo::test_remove_curso_do_catalogo</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_catalogo.py::TestCatalogo::test_catalogo_vazio_retorna_lista_vazia</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_catalogo.py::TestCatalogo::test_adiciona_dois_cursos_no_catalogo</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_catalogo.py::TestCatalogo::test_adiciona_curso_no_catalogo</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_coordenador.py::TestCoordenador::test_coordenador_curso_2_nao_pode_listar_alunos_curso_1</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_coordenador.py::TestCoordenador::test_coordenador_curso_pode_listar_alunos_do_curso_com_dois_aluno</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_coordenador.py::TestCoordenador::test_coordenador_curso_pode_listar_alunos_do_curso_com_um_aluno</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_coordenador.py::TestCoordenador::test_coordenador_curso_pode_listar_alunos_curso_quando_zero_alunos</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_coordenador_geral.py::TestCoordenadorGeral::test_coordenador_geral_lista_detalhes_novo_curso</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_coordenador_geral.py::TestCoordenadorGeral::test_coordenador_geral_lista_detalhes_dois_cursos_dois_alunos_com_notas</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_coordenador_geral.py::TestCoordenadorGeral::test_coordenador_geral_lista_detalhes_quando_dois_cursos_com_alunos</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_coordenador_geral.py::TestCoordenadorGeral::test_coordenador_geral_lista_detalhes_quando_dois_cursos</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_coordenador_geral.py::TestCoordenadorGeral::test_coordenador_geral_lista_detalhes_quando_dois_alunos</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_coordenador_geral.py::TestCoordenadorGeral::test_coordenador_geral_lista_detalhes_alunos_quando_um_aluno</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_coordenador_geral.py::TestCoordenadorGeral::test_cooredenador_geral_lista_detalhes_quando_zero_alunos</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_curso.py::TestCurso::test_curso_deve_ter_todas_materias_com_nomes_diferentes</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_curso.py::TestCurso::test_curso_com_quantidade_materia_diferente_tres_retorna_uma_excecao</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_curso.py::TestCurso::test_os_cursos_podem_ter_nomes_iguais</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_curso.py::TestCurso::test_todo_curso_deve_ter_nome</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_curso.py::TestCurso::test_curso_deve_ter_identificador_unico</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_curso.py::TestCurso::test_cada_curso_deve_ter_tres_materias</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_curso.py::TestCurso::test_numero_cursos_deve_ser_tres</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_materia.py::TestMateria::test_os_nomes_das_materias_nao_precisam_ser_diferentes</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_materia.py::TestMateria::test_cada_materia_deve_ter_um_nome</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/unit/test_materia.py::TestMateria::test_materias_curso_devem_ter_identificadores_unicos</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody></table></body></html>
+            <div class="log">ImportError while importing test module &#x27;/home/douglas/repo/tdd_detroid/tests/unit/dao/test_dao_aluno.py&#x27;.<br/>Hint: make sure your test modules/packages have valid Python names.<br/>Traceback:<br/>/usr/lib/python3.8/importlib/__init__.py:127: in import_module<br/>    return _bootstrap._gcd_import(name[level:], package, level)<br/>tests/unit/dao/test_dao_aluno.py:2: in &lt;module&gt;<br/>    from src.controller.aluno import Aluno<br/>src/controller/aluno.py:1: in &lt;module&gt;<br/>    from src.dao.dao_aluno import DaoAluno<br/>src/dao/dao_aluno.py:2: in &lt;module&gt;<br/>    from src.controller.aluno import Aluno<br/><span class="error">E   ImportError: cannot import name &#x27;Aluno&#x27; from partially initialized module &#x27;src.controller.aluno&#x27; (most likely due to a circular import) (/home/douglas/repo/tdd_detroid/src/controller/aluno.py)</span><br/></div></td></tr></tbody></table></body></html>

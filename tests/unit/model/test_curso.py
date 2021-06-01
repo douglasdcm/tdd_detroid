@@ -1,8 +1,8 @@
 from typing import cast
 import pytest
-from src.curso import Curso
-from src.gerenciador_curso import GerenciadorCurso
-from src.materia import Materia
+from src.model.curso import Curso
+from src.model.gerenciador_curso import GerenciadorCurso
+from src.model.materia import Materia
 
 class TestCurso:
 
@@ -16,8 +16,8 @@ class TestCurso:
         self.curso = None
 
     def test_curso_nao_deve_adicionar_aluno_sem_nome(self):
-        failed
-
+        with pytest.raises(Exception, match=f"Não foi possível adicionar o aluno ao curso de {self.curso.pega_nome()}"):
+           self.curso.adiciona_aluno("")
 
     def test_curso_deve_ter_todas_materias_com_nomes_diferentes(self):
         curso = Curso("mat")

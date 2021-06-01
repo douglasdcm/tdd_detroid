@@ -1,10 +1,10 @@
 import sqlite3
-from src.catalogo_curso import CatalogoCurso
-from src.aluno import Aluno
-from src.curso import Curso
-from src.coordenador_curso import CoordenadorCurso
-from src.materia import Materia
-from src.banco_dados import BancoDados
+from src.model.catalogo_curso import CatalogoCurso
+from src.model.aluno import Aluno
+from src.model.curso import Curso
+from src.model.coordenador_curso import CoordenadorCurso
+from src.model.materia import Materia
+from src.model.banco_dados import BancoDados
 
 class TestCoordenador:
     coordenador = None

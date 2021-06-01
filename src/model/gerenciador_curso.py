@@ -1,4 +1,4 @@
-from src.curso import Curso
+from src.model.curso import Curso
 
 class GerenciadorCurso:
     def __init__(self):

@@ -1,6 +1,6 @@
-from src.catalogo_curso import CatalogoCurso
-from src.curso import Curso
-from src.materia import Materia
+from src.model.catalogo_curso import CatalogoCurso
+from src.model.curso import Curso
+from src.model.materia import Materia
 
 
 class TestCatalogo:

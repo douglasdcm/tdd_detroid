@@ -1,7 +1,7 @@
 import pytest
-from src.gerenciador_curso import GerenciadorCurso
-from src.curso import Curso
-from src.materia import Materia
+from src.model.gerenciador_curso import GerenciadorCurso
+from src.model.curso import Curso
+from src.model.materia import Materia
 
 class TestMateria:
     def test_os_nomes_das_materias_nao_precisam_ser_diferentes(self):
