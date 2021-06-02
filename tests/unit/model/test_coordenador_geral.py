@@ -9,8 +9,7 @@ from src.model.banco_dados import BancoDados
 
 class TestCoordenadorGeral:
 
-    def setup_method(self, method):
-        BancoDados(sqlite3.connect(":memory:"))
+    def setup_method(self, cria_banco):
         self.catalogo = CatalogoCurso()
         self.catalogo.limpa_catalogo()
         self.curso_1 = Curso("direito")

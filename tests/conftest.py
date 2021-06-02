@@ -1,22 +1,24 @@
 from sqlite3 import connect
+
+from attr.setters import NO_OP
 from src.model.banco_dados import BancoDados
 from pytest import fixture
 from src.model.materia import Materia
 from src.model.aluno import Aluno
 from src.model.curso import Curso
 
-@fixture(scope="function")
+@fixture
 def cria_banco():
-    return BancoDados(connect(":memory:"))
-
-@fixture(scope="function")
-def limpa_banco(cria_banco):
-    cria_banco.fecha_conexao_existente()
+    bd = BancoDados(connect(":memory:"))
+    yield bd
+    bd.fecha_conexao_existente()
 
 @fixture
 def cria_aluno():
-    nome = "José_U"
-    return Aluno(nome)
+    nome = "José"
+    aluno = Aluno(nome)
+    yield aluno
+    aluno = None
 
 @fixture
 def cria_curso_com_materias():
@@ -24,9 +26,11 @@ def cria_curso_com_materias():
     curso.atualiza_materias(Materia("mat"))
     curso.atualiza_materias(Materia("hist"))
     curso.atualiza_materias(Materia("geo"))
-    return curso
+    yield curso
+    curso = None
 
 @fixture
 def inscreve_aluno(cria_aluno, cria_curso_com_materias):
     cria_aluno.inscreve_curso(cria_curso_com_materias)
-    return cria_aluno, cria_curso_com_materias
+    yield cria_aluno, cria_curso_com_materias
+    
