@@ -1,13 +1,17 @@
 # -*- coding: utf-8 -*-
-import sys, sqlite3
+from src.model.inscricao_aluno_curso import InscricaoAlunoCurso
+from sys import argv
+from sqlite3 import connect
 from src.model.aluno import Aluno
 from src.model.curso import Curso
 from src.model.materia import Materia
 from src.dao.dao_fabrica import DaoFabrica
 from src.utils.messagens import LISTA_PARAMETROS_INVALIDA
+from src.config import banco_dados
+from src.controller.controller import Controller
 
 # banco de dados
-bd = sqlite3.connect("sample.db")
+bd = connect(banco_dados)
 
 # aluno
 cria_aluno = "cria-aluno"
@@ -42,26 +46,24 @@ def _cria_curso(argumentos):
         curso.atualiza_materias(Materia(materia_1))
         curso.atualiza_materias(Materia(materia_2))
         curso.atualiza_materias(Materia(materia_3))
-        dao = DaoFabrica(curso, bd)
-        dao.fabrica_objetos_dao().salva()
+        Controller(curso, bd).salva()
         print(f"Curso de {curso.pega_nome()} criado.")
     else:
         raise Exception(LISTA_PARAMETROS_INVALIDA)
 
 
 def _inscreve_aluno_curso(argumentos):
-    aluno_parametro = "--aluno"
-    curso_parametro = "--curso"
+    aluno_parametro = "--aluno-id"
+    curso_parametro = "--curso-id"
     numero_parametros = 6
     if aluno_parametro in argumentos \
         and curso_parametro in argumentos \
         and len(argumentos) == numero_parametros:
-        curso = _pega_valor(argumentos, curso_parametro)
-        aluno = _pega_valor(argumentos, aluno_parametro)
-        curso = Curso(curso)
-        aluno = Aluno(aluno)
-        curso.adiciona_aluno(aluno)
-        print(f"Aluno {aluno.pega_nome()} inscrito no curso de {curso.pega_nome()}.")
+        curso_id = _pega_valor(argumentos, curso_parametro)
+        aluno_id = _pega_valor(argumentos, aluno_parametro)
+        aluno = Controller(Aluno(None), bd).pega_registro_por_id(aluno_id)
+        curso = Controller(Curso(None), bd).pega_registro_por_id(curso_id)
+        print(f"Aluno {aluno[int(aluno_id)]} inscrito no curso de {curso[int(curso_id)]}.")
     else:
         raise Exception(LISTA_PARAMETROS_INVALIDA)
 
@@ -72,8 +74,7 @@ def _cria_aluno(argumentos):
         and len(argumentos) == numero_parametros:
         nome = _pega_valor(argumentos, nome_parametro)
         aluno = Aluno(nome)
-        dao = DaoFabrica(aluno, bd)
-        dao.fabrica_objetos_dao().salva()
+        Controller(aluno, bd).salva()
         print(f"Aluno {aluno.pega_nome()} criado com sucesso.")
     else:
         raise Exception(LISTA_PARAMETROS_INVALIDA)
@@ -82,4 +83,4 @@ def _pega_valor(argumentos, parametro, incremento = 1):
     return argumentos[argumentos.index(parametro) + incremento]
 
 if __name__ == '__main__':
-    main(sys.argv)
+    main(argv)

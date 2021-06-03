@@ -3,75 +3,69 @@ from tests.helper import executa_comando
 from src.dao.dao_fabrica import DaoFabrica
 from sqlite3 import connect
 from src.model.curso import Curso
+from tests.massa_dados import curso_nome_1, materia_nome_1, materia_nome_2, materia_nome_3
+from src.config import banco_dados
+from src.tabelas import cursos
 
 class TestCliCurso:
 
     def setup_method(self, method):
-        self._curso = "Matemática"
-        self._MENSSAGEM_SUCESSO = f"Curso de {self._curso} criado."
+        self._MENSSAGEM_SUCESSO = f"Curso de {curso_nome_1} criado."
         self._MENSSAGEM_ERRO = "Lista de parâmetros inválida."
-        self._file = "main.py"
         self._cria_curso = "cria-curso"
-        self._bd = BancoDados(connect("sample.db"))
+        self._bd = BancoDados(connect(banco_dados))
+        self._bd.deleta_tabela(cursos)
 
-    def teardown_method(self, method):       
-        self._bd.deleta_tabela("cursos")
+    def teardown_method(self, method):
         self._bd.fecha_conexao_existente()
 
     def test_criacao_de_curso_com_menos_materias_que_o_minimo_retorna_excecao(self):
         expected = self._MENSSAGEM_ERRO
-        parametros = [self._cria_curso, "--nome", self._curso, 
-                    "-m", "algebra", "calculo"]
+        parametros = [self._cria_curso, "--nome", curso_nome_1, 
+                    "-m", materia_nome_1, materia_nome_2]
         actual = executa_comando(parametros)
         assert expected in actual
 
     def test_criacao_de_curso_sem_materias_retorna_excecao(self):
         expected = self._MENSSAGEM_ERRO
-        parametros = [self._cria_curso, "--nome", self._curso, "-m"]
+        parametros = [self._cria_curso, "--nome", curso_nome_1, "-m"]
         actual = executa_comando(parametros)
         assert expected in actual
 
     def test_criacao_de_curso_sem_nome_retorna_excecao(self):
         expected = self._MENSSAGEM_ERRO
         parametros = [self._cria_curso, "--nome", "--materias",
-                     "algebra", "cálculo", "lógica"]
+                     materia_nome_1, materia_nome_2, materia_nome_3]
         actual = executa_comando(parametros)
         assert expected in actual
 
     def test_criacao_de_curso_usando_tag__m__para_lista_das_materias(self):
         expected = self._MENSSAGEM_SUCESSO
-        parametros = [self._cria_curso, "--nome", self._curso, "--materias",
-                     "algebra", "cálculo", "lógica"]
-        actual = executa_comando(parametros)
-        assert actual == expected
-
-    def test_criacao_de_curso_usando_tag__n__para_nome_do_curso(self):
-        expected = self._MENSSAGEM_SUCESSO
-        parametros = [self._cria_curso, "--nome", self._curso, "--materias",
-                     "algebra", "cálculo", "lógica"]
+        parametros = [self._cria_curso, "--nome", curso_nome_1, "--materias",
+                     materia_nome_1, materia_nome_2, materia_nome_3]
         actual = executa_comando(parametros)
         assert actual == expected
 
     def test_criacao_de_curso_com_paramtro__materias__antes__nome(self):
         expected = self._MENSSAGEM_SUCESSO
         parametros = [self._cria_curso, "--materias",
-                     "algebra", "cálculo", "lógica", "--nome", self._curso]
+                     materia_nome_1, materia_nome_2, materia_nome_3, "--nome", curso_nome_1]
         actual = executa_comando(parametros)
         assert actual == expected
 
     def test_criacao_de_curso_com_numero_minimo_de_materias(self):
         expected = self._MENSSAGEM_SUCESSO
-        parametros = [self._cria_curso, "--nome", self._curso, "--materias",
-                     "algebra", "cálculo", "lógica"]
+        parametros = [self._cria_curso, "--nome", curso_nome_1, "--materias",
+                     materia_nome_1, materia_nome_2, materia_nome_3]
         actual = executa_comando(parametros)
         assert actual == expected
 
     def test_curso_criado_banco_dados(self):
-        expected = [tuple((1, self._curso))]
-        parametros = [self._cria_curso, "--nome", self._curso, "--materias",
-                     "algebra", "cálculo", "lógica"]
+        expected = {1: curso_nome_1}
+        parametros = [self._cria_curso, "--nome", curso_nome_1, "--materias",
+                     materia_nome_1, materia_nome_2, materia_nome_3]
         executa_comando(parametros)
-        actual = DaoFabrica(Curso(self._curso), self._bd) \
+        actual = DaoFabrica(Curso(curso_nome_1), self._bd) \
                     .fabrica_objetos_dao() \
                     .pega_tudo()
         assert actual == expected

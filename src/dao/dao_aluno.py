@@ -1,9 +1,10 @@
 from src.dao.dao_base import DaoBase
+from src.tabelas import alunos
 
 class DaoAluno(DaoBase):
     def __init__(self, aluno, bd):
         self._bd = bd
-        self._tabela = "alunos"
+        self._tabela = alunos
         self._campos = "nome"
         self._aluno = aluno
         super().__init__(self._bd, self._tabela, self._campos)

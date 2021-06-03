@@ -1,10 +1,11 @@
-from src.dao.dao_fabrica import DaoFabrica
+from tests.massa_dados import aluno_nome_1
+from src.controller.controller import Controller
 
 class TestBdAlunos:
 
     def test_aluno_criado_foi_salvo_banco_dados(self, cria_banco, cria_aluno):
-        nome = "José"
-        expected = [tuple((1, nome,)),]
-        DaoFabrica(cria_aluno, cria_banco).fabrica_objetos_dao().salva()
-        actual = cria_banco.pega_todos_registros("alunos")
+        expected = {1: aluno_nome_1 }
+        controller = Controller(cria_aluno, cria_banco)
+        controller.salva()
+        actual = controller.pega_registros()
         assert actual == expected

@@ -1,0 +1,8 @@
+aluno_nome_1 = "Marcos"
+aluno_nome_2 = "Marcela"
+aluno_nome_3 = "Rita"
+curso_nome_1 = "Administração"
+materia_nome_1 = "Política"
+materia_nome_2 = "Mercado"
+materia_nome_3 = "Economia"
+materia_nome_4 = "Patologia"

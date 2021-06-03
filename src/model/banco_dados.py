@@ -56,12 +56,26 @@ class BancoDados:
             raise Exception("Não foi possiível salvar o registro.")
 
     def pega_todos_registros(self, tabela):
+        query = f"select * from {tabela}"
+        mensagem_erro = "Não foi possível pegar os registros."
+        return self._run(query, mensagem_erro)
+
+    def pega_registro_por_id(self, tabela, id):
+        query = f"select * from {tabela} where id = {id}"
+        mensagem_erro = "Não foi possível pegar o registro especificado."
+        return self._run(query, mensagem_erro)
+
+    def pega_por_query(self, tabela, query):
+        mensagem_erro = "Não foi possível executar a query especificada."
+        return self._run(query, mensagem_erro)
+
+    def _run(self, query, mensagem_erro):
         try:
             items = self._cria_conexao()
             cur = items[1]
-            cur.execute(f"select * from {tabela}")
-            return cur.fetchall()
+            cur.execute(query)
+            return dict(cur.fetchall())
         except Exception:
-            raise Exception("Não foi possível pegar os registros.")
+            raise Exception(mensagem_erro)
 
 

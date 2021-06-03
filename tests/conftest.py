@@ -6,26 +6,49 @@ from pytest import fixture
 from src.model.materia import Materia
 from src.model.aluno import Aluno
 from src.model.curso import Curso
+from src.config import banco_dados
+from src.tabelas import alunos, cursos
+from tests.massa_dados import aluno_nome_1, curso_nome_1, materia_nome_1, materia_nome_2, materia_nome_3
+from src.controller.controller import Controller
+
+IN_MEMORY = ":memory:"
 
 @fixture
 def cria_banco():
-    bd = BancoDados(connect(":memory:"))
+    bd = BancoDados(connect(IN_MEMORY))
     yield bd
     bd.fecha_conexao_existente()
 
 @fixture
+def cria_massa_dados_em_memoria():
+    bd = BancoDados(connect(IN_MEMORY))
+    Controller(Aluno(aluno_nome_1), bd).salva()
+    Controller(Curso(curso_nome_1), bd).salva()
+    yield
+    bd.fecha_conexao_existente()
+
+@fixture
+def cria_massa_dados():
+    bd = BancoDados(connect(banco_dados))
+    bd.deleta_tabela(cursos)
+    bd.deleta_tabela(alunos)
+    Controller(Aluno(aluno_nome_1), bd).salva()
+    Controller(Curso(curso_nome_1), bd).salva()
+    yield
+    bd.fecha_conexao_existente()  
+
+@fixture
 def cria_aluno():
-    nome = "José"
-    aluno = Aluno(nome)
+    aluno = Aluno(aluno_nome_1)
     yield aluno
     aluno = None
 
 @fixture
 def cria_curso_com_materias():
-    curso = Curso("pedagogia")
-    curso.atualiza_materias(Materia("mat"))
-    curso.atualiza_materias(Materia("hist"))
-    curso.atualiza_materias(Materia("geo"))
+    curso = Curso(curso_nome_1)
+    curso.atualiza_materias(Materia(materia_nome_1))
+    curso.atualiza_materias(Materia(materia_nome_2))
+    curso.atualiza_materias(Materia(materia_nome_3))
     yield curso
     curso = None
 

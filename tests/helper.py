@@ -1,7 +1,8 @@
 from subprocess import PIPE, STDOUT, run
+from src.config import ponto_entrada
 
 def executa_comando(argumentos):
-    comando = ["python", "main.py"]
+    comando = ["python", ponto_entrada]
     comando.extend(argumentos)
     return run(comando,
                 stdout=PIPE,

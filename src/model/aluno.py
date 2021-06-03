@@ -8,6 +8,7 @@ class Aluno:
         self._nota_maxima = 10
         self._nota_minima = 0
         self._nome = nome
+        self._id = None
 
     def tranca_curso(self, decisao):
         self.calcula_situacao()
