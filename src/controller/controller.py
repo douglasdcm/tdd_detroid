@@ -6,7 +6,10 @@ class Controller:
         self.dao = DaoFabrica(obj, bd).fabrica_objetos_dao()
 
     def salva(self):
-        self.dao.salva()
+        try:
+            self.dao.salva()
+        except Exception:
+            raise
 
     def pega_registros(self):
         return self.dao.pega_tudo()
@@ -16,3 +19,6 @@ class Controller:
 
     def pega_registro_por_query(self, query):
         return self.dao.pega_por_query(query)
+
+    def deleta(self, id):
+        return self.dao.deleta(id)

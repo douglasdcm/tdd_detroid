@@ -6,14 +6,17 @@ from src.model.curso import Curso
 from tests.massa_dados import curso_nome_1, materia_nome_1, materia_nome_2, materia_nome_3
 from src.config import banco_dados
 from src.tabelas import cursos
+from pytest import fixture
+from src.controller.controller import Controller
 
 class TestCliCurso:
 
-    def setup_method(self, method):
+    @fixture(autouse=True, scope="function")
+    def setup(self, cria_banco_real):
         self._MENSSAGEM_SUCESSO = f"Curso de {curso_nome_1} criado."
         self._MENSSAGEM_ERRO = "Lista de parâmetros inválida."
         self._cria_curso = "cria-curso"
-        self._bd = BancoDados(connect(banco_dados))
+        self._bd = cria_banco_real
         self._bd.deleta_tabela(cursos)
 
     def teardown_method(self, method):
@@ -61,11 +64,9 @@ class TestCliCurso:
         assert actual == expected
 
     def test_curso_criado_banco_dados(self):
-        expected = {1: curso_nome_1}
-        parametros = [self._cria_curso, "--nome", curso_nome_1, "--materias",
-                     materia_nome_1, materia_nome_2, materia_nome_3]
+        expected = [tuple((1, curso_nome_1))]
+        parametros = [self._cria_curso, "--nome", curso_nome_1, "--materias", \
+            materia_nome_1, materia_nome_2, materia_nome_3]
         executa_comando(parametros)
-        actual = DaoFabrica(Curso(curso_nome_1), self._bd) \
-                    .fabrica_objetos_dao() \
-                    .pega_tudo()
+        actual = Controller(Curso(curso_nome_1), self._bd).pega_registros()
         assert actual == expected

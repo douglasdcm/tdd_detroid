@@ -7,7 +7,7 @@ class TestDaoAluno:
 
     def test_aluno_pode_ser_salvo_banco_dados(self, cria_banco, cria_aluno):        
         bd = cria_banco
-        expected = {1: aluno_nome_1}
+        expected = [tuple((1, aluno_nome_1))]
         dao = DaoAluno(cria_aluno, bd)
         dao.salva()
         actual = dao.pega_tudo()

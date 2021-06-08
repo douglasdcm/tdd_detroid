@@ -23,7 +23,7 @@ class TestBancoDados:
         bd_2 = BancoDados()
         campos = "campo_1"
         valor = "'valor_1'"
-        expected = {1: 'valor_1'}
+        expected = [tuple((1, 'valor_1'))]
         bd_1.cria_tabela(self.tabela, campos)
         bd_1.salva_registro(self.tabela, campos, valor) 
         actual = bd_2.pega_todos_registros(self.tabela)
@@ -53,7 +53,7 @@ class TestBancoDados:
         valor_1 = "valor_1"
         valor_2 = "valor_2"
         valores = f"'{valor_1}', '{valor_2}'"
-        expected = {1: [valor_1, valor_2]}
+        expected = [tuple((1, valor_1, valor_2))]
         self.bd.cria_tabela(self.tabela, campos)
         self.bd.salva_registro(self.tabela, campos, valores)
         actual = self.bd.pega_todos_registros(self.tabela)

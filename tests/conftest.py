@@ -1,6 +1,4 @@
 from sqlite3 import connect
-
-from attr.setters import NO_OP
 from src.model.banco_dados import BancoDados
 from pytest import fixture
 from src.model.materia import Materia
@@ -20,22 +18,55 @@ def cria_banco():
     bd.fecha_conexao_existente()
 
 @fixture
-def cria_massa_dados_em_memoria():
-    bd = BancoDados(connect(IN_MEMORY))
-    Controller(Aluno(aluno_nome_1), bd).salva()
-    Controller(Curso(curso_nome_1), bd).salva()
-    yield
+def cria_banco_real():
+    bd = BancoDados(connect(banco_dados))
+    yield bd
     bd.fecha_conexao_existente()
 
 @fixture
-def cria_massa_dados():
-    bd = BancoDados(connect(banco_dados))
+def cria_massa_dados_em_memoria(cria_banco):
+    Controller(Aluno(aluno_nome_1), cria_banco).salva()
+    Controller(Curso(curso_nome_1), cria_banco).salva()
+    yield
+    cria_banco.deleta_tabela(cursos)
+    cria_banco.deleta_tabela(alunos)
+
+@fixture
+def cria_massa_dados(cria_banco_real):
+    bd = cria_banco_real
     bd.deleta_tabela(cursos)
     bd.deleta_tabela(alunos)
     Controller(Aluno(aluno_nome_1), bd).salva()
     Controller(Curso(curso_nome_1), bd).salva()
     yield
-    bd.fecha_conexao_existente()  
+    bd.deleta_tabela(cursos)
+    bd.deleta_tabela(alunos)
+
+@fixture
+def cria_aluno_banco_real(cria_banco_real):
+    bd = cria_banco_real
+    bd.deleta_tabela(alunos)
+    Controller(Aluno(aluno_nome_1), bd).salva()
+    yield
+    bd.deleta_tabela(alunos)
+
+@fixture
+def cria_curso_banco_real(cria_banco_real):
+    bd = cria_banco_real
+    bd.deleta_tabela(cursos)
+    Controller(Curso(curso_nome_1), bd).salva()
+    yield
+    bd.deleta_tabela(cursos)
+
+@fixture
+def cria_curso_em_memoria():
+    bd = cria_banco
+    Controller(Curso(curso_nome_1), bd).salva()
+
+@fixture
+def cria_aluno_em_memoria():
+    bd = cria_banco
+    Controller(Aluno(aluno_nome_1), bd).salva()
 
 @fixture
 def cria_aluno():

@@ -10,6 +10,8 @@ from src.utils.messagens import LISTA_PARAMETROS_INVALIDA
 from src.config import banco_dados
 from src.controller.controller import Controller
 
+first = 0
+
 # banco de dados
 bd = connect(banco_dados)
 
@@ -23,7 +25,7 @@ cria_curso = "cria-curso"
 def main(*args):
     for argumentos in args:
         if cria_aluno in argumentos:
-            _cria_aluno(argumentos)        
+            _cria_aluno(argumentos) 
         elif inscreve_aluno_curso in argumentos:
             _inscreve_aluno_curso(argumentos)
         elif cria_curso in argumentos:
@@ -61,9 +63,9 @@ def _inscreve_aluno_curso(argumentos):
         and len(argumentos) == numero_parametros:
         curso_id = _pega_valor(argumentos, curso_parametro)
         aluno_id = _pega_valor(argumentos, aluno_parametro)
-        aluno = Controller(Aluno(None), bd).pega_registro_por_id(aluno_id)
-        curso = Controller(Curso(None), bd).pega_registro_por_id(curso_id)
-        print(f"Aluno {aluno[int(aluno_id)]} inscrito no curso de {curso[int(curso_id)]}.")
+        inscricao = InscricaoAlunoCurso(aluno_id, curso_id)
+        Controller(inscricao, bd).salva()
+        print(f"Aluno identificado por {aluno_id} inscrito no curso identificado por {curso_id}.")
     else:
         raise Exception(LISTA_PARAMETROS_INVALIDA)
 
@@ -74,8 +76,9 @@ def _cria_aluno(argumentos):
         and len(argumentos) == numero_parametros:
         nome = _pega_valor(argumentos, nome_parametro)
         aluno = Aluno(nome)
-        Controller(aluno, bd).salva()
-        print(f"Aluno {aluno.pega_nome()} criado com sucesso.")
+        controller = Controller(aluno, bd)
+        controller.salva()
+        print(f"Aluno {nome} criado com sucesso.")
     else:
         raise Exception(LISTA_PARAMETROS_INVALIDA)
 

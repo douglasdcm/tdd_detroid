@@ -5,6 +5,9 @@ class IDao:
     def salva(self):
         pass
 
+    def deleta(self):
+        pass
+
     def pega_por_id(self, id):
         pass
 
