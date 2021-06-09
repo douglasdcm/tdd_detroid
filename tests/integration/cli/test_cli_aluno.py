@@ -1,4 +1,5 @@
 from sqlite3 import connect
+from typing import Sized
 from src.model.aluno import Aluno
 from src.dao.dao_fabrica import DaoFabrica
 from tests.helper import executa_comando
@@ -9,6 +10,7 @@ from src.config import banco_dados
 from tests.massa_dados import aluno_nome_1, aluno_nome_2, aluno_nome_3
 from pytest import fixture
 from src.controller.controller import Controller
+from src.enums.enums import Situacao
 
 class TestCliAluno:
     
@@ -40,7 +42,9 @@ class TestCliAluno:
         assert actual == expected
 
     def test_aluno_criado_banco_dados(self):
-        expected = [tuple((1, aluno_nome_1))]
+        cr = 0
+        situacao = Situacao.em_curso.value
+        expected = [tuple((1, aluno_nome_1, cr, situacao))]
         self._cria_aluno_por_cli(aluno_nome_1)
         actual = Controller(Aluno(aluno_nome_1), self.bd).pega_registros()
         assert actual == expected

@@ -3,6 +3,7 @@ from src.model.aluno import Aluno
 from src.model.curso import Curso
 from tests.massa_dados import aluno_nome_1, curso_nome_1, materia_nome_1, \
     materia_nome_2, materia_nome_3, materia_nome_4
+from src.enums.enums import Situacao
 
 
 class TestAluno:
@@ -34,7 +35,7 @@ class TestAluno:
             aluno.tranca_curso(True)
 
     def test_aluno_destranca_curso_situacao_volta_para_anterior(self, inscreve_aluno):
-        expected = "em curso"
+        expected = Situacao.em_curso.value
         aluno, _ = inscreve_aluno
         aluno.tranca_curso(True)
         aluno.tranca_curso(False)
@@ -42,21 +43,21 @@ class TestAluno:
         assert actual == expected
 
     def test_aluno_nao_cursou_nenhuma_materia_retorna_situacao_em_curso(self, inscreve_aluno):
-        expected = "em curso"
+        expected = Situacao.em_curso.value
         aluno, _ = inscreve_aluno
         aluno.calcula_situacao()
         actual = aluno.pega_situacao()
         assert actual == expected
 
     def test_aluno_nao_inscrito_curso_situacao_retorna_aluno_inexistente(self):
-        expected = "aluno inexistente"
+        expected = Situacao.inexistente.value
         aluno = Aluno("UNKNOWN")
         aluno.calcula_situacao()
         actual = aluno.pega_situacao()
         assert actual == expected
 
     def test_aluno_trancado_quando_calcula_situacao_retorna_trancado(self, inscreve_aluno):
-        expected = "trancado"
+        expected = Situacao.trancado.value
         aluno, _ = inscreve_aluno
         aluno.tranca_curso(True)
         aluno.calcula_situacao()
@@ -100,7 +101,7 @@ class TestAluno:
         assert actual == expected
 
     def test_calcula_situacao_aluno_baseado_nas_materias_reais(self, inscreve_aluno):
-        expected = "aprovado"
+        expected = Situacao.aprovado.value
         materias = {materia_nome_1:8, materia_nome_2:7,materia_nome_3:9}
         aluno, _ = inscreve_aluno
         aluno.atualiza_materias_cursadas(materias)
@@ -127,7 +128,7 @@ class TestAluno:
         assert actual == expected
 
     def test_aluno_com_nota_sete_ao_fim_do_curso_esta_aprovado(self, inscreve_aluno):
-        expected = "aprovado"
+        expected = Situacao.aprovado.value
         materias = {materia_nome_1: 7, materia_nome_2: 7, materia_nome_3: 7}
         aluno, _ = inscreve_aluno
         aluno.atualiza_materias_cursadas(materias)
@@ -136,7 +137,7 @@ class TestAluno:
         assert actual == expected
 
     def test_aluno_com_quantidade_materias_cursadas_menor_que_em_curso_esta_com_situacao_em_curso(self, inscreve_aluno):
-        expected = "em curso"
+        expected = Situacao.em_curso.value
         materias = {materia_nome_1:6, materia_nome_2:6}   
         aluno, _ = inscreve_aluno    
         aluno.atualiza_materias_cursadas(materias)
@@ -145,7 +146,7 @@ class TestAluno:
         assert actual == expected
 
     def test_aluno_cr_menor_sete_fim_curso_esta_reprovado(self, inscreve_aluno):
-        expected = "reprovado"
+        expected = Situacao.reprovado.value
         materias = {materia_nome_1:6, materia_nome_2:6, materia_nome_3: 6}
         aluno, _ = inscreve_aluno
         aluno.atualiza_materias_cursadas(materias)
@@ -154,7 +155,7 @@ class TestAluno:
         assert actual == expected
 
     def test_aluno_com_cr_maior_que_sete_ao_fim_do_curso_esta_aprovado(self, inscreve_aluno):
-        expected = "aprovado"
+        expected = Situacao.aprovado.value
         materias = {materia_nome_1: 8, materia_nome_2: 8, materia_nome_3: 8}
         aluno, _ = inscreve_aluno
         aluno.atualiza_materias_cursadas(materias)

@@ -6,6 +6,7 @@ from src.model.aluno import Aluno
 from src.model.banco_dados import BancoDados
 from tests.massa_dados import aluno_nome_1
 from src.tabelas import alunos
+from src.enums.enums import Situacao
 
 class TestControllerAluno:
 
@@ -23,7 +24,9 @@ class TestControllerAluno:
         assert actual == expected
 
     def test_aluno_criado_banco_dados(self):
-        expected = [tuple((1, aluno_nome_1))]
+        cr = 0
+        situacao = Situacao.em_curso.value
+        expected = [tuple((1, aluno_nome_1, cr, situacao))]
         actual = self.controller.pega_registros()
         assert actual == expected
 

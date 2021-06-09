@@ -43,6 +43,12 @@ def cria_massa_dados(cria_banco_real):
     bd.deleta_tabela(alunos)
 
 @fixture
+def cria_massa_dados_em_memoria(cria_banco):
+    bd = cria_banco
+    Controller(Aluno(aluno_nome_1), bd).salva()
+    Controller(Curso(curso_nome_1), bd).salva()
+
+@fixture
 def cria_aluno_banco_real(cria_banco_real):
     bd = cria_banco_real
     bd.deleta_tabela(alunos)

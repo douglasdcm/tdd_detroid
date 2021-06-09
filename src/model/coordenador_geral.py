@@ -9,3 +9,6 @@ class CoordenadorGeral(Coordenador):
 
     def listar_detalhe_alunos(self):     
         return super().listar_detalhe_alunos(curso=self._curso)
+
+    def listar_detalhe_alunos_por_banco(self):
+        return {"alunos": [{"nome": "joão", "coeficiente rendimento": 6, "materias": {"m1": 6}}]}

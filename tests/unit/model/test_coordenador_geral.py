@@ -1,5 +1,8 @@
+from src.controller.controller import Controller
 from time import process_time_ns, sleep
 import sqlite3
+
+from pytest import fixture
 from src.model.catalogo_curso import CatalogoCurso
 from src.model.aluno import Aluno
 from src.model.curso import Curso
@@ -30,6 +33,17 @@ class TestCoordenadorGeral:
         self.curso_1 = None
         self.curso_2 = None
         self.curso_3 = None
+
+    def test_popula_banco(self, cria_banco, cria_massa_dados_em_memoria):
+        actual = Controller(Aluno(None), cria_banco).pega_registro_por_id(1)
+        actual_2 = Controller(Curso(None), cria_banco).pega_registro_por_id(1)
+        assert actual is None
+
+    def test_coordenador_geral_pega_detalhes_alunos_pelo_banco(self):
+        expected = {"alunos": [{"nome": "joão", "coeficiente rendimento": 6, "materias": {"m1": 6}}]}
+        coordenador = CoordenadorGeral()
+        actual = coordenador.listar_detalhe_alunos_por_banco()
+        assert actual == expected
 
     def test_coordenador_geral_lista_detalhes_novo_curso(self):
         nome = "mario"

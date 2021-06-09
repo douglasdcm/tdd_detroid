@@ -65,6 +65,8 @@ class BancoDados:
         result = self._run(query, mensagem_erro)
         if result == []:
             raise ErroBancoDados(f"Registro especificado não foi encontrado.")
+        else:
+            return result
 
     def pega_por_query(self, tabela, query):
         mensagem_erro = "Não foi possível executar a query especificada."
