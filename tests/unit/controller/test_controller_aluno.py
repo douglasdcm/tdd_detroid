@@ -11,9 +11,8 @@ from src.enums.enums import Situacao
 class TestControllerAluno:
 
     @fixture(autouse=True, scope="function")
-    def setup(self, cria_banco_real):
-        cria_banco_real.deleta_tabela(alunos)
-        self.controller = Controller(Aluno(aluno_nome_1), cria_banco_real)
+    def setup(self, cria_banco):
+        self.controller = Controller(Aluno(aluno_nome_1), cria_banco)
         self.controller.salva()
 
     def test_aluno_pode_ser_deletado_do_banco(self):
@@ -24,9 +23,7 @@ class TestControllerAluno:
         assert actual == expected
 
     def test_aluno_criado_banco_dados(self):
-        cr = 0
-        situacao = Situacao.em_curso.value
-        expected = [tuple((1, aluno_nome_1, cr, situacao))]
+        expected = aluno_nome_1
         actual = self.controller.pega_registros()
-        assert actual == expected
+        assert actual[0].pega_nome() == expected
 

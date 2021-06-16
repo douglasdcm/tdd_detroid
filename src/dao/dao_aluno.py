@@ -1,3 +1,5 @@
+from os import register_at_fork
+from src.model.aluno import Aluno
 from src.model.banco_dados import BancoDados
 from src.dao.dao_base import DaoBase
 from src.tabelas import alunos
@@ -18,5 +20,25 @@ class DaoAluno(DaoBase):
                                 f"'{self._aluno.pega_nome()}', \
                                    {self._aluno.pega_coeficiente_rendimento()}, \
                                    '{self._aluno.pega_situacao()}'")
+
+    def pega_por_id(self, id):
+        linha = super().pega_por_id(id)
+        return self._tuple_para_aluno(linha[0])
+
+    def pega_tudo(self):
+        registros = super().pega_tudo()
+        lista_alunos = list()
+        for linha in registros:
+            aluno = self._tuple_para_aluno(linha)
+            lista_alunos.append(aluno)
+        return lista_alunos 
+
+    def _tuple_para_aluno(self, linha):
+        (id_, nome, cr, situacao) = linha
+        aluno = Aluno(nome)
+        aluno.define_id(id_)
+        aluno.define_cr(cr)
+        aluno.define_situacao(situacao)
+        return aluno   
 
 

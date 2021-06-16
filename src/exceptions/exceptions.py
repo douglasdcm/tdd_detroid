@@ -9,3 +9,7 @@ class CursoNaoEncontrado(Exception):
 class ErroBancoDados(Exception):
     def __init__(self, mensagem="Erro no banco de dados."):
         super().__init__(mensagem)
+
+class ErroMateriaSemNome(Exception):
+    def __init__(self, mensagem="Matéria especificada sem nome."):
+        super().__init__(mensagem)

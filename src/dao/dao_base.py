@@ -1,9 +1,8 @@
-from os import set_blocking
 from src.model.banco_dados import BancoDados
 from src.dao.dao_interface import IDao
 
 class DaoBase(IDao):
-    def __init__(self, bd :BancoDados, tabela, campos, complemento=None):
+    def __init__(self, bd :BancoDados, tabela, campos, complemento=""):
         self._bd = bd
         self._tabela = tabela
         self._campos = campos

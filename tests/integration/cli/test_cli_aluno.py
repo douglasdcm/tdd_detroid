@@ -42,12 +42,10 @@ class TestCliAluno:
         assert actual == expected
 
     def test_aluno_criado_banco_dados(self):
-        cr = 0
-        situacao = Situacao.em_curso.value
-        expected = [tuple((1, aluno_nome_1, cr, situacao))]
-        self._cria_aluno_por_cli(aluno_nome_1)
-        actual = Controller(Aluno(aluno_nome_1), self.bd).pega_registros()
-        assert actual == expected
+        expected = aluno_nome_1
+        self._cria_aluno_por_cli(expected)
+        actual = Controller(Aluno(expected), self.bd).pega_registros()
+        assert actual[0].pega_nome() == expected
 
     def test_criacao_um_aluno_com_informacoes_basicas(self):
         expected = self._MENSSAGEM_SUCESSO % aluno_nome_1

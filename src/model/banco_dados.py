@@ -10,7 +10,15 @@ class BancoDados:
             if conexao is not None:            
                 type(self)._conexao = conexao
             else:
-                raise ErroBancoDados("Uma conexão precisa ser informada.")            
+                raise ErroBancoDados("Uma conexão precisa ser informada.")
+
+    def _liga_foreing_key_support(self):
+        try:
+            items = self._cria_conexao()
+            cur = items[1] 
+            cur.execute(f"PRAGMA foreign_keys = OFF")
+        except Exception:
+            raise ErroBancoDados("Não foi possível ligar o foreing_key_support.")     
 
     def deleta_tabela(self, tabela):
         try:
@@ -81,6 +89,6 @@ class BancoDados:
             con.commit()
             return cur.fetchall()
         except Exception:
-            raise ErroBancoDados(mensagem_erro)
+            raise ErroBancoDados(f"{mensagem_erro}\nquery: {query}")
 
 

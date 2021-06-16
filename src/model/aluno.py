@@ -10,6 +10,18 @@ class Aluno:
         self._nome = nome
         self._id = None
 
+    def define_situacao(self, situacao):
+        self._situacao = situacao
+
+    def define_cr(self, cr):
+        self._coeficiente_rendimento = cr
+
+    def define_id(self, id_):
+        self._id = id_
+
+    def pega_id(self):
+        return self._id
+
     def tranca_curso(self, decisao):
         self.calcula_situacao()
         if self._situacao == "aprovado" or self._situacao == "reprovado":

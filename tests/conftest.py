@@ -1,4 +1,6 @@
 from sqlite3 import connect
+from src.model.inscricao_aluno_curso import InscricaoAlunoCurso
+from src.model.associa_curso_materia import AssociaCursoMateria
 from src.model.banco_dados import BancoDados
 from pytest import fixture
 from src.model.materia import Materia
@@ -27,6 +29,13 @@ def cria_banco_real():
 def cria_massa_dados_em_memoria(cria_banco):
     Controller(Aluno(aluno_nome_1), cria_banco).salva()
     Controller(Curso(curso_nome_1), cria_banco).salva()
+    Controller(Materia(materia_nome_1), cria_banco).salva()
+    Controller(Materia(materia_nome_2), cria_banco).salva()
+    Controller(Materia(materia_nome_3), cria_banco).salva()
+    Controller(AssociaCursoMateria(curso_id=1,materia_id=1), cria_banco).salva()
+    Controller(AssociaCursoMateria(curso_id=2,materia_id=1), cria_banco).salva()
+    Controller(AssociaCursoMateria(curso_id=3,materia_id=1), cria_banco).salva()
+    Controller(InscricaoAlunoCurso(aluno_id=1, curso_id=1), cria_banco)
     yield
     cria_banco.deleta_tabela(cursos)
     cria_banco.deleta_tabela(alunos)
@@ -41,12 +50,6 @@ def cria_massa_dados(cria_banco_real):
     yield
     bd.deleta_tabela(cursos)
     bd.deleta_tabela(alunos)
-
-@fixture
-def cria_massa_dados_em_memoria(cria_banco):
-    bd = cria_banco
-    Controller(Aluno(aluno_nome_1), bd).salva()
-    Controller(Curso(curso_nome_1), bd).salva()
 
 @fixture
 def cria_aluno_banco_real(cria_banco_real):

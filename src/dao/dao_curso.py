@@ -4,7 +4,7 @@ from src.model.banco_dados import BancoDados
 from src.tabelas import cursos
 
 class DaoCurso(DaoBase):
-    def __init__(self, curso, bd) -> None:
+    def __init__(self, curso :Curso, bd: BancoDados):
         self._bd = bd
         self._tabela = cursos
         self._campos = "nome"

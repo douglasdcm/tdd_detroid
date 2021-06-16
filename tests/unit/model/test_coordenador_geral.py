@@ -1,3 +1,4 @@
+from src.model.inscricao_aluno_curso import InscricaoAlunoCurso
 from src.controller.controller import Controller
 from time import process_time_ns, sleep
 import sqlite3
@@ -35,8 +36,12 @@ class TestCoordenadorGeral:
         self.curso_3 = None
 
     def test_popula_banco(self, cria_banco, cria_massa_dados_em_memoria):
-        actual = Controller(Aluno(None), cria_banco).pega_registro_por_id(1)
-        actual_2 = Controller(Curso(None), cria_banco).pega_registro_por_id(1)
+        id_inscricao = 1
+        (id_aluno, id_curso) = Controller(InscricaoAlunoCurso(None, None), cria_banco). \
+                        pega_registro_por_id(id_inscricao)
+        Controller(Aluno(None), cria_banco).pega_registro_por_id(id_aluno)
+        Controller(Curso(None), cria_banco).pega_registro_por_id(id_curso)
+        actual = CoordenadorGeral().listar_detalhe_alunos_por_banco()
         assert actual is None
 
     def test_coordenador_geral_pega_detalhes_alunos_pelo_banco(self):
