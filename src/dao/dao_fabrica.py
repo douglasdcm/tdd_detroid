@@ -1,3 +1,4 @@
+from src.model.coordenador_geral import CoordenadorGeral
 from src.model.associa_curso_materia import AssociaCursoMateria
 from src.model.materia import Materia
 from src.model.inscricao_aluno_curso import InscricaoAlunoCurso
@@ -9,6 +10,9 @@ from src.dao.dao_curso import DaoCurso
 from src.dao.dao_inscricao import DaoInscricao
 from src.dao.dao_materia import DaoMateria
 from src.dao.dao_associa_curso_materia import DaoAssociaCursoMateria
+from src.dao.dao_coordenador_geral import DaoCoordenadorGeral
+from src.exceptions.exceptions import ErroObjetoDaoNaoEncontrado
+
 
 class DaoFabrica:
     def __init__(self, obj, bd):
@@ -27,5 +31,7 @@ class DaoFabrica:
             return DaoMateria(self.obj, bd)
         if isinstance(self.obj, AssociaCursoMateria):
             return DaoAssociaCursoMateria(self.obj, bd)
+        if isinstance(self.obj, CoordenadorGeral):
+            return DaoCoordenadorGeral(self.obj, bd)
         else:
-            raise Exception("Objeto Dao não identificado.")
+            raise ErroObjetoDaoNaoEncontrado("Objeto Dao não identificado.")

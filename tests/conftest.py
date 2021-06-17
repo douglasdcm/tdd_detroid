@@ -8,10 +8,12 @@ from src.model.aluno import Aluno
 from src.model.curso import Curso
 from src.config import banco_dados
 from src.tabelas import alunos, cursos
-from tests.massa_dados import aluno_nome_1, curso_nome_1, materia_nome_1, materia_nome_2, materia_nome_3
+from tests.massa_dados import aluno_nome_1, curso_nome_1, materia_nome_1, \
+                              materia_nome_2, materia_nome_3
 from src.controller.controller import Controller
 
 IN_MEMORY = ":memory:"
+
 
 @fixture
 def cria_banco():
@@ -19,11 +21,13 @@ def cria_banco():
     yield bd
     bd.fecha_conexao_existente()
 
+
 @fixture
 def cria_banco_real():
     bd = BancoDados(connect(banco_dados))
     yield bd
     bd.fecha_conexao_existente()
+
 
 @fixture
 def cria_massa_dados_em_memoria(cria_banco):
@@ -32,13 +36,17 @@ def cria_massa_dados_em_memoria(cria_banco):
     Controller(Materia(materia_nome_1), cria_banco).salva()
     Controller(Materia(materia_nome_2), cria_banco).salva()
     Controller(Materia(materia_nome_3), cria_banco).salva()
-    Controller(AssociaCursoMateria(curso_id=1,materia_id=1), cria_banco).salva()
-    Controller(AssociaCursoMateria(curso_id=2,materia_id=1), cria_banco).salva()
-    Controller(AssociaCursoMateria(curso_id=3,materia_id=1), cria_banco).salva()
+    Controller(AssociaCursoMateria(curso_id=1, materia_id=1),
+               cria_banco).salva()
+    Controller(AssociaCursoMateria(curso_id=2, materia_id=1),
+               cria_banco).salva()
+    Controller(AssociaCursoMateria(curso_id=3, materia_id=1),
+               cria_banco).salva()
     Controller(InscricaoAlunoCurso(aluno_id=1, curso_id=1), cria_banco)
     yield
     cria_banco.deleta_tabela(cursos)
     cria_banco.deleta_tabela(alunos)
+
 
 @fixture
 def cria_massa_dados(cria_banco_real):
@@ -51,6 +59,7 @@ def cria_massa_dados(cria_banco_real):
     bd.deleta_tabela(cursos)
     bd.deleta_tabela(alunos)
 
+
 @fixture
 def cria_aluno_banco_real(cria_banco_real):
     bd = cria_banco_real
@@ -58,6 +67,7 @@ def cria_aluno_banco_real(cria_banco_real):
     Controller(Aluno(aluno_nome_1), bd).salva()
     yield
     bd.deleta_tabela(alunos)
+
 
 @fixture
 def cria_curso_banco_real(cria_banco_real):
@@ -67,21 +77,25 @@ def cria_curso_banco_real(cria_banco_real):
     yield
     bd.deleta_tabela(cursos)
 
+
 @fixture
 def cria_curso_em_memoria():
     bd = cria_banco
     Controller(Curso(curso_nome_1), bd).salva()
+
 
 @fixture
 def cria_aluno_em_memoria():
     bd = cria_banco
     Controller(Aluno(aluno_nome_1), bd).salva()
 
+
 @fixture
 def cria_aluno():
     aluno = Aluno(aluno_nome_1)
     yield aluno
     aluno = None
+
 
 @fixture
 def cria_curso_com_materias():
@@ -92,8 +106,8 @@ def cria_curso_com_materias():
     yield curso
     curso = None
 
+
 @fixture
 def inscreve_aluno(cria_aluno, cria_curso_com_materias):
     cria_aluno.inscreve_curso(cria_curso_com_materias)
     yield cria_aluno, cria_curso_com_materias
-    

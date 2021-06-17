@@ -11,7 +11,14 @@ class Curso:
         self._nome = nome
         self._lista_alunos = list()        
         self._adiciona_catalogo_cursos()        
-        
+        self._id = None
+
+    def pega_id(self):
+        return self._id
+
+    def define_id(self, id):
+        self._id = id
+
     def _adiciona_catalogo_cursos(self):
         catalogo = CatalogoCurso()
         catalogo.adiciona_curso(self)

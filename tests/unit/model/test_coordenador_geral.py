@@ -1,15 +1,9 @@
-from src.model.inscricao_aluno_curso import InscricaoAlunoCurso
-from src.controller.controller import Controller
-from time import process_time_ns, sleep
-import sqlite3
-
-from pytest import fixture
 from src.model.catalogo_curso import CatalogoCurso
 from src.model.aluno import Aluno
 from src.model.curso import Curso
 from src.model.coordenador_geral import CoordenadorGeral
 from src.model.materia import Materia
-from src.model.banco_dados import BancoDados
+
 
 class TestCoordenadorGeral:
 
@@ -35,26 +29,12 @@ class TestCoordenadorGeral:
         self.curso_2 = None
         self.curso_3 = None
 
-    def test_popula_banco(self, cria_banco, cria_massa_dados_em_memoria):
-        id_inscricao = 1
-        (id_aluno, id_curso) = Controller(InscricaoAlunoCurso(None, None), cria_banco). \
-                        pega_registro_por_id(id_inscricao)
-        Controller(Aluno(None), cria_banco).pega_registro_por_id(id_aluno)
-        Controller(Curso(None), cria_banco).pega_registro_por_id(id_curso)
-        actual = CoordenadorGeral().listar_detalhe_alunos_por_banco()
-        assert actual is None
-
-    def test_coordenador_geral_pega_detalhes_alunos_pelo_banco(self):
-        expected = {"alunos": [{"nome": "joão", "coeficiente rendimento": 6, "materias": {"m1": 6}}]}
-        coordenador = CoordenadorGeral()
-        actual = coordenador.listar_detalhe_alunos_por_banco()
-        assert actual == expected
-
     def test_coordenador_geral_lista_detalhes_novo_curso(self):
         nome = "mario"
         aluno = Aluno(nome)
         materias = {"virus": 6}
-        expected = {"alunos": [{"nome": nome, "coeficiente rendimento": 6, "materias": materias}]}
+        expected = {"alunos": [{"nome": nome, "coeficiente rendimento": 6,
+                    "materias": materias}]}
         coordenador = CoordenadorGeral()
         curso_novo = Curso("patologia")
         curso_novo.atualiza_materias(Materia("bacterias"))
@@ -65,15 +45,17 @@ class TestCoordenadorGeral:
         actual = coordenador.listar_detalhe_alunos()
         assert actual == expected
 
-    def test_coordenador_geral_lista_detalhes_dois_cursos_dois_alunos_com_notas(self):
+    def test_coordenador_geral_lista_detalhe_2_cursos_2_alunos_com_notas(self):
         nome_1 = "joao"
         nome_2 = "maria"
         materias_1 = {"penal": 3}
         materias_2 = {"plantas": 3, "solos": 3}
         cr = 3
         expected = {"alunos": [
-            {"nome": nome_1, "coeficiente rendimento": cr, "materias": materias_1},
-            {"nome": nome_2, "coeficiente rendimento": cr, "materias": materias_2}
+            {"nome": nome_1, "coeficiente rendimento": cr,
+             "materias": materias_1},
+            {"nome": nome_2, "coeficiente rendimento": cr,
+             "materias": materias_2}
         ]}
         aluno_1 = Aluno(nome_1)
         aluno_2 = Aluno(nome_2)
@@ -85,7 +67,7 @@ class TestCoordenadorGeral:
         actual = coordenador.listar_detalhe_alunos()
         assert actual == expected
 
-    def test_coordenador_geral_lista_detalhes_quando_dois_cursos_com_alunos(self):
+    def test_coordenador_geral_lista_detalhes_quando_2_cursos_com_alunos(self):
         nome_1 = "joao"
         nome_2 = "maria"
         expected = {"alunos": [
@@ -106,7 +88,6 @@ class TestCoordenadorGeral:
         actual = coordenador.listar_detalhe_alunos()
         assert actual == expected
 
-
     def test_coordenador_geral_lista_detalhes_quando_dois_alunos(self):
         nome_1 = "joao"
         nome_2 = "maria"
@@ -126,23 +107,17 @@ class TestCoordenadorGeral:
         nome = "maria"
         materias = {"civil": 6}
         cr = 6
-        expected = {"alunos":[
-                    {
-                        "nome": nome,
-                        "materias": materias,
-                        "coeficiente rendimento": cr
+        expected = {"alunos": [
+                            {
+                                "nome": nome,
+                                "materias": materias,
+                                "coeficiente rendimento": cr
+                            }
+                        ]
                     }
-                ]
-            }
         aluno = Aluno("maria")
         aluno.inscreve_curso(self.curso_1)
         aluno.atualiza_materias_cursadas(materias)
-        coordenador = CoordenadorGeral()
-        actual = coordenador.listar_detalhe_alunos()
-        assert actual == expected
-
-    def test_cooredenador_geral_lista_detalhes_quando_zero_alunos(self):
-        expected = {"alunos": []}
         coordenador = CoordenadorGeral()
         actual = coordenador.listar_detalhe_alunos()
         assert actual == expected

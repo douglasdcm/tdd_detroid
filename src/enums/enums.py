@@ -1,4 +1,6 @@
 from enum import Enum
+
+
 class Situacao(Enum):
     em_curso = "em curso"
     aprovado = "aprovado"

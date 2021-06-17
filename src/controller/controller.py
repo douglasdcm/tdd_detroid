@@ -1,5 +1,6 @@
 from src.dao.dao_fabrica import DaoFabrica
 
+
 class Controller:
 
     def __init__(self, obj, bd):

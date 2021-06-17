@@ -1,7 +1,8 @@
 from src.model.banco_dados import BancoDados
 from pytest import raises
 
-class TestException:
+
+class TestExceptionTraning:
 
     def test_retorna_excecao_por_try_except(self):
         mensagem = "Exceção por try > except."
@@ -36,14 +37,14 @@ class TestException:
             raise Exception1(mensagem)
 
     def _retorna_excecao_por_if(self, entrada, mensagem):
-        if entrada == True:
+        if entrada is True:
             raise Exception1(mensagem)
 
     def _retorna_excecao_com_mensagem_padrao(self):
         raise Exception2()
 
     def _retorna_excecao_sempre(self, mensagem):
-        raise Exception1(mensagem)   
+        raise Exception1(mensagem)
 
     def _retorna_excecao_try_except(self, mensagem):
         try:
@@ -51,12 +52,13 @@ class TestException:
         except Exception:
             raise Exception1(mensagem)
 
+
 class Exception1(Exception):
     def __init__(self, mensagem="Mensagem padrão."):
         super().__init__(mensagem)
 
+
 class Exception2(Exception):
     def __init__(self):
-        mensagem="Mensagem padrao constante."
+        mensagem = "Mensagem padrao constante."
         super().__init__(mensagem)
-
