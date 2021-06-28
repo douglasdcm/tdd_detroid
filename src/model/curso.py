@@ -1,23 +1,34 @@
+from src.model.i_model import IModel
 import time
 from src.model.catalogo_curso import CatalogoCurso
 from src.model.aluno import Aluno
+from src.exceptions.exceptions import MaximoCaracteres
 
-class Curso:
 
-    def __init__(self, nome):
+class Curso(IModel):
+
+    def __init__(self, nome=""):
         self._lista_materias = list()
         self._minimo_materia = 3
+        self._maximo_caracteres = 10
         self._identificador_unico = time.time()
         self._nome = nome
-        self._lista_alunos = list()        
-        self._adiciona_catalogo_cursos()        
+        self._lista_alunos = list()
+        self._adiciona_catalogo_cursos()
         self._id = None
+        self._valida_parametros(nome)
+
+    def _valida_parametros(self, nome):
+        if len(nome) > self._maximo_caracteres:
+            raise MaximoCaracteres("Nome do curso deve ter no máximao {} letras.".format(
+                self._maximo_caracteres))
 
     def pega_id(self):
         return self._id
 
     def define_id(self, id):
         self._id = id
+        return self
 
     def _adiciona_catalogo_cursos(self):
         catalogo = CatalogoCurso()
@@ -25,10 +36,10 @@ class Curso:
 
     def pega_nome(self):
         return self._nome
-    
+
     def pega_identificador_unico(self):
         return self._identificador_unico
-    
+
     def atualiza_materias(self, materia):
         if len(self._lista_materias) == 0:
             self._lista_materias.append(materia)
@@ -37,7 +48,7 @@ class Curso:
                 if item.pega_nome() == materia.pega_nome():
                     return
             if len(self._lista_materias) < self._minimo_materia:
-                    self._lista_materias.append(materia)
+                self._lista_materias.append(materia)
 
     def pega_lista_materias(self):
         quantidade_materias = len(self._lista_materias)
@@ -54,8 +65,3 @@ class Curso:
             self._lista_alunos.append(aluno)
         else:
             raise Exception(f"Não foi possível adicionar o aluno ao curso de {self.pega_nome()}.")
-
-
-    
-
-            

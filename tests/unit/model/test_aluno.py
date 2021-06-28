@@ -8,6 +8,24 @@ from src.enums.enums import Situacao
 
 class TestAluno:
 
+    def test_define_cr_retorna_aluno_com_cr_atualizado(self):
+        expected = 7
+        aluno = Aluno(aluno_nome_1).define_cr(expected)
+        actual = aluno.pega_coeficiente_rendimento()
+        assert actual == expected
+
+    def test_define_situacao_retorna_aluno_com_situacao_atualizada(self):
+        expected = "aprovado"
+        aluno = Aluno(aluno_nome_1).define_situacao(Situacao.aprovado.value)
+        actual = aluno.pega_situacao()
+        assert actual == expected
+
+    def test_define_id_retorna_aluno_com_id_atualizado(self):
+        expected = 1
+        aluno = Aluno(aluno_nome_1).define_id(expected)
+        actual = aluno.pega_id()
+        assert actual == expected
+
     def test_aluno_deve_ter_nome(self):
         expected = aluno_nome_1
         aluno = Aluno(expected)

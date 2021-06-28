@@ -3,8 +3,8 @@ from src.dao.dao_fabrica import DaoFabrica
 
 class Controller:
 
-    def __init__(self, obj, bd):
-        self.dao = DaoFabrica(obj, bd).fabrica_objetos_dao()
+    def __init__(self, obj_dao, bd):
+        self.dao = DaoFabrica(obj_dao, bd).fabrica_objetos_dao()
 
     def salva(self):
         try:

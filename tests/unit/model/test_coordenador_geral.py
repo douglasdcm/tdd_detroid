@@ -29,6 +29,12 @@ class TestCoordenadorGeral:
         self.curso_2 = None
         self.curso_3 = None
 
+    def test_define_id_retorna_coordenador_com_id_atualizado(self):
+        expected = 1
+        coordenador = CoordenadorGeral().define_id(expected)
+        actual = coordenador.pega_id()
+        assert actual == expected
+
     def test_coordenador_geral_lista_detalhes_novo_curso(self):
         nome = "mario"
         aluno = Aluno(nome)

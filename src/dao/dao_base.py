@@ -1,8 +1,10 @@
+from src.model.i_model import IModel
 from src.model.banco_dados import BancoDados
 from src.dao.dao_interface import IDao
 
+
 class DaoBase(IDao):
-    def __init__(self, bd :BancoDados, tabela, campos, complemento=""):
+    def __init__(self, bd: BancoDados, tabela, campos, complemento=""):
         self._bd = bd
         self._tabela = tabela
         self._campos = campos
@@ -19,4 +21,3 @@ class DaoBase(IDao):
 
     def pega_por_query(self, query):
         return self._bd.pega_por_query(self._tabela, query)
-

@@ -1,6 +1,7 @@
 from src.model.catalogo_curso import CatalogoCurso
 from src.model.coordenador import Coordenador
 
+
 class CoordenadorCurso(Coordenador):
     def __init__(self, curso,):
         self._curso = curso

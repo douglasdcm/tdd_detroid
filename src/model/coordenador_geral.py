@@ -11,6 +11,10 @@ class CoordenadorGeral(Coordenador):
 
     def define_id(self, id):
         self._id = id
+        return self
 
-    def listar_detalhe_alunos(self):     
+    def pega_id(self):
+        return self._id
+
+    def listar_detalhe_alunos(self):
         return super().listar_detalhe_alunos(curso=self._curso)

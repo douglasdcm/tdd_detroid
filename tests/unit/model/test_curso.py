@@ -1,13 +1,13 @@
-from typing import cast
 import pytest
 from src.model.curso import Curso
 from src.model.gerenciador_curso import GerenciadorCurso
 from src.model.materia import Materia
 
+
 class TestCurso:
 
     def setup_method(self, method):
-        self.curso = Curso("Administração")
+        self.curso = Curso("Administra")
         self.curso.atualiza_materias(Materia("Política"))
         self.curso.atualiza_materias(Materia("Trabalho"))
         self.curso.atualiza_materias(Materia("Pessoas"))
@@ -15,15 +15,19 @@ class TestCurso:
     def teardown_method(self, method):
         self.curso = None
 
+    def test_nome_curso_deve_ter_no_maximo_dez_letras(self):
+        with pytest.raises(Exception, match=f"Nome do curso deve ter no máximao 10 letras."):
+            Curso("AAAAAAAAAA_")
+
     def test_curso_nao_deve_adicionar_aluno_sem_nome(self):
         with pytest.raises(Exception, match=f"Não foi possível adicionar o aluno ao curso de {self.curso.pega_nome()}"):
-           self.curso.adiciona_aluno("")
+            self.curso.adiciona_aluno("")
 
     def test_curso_deve_ter_todas_materias_com_nomes_diferentes(self):
         curso = Curso("mat")
         curso.atualiza_materias(Materia("alg"))
         curso.atualiza_materias(Materia("calc"))
-        #deve ser ignorado
+        # deve ser ignorado
         curso.atualiza_materias(Materia("alg"))
         with pytest.raises(Exception, match="Número mínimo que matérias é três. Adicione mais 1."):
             curso.pega_lista_materias()
@@ -49,7 +53,7 @@ class TestCurso:
         assert actual_1 == actual_2
 
     def test_todo_curso_deve_ter_nome(self):
-        expected = "administracao"
+        expected = "administra"
         curso = Curso(nome=expected)
         actual = curso.pega_nome()
         assert actual == expected
@@ -72,7 +76,8 @@ class TestCurso:
         cursos[0].atualiza_materias(Materia("mat"))
         cursos[0].atualiza_materias(Materia("adm"))
         cursos[0].atualiza_materias(Materia("med"))
-        cursos[0].atualiza_materias(Materia("vet")) #deve ser ignorado
+        # deve ser ignorado
+        cursos[0].atualiza_materias(Materia("vet"))
         actual = len(cursos[0].pega_lista_materias())
         assert actual == expected
 
@@ -83,6 +88,7 @@ class TestCurso:
         self.gerenciador_curso.atualiza_cursos(self.curso)
         self.gerenciador_curso.atualiza_cursos(self.curso)
         self.gerenciador_curso.atualiza_cursos(self.curso)
-        self.gerenciador_curso.atualiza_cursos(self.curso) #deve ser ignorado    
+        # deve ser ignorado
+        self.gerenciador_curso.atualiza_cursos(self.curso)    
         actual = len(self.gerenciador_curso.pega_lista_cursos())
         assert actual == expected

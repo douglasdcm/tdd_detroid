@@ -12,16 +12,17 @@ from pytest import fixture
 from src.controller.controller import Controller
 from src.enums.enums import Situacao
 
+
 class TestCliAluno:
-    
+
     _MENSSAGEM_SUCESSO = "Aluno %s criado com sucesso."
     _comando_cria_aluno = "cria-aluno"
 
     @fixture(autouse=True, scope="function")
-    def setup(self, cria_banco_real):        
+    def setup(self, cria_banco_real):
         self.bd = cria_banco_real
         self.bd.deleta_tabela(alunos)
-    
+
     def test_criacao_alunos_sem_nome_retorna_excecao(self):
         expected = LISTA_PARAMETROS_INVALIDA
         parametros = [self._comando_cria_aluno, "--nome"]

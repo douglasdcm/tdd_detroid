@@ -1,3 +1,4 @@
+from src.model.i_model import IModel
 from src.model.curso import Curso
 from src.dao.dao_base import DaoBase
 from src.model.banco_dados import BancoDados
@@ -16,7 +17,7 @@ class DaoCurso(DaoBase):
         self._bd.salva_registro(self._tabela, self._campos,
                                 f"'{self._curso.pega_nome()}'")
 
-    def pega_tudo(self):
+    def pega_tudo(self) -> list():
         registros = super().pega_tudo()
         lista = list()
         for linha in registros:

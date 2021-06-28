@@ -9,6 +9,8 @@ from src.controller.controller import Controller
 
 class TestCliCurso:
 
+    first = 0
+
     @fixture(autouse=True, scope="function")
     def setup(self, cria_banco_real):
         self._MENSSAGEM_SUCESSO = f"Curso de {curso_nome_1} criado."
@@ -56,9 +58,10 @@ class TestCliCurso:
         assert actual == expected
 
     def test_curso_criado_banco_dados(self):
-        expected = [tuple((1, curso_nome_1))]
+        expected = Curso(curso_nome_1).pega_nome()
         parametros = [self._cria_curso, "--nome", curso_nome_1, "--materias",
                       materia_nome_1, materia_nome_2, materia_nome_3]
         executa_comando(parametros)
-        actual = Controller(Curso(curso_nome_1), self._bd).pega_registros()
+        curso = Controller(Curso(curso_nome_1), self._bd).pega_registros()[self.first]
+        actual = curso.pega_nome()
         assert actual == expected

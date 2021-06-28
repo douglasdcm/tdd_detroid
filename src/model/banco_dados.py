@@ -90,5 +90,3 @@ class BancoDados:
             return cur.fetchall()
         except Exception:
             raise ErroBancoDados(f"{mensagem_erro}\nquery: {query}")
-
-

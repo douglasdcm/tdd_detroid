@@ -18,6 +18,11 @@ class ErroMateriaSemNome(Exception):
         super().__init__(mensagem)
 
 
+class MaximoCaracteres(Exception,):
+    def __init__(self, mensagem="Número de letras excedeu o máximo permitido."):
+        super().__init__(mensagem)
+
+
 class ErroObjetoDaoNaoEncontrado(Exception):
     def __init__(self, mensagem="Objeto não identificado"):
         super().__init__(mensagem)

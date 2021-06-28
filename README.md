@@ -1,6 +1,7 @@
-# Controle de notas
+# Controle de notas de alunos de faculdadde
 ## Introdução
 Este projeto tem o objetivo de exercitar os "code smells" relacionados a testes unitários utilizando um aplicativo que simula um negócio real.
+O código será desenvolvido com a técnica TDD ao estilo Detroid, daí o nome do repositório.
 O aplicativo simula o controle de notas dos alunos de uma universidade. Abaixo segue a especificação do aplicativo:
 # Fase 1
 Construção das funções básicas do sistema
@@ -31,7 +32,7 @@ Construção das funções básicas do sistema
 ## Entrega 7
 1. O coordenador do curso pode eliminar matérias e neste caso os alunos não podem atualizar suas notas nesta matéria
 2. Os alunos só podem atualizar suas notas na matérias em que estão inscritos
-## Entrega 8
+## Entrega 8 - Faltando (2.)
 1. O nome dos cursos e materias tem que ter no máximo 10 letras
 2. Os cursos podem ter nomes iguais se forem de unidades diferentes
 ## Entrega 9

@@ -1,3 +1,6 @@
+from src.enums.enums import Situacao
+
+
 class Aluno:
     def __init__(self, nome):
         self._coeficiente_rendimento = 0
@@ -10,14 +13,17 @@ class Aluno:
         self._nome = nome
         self._id = None
 
-    def define_situacao(self, situacao):
+    def define_situacao(self, situacao: Situacao):
         self._situacao = situacao
+        return self
 
     def define_cr(self, cr):
         self._coeficiente_rendimento = cr
+        return self
 
     def define_id(self, id_):
         self._id = id_
+        return self
 
     def pega_id(self):
         return self._id
@@ -59,7 +65,7 @@ class Aluno:
 
     def pega_materias_cursadas(self):
         return self._materias_cursadas
-    
+
     def calcula_situacao(self):
         if self._curso is None:
             self._situacao = "aluno inexistente"
@@ -76,10 +82,10 @@ class Aluno:
                 self._situacao = "em curso"
             else:
                 self._situacao = "reprovado"
-    
+
     def pega_situacao(self):
         return self._situacao
-    
+
     def pega_coeficiente_rendimento(self):
         self._calcula_coficiente_rendimento()
         return self._coeficiente_rendimento

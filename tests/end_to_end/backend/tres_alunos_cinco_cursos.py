@@ -4,6 +4,7 @@ from src.model.curso import Curso
 from src.model.aluno import Aluno
 from src.model.catalogo_curso import CatalogoCurso
 
+
 class TestCenarioTresAlunosCincoCursos:
 
     def test_faculdade_com_dois_alunos_aprovados_e_um_reprovado_no_curso(self):
@@ -52,8 +53,8 @@ class TestCenarioTresAlunosCincoCursos:
         tiago.inscreve_curso(engenharia_civil)
 
         print("\nPrimeiro semestre")
-        pedro.atualiza_materias_cursadas({"Robótica":10})
-        jose.atualiza_materias_cursadas({"Robótica":6})
+        pedro.atualiza_materias_cursadas({"Robótica": 10})
+        jose.atualiza_materias_cursadas({"Robótica": 6})
         tiago.atualiza_materias_cursadas({"Concreto armado": 8})
 
         print("\nRelatório geral")
@@ -66,8 +67,8 @@ class TestCenarioTresAlunosCincoCursos:
         print(coordenador_matematica.listar_detalhe_alunos())
 
         print("\nSegundo semestre")
-        pedro.atualiza_materias_cursadas({"Chips":9})
-        jose.atualiza_materias_cursadas({"Robótica":9})
+        pedro.atualiza_materias_cursadas({"Chips": 9})
+        jose.atualiza_materias_cursadas({"Robótica": 9})
         tiago.atualiza_materias_cursadas({"Estrutura": 0})
 
         print("\nRelatório geral")
@@ -80,8 +81,8 @@ class TestCenarioTresAlunosCincoCursos:
         print(coordenador_matematica.listar_detalhe_alunos())
 
         print("\nTerceiro semestre")
-        pedro.atualiza_materias_cursadas({"Circuitos":7})
-        jose.atualiza_materias_cursadas({"Chips":9})
+        pedro.atualiza_materias_cursadas({"Circuitos": 7})
+        jose.atualiza_materias_cursadas({"Chips": 9})
         tiago.atualiza_materias_cursadas({"Estrutura": 10})
 
         print("\nRelatório geral")
@@ -100,7 +101,7 @@ class TestCenarioTresAlunosCincoCursos:
         print(tiago.pega_situacao())
 
         print("\nQuarto semestre")
-        jose.atualiza_materias_cursadas({"Circuitos":9.7})
+        jose.atualiza_materias_cursadas({"Circuitos": 9.7})
         tiago.atualiza_materias_cursadas({"Hidráulica": 3})
 
         print("\nRelatório geral")
