@@ -24,6 +24,14 @@ cria_curso = "cria-curso"
 
 def main(*args):
     for argumentos in args:
+        if "-h" in argumentos or "--help" in argumentos:
+            print("""
+Comandos:
+    cria-aluno --nome NOME_ALUNO
+    cria-curso --nome NOME_CURSO --materias MATERIA_1 MATERIA_2 MATERIA_3  
+    inscreve-aluno-curso --curso-id CURSO_ID --aluno-id ALUNO_ID
+                    """)
+            return
         if cria_aluno in argumentos:
             _cria_aluno(argumentos)
         elif inscreve_aluno_curso in argumentos:

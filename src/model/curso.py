@@ -1,8 +1,9 @@
+from src.model.unidade import Unidade
 from src.model.i_model import IModel
 import time
 from src.model.catalogo_curso import CatalogoCurso
 from src.model.aluno import Aluno
-from src.exceptions.exceptions import MaximoCaracteres
+from src.exceptions.exceptions import MaximoCaracteres, UnidadeInvalida
 
 
 class Curso(IModel):
@@ -16,12 +17,22 @@ class Curso(IModel):
         self._lista_alunos = list()
         self._adiciona_catalogo_cursos()
         self._id = None
+        self._unidade = None
         self._valida_parametros(nome)
 
     def _valida_parametros(self, nome):
         if len(nome) > self._maximo_caracteres:
             raise MaximoCaracteres("Nome do curso deve ter no máximao {} letras.".format(
                 self._maximo_caracteres))
+
+    def pega_unidade(self):
+        return self._unidade
+
+    def define_unidade(self, unidade: Unidade):
+        if self._nome in unidade.pega_cursos():
+            raise UnidadeInvalida("Curso já existente na unidade {}".format(unidade.pega_nome()))
+        self._unidade = unidade.pega_nome()
+        unidade.define_cursos(self._nome)
 
     def pega_id(self):
         return self._id

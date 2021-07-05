@@ -1,10 +1,34 @@
+from typing import Coroutine
 import pytest
 from src.model.curso import Curso
+from src.model.unidade import Unidade
 from src.model.gerenciador_curso import GerenciadorCurso
 from src.model.materia import Materia
+from tests.massa_dados import unidade_nome_1, unidade_nome_2, curso_nome_1, \
+    curso_nome_2
 
 
 class TestCurso:
+
+    def test_cursos_devem_ter_nomes_diferentes_se_mesma_unidade(self):
+        unidade = Unidade(unidade_nome_1)
+        curso_1 = Curso(curso_nome_1)
+        curso_2 = Curso(curso_nome_1)
+        expected = "Curso já existente na unidade {}".format(unidade_nome_1)
+        curso_1.define_unidade(unidade)
+        with pytest.raises(Exception, match=expected):
+            curso_2.define_unidade(unidade)
+
+    def test_cursos_podem_ter_nomes_iguais_se_unidades_diferentes(self):
+        unidade = Unidade(unidade_nome_1)
+        curso_1 = Curso(curso_nome_1)
+        curso_2 = Curso(curso_nome_2)
+        expected = unidade_nome_1
+        curso_1.define_unidade(unidade)
+        curso_2.define_unidade(unidade)
+        actual = curso_1.pega_unidade()
+        assert actual == expected
+
 
     def setup_method(self, method):
         self.curso = Curso("Administra")

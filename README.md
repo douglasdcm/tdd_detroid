@@ -32,7 +32,7 @@ Construção das funções básicas do sistema
 ## Entrega 7
 1. O coordenador do curso pode eliminar matérias e neste caso os alunos não podem atualizar suas notas nesta matéria
 2. Os alunos só podem atualizar suas notas na matérias em que estão inscritos
-## Entrega 8 - Faltando (2.)
+## Entrega 8 - finalizado
 1. O nome dos cursos e materias tem que ter no máximo 10 letras
 2. Os cursos podem ter nomes iguais se forem de unidades diferentes
 ## Entrega 9
@@ -68,3 +68,14 @@ Construção da interface de comandos
 ## Entrega 2
 1. O usuário deve ser capaz de inscrever o aluno em um curso
 2. O usuário deve ser capaz de criar cursos com o número mínimo de matérias
+## Entrega 3
+1. O adminstrador deve ser capaz de listar todos os alunos com informações detalhas (toas as informações disponíveis)
+2. O admnistrador deve ser capaz de listar todos os cursos com todas as informações disponíveis
+3. O administrador e somente ele deve ser capaz de listar a relação de alunos por curso
+4. O administrador e somente ele deve ser capaz de listar a relação de matérias por aluno
+## Entrega 4
+1. O aluno deve ser capaz de listar todas as matérias de seu curso
+2. O aluno deve ser capaz de listar todas as suas matérias cursadas
+3. O aludo deve ser capaz de listar as matérias faltantes
+## Entrega 5
+1. O administrador deve ser capaz se listar todos os coordenadores de cursos com as informação disponíveis
