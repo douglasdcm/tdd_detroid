@@ -1,12 +1,23 @@
 from pytest import raises
+import pytest
 from src.model.aluno import Aluno
 from src.model.curso import Curso
-from tests.massa_dados import aluno_nome_1, curso_nome_1, materia_nome_1, \
+from tests.massa_dados import aluno_nome_1, curso_nome_1, \
+    curso_nome_2, materia_nome_1, \
     materia_nome_2, materia_nome_3, materia_nome_4
 from src.enums.enums import Situacao
 
 
 class TestAluno:
+
+    def test_aluno_so_pode_se_inscrever_um_curso(self, cria_curso_com_materias):
+        expected = "O aluno só pode se inscrever apenas em um curso"
+        curso_1 = cria_curso_com_materias
+        curso_2 = cria_curso_com_materias
+        aluno = Aluno(None)
+        aluno.inscreve_curso(curso_1)
+        with pytest.raises(Exception, match=expected):
+            aluno.inscreve_curso(curso_2)
 
     def test_define_cr_retorna_aluno_com_cr_atualizado(self):
         expected = 7

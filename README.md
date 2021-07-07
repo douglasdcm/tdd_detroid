@@ -35,7 +35,7 @@ Construção das funções básicas do sistema
 ## Entrega 8 - finalizado
 1. O nome dos cursos e materias tem que ter no máximo 10 letras
 2. Os cursos podem ter nomes iguais se forem de unidades diferentes
-## Entrega 9
+## Entrega 9 - falta 3.
 1. O aluno só pode se increver em um curso
 2. O coordenador pode ser corrdenador de mais de um curso
 3. O coordenador pode listar os alunos, materias e notas, e crs de todos os seus cursos (coordenador de mais de um curso)
@@ -78,4 +78,4 @@ Construção da interface de comandos
 2. O aluno deve ser capaz de listar todas as suas matérias cursadas
 3. O aludo deve ser capaz de listar as matérias faltantes
 ## Entrega 5
-1. O administrador deve ser capaz se listar todos os coordenadores de cursos com as informação disponíveis
+1. O administrador deve ser capaz se listar todos os coordenadores de cursos com as informação disponíveisop

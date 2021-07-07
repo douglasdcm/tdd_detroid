@@ -3,8 +3,8 @@ from src.model.catalogo_curso import CatalogoCurso
 
 
 class Coordenador:
-    
-    def __init__(self):            
+
+    def __init__(self):
         self._alunos = list()
 
     def _pega_alunos(self, curso):
@@ -17,10 +17,10 @@ class Coordenador:
             self._alunos.append(alunos)
         return self._alunos
 
-    def listar_detalhe_alunos(self, curso):          
+    def listar_detalhe_alunos(self, curso):
         if isinstance(curso, list):
-            for meu_curso in self._curso:            
+            for meu_curso in self._cursos:
                 self._pega_alunos(meu_curso)
         if isinstance(curso, Curso):
-            self._pega_alunos(curso) 
+            self._pega_alunos(curso)
         return {"alunos": self._alunos}

@@ -28,6 +28,11 @@ class UnidadeInvalida(Exception):
         super().__init__(menssagem)
 
 
+class CursoUnico(Exception):
+    def __init__(self, menssagem="Apenas um curso é permitido."):
+        super().__init__(menssagem)
+
+
 class ErroObjetoDaoNaoEncontrado(Exception):
     def __init__(self, menssagem="Objeto não identificado"):
         super().__init__(menssagem)

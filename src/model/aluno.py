@@ -1,5 +1,5 @@
 from src.enums.enums import Situacao
-
+from src.exceptions.exceptions import CursoUnico
 
 class Aluno:
     def __init__(self, nome):
@@ -40,8 +40,14 @@ class Aluno:
                 self.calcula_situacao()
 
     def inscreve_curso(self, curso):
+        """
+        Args:
+            curso (Curso): nome do curso que o aluno está se inscrevendo
+        """
+        if self._curso is not None:
+            raise CursoUnico("O aluno só pode se inscrever apenas em um curso")
         if curso.pega_lista_materias():
-            self._curso = curso        
+            self._curso = curso
             curso.adiciona_aluno(self)
 
     def pega_nome(self):
