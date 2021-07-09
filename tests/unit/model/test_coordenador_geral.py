@@ -37,12 +37,13 @@ class TestCoordenadorGeral:
 
     def test_coordenador_geral_lista_detalhes_novo_curso(self):
         nome = "mario"
+        curso = "patologia"
         aluno = Aluno(nome)
         materias = {"virus": 6}
         expected = {"alunos": [{"nome": nome, "coeficiente rendimento": 6,
-                    "materias": materias}]}
+                    "materias": materias, "curso": curso}]}
         coordenador = CoordenadorGeral()
-        curso_novo = Curso("patologia")
+        curso_novo = Curso(curso)
         curso_novo.atualiza_materias(Materia("bacterias"))
         curso_novo.atualiza_materias(Materia("virus"))
         curso_novo.atualiza_materias(Materia("vermes"))
@@ -59,9 +60,9 @@ class TestCoordenadorGeral:
         cr = 3
         expected = {"alunos": [
             {"nome": nome_1, "coeficiente rendimento": cr,
-             "materias": materias_1},
+             "materias": materias_1, "curso": self.curso_1.pega_nome()},
             {"nome": nome_2, "coeficiente rendimento": cr,
-             "materias": materias_2}
+             "materias": materias_2, "curso": self.curso_2.pega_nome()}
         ]}
         aluno_1 = Aluno(nome_1)
         aluno_2 = Aluno(nome_2)
@@ -77,8 +78,8 @@ class TestCoordenadorGeral:
         nome_1 = "joao"
         nome_2 = "maria"
         expected = {"alunos": [
-            {"nome": nome_1, "coeficiente rendimento": 0, "materias": {}},
-            {"nome": nome_2, "coeficiente rendimento": 0, "materias": {}}
+            {"nome": nome_1, "coeficiente rendimento": 0, "materias": {}, "curso": self.curso_1.pega_nome()},
+            {"nome": nome_2, "coeficiente rendimento": 0, "materias": {}, "curso": self.curso_2.pega_nome()}
         ]}
         aluno_1 = Aluno(nome_1)
         aluno_2 = Aluno(nome_2)
@@ -98,8 +99,8 @@ class TestCoordenadorGeral:
         nome_1 = "joao"
         nome_2 = "maria"
         expected = {"alunos": [
-            {"nome": nome_1, "coeficiente rendimento": 0, "materias": {}},
-            {"nome": nome_2, "coeficiente rendimento": 0, "materias": {}}
+            {"nome": nome_1, "coeficiente rendimento": 0, "materias": {}, "curso": self.curso_1.pega_nome()},
+            {"nome": nome_2, "coeficiente rendimento": 0, "materias": {}, "curso": self.curso_1.pega_nome()}
         ]}
         aluno_1 = Aluno(nome_1)
         aluno_2 = Aluno(nome_2)
@@ -117,7 +118,8 @@ class TestCoordenadorGeral:
                             {
                                 "nome": nome,
                                 "materias": materias,
-                                "coeficiente rendimento": cr
+                                "coeficiente rendimento": cr,
+                                "curso": self.curso_1.pega_nome()
                             }
                         ]
                     }

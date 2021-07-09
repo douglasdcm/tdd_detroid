@@ -16,7 +16,8 @@ class TestControllerCoordenadorGeral:
                             {
                                 "nome": aluno_nome_1,
                                 "coeficiente rendimento": 0,
-                                "materias": {}
+                                "materias": {},
+                                "curso": curso_nome_1
                             }
                         ]
                     }

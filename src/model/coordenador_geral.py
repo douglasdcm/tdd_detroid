@@ -5,7 +5,7 @@ from src.model.coordenador import Coordenador
 class CoordenadorGeral(Coordenador):
     def __init__(self):
         self._catalogo = CatalogoCurso()
-        self._curso = CatalogoCurso.pega_cursos()
+        self._cursos = CatalogoCurso.pega_cursos()
         self._id = None
         super().__init__()
 
@@ -16,5 +16,5 @@ class CoordenadorGeral(Coordenador):
     def pega_id(self):
         return self._id
 
-    def listar_detalhe_alunos(self):
-        return super().listar_detalhe_alunos(curso=self._curso)
+    def listar_detalhe_alunos(self, cursos=None):
+        return super().listar_detalhe_alunos(cursos=self._cursos)

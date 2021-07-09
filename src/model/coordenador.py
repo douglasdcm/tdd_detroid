@@ -12,15 +12,16 @@ class Coordenador:
             alunos = {
                     "nome": aluno.pega_nome(),
                     "materias": aluno.pega_materias_cursadas(),
-                    "coeficiente rendimento": aluno.pega_coeficiente_rendimento()
+                    "coeficiente rendimento": aluno.pega_coeficiente_rendimento(),
+                    "curso": curso.pega_nome()
                 }
             self._alunos.append(alunos)
         return self._alunos
 
-    def listar_detalhe_alunos(self, curso):
-        if isinstance(curso, list):
+    def listar_detalhe_alunos(self, cursos):
+        if isinstance(cursos, list):
             for meu_curso in self._cursos:
                 self._pega_alunos(meu_curso)
-        if isinstance(curso, Curso):
-            self._pega_alunos(curso)
+        if isinstance(cursos, Curso):
+            self._pega_alunos(cursos)
         return {"alunos": self._alunos}

@@ -1,6 +1,7 @@
 from src.enums.enums import Situacao
 from src.exceptions.exceptions import CursoUnico
 
+
 class Aluno:
     def __init__(self, nome):
         self._coeficiente_rendimento = 0

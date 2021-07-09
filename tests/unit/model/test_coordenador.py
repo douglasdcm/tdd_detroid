@@ -6,6 +6,7 @@ from src.model.curso import Curso
 from src.model.coordenador_curso import CoordenadorCurso
 from src.model.materia import Materia
 from src.model.banco_dados import BancoDados
+from tests.massa_dados import materia_nome_1, materia_nome_2, materia_nome_3
 
 
 class TestCoordenador:
@@ -30,12 +31,14 @@ class TestCoordenador:
         nome_2 = "miguel"
         curso_1 = cria_curso_com_materias
         curso_1_nome = curso_1.pega_nome()
-        curso_2 = cria_curso_com_materias
+        curso_2 = self.curso
         curso_2_nome = curso_2.pega_nome()
-        materias_1 = {"civil": 1}
-        materias_2 = {"penal": 8, "civil": 8}
-        cr_1 = 1
-        cr_2 = 8
+        materias_1 = {materia_nome_1: 1.0}
+        materias_2 = {"civil": 8.0, "penal": 8.0}
+        cr_1 = 1.0
+        cr_2 = 8.0
+        coordenador = CoordenadorCurso(curso_1)
+        coordenador.adiciona_cursos(curso_2)
         expected = {"alunos": [
             {
                 "nome": nome_1,
@@ -53,7 +56,7 @@ class TestCoordenador:
         }
         self._cria_aluno_no_curso(nome_1, curso_1, materias_1)
         self._cria_aluno_no_curso(nome_2, curso_2, materias_2)
-        actual = self.coordenador.listar_detalhe_alunos()
+        actual = coordenador.listar_detalhe_alunos()
         assert actual == expected
 
     def test_coordenador_pode_coordenar_mais_de_um_curso(self, cria_curso_com_materias):
@@ -91,12 +94,14 @@ class TestCoordenador:
             {
                 "nome": nome_1,
                 "materias": materias_1,
-                "coeficiente rendimento": cr_1
+                "coeficiente rendimento": cr_1,
+                "curso": self.curso.pega_nome()
             },
             {
                 "nome": nome_2,
                 "materias": materias_2,
-                "coeficiente rendimento": cr_2
+                "coeficiente rendimento": cr_2,
+                "curso": self.curso.pega_nome()
             },
             ]
         }
@@ -109,7 +114,8 @@ class TestCoordenador:
         nome = "marcos"
         materias = {"civil": 5}
         cr = 5
-        expected = {"alunos": [{"nome": nome, "materias": materias, "coeficiente rendimento": cr}]}
+        expected = {"alunos": [{"nome": nome, "materias": materias,
+        "coeficiente rendimento": cr, "curso": self.curso.pega_nome()}]}
         self._cria_aluno_no_curso(nome, self.curso, materias)
         actual = self.coordenador.listar_detalhe_alunos()
         assert actual == expected

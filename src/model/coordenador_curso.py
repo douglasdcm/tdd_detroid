@@ -6,7 +6,7 @@ class CoordenadorCurso(Coordenador):
     def __init__(self, curso):
         """
         Args:
-            curso (list(Curso)/Curso): lista de cursos ou objeto curso
+            curso (Curso): cursos do coordenador
         """
         self._cursos = [curso]
         super().__init__()
@@ -14,13 +14,12 @@ class CoordenadorCurso(Coordenador):
     def listar_detalhe_alunos(self):
         return super().listar_detalhe_alunos(self._cursos)
 
-    def adiciona_cursos(self, cursos):
+    def adiciona_cursos(self, curso):
         """
             Args:
-                cursos (list(Cursos)): lista de cursos a serem adicionados
+                cursos (Cursos): curso a ser adicionado
         """
-        for curso in cursos:
-            self._cursos.append(curso)
+        self._cursos.append(curso)
 
     def pega_lista_cursos(self):
         return self._cursos
