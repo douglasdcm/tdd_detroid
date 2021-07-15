@@ -7,6 +7,7 @@ from src.model.coordenador_curso import CoordenadorCurso
 from src.model.materia import Materia
 from src.model.banco_dados import BancoDados
 from tests.massa_dados import materia_nome_1, materia_nome_2, materia_nome_3
+import pytest
 
 
 class TestCoordenador:
@@ -25,6 +26,11 @@ class TestCoordenador:
         self.catalogo.limpa_catalogo()
         self.curso = None
         self.coordenador = None
+
+    def test_coordenador_nao_pode_coordenar_curso_cancelado(self, cria_curso_cancelado):
+        curso = cria_curso_cancelado
+        with pytest.raises(Exception, match="O coordenador não pode se associar a um curso cancelado"):
+            CoordenadorCurso(curso)
 
     def test_coordenador_pode_listar_info_todos_alunos_dos_cursos(self, cria_curso_com_materias):
         nome_1 = "diogo"

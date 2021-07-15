@@ -108,6 +108,13 @@ def cria_curso_com_materias():
 
 
 @fixture
+def cria_curso_cancelado(cria_curso_com_materias):
+    curso = cria_curso_com_materias
+    curso.define_situacao("cancelado")
+    yield curso
+
+
+@fixture
 def inscreve_aluno(cria_aluno, cria_curso_com_materias):
     cria_aluno.inscreve_curso(cria_curso_com_materias)
     yield cria_aluno, cria_curso_com_materias

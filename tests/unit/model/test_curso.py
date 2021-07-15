@@ -1,14 +1,21 @@
-from typing import Coroutine
 import pytest
 from src.model.curso import Curso
 from src.model.unidade import Unidade
 from src.model.gerenciador_curso import GerenciadorCurso
 from src.model.materia import Materia
+from src.enums.enums import SituacaoCurso
 from tests.massa_dados import unidade_nome_1, unidade_nome_2, curso_nome_1, \
     curso_nome_2
 
 
 class TestCurso:
+
+    def test_curso_pode_ser_cancelado(self, cria_curso_com_materias):
+        expected = SituacaoCurso.cancelado
+        curso = cria_curso_com_materias
+        curso.define_situacao(SituacaoCurso.cancelado)
+        actual = curso.pega_situacao()
+        assert actual == expected
 
     def test_cursos_devem_ter_nomes_diferentes_se_mesma_unidade(self):
         unidade = Unidade(unidade_nome_1)

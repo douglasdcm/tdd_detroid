@@ -18,12 +18,19 @@ class Curso(IModel):
         self._adiciona_catalogo_cursos()
         self._id = None
         self._unidade = None
+        self._situacao = None
         self._valida_parametros(nome)
 
     def _valida_parametros(self, nome):
         if len(nome) > self._maximo_caracteres:
             raise MaximoCaracteres("Nome do curso deve ter no máximao {} letras.".format(
                 self._maximo_caracteres))
+
+    def define_situacao(self, situacao):
+        self._situacao = situacao
+
+    def pega_situacao(self):
+        return self._situacao
 
     def pega_unidade(self):
         return self._unidade

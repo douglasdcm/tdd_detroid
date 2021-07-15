@@ -1,5 +1,5 @@
-from src.enums.enums import Situacao
-from src.exceptions.exceptions import CursoUnico
+from src.enums.enums import SituacaoCurso, Situacao
+from src.exceptions.exceptions import CursoUnico, CursoCancelado
 
 
 class Aluno:
@@ -39,22 +39,53 @@ class Aluno:
             else:
                 self._situacao = "destrancando"
                 self.calcula_situacao()
+        return self
+
+    def lista_materias_faltantes(self):
+        materias_curso = self._curso.pega_lista_materias()
+        lista_materias_faltantes = list()
+        materias_cursadas = list()
+        for materia, _ in self._materias_cursadas.items():
+            materias_cursadas.append(materia)
+        for materia in materias_curso:
+            nome_materia = materia.pega_nome()
+            if nome_materia not in materias_cursadas:
+                lista_materias_faltantes.append(nome_materia)
+        return lista_materias_faltantes
+
+    def lista_materias(self):
+        lista_materias = list()
+        materias = self._curso.pega_lista_materias()
+        for materia in materias:
+            lista_materias.append(materia.pega_nome())
+        return lista_materias
 
     def inscreve_curso(self, curso):
         """
         Args:
             curso (Curso): nome do curso que o aluno está se inscrevendo
         """
+        if curso.pega_situacao() == SituacaoCurso.cancelado.value:
+            raise CursoCancelado("O aluno não pode se inscrever em um curso cancelado.")
         if self._curso is not None:
             raise CursoUnico("O aluno só pode se inscrever apenas em um curso")
         if curso.pega_lista_materias():
             self._curso = curso
             curso.adiciona_aluno(self)
+        return self
 
     def pega_nome(self):
         return self._nome
 
+    def lista_materias_cursadas(self):
+        return self._materias_cursadas
+
     def atualiza_materias_cursadas(self, materias):
+        """
+            Args:
+                materias (dict): dicionário com matérias cursadas e notas a serem atualizadas
+                Por examplo: {materia_nome_1: 8, materia_nome_2: 7,materia_nome_3: 9}
+        """
         if self._situacao == "trancado":
             raise Exception("Aluno com curso trancado não pode fazer atualizações no sistema.")
         for key, value in materias.items():
@@ -69,6 +100,7 @@ class Aluno:
                     self._materias_cursadas[key] = value
                     break
         self._calcula_coficiente_rendimento()
+        return self
 
     def pega_materias_cursadas(self):
         return self._materias_cursadas
@@ -89,6 +121,7 @@ class Aluno:
                 self._situacao = "em curso"
             else:
                 self._situacao = "reprovado"
+        return self
 
     def pega_situacao(self):
         return self._situacao
@@ -105,3 +138,4 @@ class Aluno:
             quantidade += 1
         if soma_notas > 0:
             self._coeficiente_rendimento = soma_notas / quantidade
+        return self

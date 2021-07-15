@@ -10,6 +10,35 @@ from src.enums.enums import Situacao
 
 class TestAluno:
 
+    def test_aluno_deve_ser_capaz_de_listar_materias_faltantes(self, cria_curso_com_materias):
+        aluno = Aluno(aluno_nome_1).inscreve_curso(cria_curso_com_materias)
+        materias = {materia_nome_2: 7, materia_nome_3: 9}
+        expected = [materia_nome_1]
+        aluno.atualiza_materias_cursadas(materias)
+        actual = aluno.lista_materias_faltantes()
+        assert actual == expected
+
+    def test_aluno_pode_pegar_lista_materias_cursadas(self, cria_curso_com_materias):
+        curso = cria_curso_com_materias
+        materias = {materia_nome_2: 7, materia_nome_3: 9}
+        expected = materias
+        aluno = Aluno(aluno_nome_1).inscreve_curso(curso)
+        aluno.atualiza_materias_cursadas(materias)
+        actual = aluno.lista_materias_cursadas()
+        assert actual == expected
+
+    def test_aluno_deve_ser_capaz_de_listar_as_materias_de_seu_curso(self, cria_curso_com_materias):
+        curso = cria_curso_com_materias
+        expected = [materia_nome_1, materia_nome_2, materia_nome_3]
+        aluno = Aluno(aluno_nome_1).inscreve_curso(curso)
+        actual = aluno.lista_materias()
+        assert actual == expected
+
+    def test_aluno_nao_pode_se_inscrever_em_curso_cancelado(self, cria_curso_cancelado):
+        curso = cria_curso_cancelado
+        with pytest.raises(Exception, match="O aluno não pode se inscrever em um curso cancelado"):
+            Aluno(aluno_nome_1).inscreve_curso(curso)
+
     def test_aluno_so_pode_se_inscrever_um_curso(self, cria_curso_com_materias):
         expected = "O aluno só pode se inscrever apenas em um curso"
         curso_1 = cria_curso_com_materias

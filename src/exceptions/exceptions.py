@@ -28,6 +28,11 @@ class UnidadeInvalida(Exception):
         super().__init__(menssagem)
 
 
+class CursoCancelado(Exception):
+    def __init__(self, menssagem="O curso está cancelado."):
+        super().__init__(menssagem)
+
+
 class CursoUnico(Exception):
     def __init__(self, menssagem="Apenas um curso é permitido."):
         super().__init__(menssagem)

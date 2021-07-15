@@ -35,19 +35,19 @@ Construção das funções básicas do sistema
 ## Entrega 8 - finalizado
 1. O nome dos cursos e materias tem que ter no máximo 10 letras
 2. Os cursos podem ter nomes iguais se forem de unidades diferentes
-## Entrega 9 - falta 3.
+## Entrega 9 - finalizada
 1. O aluno só pode se increver em um curso
 2. O coordenador pode ser corrdenador de mais de um curso
 3. O coordenador pode listar os alunos, materias e notas, e crs de todos os seus cursos (coordenador de mais de um curso)
-## Entrega 10
+## Entrega 10 - finalizado
 1. O curso pode ser cancelado
-2. Os cursos cancelados não podem aceitar increições de alunos
+2. Os cursos cancelados não podem aceitar incrições de alunos
 3. Os cursos cancelados não pode ter coordenadores
 ## Entrega 11
 1. O coordenador só pode ser coordenador de 3 cursos no máximo
 2. O coordenador geral não pode ser coordenador de cursos
 ## Entrega 12
-1. O aluno tem 10 semetres para se formar
+1. O aluno tem 10 semestres para se formar
 2. Caso o aluno exceda os 10 semestres, ele é automaticamente reprovado
 ## Entrega 13
 1. Cada matéria pode ter no máximo 30 alunos inscritos
@@ -69,13 +69,15 @@ Construção da interface de comandos
 1. O usuário deve ser capaz de inscrever o aluno em um curso
 2. O usuário deve ser capaz de criar cursos com o número mínimo de matérias
 ## Entrega 3
-1. O adminstrador deve ser capaz de listar todos os alunos com informações detalhas (toas as informações disponíveis)
-2. O admnistrador deve ser capaz de listar todos os cursos com todas as informações disponíveis
+1. O adminstrador e somente ele deve ser capaz de listar todos os alunos com informações detalhadas (todas as informações disponíveis)
+2. O admnistrador e somente ele deve ser capaz de listar todos os cursos com todas as informações disponíveis
 3. O administrador e somente ele deve ser capaz de listar a relação de alunos por curso
 4. O administrador e somente ele deve ser capaz de listar a relação de matérias por aluno
-## Entrega 4
-1. O aluno deve ser capaz de listar todas as matérias de seu curso
+## Entrega 4 - finalizado
+1. O aluno deve ser capaz de listar todas as matérias somente de seu curso
 2. O aluno deve ser capaz de listar todas as suas matérias cursadas
 3. O aludo deve ser capaz de listar as matérias faltantes
 ## Entrega 5
 1. O administrador deve ser capaz se listar todos os coordenadores de cursos com as informação disponíveisop
+## Entrega 6
+1. 
