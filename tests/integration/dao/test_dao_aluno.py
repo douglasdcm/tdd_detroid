@@ -1,10 +1,8 @@
-from src.dao.dao_base import DaoBase
-from src.controller.controller import Controller
 from src.dao.dao_aluno import DaoAluno
-from src.dao.dao_fabrica import DaoFabrica
 from tests.massa_dados import aluno_nome_1
 from src.enums.enums import Situacao
 from src.model.aluno import Aluno
+from tests.massa_dados import materia_nome_2, materia_nome_3
 
 
 class TestDaoAluno:
@@ -34,6 +32,21 @@ class TestDaoAluno:
                                              situacao=situacao,
                                              cr=cr, nome=nome)
         return expected, actual
+
+    def test_aluno_pode_ser_atualizado_banco(self, cria_banco, cria_massa_dados,
+                                             cria_curso_com_materias):
+        cria_massa_dados
+        id_ = "1"
+        aluno = DaoAluno(None, cria_banco).pega_por_id(id_)
+        curso = cria_curso_com_materias
+        materias = {materia_nome_2: 7, materia_nome_3: 9}
+        expected = 8
+        aluno.inscreve_curso(curso).atualiza_materias_cursadas(materias)
+        aluno.pega_coeficiente_rendimento(auto_calculo=True)
+        DaoAluno(aluno, cria_banco).atualiza(id_)
+        aluno = DaoAluno(None, cria_banco).pega_por_id(id_)
+        actual = aluno.pega_coeficiente_rendimento()
+        assert actual == expected
 
     def test_dao_pega_por_id_retorna_objeto_aluno_com_id_correto(self,
                                                                  cria_banco):

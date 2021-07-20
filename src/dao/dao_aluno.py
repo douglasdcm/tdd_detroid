@@ -8,21 +8,34 @@ class DaoAluno(DaoBase):
     def __init__(self, aluno: Aluno, bd: BancoDados):
         self._bd = bd
         self._tabela = alunos
-        campo_1 = "nome"
-        campo_2 = "cr"
-        campo_3 = "situacao"
-        self._campos = f"{campo_1}, {campo_2}, {campo_3}"
+        self.campo_1 = "nome"
+        self.campo_2 = "cr"
+        self.campo_3 = "situacao"
+        self._campos = f"{self.campo_1}, {self.campo_2}, {self.campo_3}"
         self._aluno = aluno
         super().__init__(self._bd, self._tabela, self._campos)
 
     def salva(self):
-        self._bd.salva_registro(self._tabela, self._campos,
-                                (f"'{self._aluno.pega_nome()}', "
-                                 f"{self._aluno.pega_coeficiente_rendimento()}, "
-                                 f"'{self._aluno.pega_situacao()}'"))
+        return self._bd.salva_registro(self._tabela, self._campos,
+                                       (f"'{self._aluno.pega_nome()}', "
+                                        f"{self._aluno.pega_coeficiente_rendimento()}, "
+                                        f"'{self._aluno.pega_situacao()}'"))
 
-    def pega_por_id(self, id):
-        linha = super().pega_por_id(id)
+    def atualiza(self, id_):
+        return self._bd.atualiza_registro(self._tabela,
+                                          (f"{self.campo_1} = '{self._aluno.pega_nome()}', "
+                                           f"{self.campo_2} = {self._aluno.pega_coeficiente_rendimento()}, "
+                                           f"{self.campo_3} = '{self._aluno.pega_situacao()}'"),
+                                          id_)
+
+    def pega_por_id(self, id_):
+        """
+        Args:
+            id (int): identificador do aluno
+        Returns:
+            objeto aluno com dados pegos do banco de dados
+        """
+        linha = super().pega_por_id(id_)
         return self._tuple_para_aluno(linha[0])
 
     def pega_tudo(self):

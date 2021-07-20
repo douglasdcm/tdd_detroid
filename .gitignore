@@ -1,4 +1,5 @@
 unit_test/
+venv/
 tdd_detroid/
 htmlcov/
 *.pyc

@@ -14,8 +14,8 @@ class DaoCurso(DaoBase):
         super().__init__(self._bd, self._tabela, self._campos)
 
     def salva(self):
-        self._bd.salva_registro(self._tabela, self._campos,
-                                f"'{self._curso.pega_nome()}'")
+        return self._bd.salva_registro(self._tabela, self._campos,
+                                       f"'{self._curso.pega_nome()}'")
 
     def pega_tudo(self) -> list():
         registros = super().pega_tudo()

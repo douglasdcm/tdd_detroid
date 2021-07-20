@@ -19,6 +19,12 @@ class Aluno:
         return self
 
     def define_cr(self, cr):
+        """
+        Args:
+            cr (int): coeficiente de rendimento atualizado.
+        Returns:
+            self
+        """
         self._coeficiente_rendimento = cr
         return self
 
@@ -126,8 +132,14 @@ class Aluno:
     def pega_situacao(self):
         return self._situacao
 
-    def pega_coeficiente_rendimento(self):
-        self._calcula_coficiente_rendimento()
+    def pega_coeficiente_rendimento(self, auto_calculo=False):
+        """
+        Args:
+            auto_calculo (bool): informa se o cr será calculado antes de ser retornado
+        Returns: coeficiente de rendimento calculado.
+        """
+        if auto_calculo:
+            self._calcula_coficiente_rendimento()
         return self._coeficiente_rendimento
 
     def _calcula_coficiente_rendimento(self):

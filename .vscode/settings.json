@@ -6,9 +6,11 @@
     "python.linting.pycodestyleArgs": [
         "--max-line-length=100"
     ],
+    "python.linting.flake8Args": ["--ignore=E121", "--max-line-length=100"],
     "python.testing.unittestEnabled": false,
     "python.testing.nosetestsEnabled": false,
     "python.testing.pytestEnabled": true,
-    "python.linting.pycodestyleEnabled": true,
-    "python.linting.enabled": true
+    "python.linting.pycodestyleEnabled": false,
+    "python.linting.enabled": true,
+    "python.linting.flake8Enabled": true
 }

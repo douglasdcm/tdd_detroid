@@ -22,7 +22,7 @@ class DaoFabrica:
     def fabrica_objetos_dao(self):
         bd = BancoDados(self.bd)
         if isinstance(self.obj, Aluno):
-            return DaoAluno(self.obj, bd)        
+            return DaoAluno(self.obj, bd)
         if isinstance(self.obj, Curso):
             return DaoCurso(self.obj, bd)
         if isinstance(self.obj, InscricaoAlunoCurso):

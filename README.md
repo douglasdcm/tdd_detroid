@@ -3,6 +3,10 @@
 Este projeto tem o objetivo de exercitar os "code smells" relacionados a testes unitários utilizando um aplicativo que simula um negócio real.
 O código será desenvolvido com a técnica TDD ao estilo Detroid, daí o nome do repositório.
 O aplicativo simula o controle de notas dos alunos de uma universidade. Abaixo segue a especificação do aplicativo:
+Definição de Feito (Definition of Done):
+1. Testes unitários estão cobrindo a funcionalidade
+2. A funcionalidade está desenvolvidade para ser utilizada via CLI
+3. Os dados estão sendo salvos no banco de dados
 # Fase 1
 Construção das funções básicas do sistema
 ## Entrega 1 - finalizada

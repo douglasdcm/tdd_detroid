@@ -3,7 +3,7 @@ import pytest
 from src.model.aluno import Aluno
 from src.model.curso import Curso
 from tests.massa_dados import aluno_nome_1, curso_nome_1, \
-    curso_nome_2, materia_nome_1, \
+    materia_nome_1, \
     materia_nome_2, materia_nome_3, materia_nome_4
 from src.enums.enums import Situacao
 

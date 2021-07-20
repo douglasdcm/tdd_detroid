@@ -1,6 +1,7 @@
 from tests.massa_dados import aluno_nome_1
 from src.controller.controller import Controller
 
+
 class TestBdAlunos:
 
     def test_aluno_criado_foi_salvo_banco_dados(self, cria_banco, cria_aluno):

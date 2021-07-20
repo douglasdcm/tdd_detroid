@@ -1,9 +1,12 @@
-class CatalogoAlunos:
+from src.model.i_catalogo import ICatalogo
 
-    def __init__(self):
+
+class CatalogoAlunos(Catalogo):
+
+    def __init__(self, aluno):
         self._catalogo = list()
 
-    def adiciona_aluno(self, aluno):
+    def adiciona(self, aluno):
         """
         Args:
             aluno (Aluno)

@@ -8,6 +8,7 @@ from src.model.materia import Materia
 from src.utils.messagens import LISTA_PARAMETROS_INVALIDA
 from src.config import banco_dados
 from src.controller.controller import Controller
+from src.exceptions.exceptions import ComandoInvalido, ListaParametrosInvalida
 
 first = 0
 
@@ -17,6 +18,7 @@ bd = connect(banco_dados)
 # aluno
 cria_aluno = "cria-aluno"
 inscreve_aluno_curso = "inscreve-aluno-curso"
+atualiza_aluno = "atualiza-aluno"
 
 # curso
 cria_curso = "cria-curso"
@@ -38,8 +40,23 @@ Comandos:
             _inscreve_aluno_curso(argumentos)
         elif cria_curso in argumentos:
             _cria_curso(argumentos)
+        elif atualiza_aluno in argumentos:
+            _atualiza_aluno(argumentos)
         else:
-            raise Exception("Commando inválido.")
+            raise ComandoInvalido("Commando inválido.")
+
+
+def _atualiza_aluno(argumentos):
+    aluno_id = "--aluno-id"
+    numero_argumentos = 4
+    if aluno_id in argumentos and len(argumentos) == numero_argumentos:
+        id_ = _pega_valor(argumentos, aluno_id)
+        aluno = Controller(Aluno(None), bd).pega_registro_por_id(int(id_))
+        aluno.pega_coeficiente_rendimento(auto_calculo=True)
+        Controller(aluno, bd).atualiza(id_)
+        print(f"Aluno com identificado {id_} atualizado com sucesso.")
+    else:
+        raise ListaParametrosInvalida(LISTA_PARAMETROS_INVALIDA)
 
 
 def _cria_curso(argumentos):
@@ -59,7 +76,7 @@ def _cria_curso(argumentos):
         Controller(curso, bd).salva()
         print(f"Curso de {curso.pega_nome()} criado.")
     else:
-        raise Exception(LISTA_PARAMETROS_INVALIDA)
+        raise ListaParametrosInvalida(LISTA_PARAMETROS_INVALIDA)
 
 
 def _inscreve_aluno_curso(argumentos):
@@ -74,7 +91,7 @@ def _inscreve_aluno_curso(argumentos):
         Controller(inscricao, bd).salva()
         print(f"Aluno identificado por {aluno_id} inscrito no curso identificado por {curso_id}.")
     else:
-        raise Exception(LISTA_PARAMETROS_INVALIDA)
+        raise ListaParametrosInvalida(LISTA_PARAMETROS_INVALIDA)
 
 
 def _cria_aluno(argumentos):
@@ -87,7 +104,7 @@ def _cria_aluno(argumentos):
         controller.salva()
         print(f"Aluno {nome} criado com sucesso.")
     else:
-        raise Exception(LISTA_PARAMETROS_INVALIDA)
+        raise ListaParametrosInvalida(LISTA_PARAMETROS_INVALIDA)
 
 
 def _pega_valor(argumentos, parametro, incremento=1):

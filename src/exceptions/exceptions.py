@@ -38,6 +38,16 @@ class CursoUnico(Exception):
         super().__init__(menssagem)
 
 
+class ComandoInvalido(Exception):
+    def __init__(self, menssagem="O comando não foi reconehecido como um comando válido."):
+        super().__init__(menssagem)
+
+
+class ListaParametrosInvalida(Exception):
+    def __init__(self, menssagem="Lista de parâmetros inválida."):
+        super().__init__(menssagem)
+
+
 class ErroObjetoDaoNaoEncontrado(Exception):
     def __init__(self, menssagem="Objeto não identificado"):
         super().__init__(menssagem)

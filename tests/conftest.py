@@ -9,7 +9,7 @@ from src.model.curso import Curso
 from src.config import banco_dados
 from src.tabelas import alunos, cursos
 from tests.massa_dados import aluno_nome_1, curso_nome_1, materia_nome_1, \
-                              materia_nome_2, materia_nome_3
+    materia_nome_2, materia_nome_3
 from src.controller.controller import Controller
 
 IN_MEMORY = ":memory:"
@@ -53,9 +53,9 @@ def cria_massa_dados(cria_banco_real):
     bd = cria_banco_real
     bd.deleta_tabela(cursos)
     bd.deleta_tabela(alunos)
-    Controller(Aluno(aluno_nome_1), bd).salva()
-    Controller(Curso(curso_nome_1), bd).salva()
-    yield
+    aluno_id = Controller(Aluno(aluno_nome_1), bd).salva()
+    curso_id = Controller(Curso(curso_nome_1), bd).salva()
+    yield aluno_id, curso_id
     bd.deleta_tabela(cursos)
     bd.deleta_tabela(alunos)
 

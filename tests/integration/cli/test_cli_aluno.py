@@ -1,27 +1,30 @@
-from sqlite3 import connect
-from typing import Sized
 from src.model.aluno import Aluno
-from src.dao.dao_fabrica import DaoFabrica
 from tests.helper import executa_comando
-from src.model.banco_dados import BancoDados
 from src.utils.messagens import LISTA_PARAMETROS_INVALIDA
 from src.tabelas import alunos
-from src.config import banco_dados
 from tests.massa_dados import aluno_nome_1, aluno_nome_2, aluno_nome_3
 from pytest import fixture
 from src.controller.controller import Controller
-from src.enums.enums import Situacao
 
 
 class TestCliAluno:
 
     _MENSSAGEM_SUCESSO = "Aluno %s criado com sucesso."
+    _MENSSAGEM_SUCESSO_ATULIZACAO = "Aluno %s atualizado com sucesso."
     _comando_cria_aluno = "cria-aluno"
+    _comando_atualiza_aluno = "atualiza-aluno"
 
     @fixture(autouse=True, scope="function")
     def setup(self, cria_banco_real):
         self.bd = cria_banco_real
         self.bd.deleta_tabela(alunos)
+
+    def test_aluno_pode_atualizar_cr(self, cria_massa_dados):
+        cria_massa_dados
+        aluno_id = "1"
+        expected = self._MENSSAGEM_SUCESSO_ATULIZACAO % aluno_nome_1
+        actual = self._atualiza_aluno_por_cli(aluno_id)
+        assert actual == expected
 
     def test_criacao_alunos_sem_nome_retorna_excecao(self):
         expected = LISTA_PARAMETROS_INVALIDA
@@ -56,3 +59,7 @@ class TestCliAluno:
     def _cria_aluno_por_cli(self, nome, tag="--nome"):
         comando_1 = [self._comando_cria_aluno, tag, nome]
         return executa_comando(comando_1)
+
+    def _atualiza_aluno_por_cli(self, aluno_id):
+        comando = [self._comando_atualiza_aluno, "--aluno-id", aluno_id]
+        return executa_comando(comando)
