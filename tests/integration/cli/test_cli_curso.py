@@ -1,10 +1,12 @@
+from src.model.materia import Materia
 from tests.helper import executa_comando
 from src.model.curso import Curso
 from tests.massa_dados import curso_nome_1, materia_nome_1, \
     materia_nome_2, materia_nome_3
-from src.tabelas import cursos
-from pytest import fixture
+from src.tabelas import cursos, materias
+from pytest import fixture, raises
 from src.controller.controller import Controller
+from src.exceptions.exceptions import MateriaInvalida, ErroBancoDados
 
 
 class TestCliCurso:
@@ -18,9 +20,17 @@ class TestCliCurso:
         self._cria_curso = "cria-curso"
         self._bd = cria_banco_real
         self._bd.deleta_tabela(cursos)
+        self._bd.deleta_tabela(materias)
 
     def teardown_method(self, method):
         self._bd.fecha_conexao_existente()
+
+    def test_criacao_curso_com_materia_inexistente_retorna_excecao(self):
+        expected = "A matéria 'Materia 1' não existe no sistema."
+        parametros = [self._cria_curso, "--nome", curso_nome_1, "--materias",
+                      materia_nome_1, materia_nome_2, materia_nome_3]
+        actual = executa_comando(parametros)
+        assert expected in actual
 
     def test_criacao_curso_com_menos_materias_que_minimo_retorna_excecao(self):
         expected = self._MENSSAGEM_ERRO
@@ -43,6 +53,7 @@ class TestCliCurso:
         assert expected in actual
 
     def test_criacao_de_curso_usando_tag__m__para_lista_das_materias(self):
+        self._cria_materias()
         expected = self._MENSSAGEM_SUCESSO
         parametros = [self._cria_curso, "--nome", curso_nome_1, "--materias",
                       materia_nome_1, materia_nome_2, materia_nome_3]
@@ -50,6 +61,7 @@ class TestCliCurso:
         assert actual == expected
 
     def test_criacao_de_curso_com_paramtro__materias__antes__nome(self):
+        self._cria_materias()
         expected = self._MENSSAGEM_SUCESSO
         parametros = [self._cria_curso, "--materias",
                       materia_nome_1, materia_nome_2, materia_nome_3, "--nome",
@@ -58,6 +70,7 @@ class TestCliCurso:
         assert actual == expected
 
     def test_curso_criado_banco_dados(self):
+        self._cria_materias()
         expected = Curso(curso_nome_1).pega_nome()
         parametros = [self._cria_curso, "--nome", curso_nome_1, "--materias",
                       materia_nome_1, materia_nome_2, materia_nome_3]
@@ -65,3 +78,8 @@ class TestCliCurso:
         curso = Controller(Curso(curso_nome_1), self._bd).pega_registros()[self.first]
         actual = curso.pega_nome()
         assert actual == expected
+
+    def _cria_materias(self):
+        Controller(Materia(materia_nome_1), self._bd).salva()
+        Controller(Materia(materia_nome_2), self._bd).salva()
+        Controller(Materia(materia_nome_3), self._bd).salva()

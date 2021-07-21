@@ -8,7 +8,8 @@ from src.model.materia import Materia
 from src.utils.messagens import LISTA_PARAMETROS_INVALIDA
 from src.config import banco_dados
 from src.controller.controller import Controller
-from src.exceptions.exceptions import ComandoInvalido, ListaParametrosInvalida
+from src.exceptions.exceptions import ComandoInvalido, ListaParametrosInvalida, MateriaInvalida, \
+    MateriaInvalida
 
 first = 0
 
@@ -23,6 +24,9 @@ atualiza_aluno = "atualiza-aluno"
 # curso
 cria_curso = "cria-curso"
 
+# matéria
+cria_materia = "cria-materia"
+
 
 def main(*args):
     for argumentos in args:
@@ -30,8 +34,9 @@ def main(*args):
             print("""
 Comandos:
     cria-aluno --nome NOME_ALUNO
-    cria-curso --nome NOME_CURSO --materias MATERIA_1 MATERIA_2 MATERIA_3  
+    cria-curso --nome NOME_CURSO --materias MATERIA_1 MATERIA_2 MATERIA_3
     inscreve-aluno-curso --curso-id CURSO_ID --aluno-id ALUNO_ID
+    atualiza-aluno --aluno-id ID
                     """)
             return
         if cria_aluno in argumentos:
@@ -42,8 +47,22 @@ Comandos:
             _cria_curso(argumentos)
         elif atualiza_aluno in argumentos:
             _atualiza_aluno(argumentos)
+        elif cria_materia in argumentos:
+            _cria_materia(argumentos)
         else:
             raise ComandoInvalido("Commando inválido.")
+
+
+def _cria_materia(argumentos):
+    nome = "--nome"
+    numero_argumentos = 4
+    if nome in argumentos and len(argumentos) == numero_argumentos:
+        nome = _pega_valor(argumentos, nome)
+        materia = Materia(nome)
+        Controller(materia, bd).salva()
+        print(f"Matéria de {materia.pega_nome()} criada.")
+    else:
+        raise ListaParametrosInvalida(LISTA_PARAMETROS_INVALIDA)
 
 
 def _atualiza_aluno(argumentos):
@@ -51,10 +70,8 @@ def _atualiza_aluno(argumentos):
     numero_argumentos = 4
     if aluno_id in argumentos and len(argumentos) == numero_argumentos:
         id_ = _pega_valor(argumentos, aluno_id)
-        aluno = Controller(Aluno(None), bd).pega_registro_por_id(int(id_))
-        aluno.pega_coeficiente_rendimento(auto_calculo=True)
-        Controller(aluno, bd).atualiza(id_)
-        print(f"Aluno com identificado {id_} atualizado com sucesso.")
+        Controller(Aluno(None), bd).salva()
+        print(f"Aluno com identificador {id_} atualizado com sucesso.")
     else:
         raise ListaParametrosInvalida(LISTA_PARAMETROS_INVALIDA)
 
@@ -69,6 +86,12 @@ def _cria_curso(argumentos):
         materia_1 = _pega_valor(argumentos, materias_parametro)
         materia_2 = _pega_valor(argumentos, materias_parametro, 2)
         materia_3 = _pega_valor(argumentos, materias_parametro, 3)
+        controller = Controller(Materia(None), bd)
+        for materia in [materia_1, materia_2, materia_3]:
+            try:
+                controller.pega_registro_por_nome(materia)
+            except Exception:
+                raise MateriaInvalida(f"A matéria '{materia}' não existe no sistema.")
         curso = Curso(nome)
         curso.atualiza_materias(Materia(materia_1))
         curso.atualiza_materias(Materia(materia_2))

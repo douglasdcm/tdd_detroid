@@ -80,20 +80,37 @@ class BancoDados:
         mensagem_erro = "Não foi possível pegar os registros."
         return self._run(query, mensagem_erro)
 
-    def pega_registro_por_id(self, tabela, id):
-        query = f"select * from {tabela} where id = {id}"
+    def pega_registro_por_id(self, tabela, id_):
+        query = f"select * from {tabela} where id = {id_}"
         mensagem_erro = "Não foi possível pegar o registro especificado."
         result = self._run(query, mensagem_erro)
         if result == []:
-            raise ErroBancoDados("Registro especificado não foi encontrado.")
+            raise ErroBancoDados(f"Registro especificado de identificador {id_} não foi encontrado.")
         else:
             return result
 
-    def pega_por_query(self, tabela, query):
+    def pega_registro_por_nome(self, tabela, nome):
+        query = f"select * from {tabela} where nome = '{nome}'"
+        mensagem_erro = "Não foi possível pegar o registro especificado."
+        result = self._run(query, mensagem_erro)
+        if result == []:
+            raise ErroBancoDados(f"Registro especificado '{nome}' não foi encontrado.")
+        else:
+            return result
+
+    def pega_por_query(self, query):
         mensagem_erro = "Não foi possível executar a query especificada."
         return self._run(query, mensagem_erro)
 
     def _run(self, query, mensagem_erro):
+        """
+        Args:
+            query (str): consulta sql a ser executada
+            mensagem_erro (str): menssagem retornada em caso de erro na execução
+
+        Returns:
+            (tuple): tupla com os registros do banco de dados
+        """
         try:
             items = self._cria_conexao()
             con = items[0]

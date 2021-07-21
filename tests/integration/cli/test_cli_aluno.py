@@ -10,7 +10,7 @@ from src.controller.controller import Controller
 class TestCliAluno:
 
     _MENSSAGEM_SUCESSO = "Aluno %s criado com sucesso."
-    _MENSSAGEM_SUCESSO_ATULIZACAO = "Aluno %s atualizado com sucesso."
+    _MENSSAGEM_SUCESSO_ATULIZACAO = "Aluno com identificador %s atualizado com sucesso."
     _comando_cria_aluno = "cria-aluno"
     _comando_atualiza_aluno = "atualiza-aluno"
 
@@ -22,7 +22,7 @@ class TestCliAluno:
     def test_aluno_pode_atualizar_cr(self, cria_massa_dados):
         cria_massa_dados
         aluno_id = "1"
-        expected = self._MENSSAGEM_SUCESSO_ATULIZACAO % aluno_nome_1
+        expected = self._MENSSAGEM_SUCESSO_ATULIZACAO % aluno_id
         actual = self._atualiza_aluno_por_cli(aluno_id)
         assert actual == expected
 

@@ -7,7 +7,7 @@ from src.model.materia import Materia
 from src.model.aluno import Aluno
 from src.model.curso import Curso
 from src.config import banco_dados
-from src.tabelas import alunos, cursos
+from src.tabelas import alunos, cursos, inscricao_aluno_curso, materias
 from tests.massa_dados import aluno_nome_1, curso_nome_1, materia_nome_1, \
     materia_nome_2, materia_nome_3
 from src.controller.controller import Controller

@@ -14,5 +14,5 @@ class TestDaoMateria:
         expected = "Química"
         dao = DaoMateria(Materia(expected), cria_banco)
         dao.salva()
-        actual = dao.pega_por_id(id=1)
+        actual = dao.pega_por_id(id_=1)
         assert actual.pega_nome() == expected

@@ -27,9 +27,19 @@ class Controller:
     def pega_registro_por_id(self, id_):
         """
         Args: id (int): id do objeto
-        Returns: objeto Aluno com valores atualizados via banco de dados 
+        Returns: objeto, por exemplo Aluno, com valores atualizados via banco de dados
         """
         return self.dao.pega_por_id(id_)
+
+    def pega_registro_por_nome(self, nome):
+        """
+        Args: nome (str): nome do objeto
+        Returns: objeto, por exemplo Aluno, com valores atualizados via banco de dados
+        """
+        try:
+            return self.dao.pega_por_nome(nome)
+        except Exception:
+            raise
 
     def pega_registro_por_query(self, query):
         return self.dao.pega_por_query(query)

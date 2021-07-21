@@ -48,6 +48,11 @@ class ListaParametrosInvalida(Exception):
         super().__init__(menssagem)
 
 
+class MateriaInvalida(Exception):
+    def __init__(self, menssagem="Matéria informada inválida."):
+        super().__init__(menssagem)
+
+
 class ErroObjetoDaoNaoEncontrado(Exception):
     def __init__(self, menssagem="Objeto não identificado"):
         super().__init__(menssagem)

@@ -10,11 +10,14 @@ class DaoBase(IDao):
         self._campos = campos
         self._bd.cria_tabela(self._tabela, self._campos, complemento)
 
-    def deleta(self, id):
-        self._bd.deleta_registro(self._tabela, id)
+    def deleta(self, id_):
+        self._bd.deleta_registro(self._tabela, id_)
 
-    def pega_por_id(self, id):
-        return self._bd.pega_registro_por_id(self._tabela, id)
+    def pega_por_id(self, id_):
+        return self._bd.pega_registro_por_id(self._tabela, id_)
+
+    def pega_por_nome(self, nome):
+        return self._bd.pega_registro_por_nome(self._tabela, nome)
 
     def pega_tudo(self):
         return self._bd.pega_todos_registros(self._tabela)

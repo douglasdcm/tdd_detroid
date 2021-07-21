@@ -2,7 +2,7 @@ from _pytest.config import exceptions
 from src.model.materia import Materia
 from src.dao.dao_base import DaoBase
 from src.tabelas import materias
-from src.exceptions.exceptions import ErroMateriaSemNome
+from src.exceptions.exceptions import ErroMateriaSemNome, MateriaInvalida
 
 
 class DaoMateria(DaoBase):
@@ -27,9 +27,28 @@ class DaoMateria(DaoBase):
             raise ErroMateriaSemNome("""Matéria precisa ter nome para
                                      ser salva no banco de dados.""")
 
-    def pega_por_id(self, id):
-        registro = super().pega_por_id(id)
+    def pega_por_id(self, id_):
+        registro = super().pega_por_id(id_)
         (id_, nome) = registro[0]
         materia = Materia(nome)
         materia.define_id(id_)
         return materia
+
+    def pega_por_nome(self, nome):
+        try:
+            registro = super().pega_por_nome(nome)
+            (id_, nome) = registro[0]
+            materia = Materia(nome)
+            return materia
+        except Exception:
+            raise
+
+    def pega_tudo(self) -> list():
+        registros = super().pega_tudo()
+        lista = list()
+        for linha in registros:
+            (id_, nome) = linha
+            obj = Materia(nome)
+            obj.define_id(id_)
+            lista.append(obj)
+        return lista
