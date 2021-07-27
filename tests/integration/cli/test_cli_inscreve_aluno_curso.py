@@ -18,6 +18,19 @@ class TestCliInscreveAlunoCurso:
         bd.deleta_tabela(cursos)
         bd.deleta_tabela(alunos)
 
+    def test_situaca_aluno_muda_para__em_curso__apos_inscricao(self, cria_banco_real):
+        Controller(Aluno(aluno_nome_1), cria_banco_real).salva()
+        Controller(Curso(curso_nome_1), cria_banco_real).salva()
+        expected = "em curso"
+        parametros = ["inscreve-aluno-curso", "--aluno-id", self.aluno_id, "--curso-id",
+                      self.curso_id]
+        executa_comando(parametros)
+        InscricaoAlunoCurso(self.aluno_id, self.curso_id)
+        aluno = Controller(Aluno().define_id(self.aluno_id),
+                           cria_banco_real).pega_registro_por_id(self.aluno_id)
+        actual = aluno.pega_situacao()
+        assert actual == expected
+
     def test_retorna_excecao_quando_curso_id_nao_existe(self, cria_banco_real):
         expected = "Curso não encontrado."
         Controller(Aluno(None), cria_banco_real).salva()

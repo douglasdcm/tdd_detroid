@@ -17,10 +17,12 @@ class DaoAluno(DaoBase):
         super().__init__(self._bd, self._tabela, self._campos)
 
     def salva(self):
-        return self._bd.salva_registro(self._tabela, self._campos,
-                                       (f"'{self._aluno.pega_nome()}', "
-                                        f"{self._aluno.pega_coeficiente_rendimento()}, "
-                                        f"'{self._aluno.pega_situacao()}'"))
+        """Retorna a tupla com o maior id da tabela"""
+        linha = self._bd.salva_registro(self._tabela, self._campos,
+                                        (f"'{self._aluno.pega_nome()}', "
+                                         f"{self._aluno.pega_coeficiente_rendimento()}, "
+                                         f"'{self._aluno.pega_situacao()}'"))
+        return self._tuple_para_aluno(linha[0])
 
     def atualiza(self, id_):
         query = f"{self.campo_2} = {self._aluno.pega_coeficiente_rendimento()}"

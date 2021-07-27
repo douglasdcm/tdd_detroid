@@ -60,6 +60,7 @@ class BancoDados:
         self._run(query, mensagem_erro)
 
     def salva_registro(self, tabela, campos, valores):
+        """Retorna a tupla com o maior id da tabela"""
         query = f"insert into {tabela} ({campos}) values ({valores})"
         mensagem_erro = "Não foi possiível salvar o registro."
         self._run(query, mensagem_erro)
@@ -81,6 +82,7 @@ class BancoDados:
         return self._run(query, mensagem_erro)
 
     def pega_registro_por_id(self, tabela, id_):
+        """Retorna a tupla da tabela identificada pelo id"""
         query = f"select * from {tabela} where id = {id_}"
         mensagem_erro = "Não foi possível pegar o registro especificado."
         result = self._run(query, mensagem_erro)

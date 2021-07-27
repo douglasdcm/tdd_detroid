@@ -1,3 +1,4 @@
+from src.model.inscricao_aluno_curso import InscricaoAlunoCurso
 from src.model.aluno import Aluno
 from tests.helper import executa_comando
 from src.utils.messagens import LISTA_PARAMETROS_INVALIDA
@@ -18,6 +19,26 @@ class TestCliAluno:
     def setup(self, cria_banco_real):
         self.bd = cria_banco_real
         self.bd.deleta_tabela(alunos)
+
+    def test_aluno_pode_atualizar_situacao(self, cria_massa_dados):
+        cria_massa_dados
+        aluno_id = curso_id = "1"
+        expected = "trancado"
+        Controller(InscricaoAlunoCurso(aluno_id, curso_id), self.bd).salva()
+        self._atualiza_aluno_por_cli(aluno_id, situacao=expected)
+        aluno = Controller(Aluno(), self.bd).pega_registro_por_id(aluno_id)
+        actual = aluno.pega_situacao()
+        assert actual == expected
+
+    def test_aluno_pode_atualizar_nome(self, cria_massa_dados):
+        cria_massa_dados
+        aluno_id = "1"
+        nome = aluno_nome_2
+        expected = nome
+        self._atualiza_aluno_por_cli(aluno_id, nome)
+        aluno = Controller(Aluno(), self.bd).pega_registro_por_id(aluno_id)
+        actual = aluno.pega_nome()
+        assert actual == expected
 
     def test_aluno_pode_atualizar_cr(self, cria_massa_dados):
         cria_massa_dados
@@ -60,6 +81,10 @@ class TestCliAluno:
         comando_1 = [self._comando_cria_aluno, tag, nome]
         return executa_comando(comando_1)
 
-    def _atualiza_aluno_por_cli(self, aluno_id):
+    def _atualiza_aluno_por_cli(self, aluno_id, nome=None, situacao=None):
         comando = [self._comando_atualiza_aluno, "--aluno-id", aluno_id]
+        if isinstance(nome, str):
+            comando.extend(["--nome", nome])
+        if isinstance(situacao, str):
+            comando.extend(["--situacao", situacao])
         return executa_comando(comando)

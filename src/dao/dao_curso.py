@@ -3,6 +3,8 @@ from src.model.curso import Curso
 from src.dao.dao_base import DaoBase
 from src.model.banco_dados import BancoDados
 from src.tabelas import cursos
+from src.dao.dao_associa_curso_materia import DaoAssociaCursoMateria
+from src.model.associa_curso_materia import AssociaCursoMateria
 
 
 class DaoCurso(DaoBase):
@@ -38,8 +40,17 @@ class DaoCurso(DaoBase):
             raise
 
     def pega_por_id(self, id):
+        """
+        Args:
+            id (int): identificador do curso
+        Returns:
+            objeto curso com dados pegos do banco de dados
+        """
         linha = super().pega_por_id(id)
-        (id_, nome) = linha[0]
+        return self._tuple_para_objeto(linha[0])
+
+    def _tuple_para_objeto(self, linha):
+        (id_, nome) = linha
         curso = Curso(nome)
         curso.define_id(id_)
         return curso

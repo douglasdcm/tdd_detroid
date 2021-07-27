@@ -1,3 +1,6 @@
+from src.model.aluno import Aluno
+
+
 class InscricaoAlunoCurso:
 
     def __init__(self, aluno_id, curso_id):
@@ -9,3 +12,8 @@ class InscricaoAlunoCurso:
 
     def pega_curso_id(self):
         return self._curso_id
+
+    def atualiza_aluno(self, aluno, curso):
+        aluno.inscreve_curso(curso)
+        aluno.calcula_situacao()
+        return aluno

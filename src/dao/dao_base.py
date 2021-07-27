@@ -14,6 +14,7 @@ class DaoBase(IDao):
         self._bd.deleta_registro(self._tabela, id_)
 
     def pega_por_id(self, id_):
+        """Retorna a tupla da tabela identificada pelo id"""
         return self._bd.pega_registro_por_id(self._tabela, id_)
 
     def pega_por_nome(self, nome):
