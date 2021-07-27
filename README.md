@@ -9,21 +9,21 @@ Definição de Feito (Definition of Done):
 3. Os dados estão sendo salvos no banco de dados
 # Fase 1
 Construção das funções básicas do sistema
-## Entrega 1 - finalizada
+## Entrega 1 - finalizada (DoD)
 1. Cada aluno terá um controle de notas chamado "coeficiente de rendimento" (CR)
 2. O CR é a média das notas do aluno nas disciplinas já cursadas
 3. O aluno é considerado aprovado na universidade se seu CR for acima ou igual a 7 (sete) ao final do curso
 4. Caso o aluno curse a mesma matéria mais de uma vez, a maior nota será considerada no cálculo do CR
-## Entrega 2 - finalizada
+## Entrega 2 - finalizada  (DoD)
 1. A faculdade terá inicialmente 3 cursos com 3 matérias cada
 2. As matérias de cada curso podem ter nomes iguais, mas serão diferenciadas pelo número identificador único (niu)
-## Entrega 3 - finalizado
+## Entrega 3 - finalizado (DoD)
 1. O sistema deve calcular a situação do aluno levando em consideração as matérias cursadas e o total de matérias de cada curso
 2. O aluno só poderá cursar matérias do seu curso
 3. Os cursos devem ter identificador único e nome
 4. O nome dos curso pode ser igual, mas o identificador único de cada curso deve ser diferente
 5. Um curso não pode ter duas matérias com mesmo nome, mesmo que o niu seja diferente
-## Entrega 4 - finalizado
+## Entrega 4 - finalizado (DoD)
 1. A nota máxima de um aluno em uma matéria é 10
 2. A nota mínima de um aluno em uma matéria é 0
 ## Entrega 5 - finalizado
@@ -47,12 +47,6 @@ Construção das funções básicas do sistema
 1. O curso pode ser cancelado
 2. Os cursos cancelados não podem aceitar incrições de alunos
 3. Os cursos cancelados não pode ter coordenadores
-## Entrega 11
-1. O coordenador só pode ser coordenador de 3 cursos no máximo
-2. O coordenador geral não pode ser coordenador de cursos
-## Entrega 12
-1. O aluno tem 10 semestres para se formar
-2. Caso o aluno exceda os 10 semestres, ele é automaticamente reprovado
 ## Entrega 13
 1. Cada matéria pode ter no máximo 30 alunos inscritos
 2. O aluno tem que se inscrever em 3 matérias no mínimo

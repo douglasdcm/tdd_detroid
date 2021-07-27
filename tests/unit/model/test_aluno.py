@@ -10,6 +10,13 @@ from src.enums.enums import Situacao
 
 class TestAluno:
 
+    def test_situacao_nao_pode_ser_fora_dos_valores_definidos(self):
+        aluno = Aluno()
+        situacao = "ausente"
+        expected = f"Situação do aluno '{situacao}' não é válida."
+        with pytest.raises(Exception, match=expected):
+            aluno.define_situacao(situacao)
+
     def test_aluno_deve_ser_capaz_de_listar_materias_faltantes(self, cria_curso_com_materias):
         aluno = Aluno(aluno_nome_1).inscreve_curso(cria_curso_com_materias)
         materias = {materia_nome_2: 7, materia_nome_3: 9}
@@ -54,9 +61,13 @@ class TestAluno:
         actual = aluno.pega_coeficiente_rendimento()
         assert actual == expected
 
-    def test_define_situacao_retorna_aluno_com_situacao_atualizada(self):
+    def test_define_situacao_retorna_aluno_com_situacao_atualizada(self, cria_curso_com_materias):
+        materias = {materia_nome_1: 8, materia_nome_2: 8, materia_nome_3: 8}
         expected = "aprovado"
-        aluno = Aluno(aluno_nome_1).define_situacao(Situacao.aprovado.value)
+        aluno = Aluno(aluno_nome_1)
+        aluno.inscreve_curso(cria_curso_com_materias)
+        aluno.atualiza_materias_cursadas(materias)
+        aluno.define_situacao(Situacao.aprovado.value)
         actual = aluno.pega_situacao()
         assert actual == expected
 
@@ -140,12 +151,12 @@ class TestAluno:
 
     def test_nota_minima_aluno_deve_ser_zero(self, inscreve_aluno):
         aluno, _ = inscreve_aluno
-        materias = {materia_nome_1:-1}
+        materias = {materia_nome_1: -1}
         with raises(Exception, match="Nota mínima do aluno não pode ser menor do que 0."):
             aluno.atualiza_materias_cursadas(materias)
 
     def test_nota_maxima_aluno_deve_ser_dez(self, inscreve_aluno):
-        materias = {materia_nome_1:11}
+        materias = {materia_nome_1: 11}
         aluno, _ = inscreve_aluno
         with raises(Exception, match="Nota máxima do aluno não pode ser maior do que 10."):
             aluno.atualiza_materias_cursadas(materias)

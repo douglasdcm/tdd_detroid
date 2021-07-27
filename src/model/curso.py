@@ -3,7 +3,7 @@ from src.model.i_model import IModel
 import time
 from src.model.catalogo_curso import CatalogoCurso
 from src.model.aluno import Aluno
-from src.exceptions.exceptions import MaximoCaracteres, UnidadeInvalida
+from src.exceptions.exceptions import MaximoCaracteres, UnidadeInvalida, MateriaInvalida
 
 
 class Curso(IModel):
@@ -64,7 +64,7 @@ class Curso(IModel):
         else:
             for item in self._lista_materias:
                 if item.pega_nome() == materia.pega_nome():
-                    return
+                    raise MateriaInvalida("O curso não pode ter duas matérias com mesmo nome.")
             if len(self._lista_materias) < self._minimo_materia:
                 self._lista_materias.append(materia)
 

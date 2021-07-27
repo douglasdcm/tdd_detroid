@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from enum import auto
+from typing import no_type_check_decorator
 from src.model.inscricao_aluno_curso import InscricaoAlunoCurso
 from sys import argv
 from sqlite3 import connect
@@ -10,6 +12,7 @@ from src.config import banco_dados
 from src.controller.controller import Controller
 from src.exceptions.exceptions import ComandoInvalido, ListaParametrosInvalida, MateriaInvalida, \
     MateriaInvalida
+from src.model.associa_curso_materia import AssociaCursoMateria
 
 first = 0
 
@@ -67,13 +70,33 @@ def _cria_materia(argumentos):
 
 def _atualiza_aluno(argumentos):
     aluno_id = "--aluno-id"
-    numero_argumentos = 4
-    if aluno_id in argumentos and len(argumentos) == numero_argumentos:
-        id_ = _pega_valor(argumentos, aluno_id)
-        Controller(Aluno(None), bd).salva()
+    situacao = "--situacao"
+    nome = "--nome"
+    materia = "--materia"
+    nota = "--nota"
+    aluno = Aluno()
+    try:
+        if aluno_id in argumentos:
+            id_ = _pega_valor(argumentos, aluno_id)
+            Controller(aluno, bd).atualiza(id_)
+        if nome in argumentos:
+            nome_ = _pega_valor(argumentos, nome)
+            aluno.define_nome(nome_)
+            Controller(aluno, bd).atualiza(id_)
+        if situacao in argumentos:
+            situacao_ = _pega_valor(argumentos, situacao)
+            aluno.define_situacao(situacao_)
+            Controller(aluno, bd).atualiza(id_)
+        if materia in argumentos and nota in argumentos:
+            materia_ = _pega_valor(argumentos, materia)
+            nota_ = _pega_valor(argumentos, nota)
+            materias = {materia_: nota_}
+            aluno.atualiza_materias_cursadas(materias)
+            Controller(aluno, bd).atualiza(id_)
+
         print(f"Aluno com identificador {id_} atualizado com sucesso.")
-    else:
-        raise ListaParametrosInvalida(LISTA_PARAMETROS_INVALIDA)
+    except Exception:
+        raise
 
 
 def _cria_curso(argumentos):
@@ -82,22 +105,28 @@ def _cria_curso(argumentos):
     numero_argumentos = 8
     if nome_parametro in argumentos and materias_parametro in argumentos \
             and len(argumentos) == numero_argumentos:
-        nome = _pega_valor(argumentos, nome_parametro)
-        materia_1 = _pega_valor(argumentos, materias_parametro)
-        materia_2 = _pega_valor(argumentos, materias_parametro, 2)
-        materia_3 = _pega_valor(argumentos, materias_parametro, 3)
-        controller = Controller(Materia(None), bd)
-        for materia in [materia_1, materia_2, materia_3]:
-            try:
-                controller.pega_registro_por_nome(materia)
-            except Exception:
-                raise MateriaInvalida(f"A matéria '{materia}' não existe no sistema.")
-        curso = Curso(nome)
-        curso.atualiza_materias(Materia(materia_1))
-        curso.atualiza_materias(Materia(materia_2))
-        curso.atualiza_materias(Materia(materia_3))
-        Controller(curso, bd).salva()
-        print(f"Curso de {curso.pega_nome()} criado.")
+        try:
+            nome = _pega_valor(argumentos, nome_parametro)
+            materia_1 = _pega_valor(argumentos, materias_parametro)
+            materia_2 = _pega_valor(argumentos, materias_parametro, 2)
+            materia_3 = _pega_valor(argumentos, materias_parametro, 3)
+
+            curso = Curso(nome)
+            controller_curso = Controller(curso, bd)
+            controller_curso.salva()
+            registro = controller_curso.pega_registro_por_nome(nome)
+            curso_id = registro.pega_id()
+
+            controller = Controller(Materia(None), bd)
+            for materia in [materia_1, materia_2, materia_3]:
+                registro = controller.pega_registro_por_nome(materia)
+                materia_id = registro.pega_id()
+                curso.atualiza_materias(Materia(materia))
+
+                Controller(AssociaCursoMateria(curso_id, materia_id), bd).salva()
+            print(f"Curso de {curso.pega_nome()} criado.")
+        except Exception:
+            raise
     else:
         raise ListaParametrosInvalida(LISTA_PARAMETROS_INVALIDA)
 

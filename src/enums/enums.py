@@ -6,7 +6,7 @@ class Situacao(Enum):
     aprovado = "aprovado"
     reprovado = "reprovado"
     trancado = "trancado"
-    inexistente = "aluno inexistente"
+    inexistente = "aluno não matriculado"
 
 
 class SituacaoCurso(Enum):

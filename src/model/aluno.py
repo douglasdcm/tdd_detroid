@@ -1,9 +1,9 @@
 from src.enums.enums import SituacaoCurso, Situacao
-from src.exceptions.exceptions import CursoUnico, CursoCancelado
+from src.exceptions.exceptions import CursoUnico, CursoCancelado, SituacaoInvalida
 
 
 class Aluno:
-    def __init__(self, nome):
+    def __init__(self, nome=None):
         self._coeficiente_rendimento = 0
         self._situacao = "em curso"
         self.media_minima = 7
@@ -14,8 +14,14 @@ class Aluno:
         self._nome = nome
         self._id = None
 
+    def define_nome(self, nome):
+        self._nome = nome
+
     def define_situacao(self, situacao: Situacao):
-        self._situacao = situacao
+        situacao_valida = [e.value for e in Situacao]
+        if situacao not in situacao_valida:
+            raise SituacaoInvalida("Situação do aluno '{}' não é válida.".format(situacao))
+        self.calcula_situacao()
         return self
 
     def define_cr(self, cr):
@@ -113,7 +119,7 @@ class Aluno:
 
     def calcula_situacao(self):
         if self._curso is None:
-            self._situacao = "aluno inexistente"
+            self._situacao = "aluno não matriculado"
         elif self._situacao == "trancado":
             pass
         else:

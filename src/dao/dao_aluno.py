@@ -1,3 +1,4 @@
+from src.enums.enums import Situacao
 from src.model.aluno import Aluno
 from src.model.banco_dados import BancoDados
 from src.dao.dao_base import DaoBase
@@ -22,10 +23,16 @@ class DaoAluno(DaoBase):
                                         f"'{self._aluno.pega_situacao()}'"))
 
     def atualiza(self, id_):
+        query = f"{self.campo_2} = {self._aluno.pega_coeficiente_rendimento()}"
+
+        if isinstance(self._aluno.pega_nome(), str):
+            query += f", {self.campo_1} = '{self._aluno.pega_nome()}'"
+
+        if isinstance(self._aluno.pega_situacao(), str):
+            query += f", {self.campo_3} = '{self._aluno.pega_situacao()}'"
+
         return self._bd.atualiza_registro(self._tabela,
-                                          (f"{self.campo_1} = '{self._aluno.pega_nome()}', "
-                                           f"{self.campo_2} = {self._aluno.pega_coeficiente_rendimento()}, "
-                                           f"{self.campo_3} = '{self._aluno.pega_situacao()}'"),
+                                          query,
                                           id_)
 
     def pega_por_id(self, id_):

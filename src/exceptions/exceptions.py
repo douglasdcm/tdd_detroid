@@ -38,6 +38,10 @@ class CursoUnico(Exception):
         super().__init__(menssagem)
 
 
+class SituacaoInvalida(Exception):
+    def __init__(self, menssagem="Situação inválida."):
+        super().__init__(menssagem)
+
 class ComandoInvalido(Exception):
     def __init__(self, menssagem="O comando não foi reconehecido como um comando válido."):
         super().__init__(menssagem)

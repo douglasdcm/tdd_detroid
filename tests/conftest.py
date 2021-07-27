@@ -1,3 +1,4 @@
+import os
 from sqlite3 import connect
 from src.model.inscricao_aluno_curso import InscricaoAlunoCurso
 from src.model.associa_curso_materia import AssociaCursoMateria

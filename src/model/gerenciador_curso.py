@@ -1,5 +1,6 @@
 from src.model.curso import Curso
 
+
 class GerenciadorCurso:
     def __init__(self):
         self._lista_cursos = list()

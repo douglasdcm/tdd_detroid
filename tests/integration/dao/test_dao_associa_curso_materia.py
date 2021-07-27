@@ -6,6 +6,7 @@ from src.dao.dao_materia import DaoMateria
 from src.dao.dao_curso import DaoCurso
 from pytest import fixture
 
+
 class TestDaoAssociaCursoMateria:
 
     @fixture(autouse=True, scope="function")
@@ -20,8 +21,8 @@ class TestDaoAssociaCursoMateria:
 
     def test_curso_com_materials_salvo_banco(self):
         expected = [tuple((1, self.curso_id, self.materia_id))]
-        dao = DaoAssociaCursoMateria(AssociaCursoMateria(self.curso_id, \
-                 self.materia_id), self.bd)
+        dao = DaoAssociaCursoMateria(AssociaCursoMateria(self.curso_id, 
+                                                         self.materia_id), self.bd)
         dao.salva()
         actual = dao.pega_tudo()
         assert actual == expected

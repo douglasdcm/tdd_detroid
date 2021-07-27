@@ -9,6 +9,7 @@ from src.model.materia import Materia
 from src.model.aluno import Aluno
 from tests.massa_dados import curso_nome_1, materia_nome_1, aluno_nome_1
 
+
 class TestControllerCursoMateria:
 
     def test_curso_associado_materia_criado_banco_dados(self, cria_banco):

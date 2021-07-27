@@ -1,3 +1,4 @@
+from os import EX_OK
 from src.model.materia import Materia
 from tests.helper import executa_comando
 from src.model.curso import Curso
@@ -25,8 +26,16 @@ class TestCliCurso:
     def teardown_method(self, method):
         self._bd.fecha_conexao_existente()
 
+    def test_criacao_curso_com_materia_mesmo_nome_retorna_excecao(self):
+        self._cria_materias()
+        expected = "O curso não pode ter duas matérias com mesmo nome."
+        parametros = [self._cria_curso, "--nome", curso_nome_1, "--materias",
+                      materia_nome_1, materia_nome_1, materia_nome_3]
+        actual = executa_comando(parametros)
+        assert expected in actual
+
     def test_criacao_curso_com_materia_inexistente_retorna_excecao(self):
-        expected = "A matéria 'Materia 1' não existe no sistema."
+        expected = "Registro especificado \'Materia 1\' não foi encontrado."
         parametros = [self._cria_curso, "--nome", curso_nome_1, "--materias",
                       materia_nome_1, materia_nome_2, materia_nome_3]
         actual = executa_comando(parametros)

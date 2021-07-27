@@ -33,12 +33,10 @@ class DaoInscricao(DaoBase):
 
     def _valida_valores(self):
         try:
-            self._bd.pega_registro_por_id(alunos, \
-                self._inscricao.pega_aluno_id())
+            self._bd.pega_registro_por_id(alunos, self._inscricao.pega_aluno_id())
         except Exception:
             raise AlunoNaoEncontrado
         try:
-            self._bd.pega_registro_por_id(cursos, \
-                self._inscricao.pega_curso_id())
+            self._bd.pega_registro_por_id(cursos, self._inscricao.pega_curso_id())
         except Exception:
             raise CursoNaoEncontrado

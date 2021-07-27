@@ -27,6 +27,16 @@ class DaoCurso(DaoBase):
             lista.append(curso)
         return lista
 
+    def pega_por_nome(self, nome):
+        try:
+            registro = super().pega_por_nome(nome)
+            (id_, nome) = registro[0]
+            obj = Curso(nome)
+            obj.define_id(id_)
+            return obj
+        except Exception:
+            raise
+
     def pega_por_id(self, id):
         linha = super().pega_por_id(id)
         (id_, nome) = linha[0]

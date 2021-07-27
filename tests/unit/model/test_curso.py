@@ -58,10 +58,8 @@ class TestCurso:
         curso = Curso("mat")
         curso.atualiza_materias(Materia("alg"))
         curso.atualiza_materias(Materia("calc"))
-        # deve ser ignorado
-        curso.atualiza_materias(Materia("alg"))
-        with pytest.raises(Exception, match="Número mínimo que matérias é três. Adicione mais 1."):
-            curso.pega_lista_materias()
+        with pytest.raises(Exception, match="O curso não pode ter duas matérias com mesmo nome."):
+            curso.atualiza_materias(Materia("alg"))
 
     def test_curso_com_quantidade_materia_diferente_tres_retorna_uma_excecao(self):
         gerenciador_curso = GerenciadorCurso()
@@ -70,10 +68,11 @@ class TestCurso:
         gerenciador_curso.atualiza_cursos(curso)
         gerenciador_curso.atualiza_cursos(curso)
         cursos = gerenciador_curso.pega_lista_cursos()
-        materia = Materia("mat")
-        cursos[0].atualiza_materias(materia)
-        cursos[0].atualiza_materias(materia)
-        with pytest.raises(Exception, match="Número mínimo que matérias é três. Adicione mais 2."):
+        materia_1 = Materia("mat")
+        materia_2 = Materia("bio")
+        cursos[0].atualiza_materias(materia_1)
+        cursos[0].atualiza_materias(materia_2)
+        with pytest.raises(Exception, match="Número mínimo que matérias é três. Adicione mais 1."):
             cursos[0].pega_lista_materias()
 
     def test_os_cursos_podem_ter_nomes_iguais(self):
