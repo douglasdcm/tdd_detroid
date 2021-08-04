@@ -20,13 +20,12 @@ class TestCliAluno:
         self.bd = cria_banco_real
         self.bd.deleta_tabela(alunos)
 
-    def test_aluno_pode_atualizar_situacao(self, cria_massa_dados):
-        cria_massa_dados
-        aluno_id = curso_id = "1"
+    def test_aluno_pode_atualizar_situacao(self, cria_curso_materias_real):
+        aluno, curso, _ = cria_curso_materias_real
         expected = "trancado"
-        Controller(InscricaoAlunoCurso(aluno_id, curso_id), self.bd).salva()
-        self._atualiza_aluno_por_cli(aluno_id, situacao=expected)
-        aluno = Controller(Aluno(), self.bd).pega_registro_por_id(aluno_id)
+        Controller(InscricaoAlunoCurso(aluno, curso), self.bd).salva()
+        self._atualiza_aluno_por_cli(aluno.pega_id(), situacao=expected)
+        aluno = Controller(Aluno(), self.bd).pega_registro_por_id(aluno.pega_id())
         actual = aluno.pega_situacao()
         assert actual == expected
 

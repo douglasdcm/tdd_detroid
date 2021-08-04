@@ -59,6 +59,12 @@ class Curso(IModel):
         return self._identificador_unico
 
     def atualiza_materias(self, materia):
+        """
+        Args:
+            material (Materia)
+        Returns:
+            self
+        """
         if len(self._lista_materias) == 0:
             self._lista_materias.append(materia)
         else:
@@ -67,6 +73,7 @@ class Curso(IModel):
                     raise MateriaInvalida("O curso não pode ter duas matérias com mesmo nome.")
             if len(self._lista_materias) < self._minimo_materia:
                 self._lista_materias.append(materia)
+        return self
 
     def pega_lista_materias(self):
         quantidade_materias = len(self._lista_materias)

@@ -17,7 +17,7 @@ class DaoAluno(DaoBase):
         super().__init__(self._bd, self._tabela, self._campos)
 
     def salva(self):
-        """Retorna a tupla com o maior id da tabela"""
+        """Retorna objeto com campos atualizados via banco de dados"""
         linha = self._bd.salva_registro(self._tabela, self._campos,
                                         (f"'{self._aluno.pega_nome()}', "
                                          f"{self._aluno.pega_coeficiente_rendimento()}, "

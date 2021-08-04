@@ -8,7 +8,7 @@ from src.model.materia import Materia
 from src.model.aluno import Aluno
 from src.model.curso import Curso
 from src.config import banco_dados
-from src.tabelas import alunos, cursos, inscricao_aluno_curso, materias
+from src.tabelas import alunos, cursos, materias
 from tests.massa_dados import aluno_nome_1, curso_nome_1, materia_nome_1, \
     materia_nome_2, materia_nome_3
 from src.controller.controller import Controller
@@ -59,6 +59,31 @@ def cria_massa_dados(cria_banco_real):
     yield aluno_id, curso_id
     bd.deleta_tabela(cursos)
     bd.deleta_tabela(alunos)
+
+
+@fixture
+def cria_curso_materias_real(cria_banco_real):
+    bd = cria_banco_real
+    bd.deleta_tabela(cursos)
+    bd.deleta_tabela(alunos)
+    bd.deleta_tabela(materias)
+
+    aluno = Aluno(aluno_nome_1)
+    aluno = Controller(aluno, bd).salva()
+
+    curso = Curso(curso_nome_1)
+    curso = Controller(curso, bd).salva()
+
+    Controller(InscricaoAlunoCurso(aluno, curso), bd).salva()
+
+    lista_materias = [materia_nome_1, materia_nome_2, materia_nome_3]
+    lista_materia_obj = []
+    for materia in lista_materias:
+        materia_obj = Materia(materia)
+        materia_obj = Controller(materia_obj, bd).salva()
+        lista_materia_obj.append(materia_obj)
+        Controller(AssociaCursoMateria(curso, materia), bd).salva()
+    yield aluno, curso, lista_materia_obj
 
 
 @fixture

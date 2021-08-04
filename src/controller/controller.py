@@ -10,6 +10,7 @@ class Controller:
         self.dao = DaoFabrica(obj_dao, bd).fabrica_objetos_dao()
 
     def salva(self):
+        """Retorna objeto com campos atualizados via banco de dados"""
         try:
             return self.dao.salva()
         except Exception:
