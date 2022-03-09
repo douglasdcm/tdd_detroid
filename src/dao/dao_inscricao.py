@@ -44,8 +44,8 @@ class DaoInscricao(DaoBase):
             raise AlunoNaoEncontrado("Aluno não encontrado.")
         except CursoNaoEncontrado:
             raise CursoNaoEncontrado("Curso não encontrado.")
-        except Exception:
-            raise ErroBancoDados()
+        except Exception as e:
+            raise ErroBancoDados(e)
 
     def _tuple_para_objeto(self, linha):
         (id_, aluno_id, curso_id) = linha

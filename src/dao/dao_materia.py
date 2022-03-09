@@ -17,8 +17,9 @@ class DaoMateria(DaoBase):
     def salva(self):
         try:
             self._valida_campos()
-            self._bd.salva_registro(self._tabela, self._campos,
+            linha = self._bd.salva_registro(self._tabela, self._campos,
                                     f"'{self._materia.pega_nome()}'")
+            return self._tuple_para_objeto(linha[0])
         except Exception:
             raise ErroMateriaSemNome
 
@@ -53,3 +54,9 @@ class DaoMateria(DaoBase):
             obj.define_id(id_)
             lista.append(obj)
         return lista
+
+    def _tuple_para_objeto(self, linha):
+        (id_, nome) = linha
+        obj = Materia(nome)
+        obj.define_id(id_)
+        return obj

@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from enum import auto
 from typing import no_type_check_decorator
 from src.model.inscricao_aluno_curso import InscricaoAlunoCurso
 from sys import argv
@@ -116,14 +115,17 @@ def _cria_curso(argumentos):
             controller_curso.salva()
             registro = controller_curso.pega_registro_por_nome(nome)
             curso_id = registro.pega_id()
+            curso.define_id(curso_id)
 
             controller = Controller(Materia(None), bd)
             for materia in [materia_1, materia_2, materia_3]:
                 registro = controller.pega_registro_por_nome(materia)
                 materia_id = registro.pega_id()
-                curso.atualiza_materias(Materia(materia))
+                materia = Materia(materia)
+                materia.define_id(materia_id)
+                curso.atualiza_materias(materia)
 
-                Controller(AssociaCursoMateria(curso_id, materia_id), bd).salva()
+                Controller(AssociaCursoMateria(curso, materia), bd).salva()
             print(f"Curso de {curso.pega_nome()} criado.")
         except Exception:
             raise

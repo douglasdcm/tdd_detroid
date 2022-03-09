@@ -4,7 +4,7 @@ from src.controller.controller import Controller
 from src.model.aluno import Aluno
 from src.model.curso import Curso
 from src.model.coordenador_geral import CoordenadorGeral
-from tests.massa_dados import aluno_nome_1, curso_nome_1, materia_nome_1
+from tests.massa_dados import aluno_nome_1, curso_nome_1, materia_nome_1, materia_nome_2, materia_nome_3
 from src.model.associa_curso_materia import AssociaCursoMateria
 
 
@@ -28,35 +28,35 @@ class TestControllerCoordenadorGeral:
     def _setup_objetos(self, cria_banco):
         controller_aluno = Controller(Aluno(aluno_nome_1), cria_banco)
         controller_aluno.salva()
-        aluno = controller_aluno.pega_registro_por_id(id_=1)
+        aluno_obj = controller_aluno.pega_registro_por_id(id_=1)
         controller_curso = Controller(Curso(curso_nome_1), cria_banco)
         controller_curso.salva()
-        curso = controller_curso.pega_registro_por_id(id_=1)
-        Controller(InscricaoAlunoCurso(aluno_id=1,
-                                       curso_id=1),
+        curso_obj = controller_curso.pega_registro_por_id(id_=1)
+        controller_materia = Controller(Materia(materia_nome_1), cria_banco)
+        controller_materia.salva()
+        materia_1_obj = controller_materia.pega_registro_por_id(id_=1)
+        controller_materia = Controller(Materia(materia_nome_2), cria_banco)
+        controller_materia.salva()
+        materia_2_obj = controller_materia.pega_registro_por_id(id_=2)
+        controller_materia = Controller(Materia(materia_nome_3), cria_banco)
+        controller_materia.salva()
+        materia_3_obj = controller_materia.pega_registro_por_id(id_=3)
+        curso_obj = curso_obj.atualiza_materias(materia_1_obj)
+        curso_obj = curso_obj.atualiza_materias(materia_2_obj)
+        curso_obj = curso_obj.atualiza_materias(materia_3_obj)
+        aluno_obj = aluno_obj.inscreve_curso(curso_obj)
+        Controller(AssociaCursoMateria(curso_obj,
+                                       materia_1_obj), cria_banco).salva()
+        Controller(AssociaCursoMateria(curso_obj,
+                                       materia_2_obj), cria_banco).salva()
+        Controller(AssociaCursoMateria(curso_obj,
+                                       materia_3_obj), cria_banco).salva()
+        Controller(InscricaoAlunoCurso(aluno_obj,
+                                       curso_obj),
                    cria_banco).salva()
-        controller_materia = Controller(Materia(materia_nome_1), cria_banco)
-        controller_materia.salva()
-        materia_1 = controller_materia.pega_registro_por_id(id_=1)
-        controller_materia = Controller(Materia(materia_nome_1), cria_banco)
-        controller_materia.salva()
-        materia_2 = controller_materia.pega_registro_por_id(id_=2)
-        controller_materia = Controller(Materia(materia_nome_1), cria_banco)
-        controller_materia.salva()
-        materia_3 = controller_materia.pega_registro_por_id(id_=3)
-        Controller(AssociaCursoMateria(curso_id=1,
-                                       materia_id=1), cria_banco).salva()
-        Controller(AssociaCursoMateria(curso_id=1,
-                                       materia_id=2), cria_banco).salva()
-        Controller(AssociaCursoMateria(curso_id=1,
-                                       materia_id=3), cria_banco).salva()
         controller_coordenador_geral = Controller(CoordenadorGeral(),
                                                   cria_banco)
         controller_coordenador_geral.salva()
         coordenador_geral = controller_coordenador_geral \
             .pega_registro_por_id(id_=1)
-        curso.atualiza_materias(materia_1)
-        curso.atualiza_materias(materia_2)
-        curso.atualiza_materias(materia_3)
-        aluno.inscreve_curso(curso)
         return coordenador_geral

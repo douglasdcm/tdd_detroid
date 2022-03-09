@@ -7,7 +7,6 @@ from tests.massa_dados import curso_nome_1, materia_nome_1, \
 from src.tabelas import cursos, materias
 from pytest import fixture, raises
 from src.controller.controller import Controller
-from src.exceptions.exceptions import MateriaInvalida, ErroBancoDados
 
 
 class TestCliCurso:
