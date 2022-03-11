@@ -1,10 +1,7 @@
-from src.model.i_model import IModel
 from src.model.curso import Curso
 from src.dao.dao_base import DaoBase
 from src.model.banco_dados import BancoDados
 from src.tabelas import cursos
-from src.dao.dao_associa_curso_materia import DaoAssociaCursoMateria
-from src.model.associa_curso_materia import AssociaCursoMateria
 
 
 class DaoCurso(DaoBase):
@@ -13,13 +10,15 @@ class DaoCurso(DaoBase):
         self._tabela = cursos
         self._campos = "nome"
         self._curso = curso
+        self.__course = curso
         super().__init__(self._bd, self._tabela, self._campos)
 
     def salva(self):
         """Retorna objeto com campos atualizados via banco de dados"""
-        linha = self._bd.salva_registro(self._tabela, self._campos,
-                                        f"'{self._curso.pega_nome()}'")
-        return self._tuple_para_objeto(linha[0])
+        self._bd.salva_registro(
+            self._tabela, self._campos, f"'{self._curso.pega_nome()}'"
+        )
+        return True
 
     def pega_tudo(self) -> list():
         registros = super().pega_tudo()
@@ -49,10 +48,13 @@ class DaoCurso(DaoBase):
             objeto curso com dados pegos do banco de dados
         """
         linha = super().pega_por_id(id)
-        return self._tuple_para_objeto(linha[0])
+        return self.__tuple_to_object(linha[0])
 
-    def _tuple_para_objeto(self, linha):
-        (id_, nome) = linha
-        curso = Curso(nome)
-        curso.define_id(id_)
-        return curso
+    def get_by_biggest_id(self):
+        row = super().get_by_biggest_id()[0]
+        return self.__tuple_to_object(row)
+
+    def __tuple_to_object(self, row):
+        (id_, name) = row
+        self.__course.define_id(id_)
+        return self.__course

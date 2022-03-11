@@ -9,8 +9,13 @@ from src.model.aluno import Aluno
 from src.model.curso import Curso
 from src.config import banco_dados
 from src.tabelas import alunos, cursos, materias
-from tests.massa_dados import aluno_nome_1, curso_nome_1, materia_nome_1, \
-    materia_nome_2, materia_nome_3
+from tests.massa_dados import (
+    aluno_nome_1,
+    curso_nome_1,
+    materia_nome_1,
+    materia_nome_2,
+    materia_nome_3,
+)
 from src.controller.controller import Controller
 
 IN_MEMORY = ":memory:"
@@ -42,12 +47,9 @@ def cria_massa_dados_em_memoria(cria_banco):
     materia_1_obj = Controller(materia_1, cria_banco).salva()
     materia_2_obj = Controller(materia_2, cria_banco).salva()
     materia_3_obj = Controller(materia_3, cria_banco).salva()
-    Controller(AssociaCursoMateria(curso_obj, materia_1_obj),
-               cria_banco).salva()
-    Controller(AssociaCursoMateria(curso_obj, materia_2_obj),
-               cria_banco).salva()
-    Controller(AssociaCursoMateria(curso_obj, materia_3_obj),
-               cria_banco).salva()
+    Controller(AssociaCursoMateria(curso_obj, materia_1_obj), cria_banco).salva()
+    Controller(AssociaCursoMateria(curso_obj, materia_2_obj), cria_banco).salva()
+    Controller(AssociaCursoMateria(curso_obj, materia_3_obj), cria_banco).salva()
     Controller(InscricaoAlunoCurso(aluno_obj, curso_obj), cria_banco)
     yield
     cria_banco.deleta_tabela(cursos)
@@ -67,28 +69,40 @@ def cria_massa_dados(cria_banco_real):
 
 
 @fixture
-def cria_curso_materias_real(cria_banco_real):
+def enroll_student_in_course(cria_banco_real):
     bd = cria_banco_real
     bd.deleta_tabela(cursos)
     bd.deleta_tabela(alunos)
     bd.deleta_tabela(materias)
 
-    aluno = Aluno(aluno_nome_1)
-    aluno = Controller(aluno, bd).salva()
+    student_controller = Controller(Aluno(aluno_nome_1), bd)
+    student_controller.salva()
+    student_obj = student_controller.get_by_biggest_id()
 
-    curso = Curso(curso_nome_1)
-    curso = Controller(curso, bd).salva()
-
-    Controller(InscricaoAlunoCurso(aluno, curso), bd).salva()
+    course_controller = Controller(Curso(curso_nome_1), bd)
+    course_controller.salva()
+    course_obj = course_controller.get_by_biggest_id()
 
     lista_materias = [materia_nome_1, materia_nome_2, materia_nome_3]
-    lista_materia_obj = []
     for materia in lista_materias:
-        materia_obj = Materia(materia)
-        materia_obj = Controller(materia_obj, bd).salva()
-        lista_materia_obj.append(materia_obj)
-        Controller(AssociaCursoMateria(curso, materia), bd).salva()
-    yield aluno, curso, lista_materia_obj
+        materia_controller = Controller(Materia(materia), bd)
+        materia_controller.salva()
+        materia_obj = materia_controller.get_by_biggest_id()
+        Controller(AssociaCursoMateria(course_obj, materia_obj), bd).salva()
+
+    enrollment = InscricaoAlunoCurso(student_obj, course_obj)
+    Controller(enrollment, bd).salva()
+
+    student_obj = Controller(student_obj, bd).pega_registro_por_id(
+        student_obj.pega_id()
+    )
+
+    course_obj = Controller(course_obj, bd).pega_registro_por_id(course_obj.pega_id())
+
+    yield student_obj, course_obj
+    bd.deleta_tabela(cursos)
+    bd.deleta_tabela(alunos)
+    bd.deleta_tabela(materias)
 
 
 @fixture
@@ -102,11 +116,46 @@ def cria_aluno_banco_real(cria_banco_real):
 
 @fixture
 def cria_curso_banco_real(cria_banco_real):
+    # bd = cria_banco_real
+    # bd.deleta_tabela(cursos)
+    # bd.deleta_tabela(materias)
+    # lista_materias = [materia_nome_1, materia_nome_2, materia_nome_3]
+    # curso_controller = Controller(Curso(curso_nome_1), bd)
+    # curso_controller.salva()
+    # curso_obj = curso_controller.get_by_biggest_id()
+    # for materia in lista_materias:
+    #     discipline_controller = Controller(Materia(materia), bd)
+    #     discipline_controller.salva()
+    #     discipline_obj = discipline_controller.get_by_biggest_id()
+
+    #     assoc_controller = Controller(
+    #         AssociaCursoMateria(curso_obj, discipline_obj), bd
+    #     )
+    #     assoc_controller.salva()
+    #     assoc_obj = assoc_controller.get_by_biggest_id()
     bd = cria_banco_real
     bd.deleta_tabela(cursos)
-    Controller(Curso(curso_nome_1), bd).salva()
-    yield
+    bd.deleta_tabela(alunos)
+    bd.deleta_tabela(materias)
+
+    student_controller = Controller(Aluno(aluno_nome_1), bd)
+    student_controller.salva()
+    student_obj = student_controller.get_by_biggest_id()
+
+    course_controller = Controller(Curso(curso_nome_1), bd)
+    course_controller.salva()
+    course_obj = course_controller.get_by_biggest_id()
+
+    lista_materias = [materia_nome_1, materia_nome_2, materia_nome_3]
+    for materia in lista_materias:
+        materia_controller = Controller(Materia(materia), bd)
+        materia_controller.salva()
+        materia_obj = materia_controller.get_by_biggest_id()
+        Controller(AssociaCursoMateria(course_obj, materia_obj), bd).salva()
+    yield student_obj, course_obj
     bd.deleta_tabela(cursos)
+    bd.deleta_tabela(alunos)
+    bd.deleta_tabela(materias)
 
 
 @fixture

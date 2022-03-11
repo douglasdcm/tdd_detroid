@@ -20,7 +20,7 @@ class TestCatalogo:
     def test_singleton_funciona(self):
         catalogo_1 = CatalogoCurso()
         catalogo_2 = CatalogoCurso()
-        assert catalogo_1 == catalogo_2 
+        assert catalogo_1 == catalogo_2
 
     def test_limpa_catalogo(self):
         self._cria_curso()
@@ -56,10 +56,9 @@ class TestCatalogo:
         actual = self.catalogo.pega_cursos()
         assert actual == expected
 
-    def _cria_curso(self, curso=curso, 
-                        materia_1=materia_1, 
-                        materia_2=materia_2, 
-                        materia_3=materia_3):
+    def _cria_curso(
+        self, curso=curso, materia_1=materia_1, materia_2=materia_2, materia_3=materia_3
+    ):
         curso_1 = Curso(curso)
         curso_1.atualiza_materias(Materia(materia_1))
         curso_1.atualiza_materias(Materia(materia_2))

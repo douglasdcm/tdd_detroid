@@ -3,10 +3,9 @@ from src.controller.controller import Controller
 
 
 class TestBdAlunos:
-
     def test_aluno_criado_foi_salvo_banco_dados(self, cria_banco, cria_aluno):
         expected = aluno_nome_1
         controller = Controller(cria_aluno, cria_banco)
         controller.salva()
-        actual = controller.pega_registros()
+        actual = controller.get_all()
         assert actual[0].pega_nome() == expected

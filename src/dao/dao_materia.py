@@ -1,12 +1,10 @@
-from _pytest.config import exceptions
 from src.model.materia import Materia
 from src.dao.dao_base import DaoBase
 from src.tabelas import materias
-from src.exceptions.exceptions import ErroMateriaSemNome, MateriaInvalida
+from src.exceptions.exceptions import ErroMateriaSemNome
 
 
 class DaoMateria(DaoBase):
-
     def __init__(self, materia: Materia, bd):
         self._bd = bd
         self._materia = materia
@@ -17,16 +15,19 @@ class DaoMateria(DaoBase):
     def salva(self):
         try:
             self._valida_campos()
-            linha = self._bd.salva_registro(self._tabela, self._campos,
-                                    f"'{self._materia.pega_nome()}'")
-            return self._tuple_para_objeto(linha[0])
+            linha = self._bd.salva_registro(
+                self._tabela, self._campos, f"'{self._materia.pega_nome()}'"
+            )
+            return self.__tuple_to_object(linha[0])
         except Exception:
             raise ErroMateriaSemNome
 
     def _valida_campos(self):
         if self._materia.pega_nome() is None:
-            raise ErroMateriaSemNome("""Matéria precisa ter nome para
-                                     ser salva no banco de dados.""")
+            raise ErroMateriaSemNome(
+                """Matéria precisa ter nome para
+                                     ser salva no banco de dados."""
+            )
 
     def pega_por_id(self, id_):
         registro = super().pega_por_id(id_)
@@ -55,8 +56,11 @@ class DaoMateria(DaoBase):
             lista.append(obj)
         return lista
 
-    def _tuple_para_objeto(self, linha):
-        (id_, nome) = linha
-        obj = Materia(nome)
-        obj.define_id(id_)
-        return obj
+    def get_by_biggest_id(self):
+        row = super().get_by_biggest_id()[0]
+        return self.__tuple_to_object(row)
+
+    def __tuple_to_object(self, row):
+        (id_, nome) = row
+        self._materia.define_id(id_)
+        return self._materia

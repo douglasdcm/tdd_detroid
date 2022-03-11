@@ -8,21 +8,31 @@ from pytest import fixture
 
 
 class TestDaoAssociaCursoMateria:
-
-    @fixture(autouse=True, scope="function")
+    @fixture(autouse=False, scope="function")
     def setup(self, cria_banco):
         self.curso_id = 1
         self.materia_id = 1
         self.bd = cria_banco
         materia = "Química"
         curso = "Adm"
-        DaoMateria(Materia(materia), self.bd).salva()
-        DaoCurso(Curso(curso), self.bd).salva()
+        materia_obj = DaoMateria(Materia(materia), self.bd).salva()
+        course_controller = DaoCurso(Curso(curso), self.bd)
+        course_controller.salva()
+        curso_obj = course_controller.get_by_biggest_id()
+        curso_obj.define_id(self.curso_id)
+        materia_obj.define_id(self.materia_id)
+        yield curso_obj, materia_obj
 
-    def test_curso_com_materials_salvo_banco(self):
+    def test_curso_com_materials_salvo_banco(self, setup):
         expected = [tuple((1, self.curso_id, self.materia_id))]
-        dao = DaoAssociaCursoMateria(AssociaCursoMateria(self.curso_id, 
-                                                         self.materia_id), self.bd)
+        curso_obj, materia_obj = setup
+        dao = DaoAssociaCursoMateria(
+            AssociaCursoMateria(
+                curso_obj,
+                materia_obj,
+            ),
+            self.bd,
+        )
         dao.salva()
         actual = dao.pega_tudo()
         assert actual == expected

@@ -9,12 +9,16 @@ from src.dao.dao_inscricao import DaoInscricao
 from src.dao.dao_materia import DaoMateria
 from src.dao.dao_associa_curso_materia import DaoAssociaCursoMateria
 from pytest import raises, fixture
-from tests.massa_dados import aluno_nome_1, curso_nome_1, materia_nome_1, \
-    materia_nome_2, materia_nome_3
+from tests.massa_dados import (
+    aluno_nome_1,
+    curso_nome_1,
+    materia_nome_1,
+    materia_nome_2,
+    materia_nome_3,
+)
 
 
 class TestDaoInscricaoAlunoCurso:
-
     @fixture(autouse=True, scope="function")
     def setup(self, cria_banco):
         self.aluno_id = self.curso_id = "1"
@@ -43,7 +47,7 @@ class TestDaoInscricaoAlunoCurso:
         materias = [materia_nome_1, materia_nome_2, materia_nome_3]
         for materia in materias:
             materia_obj = Materia(materia)
-            DaoMateria(materia_obj, cria_banco).salva()
+            materia_obj = DaoMateria(materia_obj, cria_banco).salva()
             associa_curso_materia = AssociaCursoMateria(curso, materia_obj)
             DaoAssociaCursoMateria(associa_curso_materia, cria_banco).salva()
 

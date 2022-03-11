@@ -7,7 +7,6 @@ from src.tabelas import materias
 
 
 class TestMateriaCli:
-
     @fixture(autouse=True, scope="function")
     def setup(self, cria_banco_real):
         cria_banco_real.deleta_tabela(materias)
@@ -18,6 +17,6 @@ class TestMateriaCli:
         parametros = ["cria-materia", "--nome", nome]
         executa_comando(parametros)
         materia = Materia(nome)
-        registro = Controller(materia, cria_banco_real).pega_registros()[0]
+        registro = Controller(materia, cria_banco_real).get_all()[0]
         actual = registro.pega_nome()
         assert actual == expected

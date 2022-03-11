@@ -5,7 +5,7 @@ from src.exceptions.exceptions import CursoUnico, CursoCancelado, SituacaoInvali
 class Aluno:
     def __init__(self, nome=None):
         self._coeficiente_rendimento = 0
-        self._situacao = "em curso"
+        self._situacao = Situacao.em_curso.value
         self.media_minima = 7
         self._materias_cursadas = dict()
         self._curso = None
@@ -20,8 +20,13 @@ class Aluno:
     def define_situacao(self, situacao: Situacao):
         situacao_valida = [e.value for e in Situacao]
         if situacao not in situacao_valida:
-            raise SituacaoInvalida("Situação do aluno '{}' não é válida.".format(situacao))
-        self.calcula_situacao()
+            raise SituacaoInvalida(
+                "Situação do aluno '{}' não é válida.".format(situacao)
+            )
+        if situacao == Situacao.trancado.value:
+            self.tranca_curso(True)
+        else:
+            self.calcula_situacao()
         return self
 
     def define_cr(self, cr):
@@ -43,13 +48,16 @@ class Aluno:
 
     def tranca_curso(self, decisao):
         self.calcula_situacao()
-        if self._situacao == "aprovado" or self._situacao == "reprovado":
+        if (
+            self._situacao == Situacao.aprovado.value
+            or self._situacao == Situacao.reprovado.value
+        ):
             raise Exception(f"Aluno {self._situacao} não pode trancar o curso.")
         else:
             if decisao:
-                self._situacao = "trancado"
+                self._situacao = Situacao.trancado.value
             else:
-                self._situacao = "destrancando"
+                self._situacao = Situacao.em_curso.value
                 self.calcula_situacao()
         return self
 
@@ -84,6 +92,7 @@ class Aluno:
         if curso.pega_lista_materias():
             self._curso = curso
             curso.adiciona_aluno(self)
+            self.calcula_situacao()
         return self
 
     def pega_nome(self):
@@ -94,12 +103,14 @@ class Aluno:
 
     def atualiza_materias_cursadas(self, materias):
         """
-            Args:
-                materias (dict): dicionário com matérias cursadas e notas a serem atualizadas
-                Por examplo: {materia_nome_1: 8, materia_nome_2: 7,materia_nome_3: 9}
+        Args:
+            materias (dict): dicionário com matérias cursadas e notas a serem atualizadas
+            Por examplo: {materia_nome_1: 8, materia_nome_2: 7,materia_nome_3: 9}
         """
         if self._situacao == "trancado":
-            raise Exception("Aluno com curso trancado não pode fazer atualizações no sistema.")
+            raise Exception(
+                "Aluno com curso trancado não pode fazer atualizações no sistema."
+            )
         for key, value in materias.items():
             if value > self._nota_maxima:
                 raise Exception(f"Nota máxima do aluno não pode ser maior do que 10.")
@@ -118,6 +129,7 @@ class Aluno:
         return self._materias_cursadas
 
     def calcula_situacao(self):
+        """Define the status of the student, like 'approved', 'reproved', 'in progress'"""
         if self._curso is None:
             self._situacao = "aluno não matriculado"
         elif self._situacao == "trancado":
@@ -127,12 +139,15 @@ class Aluno:
             for _ in self._materias_cursadas:
                 quantidade_materias_cursadas += 1
             quantidade_materias_curso = len(self._curso.pega_lista_materias())
-            if self._coeficiente_rendimento >= self.media_minima and quantidade_materias_cursadas == quantidade_materias_curso:
-                self._situacao = "aprovado"
+            if (
+                self._coeficiente_rendimento >= self.media_minima
+                and quantidade_materias_cursadas == quantidade_materias_curso
+            ):
+                self._situacao = Situacao.aprovado.value
             elif quantidade_materias_cursadas < quantidade_materias_curso:
-                self._situacao = "em curso"
+                self._situacao = Situacao.em_curso.value
             else:
-                self._situacao = "reprovado"
+                self._situacao = Situacao.reprovado.value
         return self
 
     def pega_situacao(self):

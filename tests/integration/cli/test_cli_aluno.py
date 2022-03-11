@@ -20,12 +20,11 @@ class TestCliAluno:
         self.bd = cria_banco_real
         self.bd.deleta_tabela(alunos)
 
-    def test_aluno_pode_atualizar_situacao(self, cria_curso_materias_real):
-        aluno, curso, _ = cria_curso_materias_real
+    def test_aluno_pode_atualizar_situacao(self, enroll_student_in_course):
+        aluno, curso = enroll_student_in_course
         expected = "trancado"
-        Controller(InscricaoAlunoCurso(aluno, curso), self.bd).salva()
         self._atualiza_aluno_por_cli(aluno.pega_id(), situacao=expected)
-        aluno = Controller(Aluno(), self.bd).pega_registro_por_id(aluno.pega_id())
+        aluno = Controller(aluno, self.bd).pega_registro_por_id(aluno.pega_id())
         actual = aluno.pega_situacao()
         assert actual == expected
 
@@ -65,7 +64,7 @@ class TestCliAluno:
         actual = self._cria_aluno_por_cli(aluno_nome_3)
         assert actual == expected
 
-    def test_aluno_criado_banco_dados(self):
+    def test_aluno_criado_banco_dados_cli(self):
         expected = aluno_nome_1
         self._cria_aluno_por_cli(expected)
         actual = Controller(Aluno(expected), self.bd).pega_registros()
@@ -81,7 +80,7 @@ class TestCliAluno:
         return executa_comando(comando_1)
 
     def _atualiza_aluno_por_cli(self, aluno_id, nome=None, situacao=None):
-        comando = [self._comando_atualiza_aluno, "--aluno-id", aluno_id]
+        comando = [self._comando_atualiza_aluno, "--aluno-id", str(aluno_id)]
         if isinstance(nome, str):
             comando.extend(["--nome", nome])
         if isinstance(situacao, str):

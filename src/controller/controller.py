@@ -2,12 +2,14 @@ from src.dao.dao_fabrica import DaoFabrica
 
 
 class Controller:
-
     def __init__(self, obj_dao, bd):
         """
-            Args: obj_dao (Objeto): instância do objeto, exemplo: Aluno, Curso
+        Args: obj_dao (Objeto): instância do objeto, exemplo: Aluno, Curso
         """
         self.dao = DaoFabrica(obj_dao, bd).fabrica_objetos_dao()
+
+    def get_by_biggest_id(self):
+        return self.dao.get_by_biggest_id()
 
     def salva(self):
         """Retorna objeto com campos atualizados via banco de dados"""
@@ -22,8 +24,14 @@ class Controller:
         except Exception:
             raise
 
+    def update(self, id_):
+        return self.atualiza(id_)
+
     def pega_registros(self):
         return self.dao.pega_tudo()
+
+    def get_all(self):
+        return self.pega_registros()
 
     def pega_registro_por_id(self, id_):
         """

@@ -8,8 +8,8 @@ from tests.massa_dados import aluno_nome_1
 from src.tabelas import alunos
 from src.enums.enums import Situacao
 
-class TestControllerAluno:
 
+class TestControllerAluno:
     @fixture(autouse=True, scope="function")
     def setup(self, cria_banco):
         self.controller = Controller(Aluno(aluno_nome_1), cria_banco)
@@ -19,11 +19,10 @@ class TestControllerAluno:
         expected = []
         aluno_id = 1
         self.controller.deleta(aluno_id)
-        actual = self.controller.pega_registros()
+        actual = self.controller.get_all()
         assert actual == expected
 
-    def test_aluno_criado_banco_dados(self):
+    def test_aluno_criado_banco_dados_controller(self):
         expected = aluno_nome_1
-        actual = self.controller.pega_registros()
+        actual = self.controller.get_all()
         assert actual[0].pega_nome() == expected
-

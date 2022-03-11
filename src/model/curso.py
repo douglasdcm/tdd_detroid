@@ -7,7 +7,6 @@ from src.exceptions.exceptions import MaximoCaracteres, UnidadeInvalida, Materia
 
 
 class Curso(IModel):
-
     def __init__(self, nome=""):
         self._lista_materias = list()
         self._minimo_materia = 3
@@ -23,8 +22,11 @@ class Curso(IModel):
 
     def _valida_parametros(self, nome):
         if len(nome) > self._maximo_caracteres:
-            raise MaximoCaracteres("Nome do curso deve ter no máximao {} letras.".format(
-                self._maximo_caracteres))
+            raise MaximoCaracteres(
+                "Nome do curso deve ter no máximao {} letras.".format(
+                    self._maximo_caracteres
+                )
+            )
 
     def define_situacao(self, situacao):
         self._situacao = situacao
@@ -37,7 +39,9 @@ class Curso(IModel):
 
     def define_unidade(self, unidade: Unidade):
         if self._nome in unidade.pega_cursos():
-            raise UnidadeInvalida("Curso já existente na unidade {}".format(unidade.pega_nome()))
+            raise UnidadeInvalida(
+                "Curso já existente na unidade {}".format(unidade.pega_nome())
+            )
         self._unidade = unidade.pega_nome()
         unidade.define_cursos(self._nome)
 
@@ -70,7 +74,9 @@ class Curso(IModel):
         else:
             for item in self._lista_materias:
                 if item.pega_nome() == materia.pega_nome():
-                    raise MateriaInvalida("O curso não pode ter duas matérias com mesmo nome.")
+                    raise MateriaInvalida(
+                        "O curso não pode ter duas matérias com mesmo nome."
+                    )
             if len(self._lista_materias) < self._minimo_materia:
                 self._lista_materias.append(materia)
         return self
@@ -89,4 +95,6 @@ class Curso(IModel):
         if isinstance(aluno, Aluno):
             self._lista_alunos.append(aluno)
         else:
-            raise Exception(f"Não foi possível adicionar o aluno ao curso de {self.pega_nome()}.")
+            raise Exception(
+                f"Não foi possível adicionar o aluno ao curso de {self.pega_nome()}."
+            )

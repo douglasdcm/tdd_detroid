@@ -1,20 +1,25 @@
 from src.model.aluno import Aluno
+from src.model.curso import Curso
 
 
 class InscricaoAlunoCurso:
-
     def __init__(self, aluno, curso):
         """
         Args:
             aluno (Aluno)
             curso (Curso)
         """
-        self._aluno_id = aluno.pega_id()
-        self._curso_id = curso.pega_id()
+        self._aluno = aluno
+        self._curso = curso
 
-    def pega_aluno_id(self):
-        return self._aluno_id
+    def pega_aluno(self) -> Aluno:
+        return self._aluno
 
-    def pega_curso_id(self):
-        return self._curso_id
+    def pega_curso(self) -> Curso:
+        return self._curso
 
+    def atualiza_aluno(self, aluno):
+        self._aluno = aluno
+
+    def atualiza_curso(self, curso):
+        self._curso = curso

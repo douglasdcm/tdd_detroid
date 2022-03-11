@@ -67,9 +67,14 @@ class BancoDados:
         return self.pega_maior_id(tabela)
 
     def pega_maior_id(self, tabela):
-        query = "SELECT * FROM {} WHERE id = ( SELECT MAX(id) FROM {} );".format(tabela, tabela)
+        query = "SELECT * FROM {} WHERE id = ( SELECT MAX(id) FROM {} );".format(
+            tabela, tabela
+        )
         mensagem_erro = "Não foi possível pegar o ID máximo."
         return self._run(query, mensagem_erro)
+
+    def get_biggest_id(self, table):
+        return self.pega_maior_id(table)
 
     def deleta_registro(self, tabela, id_):
         query = f"delete from {tabela} where id = {id_}"
@@ -87,7 +92,9 @@ class BancoDados:
         mensagem_erro = "Não foi possível pegar o registro especificado."
         result = self._run(query, mensagem_erro)
         if result == []:
-            raise ErroBancoDados(f"Registro especificado de identificador {id_} não foi encontrado.")
+            raise ErroBancoDados(
+                f"Registro especificado de identificador {id_} não foi encontrado."
+            )
         else:
             return result
 
