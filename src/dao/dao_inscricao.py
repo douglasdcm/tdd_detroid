@@ -40,7 +40,7 @@ class DaoInscricao(DaoBase):
             self.__enrollment.atualiza_curso(course_obj)
 
             controller.Controller(student_obj, self.__db).update(student_obj.pega_id())
-            controller.Controller(course_obj, self.__db).update(course_obj.pega_id())
+            # controller.Controller(course_obj, self.__db).upd  ate(course_obj.pega_id())
 
             return True
 

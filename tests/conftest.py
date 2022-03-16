@@ -1,4 +1,4 @@
-import os
+from os import remove
 from sqlite3 import connect
 from src.model.inscricao_aluno_curso import InscricaoAlunoCurso
 from src.model.associa_curso_materia import AssociaCursoMateria
@@ -29,7 +29,71 @@ def cria_banco():
 
 
 @fixture
+def setup_database_in_memory_2(cria_banco):
+    table = {
+        "name": "student",
+        "columns": [
+            {"name": "name", "type": "text", "constraints": "not null"},
+            {"name": "score", "type": "integer", "constraints": "not null"},
+            {"name": "situation", "type": "text", "constraints": "not null"},
+        ],
+    }
+    student = [
+        {"name": "student_name", "score": 10, "situation": "in progress"},
+        {"name": "student_name_2", "score": 9.6, "situation": "approved"},
+        {"name": "student_name_3", "score": 4.7, "situation": "reproved"},
+    ]
+    database = cria_banco
+    database.create_table(table)
+    database.save(table["name"], student)
+    yield database
+
+
+@fixture
+def setup_database_in_memory(cria_banco):
+    table = {
+        "name": "alunos",
+        "columns": [
+            {"name": "nome", "type": "text", "constraints": "not null"},
+            {"name": "cr", "type": "integer", "constraints": "not null"},
+            {"name": "situacao", "type": "text", "constraints": "not null"},
+        ],
+    }
+    student = [
+        {"nome": "student_nome", "cr": 10, "situacao": "in progress"},
+        {"nome": "student_nome_2", "cr": 9.6, "situacao": "approved"},
+        {"nome": "student_name_3", "cr": 4.7, "situacao": "reproved"},
+    ]
+    database = cria_banco
+    database.create_table(table)
+    database.save(table["name"], student)
+    yield database
+
+
+@fixture
+def setup_database_in_real_db(cria_banco_real):
+    table = {
+        "name": "student",
+        "columns": [
+            {"name": "name", "type": "text", "constraints": "not null"},
+            {"name": "score", "type": "integer", "constraints": "not null"},
+            {"name": "situation", "type": "text", "constraints": "not null"},
+        ],
+    }
+    student = [
+        {"name": "student_name", "score": 10, "situation": "in progress"},
+        {"name": "student_name_2", "score": 9.6, "situation": "approved"},
+        {"name": "student_name_3", "score": 4.7, "situation": "reproved"},
+    ]
+    database = cria_banco_real
+    database.create_table(table)
+    database.save(table["name"], student)
+    yield database
+
+
+@fixture
 def cria_banco_real():
+    remove(banco_dados)
     bd = BancoDados(connect(banco_dados))
     yield bd
     bd.fecha_conexao_existente()

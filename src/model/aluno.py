@@ -16,6 +16,7 @@ class Aluno:
 
     def define_nome(self, nome):
         self._nome = nome
+        return self
 
     def define_situacao(self, situacao: Situacao):
         situacao_valida = [e.value for e in Situacao]

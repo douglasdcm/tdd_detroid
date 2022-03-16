@@ -52,6 +52,21 @@ class BancoDados:
         mensagem_erro = "Não foi possível criar a tabela."
         self._run(query, mensagem_erro)
 
+    def create_table(self, table: dict):
+        query = (
+            "CREATE TABLE IF NOT EXISTS {} (id INTEGER NOT NULL PRIMARY KEY, ".format(
+                table["name"].upper()
+            )
+        )
+        names = ""
+        for column in table["columns"]:
+            names += column["name"].upper() + " "
+            names += column["type"].upper() + " "
+            names += column["constraints"].upper() + ", "
+        query += names[:-2] + ");"
+        self._run(query)
+        return query
+
     def atualiza_registro(self, tabela, sets, id_):
         query = f"""UPDATE {tabela}
                 SET {sets}
@@ -59,12 +74,36 @@ class BancoDados:
         mensagem_erro = "Não foi possível atualizar o registro."
         self._run(query, mensagem_erro)
 
+    def save(self, table: str, records: list):
+        """Retorn a True if the record is saved"""
+        for record in records:
+            query = "insert into {} ".format(table)
+            columns = values = ""
+            for k, v in record.items():
+                columns += "{}, ".format(k)
+                if isinstance(v, str):
+                    v = '"{}"'.format(v)
+                values += "{}, ".format(v)
+            query += "({}) values ({})".format(columns[:-2], values[:-2])
+            result = self._run(query)
+        return query, result
+
     def salva_registro(self, tabela, campos, valores):
         """Retorna a tupla com o maior id da tabela"""
         query = f"insert into {tabela} ({campos}) values ({valores})"
         mensagem_erro = "Não foi possiível salvar o registro."
         self._run(query, mensagem_erro)
         return self.pega_maior_id(tabela)
+
+    def get_by_id(self, columns: list, table, id_):
+        cols = ""
+        for column in columns:
+            cols += column + ", "
+        query = "SELECT {} FROM {} WHERE ID = {}".format(
+            cols[:-2].upper(), table.upper(), id_
+        )
+        result = self._run(query)
+        return query, result
 
     def pega_maior_id(self, tabela):
         query = "SELECT * FROM {} WHERE id = ( SELECT MAX(id) FROM {} );".format(
@@ -111,7 +150,7 @@ class BancoDados:
         mensagem_erro = "Não foi possível executar a query especificada."
         return self._run(query, mensagem_erro)
 
-    def _run(self, query, mensagem_erro):
+    def _run(self, query, mensagem_erro=""):
         """
         Args:
             query (str): consulta sql a ser executada
@@ -127,5 +166,9 @@ class BancoDados:
             cur.execute(query)
             con.commit()
             return cur.fetchall()
-        except Exception:
-            raise ErroBancoDados(f"{mensagem_erro}\nquery: {query}")
+        except Exception as e:
+            raise ErroBancoDados(
+                "\nIt was not possible to run the command '{}'\n Trace: {}".format(
+                    query, e
+                )
+            )

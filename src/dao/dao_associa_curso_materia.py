@@ -51,6 +51,8 @@ class DaoAssociaCursoMateria(DaoBase):
         discipline_obj = controller.Controller(
             self.__assoc.pega_materia(), self.__db
         ).pega_registro_por_id(discipline_id)
+        course_obj.atualiza_materias(discipline_obj)
+        controller.Controller(course_obj, self.__db).update(course_id)
         self.__assoc.atualiza_curso(course_obj)
         self.__assoc.atualiza_materia(discipline_obj)
         return self.__assoc

@@ -28,7 +28,7 @@ class TestControllerCursoMateria:
         Controller(curso, cria_banco).salva()
         Controller(materia_1, cria_banco).salva()
         Controller(materia_2, cria_banco).salva()
-        Controller(materia_3, cria_banco).salva()
+        Controller(materia_3, cria_banco).salva()   
         controller = Controller(AssociaCursoMateria(curso, materia_1), cria_banco)
         controller.salva()
         controller = Controller(AssociaCursoMateria(curso, materia_2), cria_banco)

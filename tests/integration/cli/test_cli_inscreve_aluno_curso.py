@@ -77,9 +77,7 @@ class TestCliInscreveAlunoCurso:
         actual = executa_comando(parametros)
         assert expected in actual
 
-    def test_aluno_pode_ser_inscrito_curso(
-        self, cria_banco_real, cria_curso_banco_real
-    ):
+    def test_aluno_pode_ser_inscrito_curso(self, cria_curso_banco_real):
         expected = (
             f"Aluno identificado por {self.aluno_id} inscrito no curso"
             f" identificado por {self.curso_id}."
@@ -92,10 +90,7 @@ class TestCliInscreveAlunoCurso:
             "--curso-id",
             str(curso.pega_id()),
         ]
-        executa_comando(parametros)
-        actual = Controller(aluno, cria_banco_real).pega_registro_por_id(
-            aluno.pega_id()
-        )
+        actual = executa_comando(parametros)
         assert actual == expected
 
     def test_aluno_inscrito_curso_salvo_banco_dados(self, cria_banco_real):
