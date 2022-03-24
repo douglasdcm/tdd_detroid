@@ -1,23 +1,22 @@
 # -*- coding: utf-8 -*-
 from src.model.inscricao_aluno_curso import InscricaoAlunoCurso
 from sys import argv
-from sqlite3 import connect
+from sqlite3 import connect as connect
 from src.model.aluno import Aluno
 from src.model.curso import Curso
 from src.model.materia import Materia
 from src.utils.messagens import LISTA_PARAMETROS_INVALIDA
-from src.config import banco_dados
+from src.config import database_name
 from src.controller.controller import Controller
 from src.exceptions.exceptions import (
     ComandoInvalido,
     ListaParametrosInvalida,
 )
 from src.model.associa_curso_materia import AssociaCursoMateria
+from src.model.banco_dados import BancoDados
+from src.utils.tables import get_table_list
 
 first = 0
-
-# banco de dados
-bd = connect(banco_dados)
 
 # aluno
 cria_aluno = "cria-aluno"
@@ -37,6 +36,7 @@ def main(*args):
             print(
                 """
 Comandos:
+    install
     cria-aluno --nome NOME_ALUNO
     cria-curso --nome NOME_CURSO --materias MATERIA_1 MATERIA_2 MATERIA_3
     inscreve-aluno-curso --curso-id CURSO_ID --aluno-id ALUNO_ID
@@ -51,26 +51,37 @@ Comandos:
         elif cria_curso in argumentos:
             _cria_curso(argumentos)
         elif atualiza_aluno in argumentos:
-            _atualiza_aluno(argumentos)
+            __atualiza_aluno(argumentos)
         elif cria_materia in argumentos:
-            _cria_materia(argumentos)
+            __cria_materia(argumentos)
+        elif "install" in argumentos:
+            __install()
         else:
             raise ComandoInvalido("Commando inválido.")
 
 
-def _cria_materia(argumentos):
+def __install():
+    tables = get_table_list()
+    database = BancoDados(connect(database_name))
+    for table in tables:
+        database.deleta_tabela(table["name"])
+        database.create_table(table)
+
+
+def __cria_materia(argumentos):
     nome = "--nome"
     numero_argumentos = 4
     if nome in argumentos and len(argumentos) == numero_argumentos:
         nome = _pega_valor(argumentos, nome)
         materia = Materia(nome)
+        bd = connect(database_name)
         Controller(materia, bd).salva()
         print(f"Matéria de {materia.pega_nome()} criada.")
     else:
         raise ListaParametrosInvalida(LISTA_PARAMETROS_INVALIDA)
 
 
-def _atualiza_aluno(argumentos):
+def __atualiza_aluno(argumentos):
     aluno_id = "--aluno-id"
     situacao = "--situacao"
     nome = "--nome"
@@ -79,6 +90,7 @@ def _atualiza_aluno(argumentos):
     try:
         id_ = _pega_valor(argumentos, aluno_id)
         aluno = Aluno()
+        bd = connect(database_name)
         Controller(aluno, bd).update(id_)
         if nome in argumentos:
             nome_ = _pega_valor(argumentos, nome)
@@ -116,6 +128,7 @@ def _cria_curso(argumentos):
             materia_3 = _pega_valor(argumentos, materias_parametro, 3)
 
             curso = Curso(nome)
+            bd = connect(database_name)
             controller_curso = Controller(curso, bd)
             controller_curso.salva()
             registro = controller_curso.pega_registro_por_nome(nome)
@@ -152,6 +165,7 @@ def _inscreve_aluno_curso(argumentos):
         inscricao = InscricaoAlunoCurso(
             Aluno().define_id(aluno_id), Curso().define_id(curso_id)
         )
+        bd = connect(database_name)
         Controller(inscricao, bd).salva()
         print(
             f"Aluno identificado por {aluno_id} inscrito no curso identificado por {curso_id}."
@@ -166,6 +180,7 @@ def _cria_aluno(argumentos):
     if nome_parametro in argumentos and len(argumentos) == numero_parametros:
         nome = _pega_valor(argumentos, nome_parametro)
         aluno = Aluno(nome)
+        bd = connect(database_name)
         controller = Controller(aluno, bd)
         controller.salva()
         print(f"Aluno {nome} criado com sucesso.")

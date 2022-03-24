@@ -33,28 +33,44 @@ class TestControllerCoordenadorGeral:
         assert actual == expected
 
     @fixture
-    def _setup_objetos(self, cria_banco):
+    def _setup_objetos(self, setup_database_in_memory):
         CatalogoCurso().limpa_catalogo()
-        controller_aluno = Controller(Aluno("aluno_nome_1"), cria_banco)
+        controller_aluno = Controller(Aluno("aluno_nome_1"), setup_database_in_memory)
         controller_aluno.salva()
         aluno_obj = controller_aluno.pega_registro_por_id(id_=1)
-        controller_curso = Controller(Curso("curso_novo"), cria_banco)
+        controller_curso = Controller(Curso("curso_novo"), setup_database_in_memory)
         controller_curso.salva()
         curso_obj = controller_curso.pega_registro_por_id(id_=1)
-        controller_materia = Controller(Materia(materia_nome_1), cria_banco)
+        controller_materia = Controller(
+            Materia(materia_nome_1), setup_database_in_memory
+        )
         controller_materia.salva()
         materia_1_obj = controller_materia.pega_registro_por_id(id_=1)
-        controller_materia = Controller(Materia(materia_nome_2), cria_banco)
+        controller_materia = Controller(
+            Materia(materia_nome_2), setup_database_in_memory
+        )
         controller_materia.salva()
         materia_2_obj = controller_materia.pega_registro_por_id(id_=2)
-        controller_materia = Controller(Materia(materia_nome_3), cria_banco)
+        controller_materia = Controller(
+            Materia(materia_nome_3), setup_database_in_memory
+        )
         controller_materia.salva()
         materia_3_obj = controller_materia.pega_registro_por_id(id_=3)
-        Controller(AssociaCursoMateria(curso_obj, materia_1_obj), cria_banco).salva()
-        Controller(AssociaCursoMateria(curso_obj, materia_2_obj), cria_banco).salva()
-        Controller(AssociaCursoMateria(curso_obj, materia_3_obj), cria_banco).salva()
-        Controller(InscricaoAlunoCurso(aluno_obj, curso_obj), cria_banco).salva()
-        controller_coordenador_geral = Controller(CoordenadorGeral(), cria_banco)
+        Controller(
+            AssociaCursoMateria(curso_obj, materia_1_obj), setup_database_in_memory
+        ).salva()
+        Controller(
+            AssociaCursoMateria(curso_obj, materia_2_obj), setup_database_in_memory
+        ).salva()
+        Controller(
+            AssociaCursoMateria(curso_obj, materia_3_obj), setup_database_in_memory
+        ).salva()
+        Controller(
+            InscricaoAlunoCurso(aluno_obj, curso_obj), setup_database_in_memory
+        ).salva()
+        controller_coordenador_geral = Controller(
+            CoordenadorGeral(), setup_database_in_memory
+        )
         controller_coordenador_geral.salva()
         coordenador_geral = controller_coordenador_geral.pega_registro_por_id(id_=1)
         yield coordenador_geral

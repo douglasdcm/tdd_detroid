@@ -1,14 +1,16 @@
+from src.model.materia import Materia
 from src.model.unidade import Unidade
 from src.model.i_model import IModel
 import time
 from src.model.catalogo_curso import CatalogoCurso
 from src.model.aluno import Aluno
 from src.exceptions.exceptions import MaximoCaracteres, UnidadeInvalida, MateriaInvalida
+from typing import List
 
 
 class Curso(IModel):
     def __init__(self, nome=""):
-        self._lista_materias = list()
+        self._lista_materias: List[Materia] = list()
         self._minimo_materia = 3
         self._maximo_caracteres = 10
         self._identificador_unico = time.time()
@@ -62,7 +64,7 @@ class Curso(IModel):
     def pega_identificador_unico(self):
         return self._identificador_unico
 
-    def atualiza_materias(self, materia):
+    def atualiza_materias(self, materia: Materia):
         """
         Args:
             material (Materia)

@@ -11,76 +11,74 @@ from src.controller.controller import Controller
 class TestCliAluno:
 
     _MENSSAGEM_SUCESSO = "Aluno %s criado com sucesso."
-    _MENSSAGEM_SUCESSO_ATULIZACAO = "Aluno com identificador %s atualizado com sucesso."
-    _comando_cria_aluno = "cria-aluno"
-    _comando_atualiza_aluno = "atualiza-aluno"
+    __MENSSAGEM_SUCESSO_ATULIZACAO = (
+        "Aluno com identificador %s atualizado com sucesso."
+    )
+    __comando_cria_aluno = "cria-aluno"
 
-    @fixture(autouse=True, scope="function")
-    def setup(self, cria_banco_real):
-        self.bd = cria_banco_real
-        self.bd.deleta_tabela(alunos)
-
-    def test_aluno_pode_atualizar_situacao(self, enroll_student_in_course):
-        aluno, curso = enroll_student_in_course
+    def test_aluno_pode_atualizar_situacao(self, setup_database_in_memory):
+        connection = setup_database_in_memory
         expected = "trancado"
-        self._atualiza_aluno_por_cli(aluno.pega_id(), situacao=expected)
-        aluno = Controller(aluno, self.bd).pega_registro_por_id(aluno.pega_id())
+        self.__atualiza_aluno_por_cli(aluno_id=1, situacao=expected)
+        aluno = Controller(Aluno(), connection).pega_registro_por_id(1)
         actual = aluno.pega_situacao()
         assert actual == expected
 
-    def test_aluno_pode_atualizar_nome(self, cria_massa_dados):
-        cria_massa_dados
+    def test_aluno_pode_atualizar_nome(self, setup_database_in_real_db):
         aluno_id = "1"
-        nome = aluno_nome_2
+        nome = "student_name_1"
         expected = nome
-        self._atualiza_aluno_por_cli(aluno_id, nome)
-        aluno = Controller(Aluno(), self.bd).pega_registro_por_id(aluno_id)
+        self.__atualiza_aluno_por_cli(aluno_id, nome)
+        aluno = Controller(Aluno(), setup_database_in_real_db).pega_registro_por_id(
+            aluno_id
+        )
         actual = aluno.pega_nome()
         assert actual == expected
 
     def test_aluno_pode_atualizar_cr(self, cria_massa_dados):
         cria_massa_dados
         aluno_id = "1"
-        expected = self._MENSSAGEM_SUCESSO_ATULIZACAO % aluno_id
-        actual = self._atualiza_aluno_por_cli(aluno_id)
+        expected = self.__MENSSAGEM_SUCESSO_ATULIZACAO % aluno_id
+        actual = self.__atualiza_aluno_por_cli(aluno_id)
         assert actual == expected
 
     def test_criacao_alunos_sem_nome_retorna_excecao(self):
         expected = LISTA_PARAMETROS_INVALIDA
-        parametros = [self._comando_cria_aluno, "--nome"]
+        parametros = [self.__comando_cria_aluno, "--nome"]
         actual = executa_comando(parametros)
         assert expected in actual
 
     def test_criacao_alunos_sem_parametro__nome__retorna_excecao(self):
         expected = LISTA_PARAMETROS_INVALIDA
-        parametros = [self._comando_cria_aluno]
+        parametros = [self.__comando_cria_aluno]
         actual = executa_comando(parametros)
         assert expected in actual
 
     def test_criacao_tres_alunos_distintos_com_informacoes_basicas(self):
         expected = self._MENSSAGEM_SUCESSO % aluno_nome_3
-        self._cria_aluno_por_cli(aluno_nome_1)
-        self._cria_aluno_por_cli(aluno_nome_2)
-        actual = self._cria_aluno_por_cli(aluno_nome_3)
+        self.__cria_aluno_por_cli(aluno_nome_1)
+        self.__cria_aluno_por_cli(aluno_nome_2)
+        actual = self.__cria_aluno_por_cli(aluno_nome_3)
         assert actual == expected
 
-    def test_aluno_criado_banco_dados_cli(self):
+    def test_aluno_criado_banco_dados_cli(self, setup_empty_database_real_v2):
         expected = aluno_nome_1
-        self._cria_aluno_por_cli(expected)
-        actual = Controller(Aluno(expected), self.bd).pega_registros()
+        connection = setup_empty_database_real_v2
+        self.__cria_aluno_por_cli(expected)
+        actual = Controller(Aluno(), connection).get_by_name(aluno_nome_1)
         assert actual[0].pega_nome() == expected
 
     def test_criacao_um_aluno_com_informacoes_basicas(self):
         expected = self._MENSSAGEM_SUCESSO % aluno_nome_1
-        actual = self._cria_aluno_por_cli(aluno_nome_1)
+        actual = self.__cria_aluno_por_cli(aluno_nome_1)
         assert actual == expected
 
-    def _cria_aluno_por_cli(self, nome, tag="--nome"):
-        comando_1 = [self._comando_cria_aluno, tag, nome]
+    def __cria_aluno_por_cli(self, nome, tag="--nome"):
+        comando_1 = [self.__comando_cria_aluno, tag, nome]
         return executa_comando(comando_1)
 
-    def _atualiza_aluno_por_cli(self, aluno_id, nome=None, situacao=None):
-        comando = [self._comando_atualiza_aluno, "--aluno-id", str(aluno_id)]
+    def __atualiza_aluno_por_cli(self, aluno_id, nome=None, situacao=None):
+        comando = ["atualiza-aluno", "--aluno-id", str(aluno_id)]
         if isinstance(nome, str):
             comando.extend(["--nome", nome])
         if isinstance(situacao, str):

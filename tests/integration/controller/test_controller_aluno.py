@@ -1,18 +1,13 @@
-from tests.conftest import cria_curso_com_materias
 from pytest import fixture
-from src.model.banco_dados import BancoDados
 from src.controller.controller import Controller
 from src.model.aluno import Aluno
-from src.model.banco_dados import BancoDados
 from tests.massa_dados import aluno_nome_1
-from src.tabelas import alunos
-from src.enums.enums import Situacao
 
 
 class TestControllerAluno:
     @fixture(autouse=True, scope="function")
-    def setup(self, cria_banco):
-        self.controller = Controller(Aluno(aluno_nome_1), cria_banco)
+    def setup(self, setup_database_in_memory):
+        self.controller = Controller(Aluno(aluno_nome_1), setup_database_in_memory)
         self.controller.salva()
 
     def test_aluno_pode_ser_deletado_do_banco(self):

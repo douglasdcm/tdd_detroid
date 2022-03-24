@@ -9,21 +9,23 @@ from src.dao.dao_curso import DaoCurso
 from tests.massa_dados import curso_nome_1, aluno_nome_1
 from src.model.inscricao_aluno_curso import InscricaoAlunoCurso
 
-class TestDaoFabrica:
 
-    def test_dao_cria_inscricao_aluno_curso_no_banco(self, cria_banco):
+class TestDaoFabrica:
+    def test_dao_cria_inscricao_aluno_curso_no_banco(self, setup_database_in_memory):
         aluno_id = "1"
         curso_id = "1"
-        actual = DaoFabrica(InscricaoAlunoCurso(aluno_id, curso_id), cria_banco) \
-                    .fabrica_objetos_dao()
+        actual = DaoFabrica(
+            InscricaoAlunoCurso(aluno_id, curso_id), setup_database_in_memory
+        ).fabrica_objetos_dao()
         assert isinstance(actual, DaoInscricao)
 
-    def test_dao_cria_curso_no_banco(self, cria_banco):
-        actual = DaoFabrica(Curso(curso_nome_1), cria_banco) \
-                    .fabrica_objetos_dao()
+    def test_dao_cria_curso_no_banco(self, setup_database_in_memory):
+        actual = DaoFabrica(
+            Curso(curso_nome_1), setup_database_in_memory
+        ).fabrica_objetos_dao()
         assert isinstance(actual, DaoCurso)
 
-    def test_dao_alunos_criada(self, cria_banco):
-        dao = DaoFabrica(Aluno(aluno_nome_1), cria_banco)
+    def test_dao_alunos_criada(self, setup_database_in_memory):
+        dao = DaoFabrica(Aluno(aluno_nome_1), setup_database_in_memory)
         actual = dao.fabrica_objetos_dao()
         assert isinstance(actual, DaoAluno)

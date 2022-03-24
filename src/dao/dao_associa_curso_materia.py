@@ -5,6 +5,7 @@ from src.model.associa_curso_materia import AssociaCursoMateria
 from src.controller import controller
 from src.model.curso import Curso
 from src.model.materia import Materia
+from typing import List
 
 
 class DaoAssociaCursoMateria(DaoBase):
@@ -39,20 +40,22 @@ class DaoAssociaCursoMateria(DaoBase):
         self.__assoc.atualiza_materia(materia)
         return True
 
+    def get_by_course_id(self, course_id):
+        rows = self.__db.pega_por_query(
+            "select * from associa_curso_materia where curso_id = {}".format(course_id)
+        )
+        return self.__tuple_to_object(rows)
+
     def get_by_biggest_id(self):
         row = super().get_by_biggest_id()[0]
         return self.__tuple_to_object(row)
 
-    def __tuple_to_object(self, row):
-        (id_, course_id, discipline_id) = row
-        course_obj = controller.Controller(
-            self.__assoc.pega_curso(), self.__db
-        ).pega_registro_por_id(course_id)
-        discipline_obj = controller.Controller(
-            self.__assoc.pega_materia(), self.__db
-        ).pega_registro_por_id(discipline_id)
-        course_obj.atualiza_materias(discipline_obj)
-        controller.Controller(course_obj, self.__db).update(course_id)
-        self.__assoc.atualiza_curso(course_obj)
-        self.__assoc.atualiza_materia(discipline_obj)
-        return self.__assoc
+    def __tuple_to_object(self, rows) -> List[AssociaCursoMateria]:
+        assoc_list = []
+        for row in rows:
+            local_assoc = AssociaCursoMateria(Curso(), Materia())
+            (id_, course_id, discipline_id) = row
+            local_assoc.update_course_id(course_id)
+            local_assoc.update_discipline_id(discipline_id)
+            assoc_list.append(local_assoc)
+        return assoc_list

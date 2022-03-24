@@ -1,4 +1,4 @@
-from os import EX_OK
+from src.model.banco_dados import BancoDados
 from src.model.materia import Materia
 from tests.helper import executa_comando
 from src.model.curso import Curso
@@ -18,19 +18,18 @@ class TestCliCurso:
     first = 0
 
     @fixture(autouse=True, scope="function")
-    def setup(self, cria_banco_real):
+    def setup(self, setup_database_in_real_db):
         self._MENSSAGEM_SUCESSO = f"Curso de {curso_nome_1} criado."
         self._MENSSAGEM_ERRO = "Lista de parâmetros inválida."
         self._cria_curso = "cria-curso"
-        self._bd = cria_banco_real
-        self._bd.deleta_tabela(cursos)
-        self._bd.deleta_tabela(materias)
+        self.__bd = setup_database_in_real_db
+        self.__database = BancoDados(self.__bd)
 
     def teardown_method(self, method):
-        self._bd.fecha_conexao_existente()
+        self.__database.fecha_conexao_existente()
 
     def test_criacao_curso_com_materia_mesmo_nome_retorna_excecao(self):
-        self._cria_materias()
+        self.__cria_materias()
         expected = "O curso não pode ter duas matérias com mesmo nome."
         parametros = [
             self._cria_curso,
@@ -91,7 +90,7 @@ class TestCliCurso:
         assert expected in actual
 
     def test_criacao_de_curso_usando_tag__m__para_lista_das_materias(self):
-        self._cria_materias()
+        self.__cria_materias()
         expected = self._MENSSAGEM_SUCESSO
         parametros = [
             self._cria_curso,
@@ -106,7 +105,7 @@ class TestCliCurso:
         assert actual == expected
 
     def test_criacao_de_curso_com_paramtro__materias__antes__nome(self):
-        self._cria_materias()
+        self.__cria_materias()
         expected = self._MENSSAGEM_SUCESSO
         parametros = [
             self._cria_curso,
@@ -121,7 +120,7 @@ class TestCliCurso:
         assert actual == expected
 
     def test_curso_criado_banco_dados(self):
-        self._cria_materias()
+        self.__cria_materias()
         expected = Curso(curso_nome_1).pega_nome()
         parametros = [
             self._cria_curso,
@@ -133,11 +132,11 @@ class TestCliCurso:
             materia_nome_3,
         ]
         executa_comando(parametros)
-        curso = Controller(Curso(curso_nome_1), self._bd).pega_registros()[self.first]
+        curso = Controller(Curso(curso_nome_1), self.__bd).pega_registros()[self.first]
         actual = curso.pega_nome()
         assert actual == expected
 
-    def _cria_materias(self):
-        Controller(Materia(materia_nome_1), self._bd).salva()
-        Controller(Materia(materia_nome_2), self._bd).salva()
-        Controller(Materia(materia_nome_3), self._bd).salva()
+    def __cria_materias(self):
+        Controller(Materia(materia_nome_1), self.__bd).salva()
+        Controller(Materia(materia_nome_2), self.__bd).salva()
+        Controller(Materia(materia_nome_3), self.__bd).salva()

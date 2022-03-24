@@ -2,7 +2,7 @@ import time
 
 
 class Materia:
-    def __init__(self, nome):
+    def __init__(self, nome=None):
         self._nome = nome
         self._id = None
 

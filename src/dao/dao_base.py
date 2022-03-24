@@ -9,7 +9,7 @@ class DaoBase(IDao):
         self.__db = bd
         self._tabela = tabela
         self._campos = campos
-        self._bd.cria_tabela(self._tabela, self._campos, complemento)
+        # self._bd.cria_tabela(self._tabela, self._campos, complemento)
 
     def deleta(self, id_):
         self._bd.deleta_registro(self._tabela, id_)
@@ -26,6 +26,9 @@ class DaoBase(IDao):
 
     def pega_por_nome(self, nome):
         return self._bd.pega_registro_por_nome(self._tabela, nome)
+
+    def get_by_name(self, name):
+        return self._bd.get_by_name(self._tabela, name)
 
     def pega_tudo(self):
         return self._bd.pega_todos_registros(self._tabela)

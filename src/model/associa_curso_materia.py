@@ -13,6 +13,12 @@ class AssociaCursoMateria:
         self._curso = curso
         self._materia = materia
 
+    def update_course_id(self, course_id):
+        self._curso_id = course_id
+
+    def update_discipline_id(self, discipline_id):
+        self._materia_id = discipline_id
+
     def pega_curso_id(self):
         return self._curso_id
 

@@ -5,8 +5,8 @@ from sqlite3 import connect
 
 class TestBancoDados:
     @fixture(autouse=True, scope="function")
-    def setup(self, cria_banco):
-        self.bd = cria_banco
+    def setup(self, setup_database_in_memory):
+        self.bd = setup_database_in_memory
         self.tabela = "teste"
         yield
         self.bd.fecha_conexao_existente()
@@ -16,10 +16,10 @@ class TestBancoDados:
         valor = f"'valor_1'"
         self.bd.cria_tabela(self.tabela, campo)
         self.bd.salva_registro(self.tabela, campo, valor)
-        self.bd.deleta_tabela(self.tabela)
+        # self.bd.deleta_tabela(self.tabela)
 
-    def test_conexao_nao_criada_se_existe(self, cria_banco):
-        bd_1 = cria_banco
+    def test_conexao_nao_criada_se_existe(self, setup_database_in_memory):
+        bd_1 = setup_database_in_memory
         bd_2 = BancoDados()
         campos = "campo_1"
         valor = "'valor_1'"

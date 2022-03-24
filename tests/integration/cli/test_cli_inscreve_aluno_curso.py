@@ -16,15 +16,9 @@ from tests.massa_dados import (
 
 
 class TestCliInscreveAlunoCurso:
-    @fixture(autouse=True, scope="function")
-    def setup(self, cria_banco_real):
-        self.aluno_id = self.curso_id = "1"
-        bd = cria_banco_real
-        bd.deleta_tabela(inscricao_aluno_curso)
-        bd.deleta_tabela(cursos)
-        bd.deleta_tabela(alunos)
-
-    def test_situaca_aluno_muda_para__em_curso__apos_inscricao(self, cria_banco_real):
+    def test_situaca_aluno_muda_para__em_curso__apos_inscricao(
+        self, setup_database_in_real_db
+    ):
         aluno = Aluno(aluno_nome_1)
         curso = Curso(curso_nome_1)
         materia_1 = Materia(materia_nome_1)
@@ -33,8 +27,8 @@ class TestCliInscreveAlunoCurso:
         curso.atualiza_materias(materia_1)
         curso.atualiza_materias(materia_2)
         curso.atualiza_materias(materia_3)
-        Controller(aluno, cria_banco_real).salva()
-        Controller(curso, cria_banco_real).salva()
+        Controller(aluno, setup_database_in_real_db).salva()
+        Controller(curso, setup_database_in_real_db).salva()
         expected = "em curso"
         parametros = [
             "inscreve-aluno-curso",
@@ -47,14 +41,18 @@ class TestCliInscreveAlunoCurso:
         inscricao = InscricaoAlunoCurso(
             aluno.define_id(self.aluno_id), curso.define_id(self.curso_id)
         )
-        Controller(inscricao, cria_banco_real).salva()
-        aluno = Controller(aluno, cria_banco_real).pega_registro_por_id(self.aluno_id)
+        Controller(inscricao, setup_database_in_real_db).salva()
+        aluno = Controller(aluno, setup_database_in_real_db).pega_registro_por_id(
+            self.aluno_id
+        )
         actual = aluno.pega_situacao()
         assert actual == expected
 
-    def test_retorna_excecao_quando_curso_id_nao_existe(self, cria_banco_real):
+    def test_retorna_excecao_quando_curso_id_nao_existe(
+        self, setup_database_in_real_db
+    ):
         expected = "Curso não encontrado."
-        Controller(Aluno(None), cria_banco_real).salva()
+        Controller(Aluno(None), setup_database_in_real_db).salva()
         parametros = [
             "inscreve-aluno-curso",
             "--aluno-id",
@@ -77,27 +75,27 @@ class TestCliInscreveAlunoCurso:
         actual = executa_comando(parametros)
         assert expected in actual
 
-    def test_aluno_pode_ser_inscrito_curso(self, cria_curso_banco_real):
+    def test_aluno_pode_ser_inscrito_curso(self, setup_database_in_real_db):
+        aluno_id = curso_id = "1"
         expected = (
-            f"Aluno identificado por {self.aluno_id} inscrito no curso"
-            f" identificado por {self.curso_id}."
+            f"Aluno identificado por {aluno_id} inscrito no curso"
+            f" identificado por {curso_id}."
         )
-        aluno, curso = cria_curso_banco_real
         parametros = [
             "inscreve-aluno-curso",
             "--aluno-id",
-            str(aluno.pega_id()),
+            aluno_id,
             "--curso-id",
-            str(curso.pega_id()),
+            curso_id,
         ]
         actual = executa_comando(parametros)
         assert actual == expected
 
-    def test_aluno_inscrito_curso_salvo_banco_dados(self, cria_banco_real):
+    def test_aluno_inscrito_curso_salvo_banco_dados(self, setup_database_in_real_db):
         aluno = Aluno(aluno_nome_1)
         curso = Curso(curso_nome_1)
-        Controller(aluno, cria_banco_real).salva()
-        Controller(curso, cria_banco_real).salva()
+        Controller(aluno, setup_database_in_real_db).salva()
+        Controller(curso, setup_database_in_real_db).salva()
         expected = [tuple((1, self.aluno_id, self.curso_id))]
         parametros = [
             "inscreve-aluno-curso",
@@ -110,5 +108,5 @@ class TestCliInscreveAlunoCurso:
         inscricao = InscricaoAlunoCurso(
             aluno.define_id(self.aluno_id), curso.define_id(self.curso_id)
         )
-        actual = Controller(inscricao, cria_banco_real).pega_registros()
+        actual = Controller(inscricao, setup_database_in_real_db).pega_registros()
         assert actual == expected

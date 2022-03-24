@@ -3,15 +3,8 @@ from tests.helper import executa_comando
 from pytest import fixture
 from src.tabelas import alunos, cursos, inscricao_aluno_curso
 
+
 class TestIncricaoAlunosCursos:
-
-    @fixture
-    def setup(self, cria_banco_real):
-        bd = cria_banco_real
-        bd.deleta_tabela(alunos)
-        bd.deleta_tabela(cursos)
-        bd.deleta_tabela(inscricao_aluno_curso)
-
     def test_inscreve_um_aluno_em_um_curso(self):
         expected = "Aluno identificado por 1 inscrito no curso identificado por 1."
         parametros_aluno = self._cria_aluno("Douglas")
@@ -34,7 +27,7 @@ class TestIncricaoAlunosCursos:
         executa_comando(parametros_curso)
         executa_comando(parametros_inscricao_1)
         actual = executa_comando(parametros_inscricao_2)
-        assert expected in actual 
+        assert expected in actual
 
     def test_inscreve_um_aluno_em_dois_cursos(self):
         aluno_id = "1"
@@ -51,7 +44,7 @@ class TestIncricaoAlunosCursos:
         executa_comando(parametros_curso_2)
         executa_comando(parametros_inscricao_1)
         actual = executa_comando(parametros_inscricao_2)
-        assert expected in actual 
+        assert expected in actual
 
     def _cria_aluno(self, nome):
         return ["cria-aluno", "--nome", nome]

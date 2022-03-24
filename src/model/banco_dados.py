@@ -146,9 +146,21 @@ class BancoDados:
         else:
             return result
 
+    def get_by_name(self, table, name):
+        query = f"select * from {table} where name = '{name}'"
+        mensagem_erro = "Não foi possível pegar o registro especificado."
+        result = self._run(query, mensagem_erro)
+        if result == []:
+            raise ErroBancoDados(f"Registro especificado '{name}' não foi encontrado.")
+        else:
+            return result
+
     def pega_por_query(self, query):
         mensagem_erro = "Não foi possível executar a query especificada."
         return self._run(query, mensagem_erro)
+
+    def get_by_query(self, query):
+        return self.pega_por_query(query)
 
     def _run(self, query, mensagem_erro=""):
         """

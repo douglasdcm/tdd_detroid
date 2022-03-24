@@ -2,11 +2,11 @@ from src.dao.dao_fabrica import DaoFabrica
 
 
 class Controller:
-    def __init__(self, obj_dao, bd):
+    def __init__(self, obj_dao, connection):
         """
         Args: obj_dao (Objeto): instância do objeto, exemplo: Aluno, Curso
         """
-        self.dao = DaoFabrica(obj_dao, bd).fabrica_objetos_dao()
+        self.dao = DaoFabrica(obj_dao, connection).fabrica_objetos_dao()
 
     def get_by_biggest_id(self):
         return self.dao.get_by_biggest_id()
@@ -47,6 +47,16 @@ class Controller:
         """
         try:
             return self.dao.pega_por_nome(nome)
+        except Exception:
+            raise
+
+    def get_by_name(self, name):
+        """
+        Args: name (str): name do objeto
+        Returns: objeto, por exemplo Aluno, com valores atualizados via banco de dados
+        """
+        try:
+            return self.dao.get_by_name(name)
         except Exception:
             raise
 

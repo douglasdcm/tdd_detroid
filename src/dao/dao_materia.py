@@ -38,11 +38,8 @@ class DaoMateria(DaoBase):
 
     def pega_por_nome(self, nome):
         try:
-            registro = super().pega_por_nome(nome)
-            (id_, nome) = registro[0]
-            obj = Materia(nome)
-            obj.define_id(id_)
-            return obj
+            rows = super().pega_por_nome(nome)
+            return self.__tuple_to_object(rows[0])
         except Exception:
             raise
 
