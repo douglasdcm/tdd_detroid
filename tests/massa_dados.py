@@ -9,3 +9,10 @@ materia_nome_3 = "Materia 3"
 materia_nome_4 = "Materia 4"
 unidade_nome_1 = "Unidade 1"
 unidade_nome_2 = "Unidade 2"
+discipline_names = [
+    "discipline_1",
+    "discipline_2",
+    "discipline_3",
+    "discipline_4",
+    "discipline_5",
+]

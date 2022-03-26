@@ -7,6 +7,7 @@ class Situacao(Enum):
     reprovado = "reprovado"
     trancado = "trancado"
     inexistente = "aluno não matriculado"
+    locked = "locked"
     in_progress = "in progress"
     approved = "approved"
     reproved = "reproved"

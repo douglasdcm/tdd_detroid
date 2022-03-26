@@ -7,12 +7,17 @@ from src.tabelas import materias
 
 
 class TestMateriaCli:
-    def test_cria_materia_por_cli(self, setup_database_in_real_db):
+    def test_should_create_discipline_by_cli_when_asked_for(
+        self, setup_database_in_real_db
+    ):
         nome = materia_nome_1
         expected = nome
         parametros = ["cria-materia", "--nome", nome]
         executa_comando(parametros)
         materia = Materia(nome)
-        registro = Controller(materia, setup_database_in_real_db).get_all()[0]
-        actual = registro.pega_nome()
+        actual = (
+            Controller(materia, setup_database_in_real_db)
+            .get_by_biggest_id()
+            .pega_nome()
+        )
         assert actual == expected

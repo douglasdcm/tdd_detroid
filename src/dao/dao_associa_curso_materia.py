@@ -47,8 +47,7 @@ class DaoAssociaCursoMateria(DaoBase):
         return self.__tuple_to_object(rows)
 
     def get_by_biggest_id(self):
-        row = super().get_by_biggest_id()[0]
-        return self.__tuple_to_object(row)
+        return self.__tuple_to_object(super().get_by_biggest_id())[0]
 
     def __tuple_to_object(self, rows) -> List[AssociaCursoMateria]:
         assoc_list = []

@@ -46,8 +46,10 @@ def populate_database(connection):
         db.create_table(table)
     students = [
         {"name": "student_name_1", "score": 10, "situation": "in progress"},
-        {"name": "student_name_2", "score": 10, "situation": "in progress"},
-        {"name": "student_name_3", "score": 10, "situation": "in progress"},
+        {"name": "student_name_2", "score": 3, "situation": "in progress"},
+        {"name": "student_name_3", "score": 5, "situation": "locked"},
+        {"name": "student_name_4", "score": 0, "situation": "reproved"},
+        {"name": "student_name_5", "score": 8, "situation": "approved"},
     ]
     disciplines = [
         {"nome": "discipline_1"},

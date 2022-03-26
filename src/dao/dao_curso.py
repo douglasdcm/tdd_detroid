@@ -19,7 +19,7 @@ class DaoCurso(DaoBase):
 
     def salva(self):
         """Retorna objeto com campos atualizados via banco de dados"""
-        # self._curso.pega_lista_materias()
+        self._curso.pega_lista_materias()
         self.__db.salva_registro(
             self._tabela, self._campos, f"'{self._curso.pega_nome()}'"
         )
@@ -37,11 +37,7 @@ class DaoCurso(DaoBase):
 
     def pega_por_nome(self, nome):
         try:
-            registro = super().pega_por_nome(nome)
-            (id_, nome) = registro[0]
-            obj = Curso(nome)
-            obj.define_id(id_)
-            return obj
+            return self.__tuple_to_object(super().pega_por_nome(nome))
         except Exception:
             raise
 
@@ -54,6 +50,9 @@ class DaoCurso(DaoBase):
         """
         linha = super().pega_por_id(id)
         return self.__tuple_to_object(linha[0])
+
+    def get_by_id(self, id_):
+        return self.pega_por_id(id_)
 
     def get_by_biggest_id(self):
         row = super().get_by_biggest_id()[0]

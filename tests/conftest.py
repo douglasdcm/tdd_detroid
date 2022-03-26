@@ -1,7 +1,4 @@
-from multiprocessing import connection
 from sqlite3 import connect as connect
-from src.model.inscricao_aluno_curso import InscricaoAlunoCurso
-from src.model.associa_curso_materia import AssociaCursoMateria
 from src.model.banco_dados import BancoDados
 from pytest import fixture
 from src.model.materia import Materia
@@ -27,8 +24,8 @@ from tests.helper import (
 @fixture
 def setup_empty_database_in_memory():
     connection = connect(memory_database)
-    yield build_database_with_empty_tables(connection)
     clean_database(connection)
+    yield build_database_with_empty_tables(connection)
 
 
 @fixture
@@ -36,6 +33,7 @@ def setup_empty_database_real():
     connection = connect(database_name)
     clean_database(connection)
     yield build_database_with_empty_tables(connection)
+    BancoDados(connection).close()
 
 
 @fixture
@@ -44,6 +42,7 @@ def setup_empty_database_real_v2():
     connection = connect(database_name)
     clean_database(connection)
     yield build_database_with_empty_tables_v2(connection)
+    BancoDados(connection).close()
 
 
 @fixture
@@ -51,6 +50,7 @@ def setup_database_in_memory():
     connection = connect(memory_database)
     clean_database(connection)
     yield populate_database(connection)
+    BancoDados(connection).close()
 
 
 @fixture
@@ -58,38 +58,16 @@ def setup_database_in_real_db():
     connection = connect(database_name)
     clean_database(connection)
     yield populate_database(connection)
-
-
-@fixture
-def cria_massa_dados_em_memoria(setup_database_in_memory):
-    aluno = Aluno(aluno_nome_1)
-    curso = Curso(curso_nome_1)
-    materia_1 = Materia(materia_nome_1)
-    materia_2 = Materia(materia_nome_2)
-    materia_3 = Materia(materia_nome_3)
-    aluno_obj = Controller(aluno, setup_database_in_memory).salva()
-    curso_obj = Controller(curso, setup_database_in_memory).salva()
-    materia_1_obj = Controller(materia_1, setup_database_in_memory).salva()
-    materia_2_obj = Controller(materia_2, setup_database_in_memory).salva()
-    materia_3_obj = Controller(materia_3, setup_database_in_memory).salva()
-    Controller(
-        AssociaCursoMateria(curso_obj, materia_1_obj), setup_database_in_memory
-    ).salva()
-    Controller(
-        AssociaCursoMateria(curso_obj, materia_2_obj), setup_database_in_memory
-    ).salva()
-    Controller(
-        AssociaCursoMateria(curso_obj, materia_3_obj), setup_database_in_memory
-    ).salva()
-    Controller(InscricaoAlunoCurso(aluno_obj, curso_obj), setup_database_in_memory)
+    BancoDados(connection).close()
 
 
 @fixture
 def cria_massa_dados():
     connection = connect(database_name)
+    clean_database(connection)
     populate_database(connection)
     yield 1, 1
-    clean_database(connection)
+    BancoDados(connection).close()
 
 
 @fixture
@@ -103,46 +81,6 @@ def enroll_student_in_course():
     course_obj = Controller(Curso(), connection).pega_registro_por_id(1)
 
     yield student_obj, course_obj, connection
-
-
-@fixture
-def cria_aluno_banco_real(setup_database_in_real_db):
-    bd = setup_database_in_real_db
-    Controller(Aluno(aluno_nome_1), bd).salva()
-    yield
-
-
-@fixture
-def cria_curso_banco_real(setup_database_in_real_db):
-    bd = setup_database_in_real_db
-
-    student_controller = Controller(Aluno(aluno_nome_1), bd)
-    student_controller.salva()
-    student_obj = student_controller.get_by_biggest_id()
-
-    course_controller = Controller(Curso(curso_nome_1), bd)
-    course_controller.salva()
-    course_obj = course_controller.get_by_biggest_id()
-
-    lista_materias = [materia_nome_1, materia_nome_2, materia_nome_3]
-    for materia in lista_materias:
-        materia_controller = Controller(Materia(materia), bd)
-        materia_controller.salva()
-        materia_obj = materia_controller.get_by_biggest_id()
-        Controller(AssociaCursoMateria(course_obj, materia_obj), bd).salva()
-    yield student_obj, course_obj
-
-
-@fixture
-def cria_curso_em_memoria(setup_database_in_memory):
-    bd = setup_database_in_memory
-    Controller(Curso(curso_nome_1), bd).salva()
-
-
-@fixture
-def cria_aluno_em_memoria(setup_database_in_memory):
-    bd = setup_database_in_memory
-    Controller(Aluno(aluno_nome_1), bd).salva()
 
 
 @fixture

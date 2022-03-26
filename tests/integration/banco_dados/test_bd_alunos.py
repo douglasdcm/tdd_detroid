@@ -1,13 +1,12 @@
-from tests.massa_dados import aluno_nome_1
 from src.controller.controller import Controller
+from src.model.aluno import Aluno
 
 
 class TestBdAlunos:
-    def test_aluno_criado_foi_salvo_banco_dados(
-        self, setup_database_in_memory, cria_aluno
-    ):
-        expected = aluno_nome_1
-        controller = Controller(cria_aluno, setup_database_in_memory)
-        controller.salva()
-        actual = controller.get_all()
-        assert actual[0].pega_nome() == expected
+    def test_aluno_criado_foi_salvo_banco_dados(self, setup_database_in_memory):
+        id_ = 1
+        expected = "student_name_1"
+        actual = (
+            Controller(Aluno(), setup_database_in_memory).get_by_id(id_).pega_nome()
+        )
+        assert actual == expected

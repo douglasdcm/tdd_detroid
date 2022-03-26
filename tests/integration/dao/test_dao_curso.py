@@ -41,7 +41,7 @@ class TestDaoCurso:
     ):
         expected = 3
         course = Curso().define_id(1)
-        DaoCurso(course, setup_database_in_memory).get_by_id(1)
+        DaoCurso(course, BancoDados(setup_database_in_memory)).get_by_id(1)
         actual = len(course.pega_lista_materias())
         assert actual == expected
 
@@ -88,16 +88,26 @@ class TestDaoCurso:
         )
         assert actual[indice].pega_id() == expected.pega_id()
 
-    def test_should_the_name_of_course_be_the_same_when_fetched_from_databse(
+    def test_should_the_name_of_course_be_the_same_when_fetched_from_database(
         self, setup_database_in_memory
     ):
-        expected, actual = self.__pega_todos_registros(
-            setup_database_in_memory, id=1, nome=curso_nome_1
+        id_ = 1
+        expected = "course_1"
+        actual = (
+            DaoCurso(
+                Curso(expected).define_id(id_), BancoDados(setup_database_in_memory)
+            )
+            .get_by_id(id_)
+            .pega_nome()
         )
-        assert actual[0].pega_nome() == expected.pega_nome()
+        assert actual == expected
 
     def test_curso_id_recuperado_do_banco_dados(self, setup_database_in_memory):
-        expected, actual = self.__pega_todos_registros(
-            setup_database_in_memory, id=1, nome=curso_nome_1
+        id_ = 1
+        expected = id_
+        actual = (
+            DaoCurso(Curso(), BancoDados(setup_database_in_memory))
+            .get_by_id(id_)
+            .pega_id()
         )
-        assert actual[0].pega_id() == expected.pega_id()
+        assert actual == expected

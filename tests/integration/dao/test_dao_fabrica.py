@@ -12,10 +12,11 @@ from src.model.inscricao_aluno_curso import InscricaoAlunoCurso
 
 class TestDaoFabrica:
     def test_dao_cria_inscricao_aluno_curso_no_banco(self, setup_database_in_memory):
-        aluno_id = "1"
-        curso_id = "1"
+        id_ = 1
+        course = Curso().define_id(id_)
         actual = DaoFabrica(
-            InscricaoAlunoCurso(aluno_id, curso_id), setup_database_in_memory
+            InscricaoAlunoCurso(Aluno(), course),
+            BancoDados(setup_database_in_memory),
         ).fabrica_objetos_dao()
         assert isinstance(actual, DaoInscricao)
 

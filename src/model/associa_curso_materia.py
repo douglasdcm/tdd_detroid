@@ -1,4 +1,5 @@
 from src.model.curso import Curso
+from src.model.materia import Materia
 
 
 class AssociaCursoMateria:
@@ -8,6 +9,10 @@ class AssociaCursoMateria:
             curso (Curso)
             materia (Materia)
         """
+        if curso is None:
+            curso = Curso()
+        if materia is None:
+            materia = Materia()
         self._curso_id = curso.pega_id()
         self._materia_id = materia.pega_id()
         self._curso = curso
@@ -21,6 +26,9 @@ class AssociaCursoMateria:
 
     def pega_curso_id(self):
         return self._curso_id
+
+    def get_course_id(self):
+        return self.pega_curso_id()
 
     def pega_materia_id(self):
         return self._materia_id

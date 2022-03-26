@@ -1,17 +1,18 @@
+from src.model.banco_dados import BancoDados
+
+
 class TestDatabaseCreateTable:
     def test_should_create_table_when_it_does_not_exist(self, setup_database_in_memory):
         table = {
             "name": "table_name",
-            "columns": [
-                {"name": "col_1", "type": "integer", "constraints": "not null"}
-            ],
+            "columns": [{"name": "col_1", "type": "text", "constraints": "not null"}],
         }
-        expected = "CREATE TABLE IF NOT EXISTS TABLE_NAME (id INTEGER NOT NULL PRIMARY KEY, COL_1 INTEGER NOT NULL);"
-        database = setup_database_in_memory
+        expected = "CREATE TABLE IF NOT EXISTS TABLE_NAME (id INTEGER NOT NULL PRIMARY KEY, COL_1 TEXT NOT NULL);"
+        database = BancoDados(setup_database_in_memory)
         actual = database.create_table(table)
         assert actual == expected
 
-    def test_should_create_table_with_int_cloum_when_colums_type_is_integer(
+    def test_should_create_table_with_int_column_when_columns_type_is_integer(
         self, setup_database_in_memory
     ):
         table = {
@@ -21,7 +22,7 @@ class TestDatabaseCreateTable:
             ],
         }
         expected = "CREATE TABLE IF NOT EXISTS TABLE_NAME (id INTEGER NOT NULL PRIMARY KEY, COL_1 INTEGER NOT NULL);"
-        database = setup_database_in_memory
+        database = BancoDados(setup_database_in_memory)
         actual = database.create_table(table)
         assert actual == expected
 
@@ -37,7 +38,7 @@ class TestDatabaseCreateTable:
             ],
         }
         expected = "CREATE TABLE IF NOT EXISTS TABLE_NAME (id INTEGER NOT NULL PRIMARY KEY, COL_1 TEXT NOT NULL, COL_2 TEXT NOT NULL, COL_3 TEXT NOT NULL);"
-        database = setup_database_in_memory
+        database = BancoDados(setup_database_in_memory)
         actual = database.create_table(table)
         assert actual == expected
 
@@ -49,6 +50,6 @@ class TestDatabaseCreateTable:
             "columns": [{"name": "col_1", "type": "text", "constraints": "not null"}],
         }
         expected = "CREATE TABLE IF NOT EXISTS TABLE_NAME (id INTEGER NOT NULL PRIMARY KEY, COL_1 TEXT NOT NULL);"
-        database = setup_database_in_memory
+        database = BancoDados(setup_database_in_memory)
         actual = database.create_table(table)
         assert actual == expected

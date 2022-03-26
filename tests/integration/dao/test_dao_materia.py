@@ -2,6 +2,7 @@ from tests.conftest import setup_database_in_memory
 from src.dao.dao_materia import DaoMateria
 from src.model.materia import Materia
 from pytest import raises
+from src.model.banco_dados import BancoDados
 
 
 class TestDaoMateria:
@@ -11,7 +12,7 @@ class TestDaoMateria:
 
     def test_materia_pode_ser_salva_banco(self, setup_database_in_memory):
         expected = "Química"
-        dao = DaoMateria(Materia(expected), setup_database_in_memory)
+        dao = DaoMateria(Materia(expected), BancoDados(setup_database_in_memory))
         dao.salva()
-        actual = dao.pega_por_id(id_=1)
-        assert actual.pega_nome() == expected
+        actual = dao.get_by_biggest_id().pega_nome()
+        assert actual == expected

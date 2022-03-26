@@ -56,6 +56,12 @@ def get_table_list():
             {"name": "curso_id", "type": "integer", "constraints": "not null"},
         ],
     }
+    general_coordinator = {
+        "name": tabelas.coordenador_geral,
+        "columns": [
+            {"name": "_", "type": "text", "constraints": "not null"},
+        ],
+    }
 
     return [
         students,
@@ -66,4 +72,5 @@ def get_table_list():
         enrol_course_discipline,
         assoc_curso_materia,
         assoc_aluno_curso,
+        general_coordinator,
     ]

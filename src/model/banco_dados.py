@@ -37,6 +37,9 @@ class BancoDados:
         except Exception:
             return False
 
+    def close(self):
+        return self.fecha_conexao_existente()
+
     def _cria_conexao(self):
         try:
             con = type(self)._conexao

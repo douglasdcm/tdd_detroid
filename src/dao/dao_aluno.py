@@ -56,42 +56,37 @@ class DaoAluno(DaoBase):
         Returns:
             objeto aluno com dados pegos do banco de dados
         """
-        linha = super().pega_por_id(id_)
-        return self.__tuple_to_object(linha[0])
+        return self.__tuple_to_object(super().pega_por_id(id_))[0]
 
     def pega_tudo(self):
-        registros = super().pega_tudo()
-        lista_alunos = list()
-        for linha in registros:
-            aluno = self.__tuple_to_object(linha)
-            lista_alunos.append(aluno)
-        return lista_alunos
+        return self.__tuple_to_object(super().pega_tudo())
 
     def get_all(self):
         return self.pega_tudo()
 
     def get_by_name(self, name):
-        rows = super().get_by_name(name)
-        students = []
-        for row in rows:
-            students.append(self.__tuple_to_object(row))
-        return students
+        return self.__tuple_to_object(super().get_by_name(name))
 
     def get_by_biggest_id(self):
-        row = super().get_by_biggest_id()[0]
-        return self.__tuple_to_object(row)
+        return self.__tuple_to_object(super().get_by_biggest_id())[0]
 
     def __tuple_to_object(self, rows) -> List[Aluno]:
-        (id_, name, cr, status) = rows
-        self.__student.define_id(id_)
-        self.__student.define_nome(name)
-        self.__student.define_cr(cr)
+        students = []
+        for row in rows:
+            (id_, name, cr, status) = row
+            student = Aluno()
+            student.define_id(id_)
+            student.define_nome(name)
+            student.define_cr(cr)
 
-        assocs = DaoInscricao(InscricaoAlunoCurso(), self.__db).get_by_student_id(id_)
-        for assoc in assocs:
-            self.__student.inscreve_curso(
-                DaoCurso(Curso(), self.__db).pega_por_id(assoc.get_course_id())
+            assocs = DaoInscricao(InscricaoAlunoCurso(), self.__db).get_by_student_id(
+                id_
             )
+            for assoc in assocs:
+                student.inscreve_curso(
+                    DaoCurso(Curso(), self.__db).pega_por_id(assoc.get_course_id())
+                )
 
-        self.__student.define_situacao(status)
-        return self.__student
+            student.define_situacao(status)
+            students.append(student)
+        return students

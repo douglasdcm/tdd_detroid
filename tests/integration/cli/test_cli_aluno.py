@@ -2,9 +2,7 @@ from src.model.inscricao_aluno_curso import InscricaoAlunoCurso
 from src.model.aluno import Aluno
 from tests.helper import executa_comando
 from src.utils.messagens import LISTA_PARAMETROS_INVALIDA
-from src.tabelas import alunos
 from tests.massa_dados import aluno_nome_1, aluno_nome_2, aluno_nome_3
-from pytest import fixture
 from src.controller.controller import Controller
 
 
@@ -16,23 +14,27 @@ class TestCliAluno:
     )
     __comando_cria_aluno = "cria-aluno"
 
-    def test_aluno_pode_atualizar_situacao(self, setup_database_in_memory):
-        connection = setup_database_in_memory
+    def test_should_update_student_situation_by_cli_when_asked_for(
+        self, setup_database_in_real_db
+    ):
+        aluno_id = 1
+        connection = setup_database_in_real_db
         expected = "trancado"
-        self.__atualiza_aluno_por_cli(aluno_id=1, situacao=expected)
-        aluno = Controller(Aluno(), connection).pega_registro_por_id(1)
-        actual = aluno.pega_situacao()
+        self.__atualiza_aluno_por_cli(aluno_id, situacao=expected)
+        actual = (
+            Controller(Aluno(), connection)
+            .pega_registro_por_id(aluno_id)
+            .pega_situacao()
+        )
         assert actual == expected
 
     def test_aluno_pode_atualizar_nome(self, setup_database_in_real_db):
-        aluno_id = "1"
-        nome = "student_name_1"
-        expected = nome
-        self.__atualiza_aluno_por_cli(aluno_id, nome)
-        aluno = Controller(Aluno(), setup_database_in_real_db).pega_registro_por_id(
-            aluno_id
-        )
-        actual = aluno.pega_nome()
+        aluno_id = 1
+        new_name = "student_new_name"
+        connection = setup_database_in_real_db
+        expected = new_name
+        self.__atualiza_aluno_por_cli(aluno_id, new_name)
+        actual = Controller(Aluno(), connection).get_by_id(aluno_id).pega_nome()
         assert actual == expected
 
     def test_aluno_pode_atualizar_cr(self, cria_massa_dados):

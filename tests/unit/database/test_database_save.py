@@ -1,4 +1,5 @@
 from pytest import fixture
+from src.model.banco_dados import BancoDados
 
 
 class TestDatabaseSave:
@@ -12,7 +13,7 @@ class TestDatabaseSave:
                 {"name": "situation", "type": "text", "constraints": "not null"},
             ],
         }
-        database = setup_database_in_memory
+        database = BancoDados(setup_database_in_memory)
         database.create_table(table)
         yield database
 
@@ -48,7 +49,7 @@ class TestDatabaseSave:
             "name": "students",
             "columns": [{"name": "name", "type": "text", "constraints": "not null"}],
         }
-        database = setup_database_in_memory
+        database = BancoDados(setup_database_in_memory)
         database.create_table(table)
         expected = 'insert into students (name) values ("student_name")'
         actual, _ = database.save(table["name"], student)

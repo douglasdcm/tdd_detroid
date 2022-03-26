@@ -4,11 +4,13 @@ from src.exceptions.exceptions import (
     ErroBancoDados,
 )
 from src.model.inscricao_aluno_curso import InscricaoAlunoCurso
+from src.model.curso import Curso
 from src.dao.dao_base import DaoBase
 from src.tabelas import inscricao_aluno_curso, alunos, cursos
 from src.model.banco_dados import BancoDados
 from src.controller import controller
 from typing import List
+from src.dao.dao_curso import DaoCurso
 
 
 class DaoInscricao(DaoBase):
@@ -35,23 +37,29 @@ class DaoInscricao(DaoBase):
     def save(self):
         return self.salva()
 
+    def get_by_biggest_id(self):
+        return self.__tuple_to_object(super().get_by_biggest_id())[0]
+
     def salva(self):
         try:
-            self._valida_valores()
-            student_obj = self.__enrollment.pega_aluno()
-            course_obj = self.__enrollment.pega_curso()
+            self.__valida_valores()
+            student = self.__enrollment.pega_aluno()
 
-            valores = f"'{student_obj.pega_id()}', \
-                '{course_obj.pega_id()}'"
+            course = DaoCurso(Curso(), self.__db).get_by_id(
+                self.__enrollment.pega_curso().pega_id()
+            )
+
+            valores = f"'{student.pega_id()}', \
+                '{course.pega_id()}'"
             self.__db.salva_registro(self.__tabela, self._campos, valores)
 
-            student_obj.inscreve_curso(course_obj)
+            student.inscreve_curso(course)
 
-            self.__enrollment.atualiza_aluno(student_obj)
-            self.__enrollment.atualiza_curso(course_obj)
+            self.__enrollment.atualiza_aluno(student)
+            self.__enrollment.atualiza_curso(course)
 
-            controller.Controller(student_obj, self.__db).update(student_obj.pega_id())
-            # controller.Controller(course_obj, self.__db).upd  ate(course_obj.pega_id())
+            controller.Controller(student, self.__db).update(student.pega_id())
+            # controller.Controller(course, self.__db).upd  ate(course.pega_id())
 
             return True
 
@@ -62,7 +70,7 @@ class DaoInscricao(DaoBase):
         except Exception as e:
             raise ErroBancoDados(e)
 
-    def _valida_valores(self):
+    def __valida_valores(self):
         try:
             self.__db.pega_registro_por_id(
                 alunos, self._inscricao.pega_aluno().pega_id()

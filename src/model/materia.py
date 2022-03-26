@@ -8,6 +8,7 @@ class Materia:
 
     def define_id(self, id):
         self._id = id
+        return self
 
     def pega_id(self):
         return self._id

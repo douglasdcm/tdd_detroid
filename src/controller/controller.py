@@ -40,6 +40,9 @@ class Controller:
         """
         return self.dao.pega_por_id(id_)
 
+    def get_by_id(self, id_):
+        return self.pega_registro_por_id(id_)
+
     def pega_registro_por_nome(self, nome):
         """
         Args: nome (str): nome do objeto
