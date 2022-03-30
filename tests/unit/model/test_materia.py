@@ -1,7 +1,5 @@
-import pytest
-from src.model.gerenciador_curso import GerenciadorCurso
-from src.model.curso import Curso
 from src.model.materia import Materia
+
 
 class TestMateria:
     def test_os_nomes_das_materias_nao_precisam_ser_diferentes(self):
@@ -20,8 +18,7 @@ class TestMateria:
 
     def test_materias_curso_devem_ter_identificadores_unicos(self):
         expected = "1"
-        materia = (Materia("mat"))
+        materia = Materia("mat")
         materia.define_id(expected)
         actual = materia.pega_id()
         assert actual == expected
-

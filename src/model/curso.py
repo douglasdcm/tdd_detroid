@@ -3,26 +3,27 @@ from src.model.unidade import Unidade
 from src.model.i_model import IModel
 import time
 from src.model.catalogo_curso import CatalogoCurso
-from src.model.aluno import Aluno
+from src.model import aluno as student
 from src.exceptions.exceptions import MaximoCaracteres, UnidadeInvalida, MateriaInvalida
 from typing import List
+from src.enums.enums import SituacaoCurso
 
 
 class Curso(IModel):
     def __init__(self, nome=""):
-        self._lista_materias: List[Materia] = list()
-        self._minimo_materia = 3
+        self.__list_disciplines: List[Materia] = list()
+        self.__minimum_disciplines = 3
         self._maximo_caracteres = 10
         self._identificador_unico = time.time()
         self._nome = nome
         self._lista_alunos = list()
-        self._adiciona_catalogo_cursos()
+        self.__adiciona_catalogo_cursos()
         self._id = None
         self._unidade = None
-        self._situacao = None
-        self._valida_parametros(nome)
+        self.__situacao = SituacaoCurso.pending.value
+        self.__valida_parametros(nome)
 
-    def _valida_parametros(self, nome):
+    def __valida_parametros(self, nome):
         if len(nome) > self._maximo_caracteres:
             raise MaximoCaracteres(
                 "Nome do curso deve ter no máximao {} letras.".format(
@@ -31,10 +32,18 @@ class Curso(IModel):
             )
 
     def define_situacao(self, situacao):
-        self._situacao = situacao
+        if situacao == SituacaoCurso.cancelado.value:
+            self.__situacao = situacao
+        elif (
+            self.__situacao == SituacaoCurso.cancelado.value
+            and situacao == self.__calculate_status()
+        ):
+            self.__situacao = situacao
+        elif situacao in [SituacaoCurso]:
+            self.__situacao = self.__calculate_status()
 
     def pega_situacao(self):
-        return self._situacao
+        return self.__situacao
 
     def pega_unidade(self):
         return self._unidade
@@ -54,7 +63,7 @@ class Curso(IModel):
         self._id = id
         return self
 
-    def _adiciona_catalogo_cursos(self):
+    def __adiciona_catalogo_cursos(self):
         catalogo = CatalogoCurso()
         catalogo.adiciona_curso(self)
 
@@ -71,32 +80,51 @@ class Curso(IModel):
         Returns:
             self
         """
-        if len(self._lista_materias) == 0:
-            self._lista_materias.append(materia)
+        if len(self.__list_disciplines) == 0:
+            self.__list_disciplines.append(materia)
         else:
-            for item in self._lista_materias:
+            for item in self.__list_disciplines:
                 if item.pega_nome() == materia.pega_nome():
                     raise MateriaInvalida(
                         "O curso não pode ter duas matérias com mesmo nome."
                     )
-            if len(self._lista_materias) < self._minimo_materia:
-                self._lista_materias.append(materia)
+            if len(self.__list_disciplines) < self.__minimum_disciplines:
+                self.__list_disciplines.append(materia)
+        self.__situacao = self.__calculate_status()
         return self
 
+    def __calculate_status(self):
+        if len(self.__list_disciplines) >= self.__minimum_disciplines:
+            status = SituacaoCurso.available.value
+        else:
+            status = SituacaoCurso.pending.value
+        return status
+
     def pega_lista_materias(self):
-        quantidade_materias = len(self._lista_materias)
-        if quantidade_materias == self._minimo_materia:
-            return self._lista_materias
-        delta = self._minimo_materia - quantidade_materias
+        quantidade_materias = len(self.__list_disciplines)
+        if quantidade_materias == self.__minimum_disciplines:
+            return self.__list_disciplines
+        delta = self.__minimum_disciplines - quantidade_materias
         raise Exception(f"Número mínimo que matérias é três. Adicione mais {delta}.")
+
+    def get_disciplines(self):
+        return self.pega_lista_materias()
 
     def pega_lista_alunos(self):
         return self._lista_alunos
 
+    def get_students(self):
+        return self.pega_lista_alunos()
+
+    def add_student(self, student):
+        self.adiciona_aluno(student)
+
     def adiciona_aluno(self, aluno):
-        if isinstance(aluno, Aluno):
+        if isinstance(aluno, student.Aluno):
             self._lista_alunos.append(aluno)
         else:
             raise Exception(
-                f"Não foi possível adicionar o aluno ao curso de {self.pega_nome()}."
+                "Não foi possível adicionar o aluno ao curso de {}.".format(
+                    self.pega_nome()
+                )
             )

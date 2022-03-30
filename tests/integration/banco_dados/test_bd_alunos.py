@@ -3,7 +3,9 @@ from src.model.aluno import Aluno
 
 
 class TestBdAlunos:
-    def test_aluno_criado_foi_salvo_banco_dados(self, setup_database_in_memory):
+    def test_should_create_student_in_database_when_asked_for(
+        self, setup_database_in_memory
+    ):
         id_ = 1
         expected = "student_name_1"
         actual = (

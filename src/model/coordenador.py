@@ -5,7 +5,7 @@ class Coordenador:
     def __init__(self):
         self._alunos = list()
 
-    def _pega_alunos(self, curso):
+    def __pega_alunos(self, curso):
         for aluno in curso.pega_lista_alunos():
             alunos = {
                 "nome": aluno.pega_nome(),
@@ -19,7 +19,7 @@ class Coordenador:
     def listar_detalhe_alunos(self, cursos):
         if isinstance(cursos, list):
             for meu_curso in cursos:
-                self._pega_alunos(meu_curso)
+                self.__pega_alunos(meu_curso)
         if isinstance(cursos, Curso):
-            self._pega_alunos(cursos)
+            self.__pega_alunos(cursos)
         return {"alunos": self._alunos}

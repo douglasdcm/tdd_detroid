@@ -78,15 +78,6 @@ class DaoAluno(DaoBase):
             student.define_id(id_)
             student.define_nome(name)
             student.define_cr(cr)
-
-            assocs = DaoInscricao(InscricaoAlunoCurso(), self.__db).get_by_student_id(
-                id_
-            )
-            for assoc in assocs:
-                student.inscreve_curso(
-                    DaoCurso(Curso(), self.__db).pega_por_id(assoc.get_course_id())
-                )
-
-            student.define_situacao(status)
+            student.set_status(status)
             students.append(student)
         return students

@@ -65,7 +65,9 @@ class BancoDados:
         for column in table["columns"]:
             names += column["name"].upper() + " "
             names += column["type"].upper() + " "
-            names += column["constraints"].upper() + ", "
+            if "constraints" in column:
+                names += column["constraints"].upper()
+            names += ", "
         query += names[:-2] + ");"
         self._run(query)
         return query

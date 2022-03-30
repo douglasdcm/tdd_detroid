@@ -13,7 +13,7 @@ def get_table_list():
     courses = {
         "name": tabelas.courses,
         "columns": [
-            {"name": "name", "type": "text", "constraints": "not null"},
+            {"name": "name", "type": "text"},
         ],
     }
     cursos = {

@@ -12,6 +12,7 @@ from tests.massa_dados import (
     materia_nome_2,
     materia_nome_3,
 )
+from src.model.inscricao_aluno_curso import InscricaoAlunoCurso
 from src.controller.controller import Controller
 from tests.helper import (
     populate_database,
@@ -101,10 +102,27 @@ def cria_curso_com_materias():
 
 
 @fixture
+def setup_available_course():
+    course = Curso("new course")
+    for discipline in ["d1", "d2", "d3"]:
+        course.atualiza_materias(Materia(discipline))
+    yield course
+    course = None
+
+
+@fixture
 def cria_curso_cancelado(cria_curso_com_materias):
     curso = cria_curso_com_materias
     curso.define_situacao("cancelado")
     yield curso
+
+
+@fixture
+def subscribe_student(setup_available_course):
+    subscription = InscricaoAlunoCurso()
+    subscription.subscribe(Aluno(), setup_available_course)
+    yield subscription
+    subscription = None
 
 
 @fixture

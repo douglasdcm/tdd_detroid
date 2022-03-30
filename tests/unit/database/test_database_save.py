@@ -37,22 +37,22 @@ class TestDatabaseSave:
         actual, _ = database.save(table, student)
         assert actual == expected
 
-    def test_should_insert_one_item_when_one_item_informed(
+    def test_should_insert_one_item_when_just_one__item_informed(
         self, setup_database_in_memory
     ):
-        student = [
+        data = [
             {
-                "name": "student_name",
+                "col_1": "val_1",
             }
         ]
         table = {
-            "name": "students",
-            "columns": [{"name": "name", "type": "text", "constraints": "not null"}],
+            "name": "table_test",
+            "columns": [{"name": "col_1", "type": "text"}],
         }
         database = BancoDados(setup_database_in_memory)
         database.create_table(table)
-        expected = 'insert into students (name) values ("student_name")'
-        actual, _ = database.save(table["name"], student)
+        expected = 'insert into table_test (col_1) values ("val_1")'
+        actual, _ = database.save(table["name"], data)
         assert actual == expected
 
     def test_should_save_student_list_when_the_valid_list_informed(self, setup):

@@ -1,20 +1,113 @@
-import pytest
+from pytest import raises
 from src.model.curso import Curso
 from src.model.unidade import Unidade
 from src.model.gerenciador_curso import GerenciadorCurso
 from src.model.materia import Materia
-from src.enums.enums import SituacaoCurso
-from tests.massa_dados import unidade_nome_1, unidade_nome_2, curso_nome_1, \
-    curso_nome_2
+from tests.massa_dados import unidade_nome_1, curso_nome_1, curso_nome_2
 
 
 class TestCurso:
+    def test_should_ignore_status_when_invalid(self, setup_available_course):
+        status = "unavailable"
+        expected = "available"
+        course = setup_available_course
+        course.define_situacao(status)
+        actual = course.pega_situacao()
+        assert actual == expected
 
-    def test_curso_pode_ser_cancelado(self, cria_curso_com_materias):
-        expected = SituacaoCurso.cancelado
-        curso = cria_curso_com_materias
-        curso.define_situacao(SituacaoCurso.cancelado)
-        actual = curso.pega_situacao()
+    def test_shouldnt_pending_course_be_available_when_hasnt_minium_disciplines_(self):
+        new_status = "available"
+        expected = "pending"
+        course = Curso()
+        course.define_situacao(new_status)
+        actual = course.pega_situacao()
+        assert actual == expected
+
+    def test_shouldnt_available_course_be_pending_when_has_minium_disciplines_(
+        self, setup_available_course
+    ):
+        new_status = "pending"
+        expected = "available"
+        course = setup_available_course
+        course.define_situacao(new_status)
+        actual = course.pega_situacao()
+        assert actual == expected
+
+    def test_shoulnt_cancelled_course_be_pending_when_has_minium_disciplines_(
+        self, setup_available_course
+    ):
+        status = "cancelado"
+        new_status = "pending"
+        expected = status
+        course = setup_available_course
+        course.define_situacao(status)
+        course.define_situacao(new_status)
+        actual = course.pega_situacao()
+        assert actual == expected
+
+    def test_shouldnt_cancelled_course_be_available_when_hasnt_minium_disciplines_(
+        self,
+    ):
+        status = "cancelado"
+        new_status = "available"
+        expected = status
+        course = Curso()
+        course.define_situacao(status)
+        course.define_situacao(new_status)
+        actual = course.pega_situacao()
+        assert actual == expected
+
+    def test_should_cancelled_courser_be_pending_when_hasnt_minimum_disciplines(self):
+        status = "cancelado"
+        new_status = "pending"
+        expected = new_status
+        course = Curso()
+        course.define_situacao(status)
+        course.define_situacao(new_status)
+        actual = course.pega_situacao()
+        assert actual == expected
+
+    def test_should_cancelled_course_be_available_when_has_minimun_disciplines(
+        self, setup_available_course
+    ):
+        status = "cancelado"
+        new_status = "available"
+        expected = new_status
+        course = setup_available_course
+        course.define_situacao(status)
+        course.define_situacao(new_status)
+        actual = course.pega_situacao()
+        assert actual == expected
+
+    def test_shouldnt_define_status_as_available_when_hasnt_minimun_disciplines(self):
+        status = "available"
+        expected = "pending"
+        course = Curso()
+        course.define_situacao(status)
+        actual = course.pega_situacao()
+        assert actual == expected
+
+    def test_should_status_be_available_when_it_has_minimun_disciplines(
+        self, setup_available_course
+    ):
+        expected = "available"
+        course = setup_available_course
+        actual = course.pega_situacao()
+        assert actual == expected
+
+    def test_should_set_course_status_as_pending_when_doesnt_have_minimun_disciplines(
+        self,
+    ):
+        expected = "pending"
+        actual = Curso().pega_situacao()
+        assert actual == expected
+
+    def test_should_be_cancelled_when_asked_for_anytime(self, setup_available_course):
+        status = "cancelado"
+        expected = status
+        course = setup_available_course
+        course.define_situacao(status)
+        actual = course.pega_situacao()
         assert actual == expected
 
     def test_cursos_devem_ter_nomes_diferentes_se_mesma_unidade(self):
@@ -23,7 +116,7 @@ class TestCurso:
         curso_2 = Curso(curso_nome_1)
         expected = "Curso já existente na unidade {}".format(unidade_nome_1)
         curso_1.define_unidade(unidade)
-        with pytest.raises(Exception, match=expected):
+        with raises(Exception, match=expected):
             curso_2.define_unidade(unidade)
 
     def test_cursos_podem_ter_nomes_iguais_se_unidades_diferentes(self):
@@ -36,29 +129,25 @@ class TestCurso:
         actual = curso_1.pega_unidade()
         assert actual == expected
 
-
-    def setup_method(self, method):
-        self.curso = Curso("Administra")
-        self.curso.atualiza_materias(Materia("Política"))
-        self.curso.atualiza_materias(Materia("Trabalho"))
-        self.curso.atualiza_materias(Materia("Pessoas"))
-
-    def teardown_method(self, method):
-        self.curso = None
-
     def test_nome_curso_deve_ter_no_maximo_dez_letras(self):
-        with pytest.raises(Exception, match=f"Nome do curso deve ter no máximao 10 letras."):
+        with raises(Exception, match=f"Nome do curso deve ter no máximao 10 letras."):
             Curso("AAAAAAAAAA_")
 
-    def test_curso_nao_deve_adicionar_aluno_sem_nome(self):
-        with pytest.raises(Exception, match=f"Não foi possível adicionar o aluno ao curso de {self.curso.pega_nome()}"):
-            self.curso.adiciona_aluno("")
+    def test_curso_nao_deve_adicionar_aluno_sem_nome(self, setup_available_course):
+        course = setup_available_course
+        with raises(
+            Exception,
+            match=f"Não foi possível adicionar o aluno ao curso de {course.pega_nome()}",
+        ):
+            course.adiciona_aluno("")
 
     def test_curso_deve_ter_todas_materias_com_nomes_diferentes(self):
         curso = Curso("mat")
         curso.atualiza_materias(Materia("alg"))
         curso.atualiza_materias(Materia("calc"))
-        with pytest.raises(Exception, match="O curso não pode ter duas matérias com mesmo nome."):
+        with raises(
+            Exception, match="O curso não pode ter duas matérias com mesmo nome."
+        ):
             curso.atualiza_materias(Materia("alg"))
 
     def test_curso_com_quantidade_materia_diferente_tres_retorna_uma_excecao(self):
@@ -72,7 +161,9 @@ class TestCurso:
         materia_2 = Materia("bio")
         cursos[0].atualiza_materias(materia_1)
         cursos[0].atualiza_materias(materia_2)
-        with pytest.raises(Exception, match="Número mínimo que matérias é três. Adicione mais 1."):
+        with raises(
+            Exception, match="Número mínimo que matérias é três. Adicione mais 1."
+        ):
             cursos[0].pega_lista_materias()
 
     def test_os_cursos_podem_ter_nomes_iguais(self):
@@ -119,6 +210,6 @@ class TestCurso:
         self.gerenciador_curso.atualiza_cursos(self.curso)
         self.gerenciador_curso.atualiza_cursos(self.curso)
         # deve ser ignorado
-        self.gerenciador_curso.atualiza_cursos(self.curso)    
+        self.gerenciador_curso.atualiza_cursos(self.curso)
         actual = len(self.gerenciador_curso.pega_lista_cursos())
         assert actual == expected

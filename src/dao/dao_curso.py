@@ -1,11 +1,15 @@
+from src.dao.dao_inscricao import DaoInscricao
 from src.model.curso import Curso
 from src.dao.dao_base import DaoBase
 from src.model.banco_dados import BancoDados
+from src.model.inscricao_aluno_curso import InscricaoAlunoCurso
 from src.tabelas import cursos
 from src.dao.dao_associa_curso_materia import DaoAssociaCursoMateria
 from src.model.associa_curso_materia import AssociaCursoMateria
 from src.model.materia import Materia
 from src.dao.dao_materia import DaoMateria
+from src.dao import dao_aluno
+from src.model.aluno import Aluno
 
 
 class DaoCurso(DaoBase):
@@ -62,11 +66,19 @@ class DaoCurso(DaoBase):
         (id_, name) = row
         self.__course.define_id(id_)
 
-        assocs = DaoAssociaCursoMateria(
+        assocs_course_discipline = DaoAssociaCursoMateria(
             AssociaCursoMateria(Curso(), Materia()), self.__db
         ).get_by_course_id(id_)
-        for assoc in assocs:
+        for assoc in assocs_course_discipline:
             self.__course.atualiza_materias(
                 DaoMateria(Materia(), self.__db).pega_por_id(assoc.pega_materia_id())
+            )
+        assocs_course_student = DaoInscricao(
+            InscricaoAlunoCurso(), self.__db
+        ).get_by_course_id(id_)
+
+        for assoc in assocs_course_student:
+            self.__course.adiciona_aluno(
+                dao_aluno.DaoAluno(Aluno(), self.__db).get_by_id(assoc.get_student_id())
             )
         return self.__course

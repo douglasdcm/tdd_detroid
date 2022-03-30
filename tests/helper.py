@@ -74,10 +74,16 @@ def populate_database(connection):
     assoc_aluno_cursos = [
         {"aluno_id": 1, "curso_id": 1},
     ]
+    general_coordinator = [
+        {
+            "_": "coord_1",
+        },
+    ]
     db.save(tabelas.alunos, students)
     db.save(tabelas.materias, disciplines)
     db.save(tabelas.courses, courses)
     db.save(tabelas.cursos, cursos)
     db.save(tabelas.associa_curso_materia, assoc_cursos_materia)
     db.save(tabelas.inscricao_aluno_curso, assoc_aluno_cursos)
+    db.save(tabelas.coordenador_geral, general_coordinator)
     return connection
