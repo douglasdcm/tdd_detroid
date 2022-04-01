@@ -1,2 +1,0 @@
-class IModel:
-    pass

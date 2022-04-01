@@ -1,6 +1,0 @@
-alunos = "alunos"
-cursos = "cursos"
-inscricao_aluno_curso = "inscricao_aluno_curso"
-associa_curso_materia = "associa_curso_materia"
-materias = "materias"
-coordenador_geral = "coordenador_geral"

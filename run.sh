@@ -1,1 +1,1 @@
-pytest --html=report.html --self-contained-html
+python -m pytest --html=report.html --self-contained-html
