@@ -9,12 +9,12 @@ Definição de Feito (Definition of Done):
 3. Os dados estão sendo salvos no banco de dados
 # Fase 1
 Construção das funções básicas do sistema
-## Entrega 1 - 
+## OK Entrega 1
 1. OK Cada aluno terá um controle de notas chamado "coeficiente de rendimento" (CR)
 2. OK O CR é a média das notas do aluno nas disciplinas já cursadas
 3. OK O aluno é considerado aprovado na universidade se seu CR for acima ou igual a 7 (sete) ao final do curso
 4. OK Caso o aluno curse a mesma matéria mais de uma vez, a maior nota será considerada no cálculo do CR
-## Entrega 2 -  
+## OK Entrega 2
 1. OK A faculdade terá inicialmente 3 cursos com 3 matérias cada
 2. OK As matérias de cada curso podem ter nomes iguais, mas serão diferenciadas pelo número identificador único (niu)
 ## Entrega 3 - 
