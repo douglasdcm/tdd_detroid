@@ -9,41 +9,41 @@ Definição de Feito (Definition of Done):
 3. Os dados estão sendo salvos no banco de dados
 # Fase 1
 Construção das funções básicas do sistema
-## Entrega 1 - finalizada
+## Entrega 1
 1. Cada aluno terá um controle de notas chamado "coeficiente de rendimento" (CR)
 2. O CR é a média das notas do aluno nas disciplinas já cursadas
 3. O aluno é considerado aprovado na universidade se seu CR for acima ou igual a 7 (sete) ao final do curso
 4. Caso o aluno curse a mesma matéria mais de uma vez, a maior nota será considerada no cálculo do CR
-## Entrega 2 - finalizada 
+## Entrega 2 
 1. A faculdade terá inicialmente 3 cursos com 3 matérias cada
 2. As matérias de cada curso podem ter nomes iguais, mas serão diferenciadas pelo número identificador único (niu)
-## Entrega 3 - finalizado
+## Entrega 3
 1. O sistema deve calcular a situação do aluno levando em consideração as matérias cursadas e o total de matérias de cada curso
 2. O aluno só poderá cursar matérias do seu curso
 3. Os cursos devem ter identificador único e nome
 4. O nome dos curso pode ser igual, mas o identificador único de cada curso deve ser diferente
 5. Um curso não pode ter duas matérias com mesmo nome, mesmo que o niu seja diferente
-## Entrega 4 - finalizado
+## Entrega 4
 1. A nota máxima de um aluno em uma matéria é 10
 2. A nota mínima de um aluno em uma matéria é 0
-## Entrega 5 - finalizado
+## Entrega 5
 1. O aluno pode trancar o curso e neste caso não pode atualizar suas notas ou matérias cursadas
 2. O coordenador do curso pode listar os alunos, notas em cada matéria e cr dos alunos
 3. O Aluno pode destrancar o curso e sua situação volta para a anterior
 4. Os alunos devem ter nomes
-## Entrega 6 - finalizado
+## Entrega 6
 3. O coordenador geral pode listar de todos os curso os alunos e notas em cada matéria e cr de cada aluno
 ## Entrega 7
 1. O coordenador do curso pode eliminar matérias e neste caso os alunos não podem atualizar suas notas nesta matéria
 2. Os alunos só podem atualizar suas notas na matérias em que estão inscritos
-## Entrega 8 - finalizado
+## Entrega 8
 1. O nome dos cursos e materias tem que ter no máximo 10 letras
 2. Os cursos podem ter nomes iguais se forem de unidades diferentes
-## Entrega 9 - finalizada
+## Entrega 9
 1. O aluno só pode se increver em um curso
 2. O coordenador pode ser corrdenador de mais de um curso
 3. O coordenador pode listar os alunos, materias e notas, e crs de todos os seus cursos (coordenador de mais de um curso)
-## Entrega 10 - finalizado
+## Entrega 10
 1. O curso pode ser cancelado
 2. Os cursos cancelados não podem aceitar incrições de alunos
 3. Os cursos cancelados não pode ter coordenadores
@@ -61,7 +61,7 @@ Construção das funções básicas do sistema
 1. O Aluno só é aprovado se tirar a nota mínima em todas as matérias do curso, mesmo se seu cr seja acima do mínimo
 # Fase 2
 Construção da interface de comandos 
-## Entrega 1 - fianlizada
+## Entrega 1
 1. O usuário deve ser capaz de criar alunos com informações básicas
 ## Entrega 2
 1. O usuário deve ser capaz de inscrever o aluno em um curso
@@ -71,7 +71,7 @@ Construção da interface de comandos
 2. O admnistrador e somente ele deve ser capaz de listar todos os cursos com todas as informações disponíveis
 3. O administrador e somente ele deve ser capaz de listar a relação de alunos por curso
 4. O administrador e somente ele deve ser capaz de listar a relação de matérias por aluno
-## Entrega 4 - finalizado
+## Entrega 4
 1. O aluno deve ser capaz de listar todas as matérias somente de seu curso
 2. O aluno deve ser capaz de listar todas as suas matérias cursadas
 3. O aludo deve ser capaz de listar as matérias faltantes
