@@ -1,4 +1,4 @@
-from sys import argv
+import click
 from src.cursos import Cursos
 from src.banco_dados import BancoDados as bd
 from src.config import NOME_BANCO
@@ -7,21 +7,21 @@ from src.banco_dados import Tabela
 conn = bd(NOME_BANCO)
 
 
-def main(*args):
+@click.group()
+def cli():
     cursos = Tabela(Cursos)
     cursos.colunas = "nome"
     conn.cria_tabela(cursos)
 
-    linha_cmd = args[0]
-    comando = linha_cmd[1]
-    comandos = {"define_curso": define_curso}
-    comandos[comando](linha_cmd[2:])
 
-
-def define_curso(args):
-    Cursos(conn).cria(args[1])
-    print(f"Curso definido: id {args[0]}, nome {args[1]}")
+@cli.command()
+@click.option("--id", required=True, type=int, help="Identificador do curso")
+@click.option("--nome", required=True, help="Nome do curso")
+def define_curso(id, nome):
+    Cursos(conn).cria(nome)
+    # TODO definir apenas o nome e pegar o id do banco
+    print(f"Curso definido: id {id}, nome {nome}")
 
 
 if __name__ == "__main__":
-    main(argv)
+    cli()
