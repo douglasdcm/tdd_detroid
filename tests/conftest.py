@@ -9,5 +9,8 @@ def setup():
     conn = bd(NOME_BANCO)
     tabela = Tabela(Cursos)
     tabela.colunas = "nome"
-    conn.deleta_tabela(Cursos)
+    try:
+        conn.deleta_tabela(Cursos)
+    except:
+        pass
     conn.cria_tabela(tabela)
