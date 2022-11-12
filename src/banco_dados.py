@@ -37,12 +37,23 @@ class BancoDados:
         self.__execute(query)
 
     def cria(self, tipo, item):
+        """
+        :item dicionário com os compos e valores do registro
+            por exemplo: item = {"nome": "Ana", "idade": 25}
+        """
         for k, v in item.items():
             if isinstance(v, str):
                 v = f"'{v}'"
             query = f"insert into {tipo.__name__.lower()} ('{k.lower()}') values ({v})"
             self.__execute(query)
         return True
+
+    def lista_maximo(self, tipo):
+        tabela_ = tipo.__name__.lower()
+        query = "select * from {} where id = ( select max(id) from {} );".format(
+            tabela_, tabela_
+        )
+        return self.__execute(query)
 
     def lista_tudo(self, tipo):
         query = f"select * from {tipo.__name__.lower()}"

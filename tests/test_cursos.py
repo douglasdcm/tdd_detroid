@@ -8,3 +8,12 @@ def test_cursos_cria():
     cursos.cria("any")
     assert cursos.lista(1).nome == "any"
     assert len(cursos.lista_tudo()) == 1
+
+
+def test_salva_cursos_no_banco():
+    conn = bd(NOME_BANCO)
+    cursos = Cursos(conn)
+    cursos.cria("any")
+    assert len(cursos.lista_tudo()) == 1
+    assert cursos.lista(1).nome == "any"
+    assert len(conn.lista(Cursos, 1)) == 1

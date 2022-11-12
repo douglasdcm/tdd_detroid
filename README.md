@@ -18,14 +18,14 @@ Construção das funções básicas do sistema
 7. O sistema deve calcular a situação do aluno levando em consideração as matérias cursadas e o total de matérias de cada curso
 8. O aluno só poderá cursar matérias do seu curso
 9. ~~Os cursos devem ter identificador único e nome~~
-10. O nome dos curso pode ser igual, mas o identificador único de cada curso deve ser diferente
+10. ~~O nome dos curso pode ser igual, mas o identificador único de cada curso deve ser diferente~~
 11. Um curso não pode ter duas matérias com mesmo nome, mesmo que o niu seja diferente
 12. A nota máxima de um aluno em uma matéria é 10
 13. A nota mínima de um aluno em uma matéria é 0
 14. O aluno pode trancar o curso e neste caso não pode atualizar suas notas ou matérias cursadas
 15. O coordenador do curso pode listar os alunos, notas em cada matéria e cr dos alunos
 16. O Aluno pode destrancar o curso e sua situação volta para a anterior
-17. Os alunos devem ter nomes
+17. ~~Os alunos devem ter nomes~~
 18. O coordenador geral pode listar de todos os curso os alunos e notas em cada matéria e cr de cada aluno
 19. O coordenador do curso pode eliminar matérias e neste caso os alunos não podem atualizar suas notas nesta matéria
 20. Os alunos só podem atualizar suas notas na matérias em que estão inscritos
