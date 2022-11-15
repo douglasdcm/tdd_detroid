@@ -1,6 +1,7 @@
 from src.cursos import Cursos
 from src.banco_dados import BancoDados as bd
 from tests.config import NOME_BANCO
+from src.manager import Tipos
 
 
 def test_cursos_cria():
@@ -16,4 +17,4 @@ def test_salva_cursos_no_banco():
     cursos.cria("any")
     assert len(cursos.lista_tudo()) == 1
     assert cursos.lista(1).nome == "any"
-    assert len(conn.lista(Cursos, 1)) == 1
+    assert len(conn.lista(Tipos.CURSOS.value, 1)) == 1

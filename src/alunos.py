@@ -1,4 +1,5 @@
 from src.banco_dados import BancoDados
+from src.manager import Tipos
 
 
 class Alunos:
@@ -19,14 +20,14 @@ class Alunos:
 
     def cria(self, nome):
         item = {"nome": nome}
-        self._conn.cria(Alunos, item)
+        self._conn.cria(Tipos.ALUNOS.value, item)
         return True
 
     def lista_tudo(self):
-        return self._conn.lista_tudo(Alunos)
+        return self._conn.lista_tudo(Tipos.ALUNOS.value)
 
     def lista(self, id_):
-        resultado = self._conn.lista(Alunos, id_)[0]
+        resultado = self._conn.lista(Tipos.ALUNOS.value, id_)[0]
         aluno = self.Aluno()
         aluno.nome = resultado[1]
         return aluno
