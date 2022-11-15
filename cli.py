@@ -2,28 +2,40 @@ import click
 from src.cursos import Cursos
 from src.banco_dados import BancoDados as bd
 from src.config import NOME_BANCO
-from src.banco_dados import Tabela
 from src.alunos import Alunos
+from src.materias import Materias
+from src.utils import create_tables
+from src.manager import Tipos
 
 conn = bd(NOME_BANCO)
 
 
 @click.group()
 def cli():
-    cursos = Tabela(Cursos)
-    cursos.colunas = "nome"
-    conn.cria_tabela(cursos)
+    # do nothing #
+    pass
 
-    alunos = Tabela(Alunos)
-    alunos.colunas = "nome"
-    conn.cria_tabela(alunos)
+
+@cli.command()
+def init_bd():
+    create_tables(conn)
+    print("Banco de dados inicializado")
+
+
+@cli.command()
+@click.option("--nome", required=True, help="Nome da materia")
+@click.option("--curso", type=int, required=True, help="Identificador do curso")
+def define_materia(nome, curso):
+    Materias(conn).cria(nome, curso)
+    id_ = conn.lista_maximo(Tipos.MATERIAS.value)[0][0]
+    print(f"Materia definida: id {id_}, nome {nome}")
 
 
 @cli.command()
 @click.option("--nome", required=True, help="Nome do aluno")
 def define_aluno(nome):
     Alunos(conn).cria(nome)
-    id_ = conn.lista_maximo(Alunos)[0][0]
+    id_ = conn.lista_maximo(Tipos.ALUNOS.value)[0][0]
     print(f"Aluno definido: id {id_}, nome {nome}")
 
 
@@ -31,7 +43,7 @@ def define_aluno(nome):
 @click.option("--nome", required=True, help="Nome do curso")
 def define_curso(nome):
     Cursos(conn).cria(nome)
-    id_ = conn.lista_maximo(Cursos)[0][0]
+    id_ = conn.lista_maximo(Tipos.CURSOS.value)[0][0]
     print(f"Curso definido: id {id_}, nome {nome}")
 
 

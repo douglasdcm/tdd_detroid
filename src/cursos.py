@@ -1,5 +1,4 @@
-from src.banco_dados import BancoDados as bd
-from src.config import NOME_BANCO
+from src.manager import Manager, Tipos
 
 
 class Cursos:
@@ -25,19 +24,21 @@ class Cursos:
             self._nome = nome
 
     def __init__(self, conn) -> None:
-        self.__conn = conn
+        self._conn = conn
+        self._manager = Manager(conn)
 
     def cria(self, nome):
-        item = {
-            "nome": nome,
-        }
-        return self.__conn.cria(Cursos, item)
+        if self._manager.pode_criar_curso():
+            item = {
+                "nome": nome,
+            }
+            return self._conn.cria(Tipos.CURSOS.value, item)
 
     def lista_tudo(self):
-        return self.__conn.lista_tudo(Cursos)
+        return self._conn.lista_tudo(Tipos.CURSOS.value)
 
     def lista(self, id_):
-        result = self.__conn.lista(Cursos, id_)[0]
+        result = self._conn.lista(Tipos.CURSOS.value, id_)[0]
         curso = self.Curso()
         curso.id_ = result[0]
         curso.nome = result[1]
