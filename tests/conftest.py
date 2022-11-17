@@ -1,17 +1,25 @@
-from src.banco_dados import BancoDados as bd
 from pytest import fixture
 from tests.config import NOME_BANCO
-from src.utils import create_tables
+from src.utils import limpa_tabelas
+from src.sql_client import SqlClient
+from src.cursos import Cursos
+from src.materias import Materias
+from src.alunos import Alunos
 
 
-def __create_tables(conn):
-    try:
-        create_tables(conn)
-    except:
-        pass
+@fixture
+def popula_banco_dados(scope="function"):
+    conn = SqlClient(NOME_BANCO)
+    limpa_tabelas(conn)
+    Cursos(conn).cria(nome="any_1")
+    Cursos(conn).cria(nome="any_2")
+    Cursos(conn).cria(nome="any_3")
+    for i in range(3):
+        Materias(conn).cria(nome=f"any{i}", curso_id=i)
+    Alunos(conn).cria(nome="any")
 
 
 @fixture(scope="function", autouse=True)
 def setup_bando_dados():
-    conn = bd(NOME_BANCO)
-    __create_tables(conn)
+    conn = SqlClient(NOME_BANCO)
+    limpa_tabelas(conn)
