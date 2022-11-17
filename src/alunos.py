@@ -1,5 +1,12 @@
-from src.banco_dados import BancoDados
-from src.manager import Tipos
+from sqlalchemy import Column, Integer, String
+from src.sql_client import Base, SqlClient
+
+
+class Aluno(Base):
+    __tablename__ = "alunos"
+
+    id = Column(Integer, primary_key=True)
+    nome = Column(String)
 
 
 class Alunos:
@@ -15,19 +22,16 @@ class Alunos:
         def nome(self, valor):
             self._nome = valor
 
-    def __init__(self, conn: BancoDados) -> None:
+    def __init__(self, conn: SqlClient) -> None:
         self._conn = conn
 
     def cria(self, nome):
-        item = {"nome": nome}
-        self._conn.cria(Tipos.ALUNOS.value, item)
+        aluno = Aluno(nome=nome)
+        self._conn.cria(aluno)
         return True
 
     def lista_tudo(self):
-        return self._conn.lista_tudo(Tipos.ALUNOS.value)
+        return self._conn.lista_tudo(Aluno)
 
     def lista(self, id_):
-        resultado = self._conn.lista(Tipos.ALUNOS.value, id_)[0]
-        aluno = self.Aluno()
-        aluno.nome = resultado[1]
-        return aluno
+        return self._conn.lista(Aluno, id_)

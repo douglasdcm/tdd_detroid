@@ -1,4 +1,22 @@
-from src.manager import Manager, Tipos
+from sqlalchemy.orm import Query
+from sqlalchemy import Column, Integer, String
+from src.sql_client import Base
+import src.materias
+import src.cursos
+from src.sql_client import SqlClient
+from sqlalchemy.orm import relationship
+
+
+class ErroCurso(Exception):
+    pass
+
+
+class Curso(Base):
+    __tablename__ = "cursos"
+
+    id = Column(Integer, primary_key=True)
+    nome = Column(String)
+    children = relationship("Materia", back_populates="parent")
 
 
 class Cursos:
@@ -23,23 +41,33 @@ class Cursos:
         def nome(self, nome):
             self._nome = nome
 
-    def __init__(self, conn) -> None:
+    def __init__(self, conn: SqlClient) -> None:
         self._conn = conn
-        self._manager = Manager(conn)
+
+    def __valida_3_cursos(self):
+        query_cursos = Query([src.cursos.Curso])
+
+        resultado = self._conn.conta(query_cursos)
+        if resultado < 3:
+            return
+
+        query_materias = Query([src.materias.Materia]).group_by(
+            src.materias.Materia.curso
+        )
+        resultado = self._conn.conta(query_materias)
+
+        if resultado < 3:
+            raise ErroCurso(
+                "Necessários 3 cursos com 3 três matérias para se criar novos cursos"
+            )
 
     def cria(self, nome):
-        if self._manager.pode_criar_curso():
-            item = {
-                "nome": nome,
-            }
-            return self._conn.cria(Tipos.CURSOS.value, item)
+        self.__valida_3_cursos()
+        curso = Curso(nome=nome)
+        return self._conn.cria(curso)
 
     def lista_tudo(self):
-        return self._conn.lista_tudo(Tipos.CURSOS.value)
+        return self._conn.lista_tudo(Curso)
 
     def lista(self, id_):
-        result = self._conn.lista(Tipos.CURSOS.value, id_)[0]
-        curso = self.Curso()
-        curso.id_ = result[0]
-        curso.nome = result[1]
-        return curso
+        return self._conn.lista(Curso, id_)

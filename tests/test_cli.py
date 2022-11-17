@@ -1,23 +1,25 @@
 import subprocess
-from src.cursos import Cursos
-from src.banco_dados import BancoDados as bd
+from src.cursos import Cursos, Curso
 from src.config import NOME_BANCO
-from pytest import fixture, raises
-from src.alunos import Alunos
-from src.materias import Materias
-from src.manager import Tipos
+from pytest import fixture
+from src.alunos import Alunos, Aluno
+from src.materias import Materias, Materia
+import uuid
+from src.sql_client import SqlClient
 
 
 @fixture
 def setup():
+    conn = SqlClient(NOME_BANCO)
     subprocess.Popen(
         ["python", "cli.py", "init-bd"],
         stdout=subprocess.PIPE,
     ).communicate()
+    yield conn
 
 
-def test_init_banco_dados():
-    conn = bd(NOME_BANCO)
+def test_init_banco_dados(setup):
+    conn = setup
     alunos = Alunos(conn)
 
     temp = subprocess.Popen(
@@ -30,29 +32,32 @@ def test_init_banco_dados():
 
 
 def __cria_curso():
+    nome_aleatorio = str(uuid.uuid4())
+
     subprocess.Popen(
-        ["python", "cli.py", "define-curso", "--nome", f"any"],
+        ["python", "cli.py", "define-curso", "--nome", f"{nome_aleatorio}"],
         stdout=subprocess.PIPE,
     ).communicate()
 
 
-def __cria_materia(curso):
+def __cria_materia(curso_id):
+    nome_aleatorio = str(uuid.uuid4())
     subprocess.Popen(
         [
             "python",
             "cli.py",
             "define-materia",
             "--nome",
-            f"any",
+            f"{nome_aleatorio}",
             "--curso",
-            f"{curso}",
+            f"{curso_id}",
         ],
         stdout=subprocess.PIPE,
     ).communicate()
 
 
 def test_cli_tres_cursos_com_tres_materias_cada(setup):
-    conn = bd(NOME_BANCO)
+    conn = setup
     cursos = Cursos(conn)
     materias = Materias(conn)
     __cria_curso()
@@ -69,15 +74,11 @@ def test_cli_tres_cursos_com_tres_materias_cada(setup):
 
 
 def test_cli_materia_nome_igual_mas_id_diferente(setup):
-    conn = bd(NOME_BANCO)
+    conn = setup
     __cria_curso()
     __cria_curso()
     __cria_curso()
     materias = Materias(conn)
-    subprocess.Popen(
-        ["python", "cli.py", "define-curso", "--nome", "any"],
-        stdout=subprocess.PIPE,
-    ).communicate()
     subprocess.Popen(
         ["python", "cli.py", "define-materia", "--nome", "any", "--curso", "1"],
         stdout=subprocess.PIPE,
@@ -93,14 +94,14 @@ def test_cli_materia_nome_igual_mas_id_diferente(setup):
     assert materias.lista(2).nome == "other"
     assert materias.lista(2).curso == 1
     # verifica banco de dados
-    assert len(conn.lista_tudo(Tipos.MATERIAS.value)) == 2
-    assert conn.lista(Tipos.MATERIAS.value, 1) == [(1, "any", 1)]
-    assert conn.lista(Tipos.MATERIAS.value, 2) == [(2, "other", 1)]
+    assert len(conn.lista_tudo(Materia)) == 2
+    assert conn.lista(Materia, 1).nome == "any"
+    assert conn.lista(Materia, 2).nome == "other"
     assert f"Materia definida: id 2, nome other" in output
 
 
 def test_cli_aluno_deve_ter_nome(setup):
-    conn = bd(NOME_BANCO)
+    conn = setup
     alunos = Alunos(conn)
     subprocess.Popen(
         ["python", "cli.py", "define-aluno", "--nome", "any"],
@@ -116,14 +117,14 @@ def test_cli_aluno_deve_ter_nome(setup):
     assert alunos.lista(1).nome == "any"
     assert alunos.lista(2).nome == "other"
     # verifica banco de dados
-    assert len(conn.lista_tudo(Tipos.ALUNOS.value)) == 2
-    assert conn.lista(Tipos.ALUNOS.value, 1) == [(1, "any")]
-    assert conn.lista(Tipos.ALUNOS.value, 2) == [(2, "other")]
+    assert len(conn.lista_tudo(Aluno)) == 2
+    assert conn.lista(Aluno, 1).nome == "any"
+    assert conn.lista(Aluno, 2).nome == "other"
     assert f"Aluno definido: id 2, nome other" in output
 
 
 def test_cli_curso_com_nome_e_id(setup):
-    conn = bd(NOME_BANCO)
+    conn = SqlClient(NOME_BANCO)
     cursos = Cursos(conn)
     subprocess.Popen(
         ["python", "cli.py", "define-curso", "--nome", "any"],
@@ -139,7 +140,7 @@ def test_cli_curso_com_nome_e_id(setup):
     assert cursos.lista(1).nome == "any"
     assert cursos.lista(2).nome == "other"
     # verifica banco de dados
-    assert len(conn.lista_tudo(Tipos.CURSOS.value)) == 2
-    assert conn.lista(Tipos.CURSOS.value, 1) == [(1, "any")]
-    assert conn.lista(Tipos.CURSOS.value, 2) == [(2, "other")]
+    assert len(conn.lista_tudo(Curso)) == 2
+    assert conn.lista(Curso, 1).nome == "any"
+    assert conn.lista(Curso, 2).nome == "other"
     assert f"Curso definido: id 2, nome other" in output

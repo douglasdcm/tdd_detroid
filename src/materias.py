@@ -1,5 +1,21 @@
-from src.banco_dados import BancoDados as bd
-from src.manager import Manager, Tipos
+from sqlalchemy import Column, Integer, String, ForeignKey
+from src.sql_client import Base
+from sqlalchemy.orm import Query
+import src.cursos
+from sqlalchemy.orm import relationship
+
+
+class Materia(Base):
+    __tablename__ = "materias"
+
+    id = Column(Integer, primary_key=True)
+    nome = Column(String)
+    curso = Column(Integer, ForeignKey("cursos.id", back_populates="children"))
+    parent = relationship("Curso", back_populates="children")
+
+
+class ErroMateria(Exception):
+    pass
 
 
 class Materias:
@@ -24,25 +40,32 @@ class Materias:
         def nome(self, valor):
             self._nome = valor
 
-    def __init__(self, conn: bd) -> None:
+    def __init__(self, conn) -> None:
         self._conn = conn
-        self._manager = Manager(conn)
 
-    def cria(self, nome, curso):
+    def __eh_materia_unica(self, nome, curso_id):
+        query = Query([Materia]).filter(Materia.nome == nome, Materia.curso == curso_id)
+        if self._conn.roda_query(query):
+            raise ErroMateria("O curso já possui uma matéria com este nome")
+        return True
+
+    def __existem_3_cursos(self):
+        if len(self._conn.lista_tudo(src.cursos.Curso)) < 3:
+            raise ErroMateria("Necessários 3 cursos para se criar a primeira matéria")
+        return True
+
+    def cria(self, nome, curso_id: int):
         """
         :nome nome da matéria
         :curso curso associado à matéria
         """
-        if self._manager.pode_criar_materia():
-            item = {"nome": nome, "curso": curso}
-            self._conn.cria(Tipos.MATERIAS.value, item)
+        self.__eh_materia_unica(nome, curso_id)
+        self.__existem_3_cursos()
+        materia = Materia(nome=nome, curso=curso_id)
+        self._conn.cria(materia)
 
     def lista_tudo(self):
-        return self._conn.lista_tudo(Tipos.MATERIAS.value)
+        return self._conn.lista_tudo(Materia)
 
     def lista(self, id_):
-        result = self._conn.lista(Tipos.MATERIAS.value, id_)[0]
-        materia = self.Materia()
-        materia.nome = result[1]
-        materia.curso = result[2]
-        return materia
+        return self._conn.lista(Materia, id_)

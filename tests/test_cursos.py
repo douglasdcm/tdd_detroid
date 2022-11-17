@@ -1,20 +1,12 @@
-from src.cursos import Cursos
-from src.banco_dados import BancoDados as bd
 from tests.config import NOME_BANCO
-from src.manager import Tipos
+from src.cursos import Curso
+from src.sql_client import SqlClient
 
 
 def test_cursos_cria():
-    cursos = Cursos(conn=bd(NOME_BANCO))
-    cursos.cria("any")
-    assert cursos.lista(1).nome == "any"
-    assert len(cursos.lista_tudo()) == 1
+    curso = Curso(nome="any")
+    sql = SqlClient(NOME_BANCO)
+    sql.cria(curso)
 
-
-def test_salva_cursos_no_banco():
-    conn = bd(NOME_BANCO)
-    cursos = Cursos(conn)
-    cursos.cria("any")
-    assert len(cursos.lista_tudo()) == 1
-    assert cursos.lista(1).nome == "any"
-    assert len(conn.lista(Tipos.CURSOS.value, 1)) == 1
+    assert sql.lista(Curso, 1).nome == "any"
+    assert len(sql.lista_tudo(Curso)) == 1

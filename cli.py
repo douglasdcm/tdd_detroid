@@ -1,13 +1,12 @@
 import click
-from src.cursos import Cursos
-from src.banco_dados import BancoDados as bd
+from src.cursos import Cursos, Curso
 from src.config import NOME_BANCO
-from src.alunos import Alunos
-from src.materias import Materias
-from src.utils import create_tables
-from src.manager import Tipos
+from src.alunos import Alunos, Aluno
+from src.utils import limpa_tabelas
+from src.sql_client import SqlClient
+from src.materias import Materias, Materia
 
-conn = bd(NOME_BANCO)
+conn = SqlClient(NOME_BANCO)
 
 
 @click.group()
@@ -18,7 +17,7 @@ def cli():
 
 @cli.command()
 def init_bd():
-    create_tables(conn)
+    limpa_tabelas(conn)
     print("Banco de dados inicializado")
 
 
@@ -27,7 +26,7 @@ def init_bd():
 @click.option("--curso", type=int, required=True, help="Identificador do curso")
 def define_materia(nome, curso):
     Materias(conn).cria(nome, curso)
-    id_ = conn.lista_maximo(Tipos.MATERIAS.value)[0][0]
+    id_ = conn.lista_maximo(Materia).id
     print(f"Materia definida: id {id_}, nome {nome}")
 
 
@@ -35,7 +34,7 @@ def define_materia(nome, curso):
 @click.option("--nome", required=True, help="Nome do aluno")
 def define_aluno(nome):
     Alunos(conn).cria(nome)
-    id_ = conn.lista_maximo(Tipos.ALUNOS.value)[0][0]
+    id_ = conn.lista_maximo(Aluno).id
     print(f"Aluno definido: id {id_}, nome {nome}")
 
 
@@ -43,7 +42,7 @@ def define_aluno(nome):
 @click.option("--nome", required=True, help="Nome do curso")
 def define_curso(nome):
     Cursos(conn).cria(nome)
-    id_ = conn.lista_maximo(Tipos.CURSOS.value)[0][0]
+    id_ = conn.lista_maximo(Curso).id
     print(f"Curso definido: id {id_}, nome {nome}")
 
 
