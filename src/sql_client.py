@@ -2,6 +2,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import Query
+from sqlalchemy import select
 
 Base = declarative_base()
 
@@ -35,6 +36,9 @@ class SqlClient:
 
     def roda_query(self, query_livre: Query):
         return query_livre.with_session(self._session).all()
+
+    def confirma(self):
+        self._session.commit()
 
     def lista_tudo(self, modelo):
         return self._session.query(modelo).all()

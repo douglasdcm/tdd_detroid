@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey
 from src.sql_client import Base
 from sqlalchemy.orm import Query
 import src.cursos
-from sqlalchemy.orm import relationship
+from src.sql_client import SqlClient
 
 
 class Materia(Base):
@@ -10,8 +10,7 @@ class Materia(Base):
 
     id = Column(Integer, primary_key=True)
     nome = Column(String)
-    curso = Column(Integer, ForeignKey("cursos.id", back_populates="children"))
-    parent = relationship("Curso", back_populates="children")
+    curso = Column(Integer, ForeignKey("cursos.id"))
 
 
 class ErroMateria(Exception):
@@ -19,28 +18,7 @@ class ErroMateria(Exception):
 
 
 class Materias:
-    class Materia:
-        def __init__(self) -> None:
-            self._nome = None
-            self._curso = None
-
-        @property
-        def curso(self):
-            return self._curso
-
-        @curso.setter
-        def curso(self, valor):
-            self._curso = valor
-
-        @property
-        def nome(self):
-            return self._nome
-
-        @nome.setter
-        def nome(self, valor):
-            self._nome = valor
-
-    def __init__(self, conn) -> None:
+    def __init__(self, conn: SqlClient) -> None:
         self._conn = conn
 
     def __eh_materia_unica(self, nome, curso_id):
@@ -54,6 +32,10 @@ class Materias:
             raise ErroMateria("Necessários 3 cursos para se criar a primeira matéria")
         return True
 
+    def __existe_curso(self, curso_id):
+        if self._conn.lista(src.cursos.Curso, curso_id) is None:
+            raise ErroMateria(f"Curso {curso_id} não existe")
+
     def cria(self, nome, curso_id: int):
         """
         :nome nome da matéria
@@ -61,6 +43,7 @@ class Materias:
         """
         self.__eh_materia_unica(nome, curso_id)
         self.__existem_3_cursos()
+        self.__existe_curso(curso_id)
         materia = Materia(nome=nome, curso=curso_id)
         self._conn.cria(materia)
 

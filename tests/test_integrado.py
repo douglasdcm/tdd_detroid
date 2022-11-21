@@ -59,8 +59,9 @@ def test_materia_nao_criada_se_menos_de_tres_cursos_existentes(setup):
 
 
 def test_materia_nao_associada_curso_inexistente(setup, popula_banco_dados):
-    with raises(ErroBancoDados):
-        setup.cria(Materia(nome="any", curso=42))
+    conn = setup
+    with raises(ErroMateria):
+        Materias(conn).cria("any", 42)
 
 
 def test_materia_associada_curso_existente(setup):

@@ -1,1 +1,1 @@
-NOME_BANCO = "tdd.db"
+NOME_BANCO = ":memory:"

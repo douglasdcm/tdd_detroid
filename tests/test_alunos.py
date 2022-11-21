@@ -10,6 +10,15 @@ def setup():
     yield Alunos(conn), conn
 
 
+def test_cria_aluno_por_api(setup):
+    alunos, _ = setup
+    alunos.cria("any")
+
+    aluno = alunos.lista(1)
+
+    assert aluno.id == 1
+
+
 def test_alunos_lista_por_id(setup):
     alunos, conn = setup
     alunos.cria(nome="any")
@@ -34,4 +43,5 @@ def test_alunos_cria_banco_dados(setup):
 
 def test_alunos_cria(setup):
     alunos, _ = setup
-    assert alunos.cria(nome="any") == True
+    alunos.cria(nome="any")
+    assert alunos.lista(1).nome == "any"
