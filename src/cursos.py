@@ -16,31 +16,11 @@ class Curso(Base):
 
     id = Column(Integer, primary_key=True)
     nome = Column(String)
-    children = relationship("Materia", back_populates="parent")
+    materia = relationship("Materia")
+    aluno = relationship("Aluno")
 
 
 class Cursos:
-    class Curso:
-        def __init__(self):
-            self._nome = None
-            self._id = None
-
-        @property
-        def id_(self):
-            return self._id
-
-        @id_.setter
-        def id_(self, id_):
-            self._id = id_
-
-        @property
-        def nome(self):
-            return self._nome
-
-        @nome.setter
-        def nome(self, nome):
-            self._nome = nome
-
     def __init__(self, conn: SqlClient) -> None:
         self._conn = conn
 

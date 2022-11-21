@@ -9,7 +9,7 @@ Definição de Feito (Definition of Done):
 3. Os dados estão sendo salvos no banco de dados
 # Entregas
 Construção das funções básicas do sistema
-1. Cada aluno terá um controle de notas chamado "coeficiente de rendimento" (CR)
+1. ~~Cada aluno terá um controle de notas chamado "coeficiente de rendimento" (CR)~~
 2. O CR é a média das notas do aluno nas matérias já cursadas
 3. O aluno é considerado aprovado na universidade se seu CR for acima ou igual a 7 (sete) ao final do curso
 4. Caso o aluno curse a mesma matéria mais de uma vez, a maior nota será considerada no cálculo do CR
@@ -31,7 +31,7 @@ Construção das funções básicas do sistema
 20. Os alunos só podem atualizar suas notas na matérias em que estão inscritos
 21. O nome dos cursos e materias tem que ter no máximo 10 letras
 22. Os cursos podem ter nomes iguais se forem de unidades diferentes
-23. O aluno só pode se increver em um curso
+23. ~~O aluno só pode se increver em um curso~~
 24. O coordenador pode ser corrdenador de mais de um curso
 25. O coordenador pode listar os alunos, materias e notas, e crs de todos os seus cursos (coordenador de mais de um curso)
 26. O curso pode ser cancelado

@@ -15,7 +15,7 @@ def popula_banco_dados(scope="function"):
     Cursos(conn).cria(nome="any_2")
     Cursos(conn).cria(nome="any_3")
     for i in range(3):
-        Materias(conn).cria(nome=f"any{i}", curso_id=i)
+        Materias(conn).cria(nome=f"any{i}", curso_id=i + 1)
     Alunos(conn).cria(nome="any")
 
 
