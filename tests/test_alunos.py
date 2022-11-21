@@ -1,6 +1,6 @@
-from src.alunos import Alunos, Aluno
+from src.alunos import Alunos, Aluno, ErroAluno
 from tests.config import NOME_BANCO
-from pytest import fixture
+from pytest import fixture, raises
 from src.sql_client import SqlClient
 
 
@@ -8,6 +8,14 @@ from src.sql_client import SqlClient
 def setup():
     conn = SqlClient(NOME_BANCO)
     yield Alunos(conn), conn
+
+
+def test_nao_inscreve_aluno_se_curso_existente(setup):
+    alunos, _ = setup
+    alunos.cria("any")
+
+    with raises(ErroAluno, match="Curso 42 nao existe"):
+        alunos.inscreve_curso(1, 42)
 
 
 def test_cria_aluno_por_api(setup):
