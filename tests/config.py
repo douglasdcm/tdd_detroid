@@ -1,0 +1,1 @@
+NOME_BANCO = ":memory:"

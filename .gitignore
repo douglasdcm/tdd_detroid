@@ -2,6 +2,6 @@ unit_test/
 venv/
 tdd_detroid/
 htmlcov/
-sample.db
+*.db
 *.pyc
 .coverage
