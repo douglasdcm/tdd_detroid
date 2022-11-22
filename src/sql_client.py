@@ -13,9 +13,8 @@ class ErroBancoDados(Exception):
 
 class SqlClient:
     def __init__(self, nome_banco) -> None:
-        _engine = create_engine(f"sqlite:///{nome_banco}", echo=False)
-        Base.metadata.create_all(_engine)
-        _session_maker = sessionmaker(bind=_engine)
+        self._engine = create_engine(f"sqlite:///{nome_banco}", echo=False)
+        _session_maker = sessionmaker(bind=self._engine)
         self._session = _session_maker()
 
     def lista_maximo(self, modelo):
@@ -24,7 +23,8 @@ class SqlClient:
             return resultado[-1]
         return resultado
 
-    def deleta_tabela(self, modelo):
+    def inicializa_tabela(self, modelo):
+        Base.metadata.create_all(self._engine)
         resultado = self._session.query(modelo).all()
         for instance in resultado:
             self._session.delete(instance)

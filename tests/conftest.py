@@ -1,7 +1,6 @@
 from pytest import fixture
-from tests.config import NOME_BANCO
-from src.utils import limpa_tabelas
-from src.sql_client import SqlClient
+from tests.config import conn
+from src.utils import inicializa_tabelas
 from src.cursos import Cursos
 from src.materias import Materias
 from src.alunos import Alunos
@@ -9,8 +8,6 @@ from src.alunos import Alunos
 
 @fixture
 def popula_banco_dados(scope="function"):
-    conn = SqlClient(NOME_BANCO)
-    limpa_tabelas(conn)
     Cursos(conn).cria(nome="any_1")
     Cursos(conn).cria(nome="any_2")
     Cursos(conn).cria(nome="any_3")
@@ -21,5 +18,4 @@ def popula_banco_dados(scope="function"):
 
 @fixture(scope="function", autouse=True)
 def setup_bando_dados():
-    conn = SqlClient(NOME_BANCO)
-    limpa_tabelas(conn)
+    inicializa_tabelas(conn)

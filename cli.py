@@ -1,5 +1,5 @@
 import click
-from src.utils import limpa_tabelas
+from src.utils import inicializa_tabelas
 from config import conn
 from commands.aluno import aluno
 from commands.materia import materia
@@ -14,7 +14,7 @@ def cli():
 
 @cli.command()
 def init_bd():
-    limpa_tabelas(conn)
+    inicializa_tabelas(conn)
     click.echo("Banco de dados inicializado")
 
 
