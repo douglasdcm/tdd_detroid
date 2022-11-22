@@ -1,10 +1,9 @@
-from src.sql_client import SqlClient
-from src.cursos import Curso
+from src.cursos import CursoBd
 from tests.config import conn
 from src.sql_client import SqlClient
 
 
 def test_cria_novo_curso():
-    curso = Curso(nome="any")
+    curso = CursoBd(nome="any")
     conn.cria(curso)
-    assert conn.lista_tudo(Curso)[0].nome == "any"
+    assert conn.lista_tudo(CursoBd)[0].nome == "any"

@@ -1,5 +1,5 @@
 import click
-from src.cursos import Cursos, Curso
+from src.cursos import Cursos, CursoBd
 from config import conn
 
 
@@ -14,7 +14,7 @@ def curso():
 def cria(nome):
     try:
         Cursos(conn).cria(nome)
-        id_ = conn.lista_maximo(Curso).id
+        id_ = conn.lista_maximo(CursoBd).id
         click.echo(f"Curso definido: id {id_}, nome {nome}")
     except Exception as e:
         click.echo(e)

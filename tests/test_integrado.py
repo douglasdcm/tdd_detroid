@@ -1,4 +1,5 @@
-from src.cursos import Cursos, ErroCurso, Curso
+from src.curso_modelo import ErroCurso
+from src.cursos import Cursos, CursoBd
 from src.materias import Materias, ErroMateria, Materia
 from tests.config import conn
 from pytest import raises
@@ -54,24 +55,24 @@ def test_materia_nao_associada_curso_inexistente(popula_banco_dados):
 
 
 def test_materia_associada_curso_existente():
-    conn.cria(Curso(nome="any"))
+    conn.cria(CursoBd(nome="any"))
     conn.cria(Materia(nome="any", curso=1))
     assert conn.lista(Materia, 1).nome == "any"
 
 
 def test_cria_tabela_com_dados():
-    conn.cria(Curso(nome="any_1"))
-    conn.cria(Curso(nome="any_2"))
-    conn.cria(Curso(nome="any_3"))
-    assert len(conn.lista_tudo(Curso)) == 3
+    conn.cria(CursoBd(nome="any_1"))
+    conn.cria(CursoBd(nome="any_2"))
+    conn.cria(CursoBd(nome="any_3"))
+    assert len(conn.lista_tudo(CursoBd)) == 3
 
 
 def test_cria_item_bd():
-    conn.cria(Curso(nome="any"))
-    assert len(conn.lista_tudo(Curso)) == 1
+    conn.cria(CursoBd(nome="any"))
+    assert len(conn.lista_tudo(CursoBd)) == 1
 
 
 def test_lista_por_id_bd():
     Cursos(conn).cria("any")
     inicializa_tabelas(conn)
-    assert len(conn.lista_tudo(Curso)) == 0
+    assert len(conn.lista_tudo(CursoBd)) == 0

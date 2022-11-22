@@ -1,5 +1,5 @@
 import subprocess
-from src.cursos import Cursos, Curso
+from src.cursos import Cursos, CursoBd
 from config import conn
 from pytest import fixture
 from src.alunos import Alunos, Aluno
@@ -163,7 +163,7 @@ def test_cli_curso_com_nome_e_id(setup):
     assert cursos.lista(1).nome == "any"
     assert cursos.lista(2).nome == "other"
     # verifica banco de dados
-    assert len(conn.lista_tudo(Curso)) == 2
-    assert conn.lista(Curso, 1).nome == "any"
-    assert conn.lista(Curso, 2).nome == "other"
+    assert len(conn.lista_tudo(CursoBd)) == 2
+    assert conn.lista(CursoBd, 1).nome == "any"
+    assert conn.lista(CursoBd, 2).nome == "other"
     assert f"Curso definido: id 2, nome other" in output

@@ -28,7 +28,7 @@ class Alunos:
             raise ErroAluno(f"Aluno {aluno_id} nao existe")
 
     def __curso_existe(self, curso_id):
-        if self._conn.lista(src.cursos.Curso, curso_id):
+        if self._conn.lista(src.cursos.CursoBd, curso_id):
             return
         else:
             raise ErroAluno(f"Curso {curso_id} nao existe")
