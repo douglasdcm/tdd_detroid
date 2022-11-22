@@ -4,7 +4,7 @@ import src.alunos
 from src.sql_client import SqlClient
 
 
-def limpa_tabelas(conn: SqlClient):
-    conn.deleta_tabela(src.materias.Materia)
-    conn.deleta_tabela(src.cursos.Curso)
-    conn.deleta_tabela(src.alunos.Aluno)
+def inicializa_tabelas(conn: SqlClient):
+    conn.inicializa_tabela(src.cursos.CursoBd)
+    conn.inicializa_tabela(src.alunos.Aluno)
+    conn.inicializa_tabela(src.materias.Materia)

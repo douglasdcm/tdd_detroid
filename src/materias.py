@@ -28,12 +28,12 @@ class Materias:
         return True
 
     def __existem_3_cursos(self):
-        if len(self._conn.lista_tudo(src.cursos.Curso)) < 3:
+        if len(self._conn.lista_tudo(src.cursos.CursoBd)) < 3:
             raise ErroMateria("Necessários 3 cursos para se criar a primeira matéria")
         return True
 
     def __existe_curso(self, curso_id):
-        if self._conn.lista(src.cursos.Curso, curso_id) is None:
+        if self._conn.lista(src.cursos.CursoBd, curso_id) is None:
             raise ErroMateria(f"Curso {curso_id} não existe")
 
     def cria(self, nome, curso_id: int):
