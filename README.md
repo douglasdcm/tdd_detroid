@@ -38,7 +38,7 @@ Construção das funções básicas do sistema
 27. Os cursos cancelados não podem aceitar incrições de alunos
 28. Os cursos cancelados não pode ter coordenadores
 29. Cada matéria pode ter no máximo 30 alunos inscritos
-30. O aluno tem que se inscrever em 3 matérias no mínimo
+30. ~~O aluno tem que se inscrever em 3 matérias no mínimo~~
 31. Caso o número de matérias faltantes de um aluno seja menor do que 3, ele pode se inscrever em 1 matéria
 32. Caso o aluno não se increva no número mínimo de matérias por semestre, ele será automaticamente reprovado
 33. O aluno deve ter CPF validado no sistema externo de validação de CPFs (sistema do governo)

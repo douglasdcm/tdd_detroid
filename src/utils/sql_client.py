@@ -2,13 +2,9 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import Query
-from sqlalchemy import select
+from src.utils.exceptions import ErroBancoDados
 
 Base = declarative_base()
-
-
-class ErroBancoDados(Exception):
-    pass
 
 
 class SqlClient:
@@ -44,7 +40,12 @@ class SqlClient:
         return self._session.query(modelo).all()
 
     def lista(self, modelo, id_):
-        return self._session.query(modelo).filter(modelo.id == id_).first()
+        resultado = self._session.query(modelo).filter(modelo.id == id_).first()
+        if not resultado:
+            raise ErroBancoDados(
+                f"Registro {id_} do tipo {modelo.__name__} nao encontrado"
+            )
+        return resultado
 
     def cria(self, instancia):
         self._session.add(instancia)

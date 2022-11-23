@@ -1,5 +1,6 @@
 import click
-from src.alunos import Alunos, Aluno
+from src.alunos import Alunos
+from src.esquemas.aluno import AlunoBd
 from config import conn
 
 
@@ -10,10 +11,21 @@ def aluno():
 
 
 @aluno.command()
+@click.option("--aluno-id", required=True, help="Identificador do aluno")
+@click.option("--materia-id", required=True, help="Identificador da materia")
+def inscreve_materia(aluno_id, materia_id):
+    try:
+        Alunos(conn).inscreve_materia(aluno_id, materia_id)
+        click.echo(f"Aluno {aluno_id} inscrito na materia {materia_id}")
+    except Exception as e:
+        click.echo(e)
+
+
+@aluno.command()
 @click.option("--nome", required=True, help="Nome do aluno")
 def cria(nome):
     Alunos(conn).cria(nome)
-    id_ = conn.lista_maximo(Aluno).id
+    id_ = conn.lista_maximo(AlunoBd).id
     click.echo(f"Aluno definido: id {id_}, nome {nome}")
 
 

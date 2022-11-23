@@ -1,9 +1,56 @@
-from src.curso_modelo import ErroCurso
-from src.cursos import Cursos, CursoBd
-from src.materias import Materias, ErroMateria, Materia
+from src.modelos.curso import ErroCurso
+from src.cursos import Cursos
+from src.materias import Materias
+from src.alunos import Alunos
+from src.esquemas.curso import CursoBd
+from src.esquemas.materia import MateriaBd
+from src.utils.utils import inicializa_tabelas
+from src.utils.exceptions import ErroAluno, ErroMateria
 from tests.config import conn
+from tests.utils import cria_curso, cria_materia
 from pytest import raises
-from src.utils import inicializa_tabelas
+from time import sleep
+
+
+def test_cria_aluno_por_api():
+    alunos = Alunos(conn)
+    alunos.cria("any")
+    aluno = alunos.lista(1)
+    assert aluno.id == 1
+
+
+def test_cli_tres_cursos_com_tres_materias_cada():
+    cursos = Cursos(conn)
+    materias = Materias(conn)
+    cria_curso(conn)
+    cria_curso(conn)
+    cria_curso(conn)
+    for _ in range(3):
+        cria_materia(conn, 1)
+        cria_materia(conn, 2)
+        cria_materia(conn, 3)
+
+    # verifica pela API
+    assert len(cursos.lista_tudo()) == 3
+    assert len(materias.lista_tudo()) == 9
+
+
+def test_aluno_pode_se_inscrever_em_apenas_um_curso(popula_banco_dados):
+    alunos = Alunos(conn)
+    alunos.cria("any")
+    Cursos(conn).cria("other")
+    alunos.inscreve_curso(1, 4)
+
+    for _ in range(3):
+        if alunos.lista(1).curso_id is not None:
+            break
+        sleep(1)
+
+    with raises(ErroAluno, match="Aluno esta inscrito em outro curso"):
+        alunos.inscreve_curso(1, 3)
+
+    aluno = alunos.lista(1)
+    assert aluno.curso_id == 4
 
 
 def test_curso_nao_pode_ter_materias_com_mesmo_nome():
@@ -56,8 +103,8 @@ def test_materia_nao_associada_curso_inexistente(popula_banco_dados):
 
 def test_materia_associada_curso_existente():
     conn.cria(CursoBd(nome="any"))
-    conn.cria(Materia(nome="any", curso=1))
-    assert conn.lista(Materia, 1).nome == "any"
+    conn.cria(MateriaBd(nome="any", curso=1))
+    assert conn.lista(MateriaBd, 1).nome == "any"
 
 
 def test_cria_tabela_com_dados():

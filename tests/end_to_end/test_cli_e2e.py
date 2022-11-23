@@ -1,9 +1,13 @@
 import subprocess
-from src.cursos import Cursos, CursoBd
+from src.cursos import Cursos
+from src.alunos import Alunos
+from src.materias import Materias
+from src.esquemas.curso import CursoBd
+from src.esquemas.aluno import AlunoBd
+from src.esquemas.materia import MateriaBd
+from src.esquemas.para_associacao import MateriaAlunoBd
 from config import conn
 from pytest import fixture
-from src.alunos import Alunos, Aluno
-from src.materias import Materias, Materia
 from time import sleep
 from tests.utils import cria_materia, cria_curso
 
@@ -61,11 +65,9 @@ def test_alunos_deve_inscreve_3_materias_no_minimo(setup, popula_banco_dados):
     )
     output = str(temp.communicate())
 
-    aluno = alunos.lista(1)
-    # verifica pela API
-    assert aluno.materias_id == [1]
     # verifica pelo banco
-    assert conn.lista(Aluno, 1).materias_id == [1]
+    ta = conn.lista_tudo(MateriaAlunoBd)
+    assert len(ta) == 1
     assert f"Aluno deve se inscrever em 3 materias no minimo" in output
 
 
@@ -94,7 +96,7 @@ def test_aluno_pode_se_inscrever_em_curso(setup, popula_banco_dados):
     # verifica pela API
     assert aluno.curso_id == 4
     # verifica pelo banco
-    assert conn.lista(Aluno, 1).curso_id == 4
+    assert conn.lista(AlunoBd, 1).curso_id == 4
     assert f"Aluno inscrito no curso 4" in output
 
 
@@ -121,9 +123,9 @@ def test_cli_materia_nome_igual_mas_id_diferente(setup):
     assert materias.lista(2).nome == "other"
     assert materias.lista(2).curso == 1
     # verifica banco de dados
-    assert len(conn.lista_tudo(Materia)) == 2
-    assert conn.lista(Materia, 1).nome == "any"
-    assert conn.lista(Materia, 2).nome == "other"
+    assert len(conn.lista_tudo(MateriaBd)) == 2
+    assert conn.lista(MateriaBd, 1).nome == "any"
+    assert conn.lista(MateriaBd, 2).nome == "other"
     assert f"Materia definida: id 2, nome other" in output
 
 
@@ -144,9 +146,9 @@ def test_cli_aluno_deve_ter_nome(setup):
     assert alunos.lista(1).nome == "any"
     assert alunos.lista(2).nome == "other"
     # verifica banco de dados
-    assert len(conn.lista_tudo(Aluno)) == 2
-    assert conn.lista(Aluno, 1).nome == "any"
-    assert conn.lista(Aluno, 2).nome == "other"
+    assert len(conn.lista_tudo(AlunoBd)) == 2
+    assert conn.lista(AlunoBd, 1).nome == "any"
+    assert conn.lista(AlunoBd, 2).nome == "other"
     assert f"Aluno definido: id 2, nome other" in output
 
 

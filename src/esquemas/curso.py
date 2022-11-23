@@ -1,7 +1,6 @@
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
-
-from src.sql_client import Base
+from src.utils.sql_client import Base
 
 
 class CursoBd(Base):
@@ -9,5 +8,5 @@ class CursoBd(Base):
 
     id = Column(Integer, primary_key=True)
     nome = Column(String)
-    materia = relationship("Materia")
-    aluno = relationship("Aluno")
+    materia = relationship("MateriaBd")
+    aluno = relationship("AlunoBd")

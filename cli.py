@@ -1,9 +1,9 @@
 import click
-from src.utils import inicializa_tabelas
+from src.utils.utils import inicializa_tabelas
 from config import conn
-from commands.aluno import aluno
-from commands.materia import materia
-from commands.curso import curso
+from src.commands.aluno import aluno
+from src.commands.materia import materia
+from src.commands.curso import curso
 
 
 @click.group()
