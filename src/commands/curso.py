@@ -1,5 +1,6 @@
 import click
-from src.cursos import Cursos, CursoBd
+from src.cursos import Cursos
+from src.esquemas.curso import CursoBd
 from config import conn
 
 

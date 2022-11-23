@@ -1,5 +1,5 @@
 import click
-from src.materias import Materias, Materia
+from src.materias import Materias, MateriaBd
 from config import conn
 
 
@@ -15,7 +15,7 @@ def materia():
 def cria(nome, curso):
     try:
         Materias(conn).cria(nome, curso)
-        id_ = conn.lista_maximo(Materia).id
+        id_ = conn.lista_maximo(MateriaBd).id
         click.echo(f"Materia definida: id {id_}, nome {nome}")
     except Exception as e:
         click.echo(e)
