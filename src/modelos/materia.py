@@ -9,18 +9,23 @@ class MateriaModelo:
     def __init__(self, conn: SqlClient) -> None:
         self._conn = conn
 
-    def __eh_materia_unica(self, nome, curso_id):
+    def verifica_existencia(self, materia_id, curso_id):
         query = Query([MateriaBd]).filter(
-            MateriaBd.nome == nome, MateriaBd.curso == curso_id
+            MateriaBd.id == materia_id, MateriaBd.curso_id == curso_id
+        )
+        if len(self._conn.roda_query(query)) == 0:
+            raise ErroMateria(f"Matéria {materia_id} não existe no curso {curso_id}")
+
+    def __verifica_duplicidade(self, nome, curso_id):
+        query = Query([MateriaBd]).filter(
+            MateriaBd.nome == nome, MateriaBd.curso_id == curso_id
         )
         if self._conn.roda_query(query):
             raise ErroMateria("O curso já possui uma matéria com este nome")
-        return True
 
     def __existem_3_cursos(self):
         if len(self._conn.lista_tudo(CursoBd)) < 3:
             raise ErroMateria("Necessários 3 cursos para se criar a primeira matéria")
-        return True
 
     def __existe_curso(self, curso_id):
         try:
@@ -33,8 +38,8 @@ class MateriaModelo:
         :nome nome da matéria
         :curso curso associado à matéria
         """
-        self.__eh_materia_unica(nome, curso_id)
+        self.__verifica_duplicidade(nome, curso_id)
         self.__existem_3_cursos()
         self.__existe_curso(curso_id)
-        materia = MateriaBd(nome=nome, curso=curso_id)
+        materia = MateriaBd(nome=nome, curso_id=curso_id)
         self._conn.cria(materia)

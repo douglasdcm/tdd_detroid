@@ -10,9 +10,9 @@ Definição de Feito (Definition of Done):
 # Entregas
 Construção das funções básicas do sistema
 1. ~~Cada aluno terá um controle de notas chamado "coeficiente de rendimento" (CR)~~
-2. O CR é a média das notas do aluno nas matérias já cursadas
+2. ~~O CR é a média das notas do aluno nas matérias já cursadas~~
 3. O aluno é considerado aprovado na universidade se seu CR for acima ou igual a 7 (sete) ao final do curso
-4. Caso o aluno curse a mesma matéria mais de uma vez, a maior nota será considerada no cálculo do CR
+4. ~~Caso o aluno curse a mesma matéria mais de uma vez, a maior nota será considerada no cálculo do CR~~
 5. ~~A faculdade terá inicialmente 3 cursos com 3 matérias cada~~
 6. ~~As matérias de cada curso podem ter nomes iguais, mas serão diferenciadas pelo número identificador único (niu)~~
 7. O sistema deve calcular a situação do aluno levando em consideração as matérias cursadas e o total de matérias de cada curso
@@ -20,8 +20,8 @@ Construção das funções básicas do sistema
 9. ~~Os cursos devem ter identificador único e nome~~
 10. ~~O nome dos curso pode ser igual, mas o identificador único de cada curso deve ser diferente~~
 11. ~~Um curso não pode ter duas matérias com mesmo nome, mesmo que o niu seja diferente~~
-12. A nota máxima de um aluno em uma matéria é 10
-13. A nota mínima de um aluno em uma matéria é 0
+12. ~~A nota máxima de um aluno em uma matéria é 10~~
+13. ~~A nota mínima de um aluno em uma matéria é 0~~
 14. O aluno pode trancar o curso e neste caso não pode atualizar suas notas ou matérias cursadas
 15. O coordenador do curso pode listar os alunos, notas em cada matéria e cr dos alunos
 16. O Aluno pode destrancar o curso e sua situação volta para a anterior

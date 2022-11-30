@@ -13,6 +13,10 @@ class SqlClient:
         _session_maker = sessionmaker(bind=self._engine)
         self._session = _session_maker()
 
+    def update(self):
+        self._session.flush()
+        self._session.commit()
+
     def lista_maximo(self, modelo):
         resultado = self._session.query(modelo).all()
         if len(resultado) > 0:
@@ -27,11 +31,8 @@ class SqlClient:
             self._session.flush()
             self._session.commit()
 
-    def conta(self, query_livre: Query):
-        return query_livre.with_session(self._session).count()
-
-    def roda_query(self, query_livre: Query):
-        return query_livre.with_session(self._session).all()
+    def roda_query(self, query: Query):
+        return query.with_session(self._session).all()
 
     def confirma(self):
         self._session.commit()

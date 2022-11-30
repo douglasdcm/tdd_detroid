@@ -5,10 +5,15 @@ from pytest import raises, mark
 from src.modelos.curso import CursoModelo
 
 
+def test_curso_pega_id():
+    curso = CursoModelo(conn)
+    curso.cria(nome="any")
+    assert curso.id == len(conn.lista_tudo(CursoBd))
+
+
 def test_curso_cria():
     curso = CursoModelo(conn)
     curso.cria(nome="any")
-    assert curso.nome == "any"
     assert conn.lista(CursoBd, 1).nome == "any"
 
 

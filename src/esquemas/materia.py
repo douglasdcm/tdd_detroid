@@ -7,4 +7,4 @@ class MateriaBd(Base):
 
     id = Column(Integer, primary_key=True)
     nome = Column(String)
-    curso = Column(Integer, ForeignKey("cursos.id"))
+    curso_id = Column(Integer, ForeignKey("cursos.id"))
