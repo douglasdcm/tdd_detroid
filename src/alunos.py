@@ -7,11 +7,20 @@ class Alunos:
     def __init__(self, conn: SqlClient) -> None:
         self._conn = conn
 
+    def lanca_nota(self, aluno_id, materia_id, nota):
+        aluno = AlunoModelo(self._conn)
+        aluno.id = aluno_id
+        aluno.lanca_nota(materia_id, nota)
+
     def inscreve_curso(self, aluno_id, curso_id):
-        AlunoModelo(self._conn, aluno_id).inscreve_curso(curso_id)
+        aluno = AlunoModelo(self._conn)
+        aluno.id = aluno_id
+        aluno.inscreve_curso(curso_id)
 
     def inscreve_materia(self, aluno_id, materia_id):
-        AlunoModelo(self._conn, aluno_id).inscreve_materia(materia_id)
+        aluno = AlunoModelo(self._conn)
+        aluno.id = aluno_id
+        aluno.inscreve_materia(materia_id)
 
     def cria(self, nome):
         AlunoModelo(self._conn).cria(nome)

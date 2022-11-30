@@ -1,15 +1,40 @@
-from src.modelos.curso import ErroCurso
 from src.cursos import Cursos
 from src.materias import Materias
 from src.alunos import Alunos
+from src.esquemas.aluno import AlunoBd
 from src.esquemas.curso import CursoBd
 from src.esquemas.materia import MateriaBd
+from src.esquemas.para_associacao import MateriaAlunoBd
 from src.utils.utils import inicializa_tabelas
-from src.utils.exceptions import ErroAluno, ErroMateria
+from src.utils.exceptions import ErroAluno, ErroMateria, ErroCurso, ErroMateriaAluno
 from tests.config import conn
 from tests.utils import cria_curso, cria_materia
 from pytest import raises
-from time import sleep
+
+
+def test_calcula_cr_aluno_de_materias_cursadas(popula_banco_dados):
+    aluno_id = len(Alunos(conn).lista_tudo())
+    alunos = Alunos(conn)
+    alunos.lanca_nota(aluno_id=aluno_id, materia_id=1, nota=5)
+    alunos.lanca_nota(aluno_id=aluno_id, materia_id=2, nota=0)
+    alunos.lanca_nota(aluno_id=aluno_id, materia_id=3, nota=5)
+
+    assert conn.lista(AlunoBd, aluno_id).coef_rend == 5
+
+
+def test_alunos_deve_inscreve_em_3_materias(popula_banco_dados):
+
+    alunos = Alunos(conn)
+    alunos.cria("any")
+    aluno_id = len(alunos.lista_tudo())
+    alunos.inscreve_curso(aluno_id, curso_id=1)
+    with raises(
+        ErroMateriaAluno, match="Aluno deve se inscrever em 3 materias no minimo"
+    ):
+        alunos.inscreve_materia(aluno_id, 1)
+
+    materia_aluno = conn.lista_tudo(MateriaAlunoBd)
+    assert len(materia_aluno) > 1
 
 
 def test_cria_aluno_por_api():
@@ -38,18 +63,14 @@ def test_cli_tres_cursos_com_tres_materias_cada():
 def test_aluno_pode_se_inscrever_em_apenas_um_curso(popula_banco_dados):
     alunos = Alunos(conn)
     alunos.cria("any")
+    aluno_id = len(alunos.lista_tudo())
     Cursos(conn).cria("other")
-    alunos.inscreve_curso(1, 4)
-
-    for _ in range(3):
-        if alunos.lista(1).curso_id is not None:
-            break
-        sleep(1)
+    alunos.inscreve_curso(aluno_id, 4)
 
     with raises(ErroAluno, match="Aluno esta inscrito em outro curso"):
-        alunos.inscreve_curso(1, 3)
+        alunos.inscreve_curso(aluno_id, 3)
 
-    aluno = alunos.lista(1)
+    aluno = alunos.lista(aluno_id)
     assert aluno.curso_id == 4
 
 
@@ -103,7 +124,7 @@ def test_materia_nao_associada_curso_inexistente(popula_banco_dados):
 
 def test_materia_associada_curso_existente():
     conn.cria(CursoBd(nome="any"))
-    conn.cria(MateriaBd(nome="any", curso=1))
+    conn.cria(MateriaBd(nome="any", curso_id=1))
     assert conn.lista(MateriaBd, 1).nome == "any"
 
 

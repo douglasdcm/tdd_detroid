@@ -6,30 +6,33 @@ from src.utils.exceptions import ErroCurso, ErroBancoDados, ErroAluno
 
 
 class CursoModelo:
-    def __init__(self, conn: SqlClient, curso_id=None) -> None:
+    def __init__(self, conn: SqlClient) -> None:
         self._conn = conn
-        self._nome = None
-        self._curso_id = curso_id
-        if curso_id:
-            self.__curso_existe(curso_id)
+        self._curso_id = None
 
     @property
-    def nome(self):
-        return self._nome
+    def id(self):
+        return self._curso_id
+
+    @id.setter
+    def id(self, valor):
+        self._curso_id = self.__pega_curso(valor)
+
+    def __pega_curso(self, curso_id):
+        try:
+            return self._conn.lista(CursoBd, curso_id)
+        except ErroBancoDados:
+            raise ErroAluno(f"Curso {curso_id} não existe")
+
+    def verifica_existencia(self, curso_id):
+        self.__pega_curso(curso_id)
 
     def cria(self, nome):
         self.__verifica_nome(nome)
         self.__verifica_existem_3_cursos()
         self.__verifica_curso_inexistente(nome)
-        curso = CursoBd(nome=nome)
-        self._conn.cria(curso)
-        self._nome = nome
-
-    def __curso_existe(self, curso_id):
-        try:
-            self._conn.lista(CursoBd, curso_id)
-        except ErroBancoDados:
-            raise ErroAluno(f"Curso {curso_id} nao existe")
+        self._conn.cria(CursoBd(nome=nome))
+        self._curso_id = len(self._conn.lista_tudo(CursoBd))
 
     def __verifica_nome(self, nome):
         if len(nome.strip()) == 0:
@@ -37,20 +40,20 @@ class CursoModelo:
 
     def __verifica_curso_inexistente(self, nome):
         query = Query(CursoBd).filter(CursoBd.nome == nome)
-        if self._conn.conta(query) > 0:
+        if len(self._conn.roda_query(query)) > 0:
             raise ErroCurso(f"Existe outro curso com o nome {nome}")
 
     def __verifica_existem_3_cursos(self):
         query_cursos = Query([CursoBd])
 
-        resultado = self._conn.conta(query_cursos)
+        resultado = len(self._conn.roda_query(query_cursos))
         if resultado < 3:
             return
 
         query_materias = Query([src.materias.MateriaBd]).group_by(
-            src.materias.MateriaBd.curso
+            src.materias.MateriaBd.curso_id
         )
-        resultado = self._conn.conta(query_materias)
+        resultado = len(self._conn.roda_query(query_materias))
 
         if resultado < 3:
             raise ErroCurso(
