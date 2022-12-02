@@ -12,12 +12,38 @@
         <h1 class="text-3xl font-bold text-gray-800 uppercase tracking-tight">To Do List</h1>
       </div>
       <div>
-        <input id="new-task-content" class="py-input" type="text">
-        <button id="new-task-btn" class="py-button" type="submit" py-click="add()">
-          Add task
+        <input id="aluno-nome" class="py-input" type="text">
+        <button id="aluno-btn" class="py-button" type="submit" py-click="add_aluno()">
+          Add aluno
         </button>
       </div>
-  
+      <div>
+        <input id="curso-nome" class="py-input" type="text">
+        <button id="curso-btn" class="py-button" type="submit" py-click="add_curso()">
+          Add curso
+        </button>
+      </div>
+      <div>
+        <input id="aluno-id" class="py-input" type="text">
+        <input id="curso-id" class="py-input" type="text">
+        <button id="curso-btn" class="py-button" type="submit" py-click="inscreve_curso()">
+          Inscrever aluno curso
+        </button>
+      </div>
+      <div>
+        <input id="materia-nome" class="py-input" type="text">
+        <input id="curso-materia-id" class="py-input" type="text">
+        <button id="curso-btn" class="py-button" type="submit" py-click="add_materia()">
+          Add materia
+        </button>
+      </div>
+      <div>
+        <input id="inscreve-aluno-id" class="py-input" type="text">
+        <input id="inscreve-materia-id" class="py-input" type="text">
+        <button id="curso-btn" class="py-button" type="submit" py-click="inscreve_materia()">
+          Inscreve materia
+        </button>
+      </div>
       <py-list id="myList"></py-list>
       <div id="list-tasks-container" class="flex flex-col-reverse mt-4">
     </div>
@@ -29,16 +55,64 @@
     </py-config>
     <py-script>
       from src.alunos import Alunos
+      from src.cursos import Cursos
+      from src.materias import Materias
       from src.config import conn
       from src.utils.utils import inicializa_tabelas
       from pyscript import Element
       inicializa_tabelas(conn)
-      def add():
-        new_task_content = Element("new-task-content")
-        alunos = Alunos(conn)
-        alunos.cria(new_task_content.value)
-        qtde = len(alunos.lista_tudo())
-        print("#Aluno", qtde, " Nome ", alunos.lista(qtde).nome)
+      def inscreve_materia():
+        try:
+          aluno_id = Element("inscreve-aluno-id")
+          materia_id = Element("inscreve-materia-id")
+          alunos = Alunos(conn)
+          alunos.inscreve_materia(aluno_id.value, materia_id.value)
+          qtde = len(alunos.lista_tudo())
+          print("#Aluno", qtde, " Nome ", alunos.lista(qtde).nome, " Materia ", materias.lista(qtde).materia_id)
+        except Exception as e:
+          print(e)
+
+      def add_materia():
+        try:
+          materia_nome = Element("materia-nome")
+          curso_materia_id = Element("curso-materia-id")
+          materias = Materias(conn)
+          materias.cria(materia_nome.value, curso_materia_id.value)
+          qtde = len(materias.lista_tudo())
+          print("#Materia", qtde, " Nome ", materias.lista(qtde).nome, " Curso ", materias.lista(qtde).curso_id)
+        except Exception as e:
+          print(e)
+
+      def inscreve_curso():
+        try:
+          aluno_id = Element("aluno-id")
+          curso_id = Element("curso-id")
+          alunos = Alunos(conn)
+          alunos.inscreve_curso(aluno_id.value, curso_id.value)
+          qtde = len(alunos.lista_tudo())
+          print("#Aluno", qtde, " Curso ", alunos.lista(qtde).curso_id)
+        except Exception as e:
+          print(e)
+
+      def add_curso():
+        try:
+          content = Element("curso-nome")
+          cursos = Cursos(conn)
+          cursos.cria(content.value)
+          qtde = len(cursos.lista_tudo())
+          print("#Curso", qtde, " Nome ", cursos.lista(qtde).nome)
+        except Exception as e:
+          print(e)
+      
+      def add_aluno():
+        try:
+          content = Element("aluno-nome")
+          alunos = Alunos(conn)
+          alunos.cria(content.value)
+          qtde = len(alunos.lista_tudo())
+          print("#Aluno", qtde, " Nome ", alunos.lista(qtde).nome)
+        except Exception as e:
+          print(e)
   </py-script>
   </body>
 </html>
