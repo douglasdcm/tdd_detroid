@@ -6,7 +6,7 @@ from src.esquemas.curso import CursoBd
 from src.esquemas.aluno import AlunoBd
 from src.esquemas.materia import MateriaBd
 from src.esquemas.para_associacao import MateriaAlunoBd
-from config import conn
+from src.config import conn
 from pytest import fixture
 from time import sleep
 from tests.utils import cria_curso, popula_banco_dados
@@ -151,7 +151,7 @@ def test_cli_materia_nome_igual_mas_id_diferente(setup):
     materias = Materias(conn)
     materias.cria("any", 1)
     temp = subprocess.Popen(
-        ["python", "cli.py", "materia", "cria", "--nome", "other", "--curso", "1"],
+        ["python", "cli.py", "materia", "cria", "--nome", "other", "--curso-id", "1"],
         stdout=subprocess.PIPE,
     )
     output = str(temp.communicate())

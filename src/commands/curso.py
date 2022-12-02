@@ -1,7 +1,7 @@
 import click
 from src.cursos import Cursos
 from src.esquemas.curso import CursoBd
-from config import conn
+from src.config import conn
 
 
 @click.group()

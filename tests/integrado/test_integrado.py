@@ -6,7 +6,12 @@ from src.esquemas.curso import CursoBd
 from src.esquemas.materia import MateriaBd
 from src.esquemas.para_associacao import MateriaAlunoBd
 from src.utils.utils import inicializa_tabelas
-from src.utils.exceptions import ErroAluno, ErroMateria, ErroCurso, ErroMateriaAluno
+from src.utils.exceptions import (
+    ErroAluno,
+    ErroMateria,
+    ErroCurso,
+    ErroMateriaAluno,
+)
 from tests.config import conn
 from tests.utils import cria_curso, cria_materia
 from pytest import raises

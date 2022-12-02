@@ -1,6 +1,6 @@
 from tests.utils import popula_banco_dados, cria_aluno_completo
 from src.utils.utils import inicializa_tabelas
-from config import conn
+from src.config import conn
 from pytest import mark
 
 

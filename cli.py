@@ -1,6 +1,6 @@
 import click
 from src.utils.utils import inicializa_tabelas
-from config import conn
+from src.config import conn
 from src.commands.aluno import aluno
 from src.commands.materia import materia
 from src.commands.curso import curso

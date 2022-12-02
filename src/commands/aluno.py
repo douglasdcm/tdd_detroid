@@ -1,7 +1,7 @@
 import click
 from src.alunos import Alunos
 from src.esquemas.aluno import AlunoBd
-from config import conn
+from src.config import conn
 
 
 @click.group()
