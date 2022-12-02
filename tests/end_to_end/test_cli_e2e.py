@@ -151,11 +151,7 @@ def test_cli_materia_nome_igual_mas_id_diferente(setup):
     materias = Materias(conn)
     materias.cria("any", 1)
     temp = subprocess.Popen(
-<<<<<<< HEAD
-        ["python", "cli.py", "materia", "cria", "--nome", "other", "--curso", "1"],
-=======
         ["python", "cli.py", "materia", "cria", "--nome", "other", "--curso-id", "1"],
->>>>>>> Primeira versao da UI com PyScript
         stdout=subprocess.PIPE,
     )
     output = str(temp.communicate())
