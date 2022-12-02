@@ -6,4 +6,4 @@ htmlcov/
 *.pyc
 .coverage
 *.whl
-*.tar.gz
+# *.tar.gz
