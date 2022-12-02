@@ -2,7 +2,12 @@ from src.esquemas.para_associacao import MateriaAlunoBd
 from src.esquemas.aluno import AlunoBd
 from src.modelos.aluno import AlunoModelo
 from src.modelos.aluno import ErroAluno
-from src.utils.exceptions import ErroAluno, ErroMateriaAluno, ErroMateria, ErroCurso
+from src.utils.exceptions import (
+    ErroAluno,
+    ErroMateriaAluno,
+    ErroMateria,
+    ErroCurso,
+)
 from tests.config import conn
 from pytest import raises
 

@@ -5,3 +5,5 @@ htmlcov/
 *.db
 *.pyc
 .coverage
+*.whl
+*.tar.gz
