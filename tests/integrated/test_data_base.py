@@ -1,5 +1,5 @@
 from tests.config import conn
-from src.esquemas.curso import CursoBd
+from src.schemes.course import CursoBd
 
 
 def test_lista_maximo_retorna_vazio_quando_nao_ha_registros():

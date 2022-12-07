@@ -1,5 +1,5 @@
 import click
-from src.materias import Materias, MateriaBd
+from src.disciplines import Materias, MateriaBd
 from src.config import conn
 
 
@@ -10,8 +10,8 @@ def materia():
 
 
 @materia.command()
-@click.option("--nome", required=True, help="Nome da materia")
-@click.option("--curso-id", type=int, required=True, help="Identificador do curso")
+@click.option("--nome", required=True, help="Discipline name")
+@click.option("--curso-id", type=int, required=True, help="Cours identification")
 def cria(nome, curso_id):
     try:
         Materias(conn).cria(nome, curso_id)

@@ -1,6 +1,6 @@
-from src.esquemas.curso import CursoBd
+from src.schemes.course import CursoBd
 from tests.config import conn
-from src.esquemas.aluno import AlunoBd
+from src.schemes.student import AlunoBd
 
 
 def test_aluno_tem_materia_id(popula_banco_dados):

@@ -1,6 +1,6 @@
 import click
-from src.cursos import Cursos
-from src.esquemas.curso import CursoBd
+from src.courses import Cursos
+from src.schemes.course import CursoBd
 from src.config import conn
 
 
@@ -11,7 +11,7 @@ def curso():
 
 
 @curso.command()
-@click.option("--nome", required=True, help="Nome do curso")
+@click.option("--nome", required=True, help="Course name")
 def cria(nome):
     try:
         Cursos(conn).cria(nome)

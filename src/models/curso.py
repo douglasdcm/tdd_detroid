@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Query
-import src.materias
-from src.esquemas.curso import CursoBd
+import src.disciplines
+from src.schemes.course import CursoBd
 from src.utils.sql_client import SqlClient
 from src.utils.exceptions import ErroCurso, ErroBancoDados, ErroAluno
 
@@ -50,8 +50,8 @@ class CursoModelo:
         if resultado < 3:
             return
 
-        query_materias = Query([src.materias.MateriaBd]).group_by(
-            src.materias.MateriaBd.curso_id
+        query_materias = Query([src.disciplines.MateriaBd]).group_by(
+            src.disciplines.MateriaBd.curso_id
         )
         resultado = len(self._conn.roda_query(query_materias))
 

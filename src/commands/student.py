@@ -1,6 +1,6 @@
 import click
-from src.alunos import Alunos
-from src.esquemas.aluno import AlunoBd
+from src.students import Alunos
+from src.schemes.student import AlunoBd
 from src.config import conn
 
 
@@ -11,9 +11,9 @@ def aluno():
 
 
 @aluno.command()
-@click.option("--aluno-id", type=int, required=True, help="Identificador do aluno")
-@click.option("--materia-id", type=int, required=True, help="Identificador da materia")
-@click.option("--nota", type=int, required=True, help="Nota do aluno")
+@click.option("--aluno-id", type=int, required=True, help="Student identification")
+@click.option("--materia-id", type=int, required=True, help="Discipline ientification")
+@click.option("--nota", type=int, required=True, help="Student grade")
 def lanca_nota(aluno_id, materia_id, nota):
     try:
         Alunos(conn).lanca_nota(aluno_id, materia_id, nota)
@@ -25,8 +25,8 @@ def lanca_nota(aluno_id, materia_id, nota):
 
 
 @aluno.command()
-@click.option("--aluno-id", type=int, required=True, help="Identificador do aluno")
-@click.option("--materia-id", type=int, required=True, help="Identificador da materia")
+@click.option("--aluno-id", type=int, required=True, help="Student identification")
+@click.option("--materia-id", type=int, required=True, help="Discipline identification")
 def inscreve_materia(aluno_id, materia_id):
     try:
         Alunos(conn).inscreve_materia(aluno_id, materia_id)
@@ -36,7 +36,7 @@ def inscreve_materia(aluno_id, materia_id):
 
 
 @aluno.command()
-@click.option("--nome", required=True, help="Nome do aluno")
+@click.option("--nome", required=True, help="Student name")
 def cria(nome):
     Alunos(conn).cria(nome)
     id_ = conn.lista_maximo(AlunoBd).id
@@ -44,8 +44,8 @@ def cria(nome):
 
 
 @aluno.command()
-@click.option("--aluno-id", type=int, required=True, help="Identificador do aluno")
-@click.option("--curso-id", type=int, required=True, help="Identificador do curso")
+@click.option("--aluno-id", type=int, required=True, help="Student identification")
+@click.option("--curso-id", type=int, required=True, help="Course identification")
 def inscreve_curso(aluno_id, curso_id):
     try:
         Alunos(conn).inscreve_curso(aluno_id, curso_id)

@@ -1,6 +1,6 @@
 from src.utils.sql_client import SqlClient
-from src.esquemas.aluno import AlunoBd
-from src.modelos.aluno import AlunoModelo
+from src.schemes.student import AlunoBd
+from src.models.aluno import AlunoModelo
 
 
 class Alunos:

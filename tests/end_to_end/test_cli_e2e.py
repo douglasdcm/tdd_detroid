@@ -1,11 +1,11 @@
 import subprocess
-from src.cursos import Cursos
-from src.alunos import Alunos
-from src.materias import Materias
-from src.esquemas.curso import CursoBd
-from src.esquemas.aluno import AlunoBd
-from src.esquemas.materia import MateriaBd
-from src.esquemas.para_associacao import MateriaAlunoBd
+from src.courses import Cursos
+from src.students import Alunos
+from src.disciplines import Materias
+from src.schemes.course import CursoBd
+from src.schemes.student import AlunoBd
+from src.schemes.discipline import MateriaBd
+from src.schemes.for_association import MateriaAlunoBd
 from src.config import conn
 from pytest import fixture
 from time import sleep
@@ -33,7 +33,7 @@ def test_init_banco_dados():
     )
     output = str(temp.communicate())
     assert len(alunos.lista_tudo()) == 0
-    assert "Banco de dados inicializado" in output
+    assert "Database initialized" in output
 
 
 def test_aluno_pode_lancar_notas(__popula_banco_dados):

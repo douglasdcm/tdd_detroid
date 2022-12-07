@@ -1,7 +1,7 @@
 import uuid
-from src.modelos.curso import CursoModelo
-from src.modelos.materia import MateriaModelo
-from src.modelos.aluno import AlunoModelo
+from src.models.curso import CursoModelo
+from src.models.materia import MateriaModelo
+from src.models.aluno import AlunoModelo
 from src.config import conn
 from pytest import raises
 from src.utils.utils import inicializa_tabelas
