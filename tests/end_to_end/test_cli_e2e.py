@@ -1,7 +1,7 @@
 import subprocess
-from src.courses import Cursos
-from src.students import Alunos
-from src.disciplines import Materias
+from src.courses import Courses
+from src.students import Students
+from src.disciplines import Disciplines
 from src.schemes.course import CursoBd
 from src.schemes.student import AlunoBd
 from src.schemes.discipline import MateriaBd
@@ -25,7 +25,7 @@ def __popula_banco_dados():
 
 def test_init_banco_dados():
 
-    alunos = Alunos(conn)
+    alunos = Students(conn)
 
     temp = subprocess.Popen(
         ["python", "cli.py", "init-bd"],
@@ -74,11 +74,11 @@ def test_aluno_pode_lancar_notas(__popula_banco_dados):
 
 def test_alunos_deve_inscreve_3_materias_no_minimo(__popula_banco_dados):
 
-    alunos = Alunos(conn)
+    alunos = Students(conn)
     alunos.cria("any")
     aluno_id = len(alunos.lista_tudo())
 
-    materias = Materias(conn)
+    materias = Disciplines(conn)
     uma_materia = materias.lista_tudo()[0]
     materia_id = uma_materia.id
     curso_id = uma_materia.curso_id
@@ -108,10 +108,10 @@ def test_alunos_deve_inscreve_3_materias_no_minimo(__popula_banco_dados):
 
 def test_aluno_pode_se_inscrever_em_curso(__popula_banco_dados):
 
-    cursos = Cursos(conn)
+    cursos = Courses(conn)
     cursos.cria("other")
     curso_id = len(cursos.lista_tudo())
-    alunos = Alunos(conn)
+    alunos = Students(conn)
     alunos.cria("any")
     aluno_id = len(alunos.lista_tudo())
 
@@ -143,12 +143,12 @@ def test_cli_materia_nome_igual_mas_id_diferente(setup):
     cria_curso(conn)
     cria_curso(conn)
     cria_curso(conn)
-    cursos = Cursos(conn)
+    cursos = Courses(conn)
     for _ in range(3):
         if len(cursos.lista_tudo()) >= 3:
             break
         sleep(1)
-    materias = Materias(conn)
+    materias = Disciplines(conn)
     materias.cria("any", 1)
     temp = subprocess.Popen(
         ["python", "cli.py", "materia", "cria", "--nome", "other", "--curso-id", "1"],
@@ -169,7 +169,7 @@ def test_cli_materia_nome_igual_mas_id_diferente(setup):
 
 def test_cli_aluno_deve_ter_nome(setup):
 
-    alunos = Alunos(conn)
+    alunos = Students(conn)
     subprocess.Popen(
         ["python", "cli.py", "aluno", "cria", "--nome", "any"],
         stdout=subprocess.PIPE,
@@ -191,7 +191,7 @@ def test_cli_aluno_deve_ter_nome(setup):
 
 
 def test_cli_curso_com_nome_e_id(setup):
-    cursos = Cursos(conn)
+    cursos = Courses(conn)
     cursos.cria("any")
     temp = subprocess.Popen(
         ["python", "cli.py", "curso", "cria", "--nome", "other"],
