@@ -3,7 +3,7 @@ from src.schemes.discipline import MateriaBd
 from src.models.materia import MateriaModelo
 
 
-class Materias:
+class Disciplines:
     def __init__(self, conn: SqlClient) -> None:
         self._conn = conn
 

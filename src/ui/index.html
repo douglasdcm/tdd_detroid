@@ -52,67 +52,18 @@
         packages = ["sqlalchemy",
         "./dist/src-0.0.1-py3-none-any.whl"
         ]
+
+        [[fetch]]
+        files = ["./functions.py"]
     </py-config>
     <py-script>
-      from src.alunos import Alunos
-      from src.cursos import Cursos
-      from src.materias import Materias
-      from src.config import conn
-      from src.utils.utils import inicializa_tabelas
-      from pyscript import Element
-      inicializa_tabelas(conn)
-      def inscreve_materia():
-        try:
-          aluno_id = Element("inscreve-aluno-id")
-          materia_id = Element("inscreve-materia-id")
-          alunos = Alunos(conn)
-          alunos.inscreve_materia(aluno_id.value, materia_id.value)
-          qtde = len(alunos.lista_tudo())
-          print("#Aluno", qtde, " Nome ", alunos.lista(qtde).nome, " Materia ", materias.lista(qtde).materia_id)
-        except Exception as e:
-          print(e)
-
-      def add_materia():
-        try:
-          materia_nome = Element("materia-nome")
-          curso_materia_id = Element("curso-materia-id")
-          materias = Materias(conn)
-          materias.cria(materia_nome.value, curso_materia_id.value)
-          qtde = len(materias.lista_tudo())
-          print("#Materia", qtde, " Nome ", materias.lista(qtde).nome, " Curso ", materias.lista(qtde).curso_id)
-        except Exception as e:
-          print(e)
-
-      def inscreve_curso():
-        try:
-          aluno_id = Element("aluno-id")
-          curso_id = Element("curso-id")
-          alunos = Alunos(conn)
-          alunos.inscreve_curso(aluno_id.value, curso_id.value)
-          qtde = len(alunos.lista_tudo())
-          print("#Aluno", qtde, " Curso ", alunos.lista(qtde).curso_id)
-        except Exception as e:
-          print(e)
-
-      def add_curso():
-        try:
-          content = Element("curso-nome")
-          cursos = Cursos(conn)
-          cursos.cria(content.value)
-          qtde = len(cursos.lista_tudo())
-          print("#Curso", qtde, " Nome ", cursos.lista(qtde).nome)
-        except Exception as e:
-          print(e)
-      
-      def add_aluno():
-        try:
-          content = Element("aluno-nome")
-          alunos = Alunos(conn)
-          alunos.cria(content.value)
-          qtde = len(alunos.lista_tudo())
-          print("#Aluno", qtde, " Nome ", alunos.lista(qtde).nome)
-        except Exception as e:
-          print(e)
+      from functions import (
+        inscreve_materia,
+        add_materia,
+        inscreve_curso,
+        add_curso,
+        add_aluno
+      )
   </py-script>
   </body>
 </html>

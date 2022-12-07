@@ -1,5 +1,5 @@
 import click
-from src.courses import Cursos
+from src.courses import Courses
 from src.schemes.course import CursoBd
 from src.config import conn
 
@@ -14,7 +14,7 @@ def curso():
 @click.option("--nome", required=True, help="Course name")
 def cria(nome):
     try:
-        Cursos(conn).cria(nome)
+        Courses(conn).cria(nome)
         id_ = conn.lista_maximo(CursoBd).id
         click.echo(f"Curso definido: id {id_}, nome {nome}")
     except Exception as e:

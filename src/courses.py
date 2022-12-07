@@ -3,7 +3,7 @@ from src.schemes.course import CursoBd
 from src.utils.sql_client import SqlClient
 
 
-class Cursos:
+class Courses:
     def __init__(self, conn: SqlClient) -> None:
         self._conn = conn
 

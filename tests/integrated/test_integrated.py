@@ -1,6 +1,6 @@
-from src.courses import Cursos
-from src.disciplines import Materias
-from src.students import Alunos
+from src.courses import Courses
+from src.disciplines import Disciplines
+from src.students import Students
 from src.schemes.student import AlunoBd
 from src.schemes.course import CursoBd
 from src.schemes.discipline import MateriaBd
@@ -18,8 +18,8 @@ from pytest import raises
 
 
 def test_calcula_cr_aluno_de_materias_cursadas(popula_banco_dados):
-    aluno_id = len(Alunos(conn).lista_tudo())
-    alunos = Alunos(conn)
+    aluno_id = len(Students(conn).lista_tudo())
+    alunos = Students(conn)
     alunos.lanca_nota(aluno_id=aluno_id, materia_id=1, nota=5)
     alunos.lanca_nota(aluno_id=aluno_id, materia_id=2, nota=0)
     alunos.lanca_nota(aluno_id=aluno_id, materia_id=3, nota=5)
@@ -29,7 +29,7 @@ def test_calcula_cr_aluno_de_materias_cursadas(popula_banco_dados):
 
 def test_alunos_deve_inscreve_em_3_materias(popula_banco_dados):
 
-    alunos = Alunos(conn)
+    alunos = Students(conn)
     alunos.cria("any")
     aluno_id = len(alunos.lista_tudo())
     alunos.inscreve_curso(aluno_id, curso_id=1)
@@ -43,15 +43,15 @@ def test_alunos_deve_inscreve_em_3_materias(popula_banco_dados):
 
 
 def test_cria_aluno_por_api():
-    alunos = Alunos(conn)
+    alunos = Students(conn)
     alunos.cria("any")
     aluno = alunos.lista(1)
     assert aluno.id == 1
 
 
 def test_cli_tres_cursos_com_tres_materias_cada():
-    cursos = Cursos(conn)
-    materias = Materias(conn)
+    cursos = Courses(conn)
+    materias = Disciplines(conn)
     cria_curso(conn)
     cria_curso(conn)
     cria_curso(conn)
@@ -66,10 +66,10 @@ def test_cli_tres_cursos_com_tres_materias_cada():
 
 
 def test_aluno_pode_se_inscrever_em_apenas_um_curso(popula_banco_dados):
-    alunos = Alunos(conn)
+    alunos = Students(conn)
     alunos.cria("any")
     aluno_id = len(alunos.lista_tudo())
-    Cursos(conn).cria("other")
+    Courses(conn).cria("other")
     alunos.inscreve_curso(aluno_id, 4)
 
     with raises(ErroAluno, match="Aluno esta inscrito em outro curso"):
@@ -81,50 +81,50 @@ def test_aluno_pode_se_inscrever_em_apenas_um_curso(popula_banco_dados):
 
 def test_curso_nao_pode_ter_materias_com_mesmo_nome():
 
-    Cursos(conn).cria("any_1")
-    Cursos(conn).cria("any_2")
-    Cursos(conn).cria("any_3")
-    Materias(conn).cria("any", 1)
+    Courses(conn).cria("any_1")
+    Courses(conn).cria("any_2")
+    Courses(conn).cria("any_3")
+    Disciplines(conn).cria("any", 1)
     with raises(
         ErroMateria,
         match="O curso já possui uma matéria com este nome",
     ):
-        Materias(conn).cria("any", 1)
+        Disciplines(conn).cria("any", 1)
 
 
 def test_nao_criar_quarto_curso_se_menos_de_tres_materias_por_curso():
-    Cursos(conn).cria("any_1")
-    Cursos(conn).cria("any_2")
-    Cursos(conn).cria("any_3")
-    Materias(conn).cria(nome="any", curso_id=1)
+    Courses(conn).cria("any_1")
+    Courses(conn).cria("any_2")
+    Courses(conn).cria("any_3")
+    Disciplines(conn).cria(nome="any", curso_id=1)
     with raises(
         ErroCurso,
         match="Necessários 3 cursos com 3 três matérias para se criar novos cursos",
     ):
-        Cursos(conn).cria("quarto")
+        Courses(conn).cria("quarto")
 
 
 def test_nao_criar_quarto_curso_se_todos_cursos_sem_materias():
-    Cursos(conn).cria("any_1")
-    Cursos(conn).cria("any_2")
-    Cursos(conn).cria("any_3")
+    Courses(conn).cria("any_1")
+    Courses(conn).cria("any_2")
+    Courses(conn).cria("any_3")
     with raises(
         ErroCurso,
         match="Necessários 3 cursos com 3 três matérias para se criar novos cursos",
     ):
-        Cursos(conn).cria("quatro")
+        Courses(conn).cria("quatro")
 
 
 def test_materia_nao_criada_se_menos_de_tres_cursos_existentes():
     with raises(
         ErroMateria, match="Necessários 3 cursos para se criar a primeira matéria"
     ):
-        Materias(conn).cria("any", 1)
+        Disciplines(conn).cria("any", 1)
 
 
 def test_materia_nao_associada_curso_inexistente(popula_banco_dados):
     with raises(ErroMateria):
-        Materias(conn).cria("any", 42)
+        Disciplines(conn).cria("any", 42)
 
 
 def test_materia_associada_curso_existente():
@@ -146,6 +146,6 @@ def test_cria_item_bd():
 
 
 def test_lista_por_id_bd():
-    Cursos(conn).cria("any")
+    Courses(conn).cria("any")
     inicializa_tabelas(conn)
     assert len(conn.lista_tudo(CursoBd)) == 0

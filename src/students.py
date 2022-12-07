@@ -3,7 +3,7 @@ from src.schemes.student import AlunoBd
 from src.models.aluno import AlunoModelo
 
 
-class Alunos:
+class Students:
     def __init__(self, conn: SqlClient) -> None:
         self._conn = conn
 

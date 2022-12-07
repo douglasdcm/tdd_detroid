@@ -1,5 +1,5 @@
 import click
-from src.students import Alunos
+from src.students import Students
 from src.schemes.student import AlunoBd
 from src.config import conn
 
@@ -16,7 +16,7 @@ def aluno():
 @click.option("--nota", type=int, required=True, help="Student grade")
 def lanca_nota(aluno_id, materia_id, nota):
     try:
-        Alunos(conn).lanca_nota(aluno_id, materia_id, nota)
+        Students(conn).lanca_nota(aluno_id, materia_id, nota)
         click.echo(
             f"Nota {nota} do aluno {aluno_id} na materia {materia_id} lancada com sucesso"
         )
@@ -29,7 +29,7 @@ def lanca_nota(aluno_id, materia_id, nota):
 @click.option("--materia-id", type=int, required=True, help="Discipline identification")
 def inscreve_materia(aluno_id, materia_id):
     try:
-        Alunos(conn).inscreve_materia(aluno_id, materia_id)
+        Students(conn).inscreve_materia(aluno_id, materia_id)
         click.echo(f"Aluno {aluno_id} inscrito na materia {materia_id}")
     except Exception as e:
         click.echo(e)
@@ -38,7 +38,7 @@ def inscreve_materia(aluno_id, materia_id):
 @aluno.command()
 @click.option("--nome", required=True, help="Student name")
 def cria(nome):
-    Alunos(conn).cria(nome)
+    Students(conn).cria(nome)
     id_ = conn.lista_maximo(AlunoBd).id
     click.echo(f"Aluno definido: id {id_}, nome {nome}")
 
@@ -48,7 +48,7 @@ def cria(nome):
 @click.option("--curso-id", type=int, required=True, help="Course identification")
 def inscreve_curso(aluno_id, curso_id):
     try:
-        Alunos(conn).inscreve_curso(aluno_id, curso_id)
+        Students(conn).inscreve_curso(aluno_id, curso_id)
         click.echo(f"Aluno inscrito no curso {curso_id}")
     except Exception as e:
         click.echo(e)
