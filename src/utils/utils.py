@@ -1,7 +1,7 @@
-from src.esquemas.curso import CursoBd
-from src.esquemas.materia import MateriaBd
-from src.esquemas.aluno import AlunoBd
-from src.esquemas.para_associacao import MateriaAlunoBd
+from src.schemes.course import CursoBd
+from src.schemes.discipline import MateriaBd
+from src.schemes.student import AlunoBd
+from src.schemes.for_association import MateriaAlunoBd
 from src.utils.sql_client import SqlClient
 
 

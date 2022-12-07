@@ -1,5 +1,5 @@
-from src.modelos.materia import MateriaModelo
-from src.esquemas.materia import MateriaBd
+from src.models.materia import MateriaModelo
+from src.schemes.discipline import MateriaBd
 from tests.config import conn
 
 

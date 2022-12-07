@@ -1,7 +1,7 @@
-from src.esquemas.para_associacao import MateriaAlunoBd
-from src.esquemas.aluno import AlunoBd
-from src.modelos.aluno import AlunoModelo
-from src.modelos.aluno import ErroAluno
+from src.schemes.for_association import MateriaAlunoBd
+from src.schemes.student import AlunoBd
+from src.models.aluno import AlunoModelo
+from src.models.aluno import ErroAluno
 from src.utils.exceptions import (
     ErroAluno,
     ErroMateriaAluno,

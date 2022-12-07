@@ -1,11 +1,11 @@
 from src.utils.sql_client import SqlClient
-from src.esquemas.aluno import AlunoBd
-from src.esquemas.para_associacao import MateriaAlunoBd
-from src.modelos.curso import CursoModelo
+from src.schemes.student import AlunoBd
+from src.schemes.for_association import MateriaAlunoBd
+from src.models.curso import CursoModelo
 from src.utils.sql_client import SqlClient
 from src.utils.exceptions import ErroAluno, ErroBancoDados, ErroMateriaAluno
-from src.modelos.materia import MateriaModelo
-from src.modelos.curso import CursoModelo
+from src.models.materia import MateriaModelo
+from src.models.curso import CursoModelo
 from sqlalchemy.orm import Query
 
 

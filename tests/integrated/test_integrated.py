@@ -1,10 +1,10 @@
-from src.cursos import Cursos
-from src.materias import Materias
-from src.alunos import Alunos
-from src.esquemas.aluno import AlunoBd
-from src.esquemas.curso import CursoBd
-from src.esquemas.materia import MateriaBd
-from src.esquemas.para_associacao import MateriaAlunoBd
+from src.courses import Cursos
+from src.disciplines import Materias
+from src.students import Alunos
+from src.schemes.student import AlunoBd
+from src.schemes.course import CursoBd
+from src.schemes.discipline import MateriaBd
+from src.schemes.for_association import MateriaAlunoBd
 from src.utils.utils import inicializa_tabelas
 from src.utils.exceptions import (
     ErroAluno,

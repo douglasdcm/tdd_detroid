@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Query
-from src.esquemas.curso import CursoBd
+from src.schemes.course import CursoBd
 from src.utils.sql_client import SqlClient
-from src.esquemas.materia import MateriaBd
+from src.schemes.discipline import MateriaBd
 from src.utils.exceptions import ErroBancoDados, ErroMateria
 
 

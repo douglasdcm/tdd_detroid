@@ -1,5 +1,5 @@
-from src.modelos.curso import CursoModelo
-from src.esquemas.curso import CursoBd
+from src.models.curso import CursoModelo
+from src.schemes.course import CursoBd
 from src.utils.sql_client import SqlClient
 
 
