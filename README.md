@@ -8,6 +8,14 @@ Definition of Done:
 2. The functionality is designed to be used via CLI
 3. Data is being saved to the database
 # How to use
+## Option 1: docker-compose
+Run the commnands and access "http://localhost:5000"
+```
+chmod +x utils/build_container.sh
+./utils/build_container.sh
+```
+## Option 2: kubernets (WIP)
+## Option 3: locally by Live Server
 1. At the root of the project, run the commands below:
 ```
 python3.6 -m venv venv
@@ -21,13 +29,20 @@ cp -r dist/ src/ui/
 2. This project was developed using VSCode, so install [Live Server](https://github.com/ritwickdey/vscode-live-server-plus-plus) on VSCode
 3. Navigate to the index.html file and start the Live Server as per the documentation
 4. Fill in the form and confirm to see the records created
+## Option 4: locally by Flask
+1. Run the commands above to setup the application
+2. Start the aplication running the commnad bellow and access "http://localhost:5001"
+```
+python app.py
+```
+## Option 5: by CLI
 5. It is possible to interact with the application using the command line. See more details in the help menu.
 ```
 python cli. init-bd
 python cli.py --help
 ```
 # Technologies
-This project uses pure Python in the backend, html for the screens, sqlite to store the records and PyScript to create the elements of the screens.
+This project uses pure Python in the backend, html for the screens, sqlite to store the records, PyScript to create the elements of the screens, Liver Server, docker-compose or kubernetes as options to bring the application up.
 # Limitations
 When used by the graphical interface, the inserted records are lost every time the screen is rendered. Persistence is only possible when used from the command line
 # Deliveries
