@@ -13,8 +13,22 @@ Run the commnands and access "http://localhost:5000"
 ```
 chmod +x utils/build_container.sh
 ./utils/build_container.sh
+docker-compose up -d
 ```
 ## Option 2: kubernets (WIP)
+Cosudering the Minikube and Virtual Box are installed, [Push the image](#publish-image) to Docker Hub Run the commands
+```
+minikube start --driver=virtualbox
+kubectl create deployment tdd-detroid --image=douglasdcm/tdd-detroid
+kubectl get pods
+```
+Create services
+```
+kubectl expose deployment tdd-detroid --type=NodePort --port=5000
+kubectl get services
+curl $(minikube ip):<port>
+```
+Navigate to $(minikube ip):<port>
 ## Option 3: locally by Live Server
 1. At the root of the project, run the commands below:
 ```
@@ -45,6 +59,32 @@ python cli.py --help
 This project uses pure Python in the backend, html for the screens, sqlite to store the records, PyScript to create the elements of the screens, Liver Server, docker-compose or kubernetes as options to bring the application up.
 # Limitations
 When used by the graphical interface, the inserted records are lost every time the screen is rendered. Persistence is only possible when used from the command line
+# Publish image
+Run the commands
+```
+docker login -u someuser -p somepassword
+docker push douglasdcm/tdd-detroid:latest
+```
+# Notes about Kubernetes
+```
+app > docker/containerd > deployment() > k8s pod > k8s node > k8s cluster
+
+if app down > k8s creats a new
+
+if node down > k8s find other
+
+* Notes
+
+k8s pods: 1 or more containers
+
+    https://kubernetes.io/docs/concepts/workloads/pods/
+
+k8s node: virtual/phisical, has a container server to run pods
+
+    https://kubernetes.io/docs/concepts/architecture/nodes/
+
+k8s cluster: control plane/client [kubectl]
+```
 # Deliveries
 Construction of the basic functions of the system
 1. ~~Each student will have a grade control called "performance coefficient" (CR)~~

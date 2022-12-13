@@ -1,0 +1,9 @@
+version: "3.6"
+
+services:
+  tdd_detroid:
+    image: douglasdcm/tdd-detroid
+    container_name: tdd-detroid
+    ports:
+      - 5000:5000
+    working_dir: /
