@@ -19,6 +19,15 @@ docker-compose up -d
 Cosidering the Minikube and Virtual Box are installed, [Push the image](#publish-image) to Docker Hub and run the commands
 ```
 minikube start --driver=virtualbox
+```
+### Declarative way
+```
+kubectl create -f kubernetes/deployments.yaml
+kubectl create -f kubernetes/services.yaml
+```
+
+### Or Imperative way
+```
 kubectl create deployment tdd-detroid --image=douglasdcm/tdd-detroid
 kubectl get pods
 ```
@@ -26,9 +35,12 @@ Create services
 ```
 kubectl expose deployment tdd-detroid --type=NodePort --port=5000
 kubectl get services
+```
+### Check access
+```
 curl $(minikube ip):<port>
 ```
-Navigate to ```http://$(minikube ip):<port>```
+and navigate to ```http://$(minikube ip):<port>```
 ## Option 3: locally by Live Server
 1. At the root of the project, run the commands below:
 ```
