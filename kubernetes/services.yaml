@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata: # ObjectMeta
+    name: tdd-detroid
+spec: # ServiceSpec
+  selector:
+    app: tdd-detroid
+  ports:
+    - port: 5000
+  type: NodePort

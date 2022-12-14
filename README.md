@@ -15,7 +15,7 @@ chmod +x utils/build_container.sh
 ./utils/build_container.sh
 docker-compose up -d
 ```
-## Option 2: Kubernets
+## Option 2: Kubernetes
 Cosidering the Minikube and Virtual Box are installed, [Push the image](#publish-image) to Docker Hub and run the commands
 ```
 minikube start --driver=virtualbox
