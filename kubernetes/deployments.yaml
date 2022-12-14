@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: # ObjectMeta
+  name: tdd-detroid
+  labels:
+    app: tdd-detroid
+spec: # DeploymentSpec
+  selector: # LabelSelector
+    # matchExpressions:
+    #   - {key: "app", operator: In, values: ["tdd-detroid"]}
+    matchLabels:
+      app: tdd-detroid
+  template: # PodTemplateSpec
+    metadata: # ObjectMeta
+      name: tdd-detroid
+      labels:
+        app: tdd-detroid
+    spec: # PodSpec
+      containers: # Containers
+        - name: tdd-detroid
+          image: douglasdcm/tdd-detroid
