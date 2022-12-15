@@ -110,6 +110,9 @@ class AlunoModelo:
         return curso_id
 
     def cria(self, nome):
+        nome = nome.strip()
+        if len(nome) == 0:
+            raise ErroAluno("Invalid student name")
         aluno = AlunoBd(nome=nome)
         self._conn.cria(aluno)
         self._aluno_id = self._conn.lista_maximo(AlunoBd).id

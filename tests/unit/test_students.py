@@ -9,7 +9,13 @@ from src.utils.exceptions import (
     ErroCurso,
 )
 from tests.config import conn
-from pytest import raises
+from pytest import raises, mark
+
+
+@mark.parametrize("input", [(""), ("   ")])
+def test_student_name_cannot_be_empty(popula_banco_dados, input):
+    with raises(ErroAluno, match="Invalid student name"):
+        AlunoModelo(conn).cria(nome=input)
 
 
 def test_arredonda_o_cr_a_uma_casa_decimal(popula_banco_dados):

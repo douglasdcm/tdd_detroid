@@ -4,6 +4,19 @@ services:
   tdd_detroid:
     image: douglasdcm/tdd-detroid
     container_name: tdd-detroid
+    volumes:
+      - .:/webapp
     ports:
       - 5000:5000
     working_dir: /
+
+  postgres:
+    image: postgres
+    container_name: postgres
+    volumes:
+      - vpm-data:/var/lib/pgsql
+    environment:
+      POSTGRES_PASSWORD: postgresql
+
+volumes:
+  vpm-data:

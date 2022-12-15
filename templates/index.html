@@ -1,69 +1,85 @@
 <html>
-    <head>
+   <head>
       <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+      <link rel="stylesheet" href="styles.css">
       <script defer src="https://pyscript.net/unstable/pyscript.js"></script>
-    </head>
+   </head>
+   <body class="py-body">
+    <div class="grid-container">
 
-  <body>
-    <main>
-      <section>
-  
-      <div class="text-center w-full mb-8">
-        <h1 class="text-3xl font-bold text-gray-800 uppercase tracking-tight">To Do List</h1>
-      </div>
-      <div>
-        <input id="aluno-nome" class="py-input" type="text">
-        <button id="aluno-btn" class="py-button" type="submit" py-click="add_aluno()">
-          Add aluno
-        </button>
-      </div>
-      <div>
-        <input id="curso-nome" class="py-input" type="text">
-        <button id="curso-btn" class="py-button" type="submit" py-click="add_curso()">
-          Add curso
-        </button>
-      </div>
-      <div>
-        <input id="aluno-id" class="py-input" type="text">
-        <input id="curso-id" class="py-input" type="text">
-        <button id="curso-btn" class="py-button" type="submit" py-click="inscreve_curso()">
-          Inscrever aluno curso
-        </button>
-      </div>
-      <div>
-        <input id="materia-nome" class="py-input" type="text">
-        <input id="curso-materia-id" class="py-input" type="text">
-        <button id="curso-btn" class="py-button" type="submit" py-click="add_materia()">
-          Add materia
-        </button>
-      </div>
-      <div>
-        <input id="inscreve-aluno-id" class="py-input" type="text">
-        <input id="inscreve-materia-id" class="py-input" type="text">
-        <button id="curso-btn" class="py-button" type="submit" py-click="inscreve_materia()">
-          Inscreve materia
-        </button>
-      </div>
-      <py-list id="myList"></py-list>
-      <div id="list-tasks-container" class="flex flex-col-reverse mt-4">
+      <div class="main">
+        <div class="text-center w-full mb-8">
+          <h1 class="text-3xl font-bold text-gray-800 uppercase tracking-tight">College manager</h1>
+        </div>
+
+        <div class="form-group">
+          <input id="student-nome" class="py-input" type="text" placeholder="Student name">
+          <button id="student-btn" class="py-button" type="submit" py-click="add_student()">
+            Add student
+          </button>
+        </div>
+
+        <div class="form-group">
+          <input id="course-nome" class="py-input" type="text" placeholder="Course name">
+          <button id="course-btn" class="py-button" type="submit" py-click="add_course()">
+            Add course
+           </button>
+        </div>
+
+        <div class="form-group">
+          <div>
+            <input id="student-id" class="py-input" type="text" placeholder="Student id">
+          </div>
+          <input id="course-id" class="py-input" type="text" placeholder="Course id">
+          <button id="course-btn" class="py-button" type="submit" py-click="subscribe_course()">
+            Subscribe student in course
+          </button>
+        </div>
+
+        <div class="form-group">
+          <div>
+            <input id="discipline-nome" class="py-input" type="text" placeholder="Discipline name">
+          </div>
+          <input id="course-discipline-id" class="py-input" type="text" placeholder="Course id">
+          <button id="course-btn" class="py-button" type="submit" py-click="add_discipline()">
+            Add discipline
+          </button>
+        </div>
+
+        <div class="form-group">
+          <div>
+            <input id="subscribe-student-id" class="py-input" type="text" placeholder="Student id">
+          </div>
+          <input id="subscribe-discipline-id" class="py-input" type="text" placeholder="Discipline id">
+          <button id="course-btn" class="py-button" type="submit" py-click="subscribe_discipline()">
+            Subscribe discipline
+          </button>
+        </div>
+
+      </div> <!--main1-->
+
+      <div class="main" style="width: 700px;">
+        <p>Events</p>
+        <div class="py-terminal" id="local-terminal"></div>
+      </div> <!--main2-->
+
     </div>
-    <div id="plot"></div>
-    <py-config type="toml">
-        packages = ["sqlalchemy",
-        "./dist/src-0.0.1-py3-none-any.whl"
-        ]
 
-        [[fetch]]
-        files = ["./functions.py"]
+    <py-config type="toml">
+      packages = ["sqlalchemy",
+      "./dist/src-0.0.1-py3-none-any.whl"
+      ]
+      [[fetch]]
+      files = ["./functions.py"]
     </py-config>
     <py-script>
       from functions import (
-        inscreve_materia,
-        add_materia,
-        inscreve_curso,
-        add_curso,
-        add_aluno
-      )
-  </py-script>
-  </body>
+        subscribe_discipline,
+        add_discipline,
+        subscribe_course,
+        add_course,
+        add_student
+        )
+    </py-script>
+   </body>
 </html>
