@@ -1,11 +1,11 @@
 
 FROM python:3.6
 
-WORKDIR .
-COPY . .
-RUN chmod -R 777 /utils
-RUN ./utils/remove_files.sh
-RUN ./utils/setup.sh
-CMD ./utils/start.sh
+WORKDIR /webapp
+COPY . /webapp
+RUN chmod -R 777 /webapp/utils
+RUN /webapp/utils/remove_files.sh
+RUN /webapp/utils/setup.sh
+CMD /webapp/utils/start.sh
 
-EXPOSE 5000
+# EXPOSE 5000
