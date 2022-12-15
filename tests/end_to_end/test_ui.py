@@ -10,13 +10,13 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from time import sleep
+from os import path
 
 
 class TestAddstudentcoursedisciplineandsubscribe:
     def setup_method(self, method):
-        self.driver = webdriver.Chrome(
-            executable_path="/home/dmorais/repo/training/tdd_detroid/tests/end_to_end/chromedriver"
-        )
+        ROOT_DIR = path.dirname(path.abspath(__file__))
+        self.driver = webdriver.Chrome(executable_path=f"{ROOT_DIR}/chromedriver")
         self.vars = {}
 
     def teardown_method(self, method):
