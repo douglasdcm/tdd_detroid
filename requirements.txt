@@ -22,14 +22,17 @@ pathspec==0.9.0
 pep517==0.13.0
 platformdirs==2.4.0
 pluggy==1.0.0
+psycopg2-binary==2.9.5
 py==1.11.0
 pyparsing==3.0.9
 pytest==7.0.1
 pytest-watch==4.2.0
+selenium==3.141.0
 SQLAlchemy==1.4.44
 tomli==1.2.3
 typed-ast==1.5.4
 typing_extensions==4.1.1
+urllib3==1.26.13
 waitress==2.0.0
 watchdog==2.1.9
 Werkzeug==2.0.3
