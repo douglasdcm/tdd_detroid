@@ -2,11 +2,18 @@ from src.students import Students
 from src.courses import Courses
 from src.disciplines import Disciplines
 from src.config import conn
-from src.utils.utils import inicializa_tabelas
 from datetime import datetime
 from pyscript import Element, create
+from pyodide.http import pyfetch
+import asyncio
 
-inicializa_tabelas(conn)
+
+async def poc_postgrest():
+    response = await pyfetch(url="http://localhost:3000/todos", method="GET")
+
+    output = f"GET request=> status:{response.status}, json:{await response.json()}"
+
+    __update_terminal(output, "INFO")
 
 
 def subscribe_discipline():

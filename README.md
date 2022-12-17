@@ -57,7 +57,7 @@ cp -r dist/ src/ui/
 4. Fill in the form and confirm to see the records created
 ## Option 4: locally by Flask
 1. Run the commands above to setup the application
-2. Start the aplication running the commnad bellow and access "http://localhost:5001"
+2. Start the aplication running the commnad bellow and access "http://localhost:5000"
 ```
 python app.py
 ```

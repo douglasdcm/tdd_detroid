@@ -23,7 +23,7 @@ def __popula_banco_dados():
     popula_banco_dados()
 
 
-def test_init_banco_dados():
+def test_init_data_base():
 
     alunos = Students(conn)
 
