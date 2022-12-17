@@ -9,7 +9,19 @@ Base = declarative_base()
 
 class SqlClient:
     def __init__(self, nome_banco) -> None:
-        self._engine = create_engine(f"sqlite:///{nome_banco}", echo=False)
+        # self._engine = create_engine(f"sqlite:///{nome_banco}", echo=False)
+        self._engine = create_engine(
+            f"postgresql+pg8000://postgres:postgresql@172.26.0.2/postgres",
+            echo=False,
+            # pool_pre_ping=True,
+        )
+
+        # # using db from websocket-postgres
+        # self._engine = create_engine(
+        #     f"postgresql+pg8000://pgws:example@172.24.0.2/postgres",
+        #     echo=False,
+        #     pool_pre_ping=True,
+        # )
         _session_maker = sessionmaker(bind=self._engine)
         self._session = _session_maker()
 
@@ -23,9 +35,12 @@ class SqlClient:
             return resultado[-1]
         return resultado
 
-    def inicializa_tabela(self, modelo):
+    def init_table(self, modelo):
+        print(modelo)
         Base.metadata.create_all(self._engine)
         resultado = self._session.query(modelo).all()
+        # print(self._engine.)
+        print(resultado)
         for instance in resultado:
             self._session.delete(instance)
             self._session.flush()

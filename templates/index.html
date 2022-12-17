@@ -5,6 +5,12 @@
       <script defer src="https://pyscript.net/unstable/pyscript.js"></script>
    </head>
    <body class="py-body">
+
+    <button id="poc-btn" type="submit" py-click="poc_postgrest()">
+      POC
+    </button>
+
+
     <div class="grid-container">
 
       <div class="main">
@@ -66,7 +72,7 @@
     </div>
 
     <py-config type="toml">
-      packages = ["sqlalchemy",
+      packages = ["sqlalchemy","pg8000", "scramp", "requests",
       "./dist/src-0.0.1-py3-none-any.whl"
       ]
       [[fetch]]
@@ -78,7 +84,8 @@
         add_discipline,
         subscribe_course,
         add_course,
-        add_student
+        add_student,
+        poc_postgrest,
         )
     </py-script>
    </body>
