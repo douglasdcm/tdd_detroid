@@ -97,6 +97,42 @@ k8s node: virtual/phisical, has a container server to run pods
 
 k8s cluster: control plane/client [kubectl]
 ```
+# Debug
+Access a container in a pod
+```
+kubectl exec -it tdd-detroid-57fbdd679-4sj87 -c tdd-detroid bash
+```
+# Links
+## K8s
+Minikube: https://kubernetes.io/docs/tutorials/hello-minikube/<br>
+Concepts: https://kubernetes.io/docs/concepts/architecture/<br>
+API: https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#PodSpec
+
+## HTML
+Attributes: https://www.w3schools.com/html/html_attributes.asp<br>
+Tags: https://www.w3schools.com/tags/tag_pre.asp<br>
+CSS: https://www.w3schools.com/css/css_howto.asp
+
+## PyScript
+Home: https://pyscript.net<br>
+Issues: https://github.com/pyscript/pyscript/issues?q=websocket
+
+## Pyodide
+FAQ: https://pyodide.org/en/stable/usage/faq.html#how-can-i-send-a-python-object-from-my-server-to-pyodide
+
+## PostgreSQL
+Doc: https://docs.sqlalchemy.org/en/14/dialects/postgresql.html<br>
+Doc: https://docs.sqlalchemy.org/en/14/core/pooling.html#pool-disconnects<br>
+Erros: https://docs.sqlalchemy.org/en/14/errors.html#error-f405
+
+## Websocket
+Doc: https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API
+
+## PostgREST
+Home: https://postgrest.org/en/stable/<br>
+Quick Start https://postgrest.org/en/stable/tutorials/tut0.html<br>
+Operations: https://postgrest.org/en/stable/api.html#insertions
+
 # Deliveries
 Construction of the basic functions of the system
 1. ~~Each student will have a grade control called "performance coefficient" (CR)~~
