@@ -1,3 +1,4 @@
+# https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/
 apiVersion: apps/v1
 kind: Deployment
 metadata: # ObjectMeta
@@ -19,3 +20,22 @@ spec: # DeploymentSpec
       containers: # Containers
         - name: tdd-detroid
           image: douglasdcm/tdd-detroid
+        - name: tdd-postgrest
+          image: douglasdcm/tdd-postgrest
+          ports:
+            - containerPort: 3000
+        - name: postgres
+          image: postgres # Docker image
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 5432 # Exposing the container port 5432 for PostgreSQL client connections.
+          envFrom:
+            - configMapRef:
+                name: postgres-secret # Using the ConfigMap postgres-secret
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgresdata
+      volumes:
+        - name: postgresdata
+          persistentVolumeClaim:
+            claimName: postgres-volume-claim

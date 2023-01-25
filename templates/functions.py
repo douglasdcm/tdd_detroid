@@ -10,9 +10,7 @@ import asyncio
 
 async def poc_postgrest():
     response = await pyfetch(url="http://localhost:3000/todos", method="GET")
-
     output = f"GET request=> status:{response.status}, json:{await response.json()}"
-
     __update_terminal(output, "INFO")
 
 
@@ -67,8 +65,20 @@ def add_course():
         __update_terminal(e, "FAIL")
 
 
-def add_student():
+async def add_student():
     try:
+        response = await pyfetch(
+            url="http://localhost:3000/alunos",
+            method="POST",
+            headers={
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+                },
+            body={"nome": "any"}
+        )
+        output = f"GET request=> status:{response.status}, json:{await response.json()}"
+        __update_terminal(output, "INFO")
+        return
         content = Element("student-nome")
         students = Students(conn)
         students.cria(content.value)
