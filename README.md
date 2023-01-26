@@ -107,7 +107,8 @@ kubectl exec -it tdd-detroid-57fbdd679-4sj87 -c tdd-detroid bash
 ## K8s
 Minikube: https://kubernetes.io/docs/tutorials/hello-minikube/<br>
 Concepts: https://kubernetes.io/docs/concepts/architecture/<br>
-API: https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#PodSpec
+API: https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#PodSpec<br>
+Cluster Networking: https://kubernetes.io/docs/concepts/cluster-administration/networking/
 
 ## HTML
 Attributes: https://www.w3schools.com/html/html_attributes.asp<br>
