@@ -7,4 +7,9 @@ spec: # ServiceSpec
     app: tdd-detroid
   ports:
     - port: 5000
+      name: tdd-detroid
+    - port: 3000
+      name: postgrest
+    - port: 5432
+      name: postgres
   type: NodePort

@@ -1,0 +1,107 @@
+# https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/
+apiVersion: apps/v1
+kind: Deployment
+metadata: # ObjectMeta
+  name: tdd-detroid
+  labels:
+    app: tdd-detroid
+spec: # DeploymentSpec
+  selector: # LabelSelector
+    # matchExpressions:
+    #   - {key: "app", operator: In, values: ["tdd-detroid"]}
+    matchLabels:
+      app: tdd-detroid
+  template: # PodTemplateSpec
+    metadata: # ObjectMeta
+      name: tdd-detroid
+      labels:
+        app: tdd-detroid
+    spec: # PodSpec
+      containers: # Containers
+        - name: tdd-detroid
+          image: douglasdcm/tdd-detroid
+          ports:
+            - containerPort: 5000
+              name: detroid-port
+        - name: tdd-postgrest
+          image: douglasdcm/tdd-postgrest
+          ports:
+            - containerPort: 3000
+        - name: postgres
+          image: postgres # Docker image
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 5432 # Exposing the container port 5432 for PostgreSQL client connections.
+          envFrom:
+            - configMapRef:
+                name: postgres-secret # Using the ConfigMap postgres-secret
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgresdata
+      volumes:
+        - name: postgresdata
+          persistentVolumeClaim:
+            claimName: postgres-volume-claim
+---
+apiVersion: v1
+kind: Service
+metadata: # ObjectMeta
+    name: tdd-detroid
+spec: # ServiceSpec
+  selector:
+    app: tdd-detroid
+  ports:
+    - port: 5000
+      name: tdd-detroid
+      targetPort: detroid-port
+      nodePort: 30500
+    - port: 3000
+      name: postgrest
+      nodePort: 30501
+    - port: 5432
+      name: postgres
+      nodePort: 30502
+  type: NodePort
+---
+apiVersion: v1
+kind: PersistentVolume # Create PV 
+metadata:
+  name: postgres-volume # Sets PV name
+  labels:
+    type: local # Sets PV's type
+    app: postgres
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 10Gi # Sets PV's size
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/data/postgresql" # Sets PV's host path
+---
+apiVersion: v1
+kind: PersistentVolumeClaim # Create PVC
+metadata:
+  name: postgres-volume-claim # Sets PVC's name
+  labels:
+    app: postgres # Defines app to create PVC for
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi # Sets PVC's size
+---
+# Create ConfigMap postgres-secret for the postgres app
+# Define default database name, user, and password
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-secret
+  labels:
+    app: postgres
+data:
+  POSTGRES_DB: postgres
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: postgresql
