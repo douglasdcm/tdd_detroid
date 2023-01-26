@@ -11,7 +11,7 @@ class SqlClient:
     def __init__(self, nome_banco) -> None:
         # self._engine = create_engine(f"sqlite:///{nome_banco}", echo=False)
         self._engine = create_engine(
-            f"postgresql+pg8000://postgres:postgresql@172.26.0.2/postgres",
+            f"postgresql+pg8000://postgres:postgresql@localhost/postgres",
             echo=False,
             # pool_pre_ping=True,
         )
