@@ -7,7 +7,7 @@ services:
     volumes:
       - .:/webapp
     ports:
-      - 5000:5000
+      - 30500:5000
     working_dir: /
 
   postgres:
@@ -24,7 +24,7 @@ services:
     image: douglasdcm/tdd-postgrest
     container_name: tdd-postgrest
     ports:
-      - 3000:3000
+      - 30501:3000
     working_dir: /
 
 volumes:
