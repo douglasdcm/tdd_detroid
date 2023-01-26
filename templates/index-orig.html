@@ -1,0 +1,92 @@
+<html>
+   <head>
+      <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+      <link rel="stylesheet" href="styles.css">
+      <script defer src="https://pyscript.net/unstable/pyscript.js"></script>
+   </head>
+   <body class="py-body">
+
+    <button id="poc-btn" type="submit" py-click="poc_postgrest()">
+      POC
+    </button>
+
+
+    <div class="grid-container">
+
+      <div class="main">
+        <div class="text-center w-full mb-8">
+          <h1 class="text-3xl font-bold text-gray-800 uppercase tracking-tight">College manager</h1>
+        </div>
+
+        <div class="form-group">
+          <input id="student-nome" class="py-input" type="text" placeholder="Student name">
+          <button id="student-btn" class="py-button" type="submit" py-click="add_student()">
+            Add student
+          </button>
+        </div>
+
+        <div class="form-group">
+          <input id="course-nome" class="py-input" type="text" placeholder="Course name">
+          <button id="course-btn" class="py-button" type="submit" py-click="add_course()">
+            Add course
+           </button>
+        </div>
+
+        <div class="form-group">
+          <div>
+            <input id="student-id" class="py-input" type="text" placeholder="Student id">
+          </div>
+          <input id="course-id" class="py-input" type="text" placeholder="Course id">
+          <button id="course-btn" class="py-button" type="submit" py-click="subscribe_course()">
+            Subscribe student in course
+          </button>
+        </div>
+
+        <div class="form-group">
+          <div>
+            <input id="discipline-nome" class="py-input" type="text" placeholder="Discipline name">
+          </div>
+          <input id="course-discipline-id" class="py-input" type="text" placeholder="Course id">
+          <button id="course-btn" class="py-button" type="submit" py-click="add_discipline()">
+            Add discipline
+          </button>
+        </div>
+
+        <div class="form-group">
+          <div>
+            <input id="subscribe-student-id" class="py-input" type="text" placeholder="Student id">
+          </div>
+          <input id="subscribe-discipline-id" class="py-input" type="text" placeholder="Discipline id">
+          <button id="course-btn" class="py-button" type="submit" py-click="subscribe_discipline()">
+            Subscribe discipline
+          </button>
+        </div>
+
+      </div> <!--main1-->
+
+      <div class="main" style="width: 700px;">
+        <p>Events</p>
+        <div class="py-terminal" id="local-terminal"></div>
+      </div> <!--main2-->
+
+    </div>
+
+    <py-config type="toml">
+      packages = ["sqlalchemy","pg8000", "scramp", "requests",
+      "./dist/src-0.0.1-py3-none-any.whl"
+      ]
+      [[fetch]]
+      files = ["./functions.py"]
+    </py-config>
+    <py-script>
+      from functions import (
+        subscribe_discipline,
+        add_discipline,
+        subscribe_course,
+        add_course,
+        add_student,
+        poc_postgrest,
+        )
+    </py-script>
+   </body>
+</html>

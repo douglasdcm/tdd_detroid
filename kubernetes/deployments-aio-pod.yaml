@@ -58,9 +58,9 @@ spec: # ServiceSpec
     - port: 3000
       name: postgrest
       nodePort: 30501
-    - port: 5432
-      name: postgres
-      nodePort: 30502
+    # - port: 5432
+    #   name: postgres
+    #   nodePort: 30502
   type: NodePort
 ---
 apiVersion: v1

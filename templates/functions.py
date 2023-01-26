@@ -9,7 +9,7 @@ import asyncio
 
 
 async def poc_postgrest():
-    response = await pyfetch(url="http://localhost:3000/todos", method="GET")
+    response = await pyfetch(url="http://minikube:30501/todos", method="GET")
     output = f"GET request=> status:{response.status}, json:{await response.json()}"
     __update_terminal(output, "INFO")
 
