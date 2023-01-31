@@ -3,15 +3,21 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import Query
 from src.utils.exceptions import ErroBancoDados
+from sqlalchemy.schema import MetaData
 
-Base = declarative_base()
+# https://docs.sqlalchemy.org/en/20/orm/mapping_styles.html#orm-declarative-mapping
+# https://docs.sqlalchemy.org/en/20/orm/mapping_api.html#sqlalchemy.orm.declarative_base
+# https://docs.sqlalchemy.org/en/20/orm/mapping_api.html#sqlalchemy.orm.registry.generate_base
+
+metadata = MetaData(schema="api")
+Base = declarative_base(metadata=metadata)
 
 
 class SqlClient:
     def __init__(self, nome_banco) -> None:
         # self._engine = create_engine(f"sqlite:///{nome_banco}", echo=False)
         self._engine = create_engine(
-            f"postgresql+pg8000://postgres:postgresql@172.26.0.2/postgres",
+            f"postgresql+pg8000://postgres:postgresql@localhost/postgres",
             echo=False,
             # pool_pre_ping=True,
         )

@@ -9,7 +9,7 @@ import asyncio
 
 
 async def poc_postgrest():
-    response = await pyfetch(url="http://minikube:30501/todos", method="GET")
+    response = await pyfetch(url="http://minikube:30501/alunos", method="GET")
     output = f"GET request=> status:{response.status}, json:{await response.json()}"
     __update_terminal(output, "INFO")
 
@@ -68,7 +68,7 @@ def add_course():
 async def add_student():
     try:
         response = await pyfetch(
-            url="http://localhost:3000/alunos",
+            url="http://minikube:30501/alunos",
             method="POST",
             headers={
                 'Accept': 'application/json',
