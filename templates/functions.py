@@ -4,13 +4,39 @@ from src.disciplines import Disciplines
 from src.config import conn
 from datetime import datetime
 from pyscript import Element, create
-from pyodide.http import pyfetch
-import asyncio
+from pyodide.http import pyfetch, FetchResponse
+from typing import Optional
+import json
 
+# https://github.com/pyscript/pyscript/pull/151/commits/3e3f21c08fa0a5e081804e8fbb11e708ee2813ce
+async def request(url:str, method:str = "GET", body:Optional[str] = None,
+ headers:Optional[dict[str,str]] = None) -> FetchResponse:
+    """
+    Async request function. Pass in Method and make sure to await!
+    Parameters:
+        method: str = {"GET", "POST", "PUT", "DELETE"} from javascript global fetch())
+        body: str = body as json string. Example, body=json.dumps(my_dict)
+        header: dict[str,str] = header as dict, will be converted to string...
+            Example, header:json.dumps({"Content-Type":"application/json"})
+    Return:
+        response: pyodide.http.FetchResponse = use with .status or await.json(), etc.
+    """
+    kwargs = {"method":method, "mode":"cors"}
+    if body and method not in ["GET", "HEAD"]:
+        kwargs["body"] = body
+    if headers:
+        kwargs["headers"] = headers
+
+
+    response = await pyfetch(url, **kwargs)
+    return response
 
 async def poc_postgrest():
-    response = await pyfetch(url="http://minikube:30501/alunos", method="GET")
+    url = "http://minikube:30501/alunos"
+    response = await request(url, "GET")
+    # response = await pyfetch(url="http://minikube:30501/alunos", method="GET")
     output = f"GET request=> status:{response.status}, json:{await response.json()}"
+    # output = f"GET request=> status:{response}"
     __update_terminal(output, "INFO")
 
 
@@ -67,15 +93,23 @@ def add_course():
 
 async def add_student():
     try:
-        response = await pyfetch(
-            url="http://minikube:30501/alunos",
-            method="POST",
-            headers={
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-                },
-            body={"nome": "any"}
-        )
+        # response = await pyfetch(
+        #     url="http://minikube:30501/alunos",
+        #     method="POST",
+        #     headers={
+        #         'Accept': 'application/json',
+        #         'Content-Type': 'application/json'
+        #         },
+        #     body={"nome": "any"}
+        # )
+
+        headers={
+            # 'Accept': 'application/json',
+            "Content-Type": "application/json"
+        }
+        url="http://minikube:30501/alunos"
+        await request(url, "POST", json.dumps({"nome": "any"}), {"Content-Type":"application/json"})
+        response = await request(url, "GET")
         output = f"GET request=> status:{response.status}, json:{await response.json()}"
         __update_terminal(output, "INFO")
         return
