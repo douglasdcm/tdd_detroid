@@ -67,6 +67,21 @@ python app.py
 python cli. init-bd
 python cli.py --help
 ```
+# Config database for postgREST manually
+```
+python cli.py init-bd
+docker exec -it postgres psql -U postgres
+create schema api;
+
+create role web_anon nologin;
+
+grant usage on schema api to web_anon;
+grant select on api.alunos to web_anon;
+
+create role authenticator noinherit login password 'mysecretpassword';
+grant web_anon to authenticator;
+```
+
 # Technologies
 This project uses pure Python in the backend, html for the screens, sqlite to store the records, PyScript to create the elements of the screens, Liver Server, docker-compose or kubernetes as options to bring the application up.
 # Limitations

@@ -7,8 +7,6 @@ metadata: # ObjectMeta
     app: tdd-detroid
 spec: # DeploymentSpec
   selector: # LabelSelector
-    # matchExpressions:
-    #   - {key: "app", operator: In, values: ["tdd-detroid"]}
     matchLabels:
       app: tdd-detroid
   template: # PodTemplateSpec
