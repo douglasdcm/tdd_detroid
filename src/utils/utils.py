@@ -6,7 +6,10 @@ from src.utils.sql_client import SqlClient
 
 
 def inicializa_tabelas(conn: SqlClient):
+    # try:
     conn.init_table(MateriaAlunoBd)
-    conn.init_table(CursoBd)
-    conn.init_table(AlunoBd)
-    conn.init_table(MateriaBd)
+    # conn.init_table(CursoBd)
+    # conn.init_table(AlunoBd)
+    # conn.init_table(MateriaBd)
+    # except Exception:
+    # pass

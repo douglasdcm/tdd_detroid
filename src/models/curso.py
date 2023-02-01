@@ -51,7 +51,7 @@ class CursoModelo:
             return
 
         query_materias = Query([src.disciplines.MateriaBd]).group_by(
-            src.disciplines.MateriaBd.curso_id
+            src.disciplines.MateriaBd.curso_id, src.disciplines.MateriaBd.id
         )
         resultado = len(self._conn.roda_query(query_materias))
 

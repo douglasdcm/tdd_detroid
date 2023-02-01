@@ -51,7 +51,7 @@ class AlunoModelo:
                 soma_nota += ma.aluno_nota
                 conta += 1
         aluno = self.__pega_aluno()
-        aluno.coef_rend = round(soma_nota / conta, 1)
+        aluno.coef_rend = int(round(soma_nota / conta, 1))
         self._conn.update()
 
     def __pega_materias_aluno(self):

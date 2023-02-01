@@ -42,15 +42,14 @@ class SqlClient:
         return resultado
 
     def init_table(self, modelo):
-        print(modelo)
+        self._session.close_all()  # <- don't forget to close
+        Base.metadata.drop_all(self._engine)
         Base.metadata.create_all(self._engine)
-        resultado = self._session.query(modelo).all()
-        # print(self._engine.)
-        print(resultado)
-        for instance in resultado:
-            self._session.delete(instance)
-            self._session.flush()
-            self._session.commit()
+        # resultado = self._session.query(modelo).all()
+        # for instance in resultado:
+        #     self._session.delete(instance)
+        #     self._session.flush()
+        #     self._session.commit()
 
     def roda_query(self, query: Query):
         return query.with_session(self._session).all()
