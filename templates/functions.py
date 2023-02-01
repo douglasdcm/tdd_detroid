@@ -93,27 +93,14 @@ def add_course():
 
 async def add_student():
     try:
-        # response = await pyfetch(
-        #     url="http://minikube:30501/alunos",
-        #     method="POST",
-        #     headers={
-        #         'Accept': 'application/json',
-        #         'Content-Type': 'application/json'
-        #         },
-        #     body={"nome": "any"}
-        # )
+        nome = Element("student-nome").value
 
-        headers={
-            # 'Accept': 'application/json',
-            "Content-Type": "application/json"
-        }
         url="http://minikube:30501/alunos"
-        await request(url, "POST", json.dumps({"nome": "any"}), {"Content-Type":"application/json"})
+        response = await request(url, "POST", json.dumps({"nome": nome}), {"Content-Type":"application/json"})
         response = await request(url, "GET")
         output = f"GET request=> status:{response.status}, json:{await response.json()}"
         __update_terminal(output, "INFO")
         return
-        content = Element("student-nome")
         students = Students(conn)
         students.cria(content.value)
         qtde = len(students.lista_tudo())
