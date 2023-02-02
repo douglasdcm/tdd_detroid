@@ -105,7 +105,7 @@ def test_nao_inscreeve_aluno_se_curso_nao_existe():
     aluno = StudentController(conn)
     aluno.create("any")
     with raises(ErroAluno, match="Aluno 1 não está inscrito em nenhum curso"):
-        aluno.inscreve_materia(1)
+        aluno.subscribe_in_discipline(1)
 
 
 def test_mensagem_sobre_3_materias_para_apos_inscricao_em_3_materias(
@@ -114,12 +114,12 @@ def test_mensagem_sobre_3_materias_para_apos_inscricao_em_3_materias(
 
     aluno = StudentController(conn)
     aluno.create("any")
-    aluno.inscreve_curso(curso_id=1)
+    aluno.subscribe_in_course(curso_id=1)
     with raises(ErroMateriaAluno):
-        aluno.inscreve_materia(1)
+        aluno.subscribe_in_discipline(1)
     with raises(ErroMateriaAluno):
-        aluno.inscreve_materia(2)
-    aluno.inscreve_materia(3)
+        aluno.subscribe_in_discipline(2)
+    aluno.subscribe_in_discipline(3)
 
 
 def test_aluno_nao_pode_se_inscrever_em_materia_inexistente(popula_banco_dados):
@@ -127,11 +127,11 @@ def test_aluno_nao_pode_se_inscrever_em_materia_inexistente(popula_banco_dados):
     aluno = StudentController(conn)
     aluno.id = aluno_id
     with raises(ErroMateriaAluno):
-        aluno.inscreve_materia(1)
-        aluno.inscreve_materia(2)
-        aluno.inscreve_materia(3)
+        aluno.subscribe_in_discipline(1)
+        aluno.subscribe_in_discipline(2)
+        aluno.subscribe_in_discipline(3)
     with raises(ErroMateria, match="Matéria 42 não existe"):
-        aluno.inscreve_materia(42)
+        aluno.subscribe_in_discipline(42)
 
 
 def test_aluno_nao_pode_se_inscrever_duas_vezes_na_mesma_materia(popula_banco_dados):
@@ -139,21 +139,21 @@ def test_aluno_nao_pode_se_inscrever_duas_vezes_na_mesma_materia(popula_banco_da
     aluno = StudentController(conn)
     aluno.id = aluno_id
     with raises(ErroMateriaAluno):
-        aluno.inscreve_materia(1)
-        aluno.inscreve_materia(2)
-        aluno.inscreve_materia(3)
+        aluno.subscribe_in_discipline(1)
+        aluno.subscribe_in_discipline(2)
+        aluno.subscribe_in_discipline(3)
     with raises(ErroMateriaAluno, match="Aluno 1 já está inscrito na matéria 1"):
-        aluno.inscreve_materia(1)
+        aluno.subscribe_in_discipline(1)
 
 
 def test_inscreve_aluno_numa_materia(popula_banco_dados):
     aluno = StudentController(conn)
     aluno.create("any")
-    aluno.inscreve_curso(curso_id=1)
+    aluno.subscribe_in_course(curso_id=1)
     with raises(
         ErroMateriaAluno, match="Aluno deve se inscrever em 3 materias no minimo"
     ):
-        aluno.inscreve_materia(1)
+        aluno.subscribe_in_discipline(1)
 
 
 def test_aluno_cria():
@@ -168,13 +168,13 @@ def test_inscreve_aluno_se_curso_existe():
     aluno.create("any")
     with raises(Exception):
         with raises(ErroCurso, match="Curso 42 nao existe"):
-            aluno.inscreve_curso(curso_id=42)
+            aluno.subscribe_in_course(curso_id=42)
 
 
 def test_inscreve_aluno_curso(popula_banco_dados):
     aluno = StudentController(conn)
     aluno.create("any")
-    aluno.inscreve_curso(curso_id=1)
+    aluno.subscribe_in_course(curso_id=1)
     assert conn.lista(AlunoBd, 1).curso_id == 1
 
 
@@ -188,7 +188,7 @@ def test_nao_inscreve_aluno_se_curso_nao_existe():
     aluno = StudentController(conn)
     aluno.create("any")
     with raises(ErroAluno, match="Curso 42 não existe"):
-        aluno.inscreve_curso(42)
+        aluno.subscribe_in_course(42)
 
 
 def test_alunos_lista_por_id():

@@ -32,11 +32,11 @@ def test_alunos_deve_inscreve_em_3_materias(popula_banco_dados):
     alunos = Students(conn)
     alunos.create("any")
     aluno_id = len(alunos.lista_tudo())
-    alunos.inscreve_curso(aluno_id, curso_id=1)
+    alunos.subscribe_in_course(aluno_id, curso_id=1)
     with raises(
         ErroMateriaAluno, match="Aluno deve se inscrever em 3 materias no minimo"
     ):
-        alunos.inscreve_materia(aluno_id, 1)
+        alunos.subscribe_in_discipline(aluno_id, 1)
 
     materia_aluno = conn.lista_tudo(MateriaAlunoBd)
     assert len(materia_aluno) > 1
@@ -70,10 +70,10 @@ def test_aluno_pode_se_inscrever_em_apenas_um_curso(popula_banco_dados):
     alunos.create("any")
     aluno_id = len(alunos.lista_tudo())
     Courses(conn).cria("other")
-    alunos.inscreve_curso(aluno_id, 4)
+    alunos.subscribe_in_course(aluno_id, 4)
 
     with raises(ErroAluno, match="Aluno esta inscrito em outro curso"):
-        alunos.inscreve_curso(aluno_id, 3)
+        alunos.subscribe_in_course(aluno_id, 3)
 
     aluno = alunos.lista(aluno_id)
     assert aluno.curso_id == 4

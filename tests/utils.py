@@ -24,12 +24,12 @@ def popula_banco_dados():
 def cria_aluno_completo(conn):
     aluno = StudentController(conn)
     aluno.create("test_manual")
-    aluno.inscreve_curso(1)
+    aluno.subscribe_in_course(1)
     with raises(Exception):
-        aluno.inscreve_materia(1)
+        aluno.subscribe_in_discipline(1)
     with raises(Exception):
-        aluno.inscreve_materia(2)
-    aluno.inscreve_materia(3)
+        aluno.subscribe_in_discipline(2)
+    aluno.subscribe_in_discipline(3)
 
 
 def cria_materia(conn, curso_id):

@@ -29,7 +29,7 @@ def lanca_nota(aluno_id, materia_id, nota):
 @click.option("--materia-id", type=int, required=True, help="Discipline identification")
 def inscreve_materia(aluno_id, materia_id):
     try:
-        Students(conn).inscreve_materia(aluno_id, materia_id)
+        Students(conn).subscribe_in_discipline(aluno_id, materia_id)
         click.echo(f"Aluno {aluno_id} inscrito na materia {materia_id}")
     except Exception as e:
         click.echo(e)
@@ -48,7 +48,7 @@ def cria(nome):
 @click.option("--curso-id", type=int, required=True, help="Course identification")
 def inscreve_curso(aluno_id, curso_id):
     try:
-        Students(conn).inscreve_curso(aluno_id, curso_id)
+        Students(conn).subscribe_in_course(aluno_id, curso_id)
         click.echo(f"Aluno inscrito no curso {curso_id}")
     except Exception as e:
         click.echo(e)

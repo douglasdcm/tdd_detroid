@@ -83,7 +83,7 @@ def test_alunos_deve_inscreve_3_materias_no_minimo(__popula_banco_dados):
     materia_id = uma_materia.id
     curso_id = uma_materia.curso_id
 
-    alunos.inscreve_curso(aluno_id, curso_id)
+    alunos.subscribe_in_course(aluno_id, curso_id)
 
     temp = subprocess.Popen(
         [
