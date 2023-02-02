@@ -1,6 +1,6 @@
 from src.utils.sql_client import SqlClient
 from src.schemes.discipline import MateriaBd
-from src.models.materia import MateriaModelo
+from src.controllers.materia import MateriaModelo
 
 
 class Disciplines:

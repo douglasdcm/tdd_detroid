@@ -1,6 +1,6 @@
 import subprocess
 from src.courses import Courses
-from src.students import Students
+from src.sdk.students import Students
 from src.disciplines import Disciplines
 from src.schemes.course import CursoBd
 from src.schemes.student import AlunoBd

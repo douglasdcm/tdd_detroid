@@ -1,7 +1,7 @@
 import uuid
-from src.models.curso import CursoModelo
-from src.models.materia import MateriaModelo
-from src.models.aluno import AlunoModelo
+from src.controllers.curso import CursoModelo
+from src.controllers.materia import MateriaModelo
+from src.controllers.student import StudentController
 from src.config import conn
 from pytest import raises
 from src.utils.utils import inicializa_tabelas
@@ -22,7 +22,7 @@ def popula_banco_dados():
 
 
 def cria_aluno_completo(conn):
-    aluno = AlunoModelo(conn)
+    aluno = StudentController(conn)
     aluno.cria("test_manual")
     aluno.inscreve_curso(1)
     with raises(Exception):

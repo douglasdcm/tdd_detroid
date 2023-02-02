@@ -1,4 +1,4 @@
-from src.models.curso import CursoModelo
+from src.controllers.curso import CursoModelo
 from src.schemes.course import CursoBd
 from src.utils.sql_client import SqlClient
 

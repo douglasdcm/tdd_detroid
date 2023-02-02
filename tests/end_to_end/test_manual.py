@@ -2,7 +2,7 @@ from tests.utils import popula_banco_dados, cria_aluno_completo
 from src.utils.utils import inicializa_tabelas
 from src.config import conn
 from pytest import mark
-from src.models.aluno import AlunoBd
+from src.controllers.student import AlunoBd
 
 
 # @mark.skip(reason="Teste manual")
