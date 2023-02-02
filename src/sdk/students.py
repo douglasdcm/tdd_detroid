@@ -12,15 +12,15 @@ class Students:
         aluno.id = aluno_id
         aluno.set_grade(materia_id, nota)
 
-    def inscreve_curso(self, aluno_id, curso_id):
+    def subscribe_in_course(self, aluno_id, curso_id):
         aluno = StudentController(self._conn)
         aluno.id = aluno_id
-        aluno.inscreve_curso(curso_id)
+        aluno.subscribe_in_course(curso_id)
 
-    def inscreve_materia(self, aluno_id, materia_id):
+    def subscribe_in_discipline(self, aluno_id, materia_id):
         aluno = StudentController(self._conn)
         aluno.id = aluno_id
-        aluno.inscreve_materia(materia_id)
+        aluno.subscribe_in_discipline(materia_id)
 
     def create(self, nome):
         StudentController(self._conn).create(nome)

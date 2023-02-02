@@ -45,7 +45,7 @@ def subscribe_discipline():
         aluno_id = Element("subscribe-student-id")
         materia_id = Element("subscribe-discipline-id")
         students = Students(conn)
-        students.inscreve_materia(aluno_id.value, materia_id.value)
+        students.subscribe_in_discipline(aluno_id.value, materia_id.value)
         qtde = len(students.lista_tudo())
         text = f"#Student id {qtde}, Name {students.lista(qtde).nome}, Discipline id {Disciplines(conn).lista(qtde).materia_id}"
         __update_terminal(text, "INFO")
@@ -71,7 +71,7 @@ def subscribe_course():
         aluno_id = Element("student-id")
         curso_id = Element("course-id")
         students = Students(conn)
-        students.inscreve_curso(aluno_id.value, curso_id.value)
+        students.subscribe_in_course(aluno_id.value, curso_id.value)
         qtde = len(students.lista_tudo())
         text = f"#Student id {qtde} subscribed to course id {students.lista(qtde).curso_id}"
         __update_terminal(text, "INFO")

@@ -31,12 +31,12 @@ def popula_banco_dados(scope="function"):
             MateriaModelo(conn).cria(nome=f"any{j}", curso_id=i + 1)
     aluno = StudentController(conn)
     aluno.create(nome="anyone")
-    aluno.inscreve_curso(curso_id=1)
+    aluno.subscribe_in_course(curso_id=1)
     with raises(Exception):
-        aluno.inscreve_materia(materia_id=1)
+        aluno.subscribe_in_discipline(materia_id=1)
     with raises(Exception):
-        aluno.inscreve_materia(materia_id=2)
-    aluno.inscreve_materia(materia_id=3)
+        aluno.subscribe_in_discipline(materia_id=2)
+    aluno.subscribe_in_discipline(materia_id=3)
 
 
 @fixture(scope="function", autouse=True)
