@@ -30,7 +30,7 @@ def popula_banco_dados(scope="function"):
         for j in range(3):
             MateriaModelo(conn).cria(nome=f"any{j}", curso_id=i + 1)
     aluno = StudentController(conn)
-    aluno.cria(nome="anyone")
+    aluno.create(nome="anyone")
     aluno.inscreve_curso(curso_id=1)
     with raises(Exception):
         aluno.inscreve_materia(materia_id=1)

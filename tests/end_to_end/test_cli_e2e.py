@@ -75,7 +75,7 @@ def test_aluno_pode_lancar_notas(__popula_banco_dados):
 def test_alunos_deve_inscreve_3_materias_no_minimo(__popula_banco_dados):
 
     alunos = Students(conn)
-    alunos.cria("any")
+    alunos.create("any")
     aluno_id = len(alunos.lista_tudo())
 
     materias = Disciplines(conn)
@@ -112,7 +112,7 @@ def test_aluno_pode_se_inscrever_em_curso(__popula_banco_dados):
     cursos.cria("other")
     curso_id = len(cursos.lista_tudo())
     alunos = Students(conn)
-    alunos.cria("any")
+    alunos.create("any")
     aluno_id = len(alunos.lista_tudo())
 
     temp = subprocess.Popen(

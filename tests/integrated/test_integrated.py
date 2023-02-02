@@ -20,9 +20,9 @@ from pytest import raises
 def test_calcula_cr_aluno_de_materias_cursadas(popula_banco_dados):
     aluno_id = len(Students(conn).lista_tudo())
     alunos = Students(conn)
-    alunos.lanca_nota(aluno_id=aluno_id, materia_id=1, nota=5)
-    alunos.lanca_nota(aluno_id=aluno_id, materia_id=2, nota=0)
-    alunos.lanca_nota(aluno_id=aluno_id, materia_id=3, nota=5)
+    alunos.set_grade(aluno_id=aluno_id, materia_id=1, nota=5)
+    alunos.set_grade(aluno_id=aluno_id, materia_id=2, nota=0)
+    alunos.set_grade(aluno_id=aluno_id, materia_id=3, nota=5)
 
     assert conn.lista(AlunoBd, aluno_id).coef_rend == 5
 
@@ -30,7 +30,7 @@ def test_calcula_cr_aluno_de_materias_cursadas(popula_banco_dados):
 def test_alunos_deve_inscreve_em_3_materias(popula_banco_dados):
 
     alunos = Students(conn)
-    alunos.cria("any")
+    alunos.create("any")
     aluno_id = len(alunos.lista_tudo())
     alunos.inscreve_curso(aluno_id, curso_id=1)
     with raises(
@@ -44,7 +44,7 @@ def test_alunos_deve_inscreve_em_3_materias(popula_banco_dados):
 
 def test_cria_aluno_por_api():
     alunos = Students(conn)
-    alunos.cria("any")
+    alunos.create("any")
     aluno = alunos.lista(1)
     assert aluno.id == 1
 
@@ -67,7 +67,7 @@ def test_cli_tres_cursos_com_tres_materias_cada():
 
 def test_aluno_pode_se_inscrever_em_apenas_um_curso(popula_banco_dados):
     alunos = Students(conn)
-    alunos.cria("any")
+    alunos.create("any")
     aluno_id = len(alunos.lista_tudo())
     Courses(conn).cria("other")
     alunos.inscreve_curso(aluno_id, 4)

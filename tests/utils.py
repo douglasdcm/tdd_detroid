@@ -23,7 +23,7 @@ def popula_banco_dados():
 
 def cria_aluno_completo(conn):
     aluno = StudentController(conn)
-    aluno.cria("test_manual")
+    aluno.create("test_manual")
     aluno.inscreve_curso(1)
     with raises(Exception):
         aluno.inscreve_materia(1)

@@ -16,7 +16,7 @@ def aluno():
 @click.option("--nota", type=int, required=True, help="Student grade")
 def lanca_nota(aluno_id, materia_id, nota):
     try:
-        Students(conn).lanca_nota(aluno_id, materia_id, nota)
+        Students(conn).set_grade(aluno_id, materia_id, nota)
         click.echo(
             f"Nota {nota} do aluno {aluno_id} na materia {materia_id} lancada com sucesso"
         )
@@ -38,7 +38,7 @@ def inscreve_materia(aluno_id, materia_id):
 @aluno.command()
 @click.option("--nome", required=True, help="Student name")
 def cria(nome):
-    Students(conn).cria(nome)
+    Students(conn).create(nome)
     id_ = conn.lista_maximo(AlunoBd).id
     click.echo(f"Aluno definido: id {id_}, nome {nome}")
 
