@@ -41,6 +41,8 @@ class StudentController:
     def subscribe_in_discipline(self, materia_id):
         curso_id = self._student_storage.get_course_id(self._aluno_id)
         DisciplineController(self._conn).check_exists(materia_id, curso_id)
+        self._student_storage.create(nome)
+        self._aluno_id = self._student_storage.get_maximum_id()
         self._student_storage.check_student_already_in_discipline(
             self._aluno_id, materia_id
         )

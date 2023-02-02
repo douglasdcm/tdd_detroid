@@ -10,26 +10,10 @@ class StudentStorage:
         self._conn = conn
 
     def get_student(self, aluno_id):
-        # try:
-        #     return self._conn.lista(AlunoBd, aluno_id)
-        # except ErroBancoDados:
-        #     raise ErroAluno(f"Aluno {aluno_id} não existe")
-
-        import requests
-
-        url = f"http://minikube:30501/alunos?id=eq.{str(aluno_id)}"
-
-        payload = {}
-        headers = {}
-
-        response = requests.request("GET", url, headers=headers, data=payload)
-        res = response.json()[0]
-        aluno = AlunoBd()
-        aluno.id = res.get("id")
-        aluno.coef_rend = res.get("coef_rend")
-        aluno.curso_id = res.get("curso_id")
-        aluno.nome = res.get("nome")
-        return aluno
+        try:
+            return self._conn.lista(AlunoBd, aluno_id)
+        except ErroBancoDados:
+            raise ErroAluno(f"Aluno {aluno_id} não existe")
 
     def __get_disciplines_of_student(self, aluno_id):
         query = Query(MateriaAlunoBd).filter(
@@ -80,20 +64,9 @@ class StudentStorage:
                 soma_nota += ma.aluno_nota
                 conta += 1
         aluno = self.get_student(aluno_id)
-        # aluno.coef_rend = int(round(soma_nota / conta, 1))
-        # self._conn.update()
-        coef_rend = int(round(soma_nota / conta, 1))
-        import requests
-        import json
 
-        url = f"http://minikube:30501/alunos?id=eq.{aluno_id}"
-
-        payload = json.dumps({"coef_rend": coef_rend})
-        headers = {"Content-Type": "application/json"}
-
-        response = requests.request("PATCH", url, headers=headers, data=payload)
-
-        print(response.text)
+        aluno.coef_rend = int(round(soma_nota / conta, 1))
+        self._conn.update()
 
     def update_grade(self, aluno_id, materia_id, grade):
         query = Query(MateriaAlunoBd).filter(
