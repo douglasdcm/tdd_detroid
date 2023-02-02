@@ -1,9 +1,9 @@
 from pytest import fixture
 from tests.config import conn
 from src.utils.utils import inicializa_tabelas
-from src.models.curso import CursoModelo
-from src.models.materia import MateriaModelo
-from src.models.aluno import AlunoModelo
+from src.controllers.curso import CursoModelo
+from src.controllers.materia import MateriaModelo
+from src.controllers.student import StudentController
 from pytest import raises
 
 
@@ -29,7 +29,7 @@ def popula_banco_dados(scope="function"):
     for i in range(3):
         for j in range(3):
             MateriaModelo(conn).cria(nome=f"any{j}", curso_id=i + 1)
-    aluno = AlunoModelo(conn)
+    aluno = StudentController(conn)
     aluno.cria(nome="anyone")
     aluno.inscreve_curso(curso_id=1)
     with raises(Exception):

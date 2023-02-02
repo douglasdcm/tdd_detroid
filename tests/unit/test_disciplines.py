@@ -1,4 +1,4 @@
-from src.models.materia import MateriaModelo
+from src.controllers.materia import MateriaModelo
 from src.schemes.discipline import MateriaBd
 from tests.config import conn
 

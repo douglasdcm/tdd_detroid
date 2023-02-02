@@ -1,8 +1,8 @@
 from tests.config import conn
 from src.schemes.course import CursoBd
-from src.models.curso import ErroCurso
+from src.controllers.curso import ErroCurso
 from pytest import raises, mark
-from src.models.curso import CursoModelo
+from src.controllers.curso import CursoModelo
 
 
 def test_curso_pega_id():

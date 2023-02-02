@@ -1,4 +1,4 @@
-from src.students import Students
+from src.sdk.students import Students
 from src.courses import Courses
 from src.disciplines import Disciplines
 from src.config import conn

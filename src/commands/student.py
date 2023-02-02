@@ -1,5 +1,5 @@
 import click
-from src.students import Students
+from src.sdk.students import Students
 from src.schemes.student import AlunoBd
 from src.config import conn
 

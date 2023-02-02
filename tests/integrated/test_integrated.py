@@ -1,6 +1,6 @@
 from src.courses import Courses
 from src.disciplines import Disciplines
-from src.students import Students
+from src.sdk.students import Students
 from src.schemes.student import AlunoBd
 from src.schemes.course import CursoBd
 from src.schemes.discipline import MateriaBd
