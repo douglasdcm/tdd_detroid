@@ -5,11 +5,11 @@ from src.schemes.discipline import MateriaBd
 from src.utils.exceptions import ErroBancoDados, ErroMateria
 
 
-class MateriaModelo:
+class DisciplineController:
     def __init__(self, conn: SqlClient) -> None:
         self._conn = conn
 
-    def verifica_existencia(self, materia_id, curso_id):
+    def check_exists(self, materia_id, curso_id):
         query = Query([MateriaBd]).filter(
             MateriaBd.id == materia_id, MateriaBd.curso_id == curso_id
         )
