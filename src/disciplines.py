@@ -1,6 +1,6 @@
 from src.utils.sql_client import SqlClient
 from src.schemes.discipline import MateriaBd
-from src.controllers.materia import MateriaModelo
+from src.controllers.materia import DisciplineController
 
 
 class Disciplines:
@@ -12,7 +12,7 @@ class Disciplines:
         :nome nome da matéria
         :curso curso associado à matéria
         """
-        MateriaModelo(self._conn).cria(nome, curso_id)
+        DisciplineController(self._conn).cria(nome, curso_id)
 
     def lista_tudo(self):
         return self._conn.lista_tudo(MateriaBd)
