@@ -15,25 +15,58 @@ Base = declarative_base(metadata=metadata)
 
 class SqlClient:
     def __init__(self, nome_banco) -> None:
-        # self._engine = create_engine(f"sqlite:///{nome_banco}", echo=False)
         self._engine = create_engine(
-            f"postgresql+pg8000://postgres:postgresql@localhost/postgres",
+            "postgresql+pg8000://postgres:postgresql@localhost/postgres",
             echo=False,
-            # pool_pre_ping=True,
         )
-
-        # # using db from websocket-postgres
-        # self._engine = create_engine(
-        #     f"postgresql+pg8000://pgws:example@172.24.0.2/postgres",
-        #     echo=False,
-        #     pool_pre_ping=True,
-        # )
         _session_maker = sessionmaker(bind=self._engine)
         self._session = _session_maker()
 
+    def create_schema(self):
+        statements = [
+            "create schema api;",
+            "create role web_anon nologin;",
+        ]
+        for statement in statements:
+            try:
+                with self._session as s:
+                    s.execute(statement)
+                    s.commit()
+            # catch any exception
+            except:
+                continue
+
+    def grant_permissions(self):
+        statements = [
+            "grant usage on schema api to web_anon;",
+            "grant select on api.alunos to web_anon;",
+            "grant insert on api.alunos to web_anon;",
+            "grant delete on api.alunos to web_anon;",
+            "grant update on api.alunos to web_anon;",
+            "grant select on api.cursos to web_anon;",
+            "grant insert on api.cursos to web_anon;",
+            "grant delete on api.cursos to web_anon;",
+            "GRANT ALL ON TABLE api.alunos TO postgres;",
+            "GRANT ALL ON TABLE api.alunos TO web_anon;",
+            "GRANT ALL ON TABLE api.cursos TO postgres;",
+            "GRANT ALL ON TABLE api.cursos TO web_anon;",
+            "GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA api TO web_anon;",
+            "create role authenticator noinherit login password 'mysecretpassword';",
+            "grant web_anon to authenticator;",
+        ]
+        for statement in statements:
+            try:
+                with self._session as s:
+                    s.execute(statement)
+                    s.commit()
+            # catch any exception
+            except:
+                continue
+
     def update(self):
-        self._session.flush()
-        self._session.commit()
+        with self._session as s:
+            s.flush()
+            s.commit()
 
     def lista_maximo(self, modelo):
         resultado = self._session.query(modelo).all()

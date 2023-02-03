@@ -5,7 +5,7 @@ from src.utils.sql_client import SqlClient
 from src.utils.exceptions import ErroCurso, ErroBancoDados, ErroAluno
 
 
-class CursoModelo:
+class CourseController:
     def __init__(self, conn: SqlClient) -> None:
         self._conn = conn
         self._curso_id = None
@@ -24,7 +24,7 @@ class CursoModelo:
         except ErroBancoDados:
             raise ErroAluno(f"Curso {curso_id} não existe")
 
-    def verifica_existencia(self, curso_id):
+    def check_exists(self, curso_id):
         self.__pega_curso(curso_id)
 
     def cria(self, nome):
