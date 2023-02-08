@@ -1,75 +1,53 @@
-from src.schemes.for_association import MateriaAlunoBd
-from src.utils.exceptions import ErroAluno, ErroBancoDados, ErroMateriaAluno
-from src.utils.sql_client import SqlClient
-from sqlalchemy.orm import Query
-from src.schemes.student import AlunoBd
+from src.utils.exceptions import ErroAluno, ErroMateriaAluno
+from src.utils.rest import get, get_by_query, get_all, patch, post
+from src.utils.parser import parse_discipine_student, parse_student
 
 
 class StudentStorage:
-    def __init__(self, conn: SqlClient) -> None:
-        self._conn = conn
+    def __init__(self):
+        self._resources = "alunos"
 
     def get_student(self, aluno_id):
-        # try:
-        #     return self._conn.lista(AlunoBd, aluno_id)
-        # except ErroBancoDados:
-        #     raise ErroAluno(f"Aluno {aluno_id} não existe")
-
-        import requests
-
-        url = f"http://minikube:30501/alunos?id=eq.{str(aluno_id)}"
-
-        payload = {}
-        headers = {}
-
-        response = requests.request("GET", url, headers=headers, data=payload)
-        res = response.json()[0]
-        aluno = AlunoBd()
-        aluno.id = res.get("id")
-        aluno.coef_rend = res.get("coef_rend")
-        aluno.curso_id = res.get("curso_id")
-        aluno.nome = res.get("nome")
-        return aluno
+        try:
+            res = get(self._resources, aluno_id)
+            return parse_student(res)
+        except IndexError:
+            raise ErroAluno(f"Aluno {aluno_id} não existe")
 
     def __get_disciplines_of_student(self, aluno_id):
-        query = Query(MateriaAlunoBd).filter(
-            MateriaAlunoBd.aluno_id == aluno_id,
-        )
-        mas = self._conn.roda_query(query)
-        return mas
+        res = get_by_query("materia_aluno", query=f"aluno_id=eq.{aluno_id}")
+        outcome = []
+        for r in res:
+            materia_aluno = parse_discipine_student(r)
+            outcome.append(materia_aluno)
+        return outcome
 
     def get_course_id(self, student_id):
-        curso_id = self._conn.lista(AlunoBd, student_id).curso_id
+        curso_id = get(self._resources, student_id).get("curso_id")
         if not curso_id:
             raise ErroAluno(f"Aluno {student_id} não está inscrito em nenhum curso")
         return curso_id
 
     def check_student_in_tree_disciplines(self, aluno_id):
-        resultado = self._conn.lista_tudo(MateriaAlunoBd)
-        qtde_materias = 0
-        for instancia in resultado:
-            if instancia.aluno_id == aluno_id:
-                qtde_materias += 1
-            if qtde_materias >= 3:
-                return
+        result = get_by_query("materia_aluno", query=f"aluno_id=eq.{aluno_id}")
+        if len(result) >= 3:
+            return
         raise ErroMateriaAluno("Aluno deve se inscrever em 3 materias no minimo")
 
     def check_student_already_in_discipline(self, aluno_id, materia_id):
-        resultado = self._conn.lista_tudo(MateriaAlunoBd)
-        for instancia in resultado:
-            if instancia.aluno_id == int(aluno_id) and instancia.materia_id == int(
-                materia_id
-            ):
-                raise ErroMateriaAluno(
-                    f"Aluno {aluno_id} já está inscrito na matéria {materia_id}"
-                )
+        result = get_by_query(
+            "materia_aluno", f"and=(aluno_id.eq.{aluno_id}, materia_id.eq.{materia_id})"
+        )
+        if result:
+            raise ErroMateriaAluno(
+                f"Aluno {aluno_id} já está inscrito na matéria {materia_id}"
+            )
 
     def get_maximum_id(self):
-        return self._conn.lista_maximo(AlunoBd).id
+        return len(get_all(self._resources))
 
     def create(self, nome):
-        aluno = AlunoBd(nome=nome)
-        self._conn.cria(aluno)
+        post(self._resources, {"nome": nome})
 
     def calculate_coef_rend(self, aluno_id):
         mas = self.__get_disciplines_of_student(aluno_id)
@@ -79,34 +57,20 @@ class StudentStorage:
             if ma.aluno_nota:
                 soma_nota += ma.aluno_nota
                 conta += 1
-        aluno = self.get_student(aluno_id)
         # aluno.coef_rend = int(round(soma_nota / conta, 1))
-        # self._conn.update()
         coef_rend = int(round(soma_nota / conta, 1))
-        import requests
-        import json
-
-        url = f"http://minikube:30501/alunos?id=eq.{aluno_id}"
-
-        payload = json.dumps({"coef_rend": coef_rend})
-        headers = {"Content-Type": "application/json"}
-
-        response = requests.request("PATCH", url, headers=headers, data=payload)
-
-        print(response.text)
+        patch(self._resources, aluno_id, {"coef_rend": coef_rend})
 
     def update_grade(self, aluno_id, materia_id, grade):
-        query = Query(MateriaAlunoBd).filter(
-            MateriaAlunoBd.aluno_id == aluno_id,
-            MateriaAlunoBd.materia_id == materia_id,
-        )
-        mas = self._conn.roda_query(query)
-        mas[0].aluno_nota = grade
-        self._conn.update()
+        resources = "materia_aluno"
+        res = get_by_query(
+            resources, f"and=(aluno_id.eq.{aluno_id}, materia_id.eq.{materia_id})"
+        )[0]
+        id_ = parse_discipine_student(res).id
+        patch(resources, id_, {"aluno_nota": grade})
 
     def subscribe_in_discipline(self, aluno_id, materia_id):
-        ma = MateriaAlunoBd(aluno_id=aluno_id, materia_id=materia_id)
-        self._conn.cria(ma)
+        post("materia_aluno", {"aluno_id": aluno_id, "materia_id": materia_id})
 
     def can_subscribe_course(self, aluno_id):
         aluno = self.get_student(aluno_id)
@@ -114,10 +78,12 @@ class StudentStorage:
             raise ErroAluno("Aluno esta inscrito em outro curso")
 
     def check_student_in_discipline(self, aluno_id, materia_id):
-        resultado = self._conn.lista_tudo(MateriaAlunoBd)
-        for instancia in resultado:
-            if instancia.aluno_id == int(aluno_id) and instancia.materia_id == int(
-                materia_id
-            ):
-                return
-        raise ErroAluno(f"Aluno {aluno_id} não está inscrito na matéria {materia_id}")
+        try:
+            get_by_query(
+                "materia_aluno",
+                f"and=(aluno_id.eq.{aluno_id}, materia_id.eq.{materia_id})",
+            )[0]
+        except IndexError:
+            raise ErroAluno(
+                f"Aluno {aluno_id} não está inscrito na matéria {materia_id}"
+            )
