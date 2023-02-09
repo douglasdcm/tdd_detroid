@@ -1,11 +1,48 @@
 import requests
 import json
+from typing import Optional
+from pyodide.http import pyfetch, FetchResponse
+
 
 BASE_URL = "http://minikube:30501/"
 HEADERS = {"Content-Type": "application/json"}
 
 
-def get_all(resources):
+# https://github.com/pyscript/pyscript/pull/151/commits/3e3f21c08fa0a5e081804e8fbb11e708ee2813ce
+async def request(
+    url: str,
+    method: str = "GET",
+    body: Optional[str] = None,
+    headers: Optional[dict[str, str]] = None,
+) -> FetchResponse:
+    """
+    Async request function. Pass in Method and make sure to await!
+    Parameters:
+        method: str = {"GET", "POST", "PUT", "DELETE"} from javascript global fetch())
+        body: str = body as json string. Example, body=json.dumps(my_dict)
+        header: dict[str,str] = header as dict, will be converted to string...
+            Example, header:json.dumps({"Content-Type":"application/json"})
+    Return:
+        response: pyodide.http.FetchResponse = use with .status or await.json(), etc.
+    """
+    kwargs = {"method": method, "mode": "cors"}
+    if body and method not in ["GET", "HEAD"]:
+        kwargs["body"] = json.dumps(body)
+    if headers:
+        kwargs["headers"] = headers
+
+    response = await pyfetch(url, **kwargs)
+    return response
+
+
+async def get_all(resources):
+    return await request(
+        f"{BASE_URL}{resources}",
+        "GET",
+    )
+
+
+def get_all_(resources):
     url = f"{BASE_URL}{resources}"
     response = requests.request("GET", url, headers={}, data={})
     return response.json()
@@ -19,13 +56,29 @@ def get_by_query(resources, query):
     return ValueError(f"Request has failed: {response.json()}")
 
 
-def get(resources, id):
+async def get(resources, id):
+    return await request(
+        f"{BASE_URL}{resources}?id=eq.{str(id)}",
+        "GET",
+    )
+
+
+def get_(resources, id):
     url = f"{BASE_URL}{resources}?id=eq.{str(id)}"
     response = requests.request("GET", url, headers={}, data={})
     return response.json()[0]
 
 
 async def post(resources, data):
+    return await request(
+        f"{BASE_URL}{resources}",
+        "POST",
+        data,
+        {"Content-Type": "application/json"},
+    )
+
+
+async def post_working(resources, data):
     from pyodide.http import pyfetch, FetchResponse
 
     url = f"{BASE_URL}{resources}"
@@ -42,7 +95,7 @@ async def post(resources, data):
     return response
 
 
-def post_(resources, data):
+def post_not_working_on_ui(resources, data):
     import requests
     from requests.adapters import HTTPAdapter
     from urllib3.util.retry import Retry

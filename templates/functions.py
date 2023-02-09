@@ -114,8 +114,10 @@ async def add_student():
         content = Element("student-nome").value
         students = Students(conn)
         await students.create(content)
-        qtde = len(students.lista_tudo())
-        text = f"Added student. id: {qtde}, Name: {students.lista(qtde).nome}"
+        # qtde = len(students.lista_tudo())
+        qtde = 42 # fake
+        # text = f"Added student. id: {qtde}, Name: {students.lista(qtde).nome}"
+        text = f"Added student. id: {qtde}, Name: {content}"
         __update_terminal(text, "INFO")
     except Exception as e:
         __update_terminal(e, "FAIL")

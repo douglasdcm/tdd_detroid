@@ -30,7 +30,7 @@ class StudentController:
     async def create(self, nome):
         nome = self._student_bl.clear_name(nome)
         res = await self._storage.create(nome)
-        self._aluno_id = self._storage.get_maximum_id()
+        self._aluno_id = await self._storage.get_maximum_id()
         return res
 
     def subscribe_in_discipline(self, materia_id):
