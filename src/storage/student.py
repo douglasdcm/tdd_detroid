@@ -49,8 +49,8 @@ class StudentStorage:
     def get_maximum_id(self):
         return len(get_all(self._resources))
 
-    def create(self, nome):
-        post(self._resources, {"nome": nome})
+    async def create(self, nome):
+        return await post(self._resources, {"nome": nome})
 
     def calculate_coef_rend(self, aluno_id):
         mas = self.__get_disciplines_of_student(aluno_id)

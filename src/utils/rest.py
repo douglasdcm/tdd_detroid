@@ -25,27 +25,38 @@ def get(resources, id):
     return response.json()[0]
 
 
-# async def post(resources, data):
-#     from pyodide.http import pyfetch, FetchResponse
+async def post(resources, data):
+    from pyodide.http import pyfetch, FetchResponse
 
-#     url = f"{BASE_URL}{resources}"
-#     body = data
-#     method = "POST"
-#     headers = HEADERS
-#     kwargs = {"method": method, "mode": "cors"}
-#     if body and method not in ["GET", "HEAD"]:
-#         kwargs["body"] = body
-#     if headers:
-#         kwargs["headers"] = headers
+    url = f"{BASE_URL}{resources}"
+    body = json.dumps(data)
+    method = "POST"
+    headers = HEADERS
+    kwargs = {"method": method, "mode": "cors"}
+    if body and method not in ["GET", "HEAD"]:
+        kwargs["body"] = body
+    if headers:
+        kwargs["headers"] = headers
 
-#     response = await pyfetch(url, **kwargs)
-#     return response
+    response = await pyfetch(url, **kwargs)
+    return response
 
 
-def post(resources, data):
+def post_(resources, data):
+    import requests
+    from requests.adapters import HTTPAdapter
+    from urllib3.util.retry import Retry
+
+    session = requests.Session()
+    retry = Retry(connect=3, backoff_factor=0.5)
+    adapter = HTTPAdapter(max_retries=retry)
+    session.mount("http://", adapter)
+    session.mount("https://", adapter)
+
     url = f"{BASE_URL}{resources}"
     headers = HEADERS
-    return requests.request("POST", url, headers=headers, data=json.dumps(data))
+    # return requests.request("POST", url, headers=headers, data=json.dumps(data))
+    return session.post(url, headers=headers, data=json.dumps(data))
 
 
 def patch(resources, id, data):
