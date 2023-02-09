@@ -8,7 +8,7 @@ class Courses:
         self._conn = conn
 
     def cria(self, nome):
-        CourseController(self._conn).cria(nome)
+        CourseController().cria(nome)
 
     def lista_tudo(self):
         return self._conn.lista_tudo(CursoBd)

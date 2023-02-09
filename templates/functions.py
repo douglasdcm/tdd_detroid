@@ -79,8 +79,17 @@ def subscribe_course():
         __update_terminal(e, "FAIL")
 
 
-def add_course():
+async def add_course():
     try:
+        nome = Element("course-nome").value
+
+        url="http://minikube:30501/alunos"
+        response = await request(url, "POST", json.dumps({"nome": nome}), {"Content-Type":"application/json"})
+        response = await request(url, "GET")
+        output = f"GET request=> status:{response.status}, json:{await response.json()}"
+        __update_terminal(output, "INFO")
+
+
         content = Element("course-nome")
         courses = Courses(conn)
         courses.cria(content.value)
@@ -91,21 +100,23 @@ def add_course():
         __update_terminal(e, "FAIL")
 
 
-async def add_student():
+def add_student():
     try:
-        nome = Element("student-nome").value
+        # nome = Element("student-nome").value
 
-        url="http://minikube:30501/alunos"
-        response = await request(url, "POST", json.dumps({"nome": nome}), {"Content-Type":"application/json"})
-        response = await request(url, "GET")
-        output = f"GET request=> status:{response.status}, json:{await response.json()}"
-        __update_terminal(output, "INFO")
-        return
+        # url="http://minikube:30501/alunos"
+        # response = await request(url, "POST", json.dumps({"nome": nome}), {"Content-Type":"application/json"})
+        # response = await request(url, "GET")
+        # output = f"GET request=> status:{response.status}, json:{await response.json()}"
+        # __update_terminal(output, "INFO")
+        # return
+
+        content = Element("student-nome").value
         students = Students(conn)
-        students.cria(content.value)
-        qtde = len(students.lista_tudo())
-        text = f"Added student. id: {qtde}, Name: {students.lista(qtde).nome}"
-        __update_terminal(text, "INFO")
+        students.create(content)
+        # qtde = len(students.lista_tudo())
+        # text = f"Added student. id: {qtde}, Name: {students.lista(qtde).nome}"
+        # __update_terminal(text, "INFO")
     except Exception as e:
         __update_terminal(e, "FAIL")
 

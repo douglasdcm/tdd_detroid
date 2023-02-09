@@ -25,6 +25,23 @@ def get(resources, id):
     return response.json()[0]
 
 
+# async def post(resources, data):
+#     from pyodide.http import pyfetch, FetchResponse
+
+#     url = f"{BASE_URL}{resources}"
+#     body = data
+#     method = "POST"
+#     headers = HEADERS
+#     kwargs = {"method": method, "mode": "cors"}
+#     if body and method not in ["GET", "HEAD"]:
+#         kwargs["body"] = body
+#     if headers:
+#         kwargs["headers"] = headers
+
+#     response = await pyfetch(url, **kwargs)
+#     return response
+
+
 def post(resources, data):
     url = f"{BASE_URL}{resources}"
     headers = HEADERS
