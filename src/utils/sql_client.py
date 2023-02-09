@@ -69,8 +69,33 @@ class SqlClient:
 
     def init_table(self, modelo):
         self._session.close_all()
+        self.drop_views()
         Base.metadata.drop_all(self._engine)
         Base.metadata.create_all(self._engine)
+        self.create_views()
+
+    def drop_views(self):
+        statement = "DROP VIEW IF EXISTS api.view_course_and_discipline;"
+        try:
+            with self._session as s:
+                s.execute(statement)
+                s.commit()
+        except:
+            raise ErroBancoDados("Could not delete the views.")
+
+    def create_views(self):
+        statement = """
+        CREATE VIEW api.view_course_and_discipline AS
+        SELECT *
+        FROM api.materias
+        GROUP BY curso_id, id;
+        """
+        try:
+            with self._session as s:
+                s.execute(statement)
+                s.commit()
+        except:
+            raise ErroBancoDados("Could not create the views.")
 
     def roda_query(self, query: Query):
         return query.with_session(self._session).all()

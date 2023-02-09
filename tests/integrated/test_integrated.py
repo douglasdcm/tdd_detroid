@@ -9,7 +9,7 @@ from src.utils.utils import inicializa_tabelas
 from src.utils.exceptions import (
     ErroAluno,
     ErroMateria,
-    ErroCurso,
+    CourseException,
     ErroMateriaAluno,
 )
 from tests.config import conn
@@ -98,7 +98,7 @@ def test_nao_criar_quarto_curso_se_menos_de_tres_materias_por_curso():
     Courses(conn).cria("any_3")
     Disciplines(conn).cria(nome="any", curso_id=1)
     with raises(
-        ErroCurso,
+        CourseException,
         match="Necessários 3 cursos com 3 três matérias para se criar novos cursos",
     ):
         Courses(conn).cria("quarto")
@@ -109,7 +109,7 @@ def test_nao_criar_quarto_curso_se_todos_cursos_sem_materias():
     Courses(conn).cria("any_2")
     Courses(conn).cria("any_3")
     with raises(
-        ErroCurso,
+        CourseException,
         match="Necessários 3 cursos com 3 três matérias para se criar novos cursos",
     ):
         Courses(conn).cria("quatro")

@@ -7,6 +7,9 @@ class StudentStorage:
     def __init__(self):
         self._resources = "alunos"
 
+    def subcribe_in_course(self, student_id, course_id):
+        patch(self._resources, student_id, {"curso_id": course_id})
+
     def get_student(self, aluno_id):
         try:
             res = get(self._resources, aluno_id)
