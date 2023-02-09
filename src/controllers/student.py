@@ -27,10 +27,11 @@ class StudentController:
         self._storage.update_grade(self._aluno_id, discipline_id, grade)
         self._storage.calculate_coef_rend(self._aluno_id)
 
-    def create(self, nome):
+    async def create(self, nome):
         nome = self._student_bl.clear_name(nome)
-        self._storage.create(nome)
+        res = await self._storage.create(nome)
         self._aluno_id = self._storage.get_maximum_id()
+        return res
 
     def subscribe_in_discipline(self, materia_id):
         curso_id = self._storage.get_course_id(self._aluno_id)

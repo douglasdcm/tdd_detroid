@@ -100,7 +100,7 @@ async def add_course():
         __update_terminal(e, "FAIL")
 
 
-def add_student():
+async def add_student():
     try:
         # nome = Element("student-nome").value
 
@@ -113,10 +113,10 @@ def add_student():
 
         content = Element("student-nome").value
         students = Students(conn)
-        students.create(content)
-        # qtde = len(students.lista_tudo())
-        # text = f"Added student. id: {qtde}, Name: {students.lista(qtde).nome}"
-        # __update_terminal(text, "INFO")
+        await students.create(content)
+        qtde = len(students.lista_tudo())
+        text = f"Added student. id: {qtde}, Name: {students.lista(qtde).nome}"
+        __update_terminal(text, "INFO")
     except Exception as e:
         __update_terminal(e, "FAIL")
 
