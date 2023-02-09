@@ -1,7 +1,5 @@
 import requests
 import json
-from typing import Optional
-from pyodide.http import pyfetch, FetchResponse
 
 
 BASE_URL = "http://minikube:30501/"
@@ -10,11 +8,11 @@ HEADERS = {"Content-Type": "application/json"}
 
 # https://github.com/pyscript/pyscript/pull/151/commits/3e3f21c08fa0a5e081804e8fbb11e708ee2813ce
 async def request(
-    url: str,
-    method: str = "GET",
-    body: Optional[str] = None,
-    headers: Optional[dict[str, str]] = None,
-) -> FetchResponse:
+    url,
+    method="GET",
+    body=None,
+    headers=None,
+):
     """
     Async request function. Pass in Method and make sure to await!
     Parameters:
@@ -25,6 +23,8 @@ async def request(
     Return:
         response: pyodide.http.FetchResponse = use with .status or await.json(), etc.
     """
+    from pyodide.http import pyfetch, FetchResponse
+
     kwargs = {"method": method, "mode": "cors"}
     if body and method not in ["GET", "HEAD"]:
         kwargs["body"] = json.dumps(body)
