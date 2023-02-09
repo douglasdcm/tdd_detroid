@@ -10,9 +10,9 @@ class StudentStorage:
     def subcribe_in_course(self, student_id, course_id):
         patch(self._resources, student_id, {"curso_id": course_id})
 
-    def get_student(self, aluno_id):
+    async def get_student(self, aluno_id):
         try:
-            res = get(self._resources, aluno_id)
+            res = await get(self._resources, aluno_id)
             return parse_student(res)
         except IndexError:
             raise ErroAluno(f"Aluno {aluno_id} não existe")
@@ -46,8 +46,9 @@ class StudentStorage:
                 f"Aluno {aluno_id} já está inscrito na matéria {materia_id}"
             )
 
-    def get_maximum_id(self):
-        return len(get_all(self._resources))
+    async def get_maximum_id(self):
+        # return len(await get_all(self._resources))
+        return await get_all(self._resources)
 
     async def create(self, nome):
         return await post(self._resources, {"nome": nome})
