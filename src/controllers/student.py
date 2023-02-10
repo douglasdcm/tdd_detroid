@@ -4,14 +4,11 @@ from src.schemes.for_association import MateriaAlunoBd
 from src.utils.sql_client import SqlClient
 from src.schemes.student import AlunoBd
 from src.schemes.for_association import MateriaAlunoBd
-from src.controllers.curso import CursoModelo
 from src.utils.exceptions import ErroAluno, ErroBancoDados, ErroMateriaAluno
-from src.controllers.materia import MateriaModelo
 from src.controllers.curso import CourseController
 from src.controllers.materia import DisciplineController
 from src.business_logic.student import StudentBL
 from src.storage.student import StudentStorage
-from src.utils.rest import patch
 
 
 class StudentController:
@@ -54,19 +51,3 @@ class StudentController:
         aluno = self._student_storage.get_student(self._aluno_id)
         CourseController(self._conn).check_exists(curso_id)
         self._student_storage.can_subscribe_course(self._aluno_id)
-        # aluno.curso_id = curso_id
-        # print("alunoCid", aluno.__dict__)
-        # self._conn.confirma()
-        # x = self._conn.lista(AlunoBd, self._aluno_id)
-        # print("aluno update", x.__dict__)
-        import requests
-        import json
-
-        url = f"http://minikube:30501/alunos?id=eq.{self._aluno_id}"
-
-        payload = json.dumps({"curso_id": 1})
-        headers = {"Content-Type": "application/json"}
-
-        response = requests.request("PATCH", url, headers=headers, data=payload)
-
-        print(response.text)
