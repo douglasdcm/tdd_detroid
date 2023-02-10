@@ -22,8 +22,8 @@ class Students:
         aluno.id = aluno_id
         aluno.subscribe_in_discipline(materia_id)
 
-    async def create(self, nome):
-        return await StudentController(self._conn).create(nome)
+    def create(self, nome):
+        StudentController(self._conn).create(nome)
 
     def lista_tudo(self):
         return self._conn.lista_tudo(AlunoBd)
