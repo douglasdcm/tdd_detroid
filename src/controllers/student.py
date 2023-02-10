@@ -9,10 +9,11 @@ from src.utils.exceptions import ErroAluno, ErroBancoDados, ErroMateriaAluno
 from src.controllers.materia import MateriaModelo
 from src.business_logic.student import StudentBL
 from src.storage.student import StudentStorage
+from src.utils.rest import patch
 
 
 class StudentController:
-    def __init__(self, conn) -> None:
+    def __init__(self, conn: SqlClient) -> None:
         self._conn = conn
         self._aluno_id = None
         self._student_bl = StudentBL()
@@ -24,14 +25,14 @@ class StudentController:
     @id.setter
     def id(self, valor):
         self._aluno_id = valor
-        self._storage.get_student(self._aluno_id)
+        self._student_storage.get_student(self._aluno_id)
 
     def set_grade(self, discipline_id, grade):
         grade = int(grade)
         self._student_bl.check_grade_boundaries(grade)
-        self._storage.check_student_in_discipline(self._aluno_id, discipline_id)
-        self._storage.update_grade(self._aluno_id, discipline_id, grade)
-        self._storage.calculate_coef_rend(self._aluno_id)
+        self._student_storage.check_student_in_discipline(self._aluno_id, discipline_id)
+        self._student_storage.update_grade(self._aluno_id, discipline_id, grade)
+        self._student_storage.calculate_coef_rend(self._aluno_id)
 
     async def create(self, nome):
         nome = self._student_bl.clear_name(nome)

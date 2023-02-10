@@ -10,7 +10,7 @@ class ErroMateriaAluno(Exception):
     pass
 
 
-class CourseException(Exception):
+class ErroCurso(Exception):
     pass
 
 
