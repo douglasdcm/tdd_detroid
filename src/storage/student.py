@@ -81,6 +81,11 @@ class StudentStorage:
         ma = MateriaAlunoBd(aluno_id=aluno_id, materia_id=materia_id)
         self._conn.cria(ma)
 
+    def subscribe_in_course(self, aluno_id, curso_id):
+        student = self.get_student(aluno_id)
+        student.curso_id = curso_id
+        self._conn.update()
+
     def can_subscribe_course(self, aluno_id):
         aluno = self.get_student(aluno_id)
         if aluno.curso_id is not None:
