@@ -1,14 +1,12 @@
-<<<<<<< HEAD
-from src.controllers.curso import CourseController
-from src.controllers.materia import DisciplineController
-=======
+from src.utils.sql_client import SqlClient
+from src.schemes.student import AlunoBd
+from src.schemes.for_association import MateriaAlunoBd
 from src.utils.sql_client import SqlClient
 from src.schemes.student import AlunoBd
 from src.schemes.for_association import MateriaAlunoBd
 from src.controllers.curso import CursoModelo
 from src.utils.exceptions import ErroAluno, ErroBancoDados, ErroMateriaAluno
 from src.controllers.materia import MateriaModelo
->>>>>>> parent of f573f1d... First test test_calcula_cr_aluno_como_media_simples_das_notas_lancadas working with postgREST calls
 from src.business_logic.student import StudentBL
 from src.storage.student import StudentStorage
 
@@ -18,7 +16,6 @@ class StudentController:
         self._conn = conn
         self._aluno_id = None
         self._student_bl = StudentBL()
-        self._storage = StudentStorage()
 
     @property
     def id(self):

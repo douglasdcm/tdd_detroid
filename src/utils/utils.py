@@ -3,11 +3,6 @@ from src.schemes.discipline import MateriaBd
 from src.schemes.student import AlunoBd
 from src.schemes.for_association import MateriaAlunoBd
 from src.utils.sql_client import SqlClient
-import uuid
-
-
-def generate_random_value():
-    return str(uuid.uuid4())
 
 
 def inicializa_tabelas(conn: SqlClient):
