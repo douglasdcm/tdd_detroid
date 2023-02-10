@@ -1,6 +1,6 @@
 from tests.config import conn
 from src.schemes.course import CursoBd
-from src.utils.exceptions import CourseException
+from src.controllers.curso import ErroCurso
 from pytest import raises, mark
 from src.controllers.curso import CursoModelo
 
@@ -27,5 +27,5 @@ def test_nome_curso_nao_vazio(input):
 def test_nao_cria_curso_com_mesmo_nome():
     curso = CursoModelo(conn)
     curso.cria("any")
-    with raises(CourseException, match="Existe outro curso com o nome any"):
+    with raises(ErroCurso, match="Existe outro curso com o nome any"):
         curso.cria("any")

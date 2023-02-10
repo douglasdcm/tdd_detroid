@@ -79,17 +79,8 @@ def subscribe_course():
         __update_terminal(e, "FAIL")
 
 
-async def add_course():
+def add_course():
     try:
-        nome = Element("course-nome").value
-
-        url="http://minikube:30501/alunos"
-        response = await request(url, "POST", json.dumps({"nome": nome}), {"Content-Type":"application/json"})
-        response = await request(url, "GET")
-        output = f"GET request=> status:{response.status}, json:{await response.json()}"
-        __update_terminal(output, "INFO")
-
-
         content = Element("course-nome")
         courses = Courses(conn)
         courses.cria(content.value)
@@ -102,22 +93,12 @@ async def add_course():
 
 async def add_student():
     try:
-        # nome = Element("student-nome").value
-
-        # url="http://minikube:30501/alunos"
-        # response = await request(url, "POST", json.dumps({"nome": nome}), {"Content-Type":"application/json"})
-        # response = await request(url, "GET")
-        # output = f"GET request=> status:{response.status}, json:{await response.json()}"
-        # __update_terminal(output, "INFO")
-        # return
-
-        content = Element("student-nome").value
+        nome = Element("student-nome").value
         students = Students(conn)
-        await students.create(content)
-        # qtde = len(students.lista_tudo())
-        qtde = 42 # fake
-        # text = f"Added student. id: {qtde}, Name: {students.lista(qtde).nome}"
-        text = f"Added student. id: {qtde}, Name: {content}"
+
+        students.cria(content.value)
+        qtde = len(students.lista_tudo())
+        text = f"Added student. id: {qtde}, Name: {students.lista(qtde).nome}"
         __update_terminal(text, "INFO")
     except Exception as e:
         __update_terminal(e, "FAIL")

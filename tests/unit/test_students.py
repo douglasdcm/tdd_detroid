@@ -6,7 +6,7 @@ from src.utils.exceptions import (
     ErroAluno,
     ErroMateriaAluno,
     ErroMateria,
-    CourseException,
+    ErroCurso,
 )
 from tests.config import conn
 from pytest import raises, mark
@@ -167,7 +167,7 @@ def test_inscreve_aluno_se_curso_existe():
     aluno = StudentController(conn)
     aluno.create("any")
     with raises(Exception):
-        with raises(CourseException, match="Curso 42 nao existe"):
+        with raises(ErroCurso, match="Curso 42 nao existe"):
             aluno.subscribe_in_course(curso_id=42)
 
 
@@ -187,7 +187,7 @@ def test_verifica_aluno_existe():
 def test_nao_inscreve_aluno_se_curso_nao_existe():
     aluno = StudentController(conn)
     aluno.create("any")
-    with raises(CourseException, match="Curso 42 não existe"):
+    with raises(ErroAluno, match="Curso 42 não existe"):
         aluno.subscribe_in_course(42)
 
 
