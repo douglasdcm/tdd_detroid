@@ -91,11 +91,10 @@ def add_course():
         __update_terminal(e, "FAIL")
 
 
-async def add_student():
+def add_student():
     try:
         nome = Element("student-nome").value
         students = Students(conn)
-
         students.cria(content.value)
         qtde = len(students.lista_tudo())
         text = f"Added student. id: {qtde}, Name: {students.lista(qtde).nome}"
