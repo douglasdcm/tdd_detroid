@@ -1,6 +1,7 @@
 from src.schemes.for_association import MateriaAlunoBd
 from src.schemes.student import AlunoBd
 from src.controllers.student import StudentController
+from src.controllers.student import ErroAluno
 from src.utils.exceptions import (
     ErroAluno,
     ErroMateriaAluno,

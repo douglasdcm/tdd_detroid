@@ -7,14 +7,10 @@ class StudentStorage:
     def __init__(self):
         self._resources = "alunos"
 
-    def subcribe_in_course(self, student_id, course_id):
-        patch(self._resources, student_id, {"curso_id": course_id})
-
-    async def get_student(self, aluno_id):
+    def get_student(self, aluno_id):
         try:
-            res = await get(self._resources, aluno_id)
-            return parse_student(res)
-        except IndexError:
+            return self._conn.lista(AlunoBd, aluno_id)
+        except ErroBancoDados:
             raise ErroAluno(f"Aluno {aluno_id} não existe")
 
     def __get_disciplines_of_student(self, aluno_id):
@@ -61,9 +57,9 @@ class StudentStorage:
             if ma.aluno_nota:
                 soma_nota += ma.aluno_nota
                 conta += 1
-        # aluno.coef_rend = int(round(soma_nota / conta, 1))
-        coef_rend = int(round(soma_nota / conta, 1))
-        patch(self._resources, aluno_id, {"coef_rend": coef_rend})
+        aluno = self.get_student(aluno_id)
+        aluno.coef_rend = int(round(soma_nota / conta, 1))
+        self._conn.update()
 
     def update_grade(self, aluno_id, materia_id, grade):
         resources = "materia_aluno"

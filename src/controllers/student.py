@@ -1,5 +1,14 @@
+<<<<<<< HEAD
 from src.controllers.curso import CourseController
 from src.controllers.materia import DisciplineController
+=======
+from src.utils.sql_client import SqlClient
+from src.schemes.student import AlunoBd
+from src.schemes.for_association import MateriaAlunoBd
+from src.controllers.curso import CursoModelo
+from src.utils.exceptions import ErroAluno, ErroBancoDados, ErroMateriaAluno
+from src.controllers.materia import MateriaModelo
+>>>>>>> parent of f573f1d... First test test_calcula_cr_aluno_como_media_simples_das_notas_lancadas working with postgREST calls
 from src.business_logic.student import StudentBL
 from src.storage.student import StudentStorage
 
@@ -34,14 +43,17 @@ class StudentController:
         return res
 
     def subscribe_in_discipline(self, materia_id):
-        curso_id = self._storage.get_course_id(self._aluno_id)
-        DisciplineController(self._conn).check_exists(materia_id, curso_id)
-        self._storage.check_student_already_in_discipline(self._aluno_id, materia_id)
-        self._storage.subscribe_in_discipline(self._aluno_id, materia_id)
-        self._storage.check_student_in_tree_disciplines(self._aluno_id)
+        curso_id = self._student_storage.get_course_id(self._aluno_id)
+        MateriaModelo(self._conn).verifica_existencia(materia_id, curso_id)
+        self._student_storage.check_student_already_in_discipline(
+            self._aluno_id, materia_id
+        )
+        self._student_storage.subscribe_in_discipline(self._aluno_id, materia_id)
+        self._student_storage.check_student_in_tree_disciplines(self._aluno_id)
 
     def subscribe_in_course(self, curso_id):
-        self._storage.get_student(self._aluno_id)
-        CourseController().check_exists(curso_id)
-        self._storage.can_subscribe_course(self._aluno_id)
-        self._storage.subcribe_in_course(self._aluno_id, curso_id)
+        aluno = self._student_storage.get_student(self._aluno_id)
+        CursoModelo(self._conn).verifica_existencia(curso_id)
+        self._student_storage.can_subscribe_course(self._aluno_id)
+        aluno.curso_id = curso_id
+        self._conn.confirma()

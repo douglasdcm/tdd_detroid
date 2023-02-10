@@ -15,51 +15,25 @@ Base = declarative_base(metadata=metadata)
 
 class SqlClient:
     def __init__(self, nome_banco) -> None:
+        # self._engine = create_engine(f"sqlite:///{nome_banco}", echo=False)
         self._engine = create_engine(
-            "postgresql+pg8000://postgres:postgresql@localhost/postgres",
+            f"postgresql+pg8000://postgres:postgresql@localhost/postgres",
             echo=False,
+            # pool_pre_ping=True,
         )
+
+        # # using db from websocket-postgres
+        # self._engine = create_engine(
+        #     f"postgresql+pg8000://pgws:example@172.24.0.2/postgres",
+        #     echo=False,
+        #     pool_pre_ping=True,
+        # )
         _session_maker = sessionmaker(bind=self._engine)
         self._session = _session_maker()
 
-    def create_schema(self):
-        statements = [
-            "create schema api;",
-            "create role web_anon nologin;",
-        ]
-        for statement in statements:
-            try:
-                with self._session as s:
-                    s.execute(statement)
-                    s.commit()
-            # catch any exception
-            except:
-                continue
-
-    def grant_permissions(self):
-        statements = [
-            "grant usage on schema api to web_anon;",
-            "grant select on all tables in schema api to web_anon;",
-            "grant insert on all tables in schema api to web_anon;",
-            "grant delete on all tables in schema api to web_anon;",
-            "grant update on all tables in schema api to web_anon;",
-            "GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA api TO web_anon;",
-            "create role authenticator noinherit login password 'mysecretpassword';",
-            "grant web_anon to authenticator;",
-        ]
-        for statement in statements:
-            try:
-                with self._session as s:
-                    s.execute(statement)
-                    s.commit()
-            # catch any exception
-            except:
-                continue
-
     def update(self):
-        with self._session as s:
-            s.flush()
-            s.commit()
+        self._session.flush()
+        self._session.commit()
 
     def lista_maximo(self, modelo):
         resultado = self._session.query(modelo).all()
@@ -68,34 +42,14 @@ class SqlClient:
         return resultado
 
     def init_table(self, modelo):
-        self._session.close_all()
-        self.drop_views()
+        self._session.close_all()  # <- don't forget to close
         Base.metadata.drop_all(self._engine)
         Base.metadata.create_all(self._engine)
-        self.create_views()
-
-    def drop_views(self):
-        statement = "DROP VIEW IF EXISTS api.view_course_and_discipline;"
-        try:
-            with self._session as s:
-                s.execute(statement)
-                s.commit()
-        except:
-            raise ErroBancoDados("Could not delete the views.")
-
-    def create_views(self):
-        statement = """
-        CREATE VIEW api.view_course_and_discipline AS
-        SELECT *
-        FROM api.materias
-        GROUP BY curso_id, id;
-        """
-        try:
-            with self._session as s:
-                s.execute(statement)
-                s.commit()
-        except:
-            raise ErroBancoDados("Could not create the views.")
+        # resultado = self._session.query(modelo).all()
+        # for instance in resultado:
+        #     self._session.delete(instance)
+        #     self._session.flush()
+        #     self._session.commit()
 
     def roda_query(self, query: Query):
         return query.with_session(self._session).all()
