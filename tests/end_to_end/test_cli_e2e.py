@@ -135,7 +135,7 @@ def test_aluno_pode_se_inscrever_em_curso(__popula_banco_dados):
     assert aluno.curso_id == curso_id
     # verifica pelo banco
     assert conn.lista(AlunoBd, aluno_id).curso_id == 4
-    assert "Aluno inscrito no curso 4" in output
+    assert f"Aluno inscrito no curso 4" in output
 
 
 def test_cli_materia_nome_igual_mas_id_diferente(setup):
