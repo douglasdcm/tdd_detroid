@@ -1,8 +1,9 @@
 from src.storage.course import CourseStorage
 
 
-class CourseController:
-    def __init__(self, conn=None) -> None:
+class CursoModelo:
+    def __init__(self, conn: SqlClient) -> None:
+        self._conn = conn
         self._curso_id = None
         self._storage = CourseStorage()
 
@@ -14,8 +15,8 @@ class CourseController:
     def id(self, valor):
         self._curso_id = self._storage.get_course(valor)
 
-    def check_exists(self, curso_id):
-        self._storage.get_course(curso_id)
+    def verifica_existencia(self, curso_id):
+        self.__pega_curso(curso_id)
 
     def cria(self, nome):
         self._storage.check_name(nome)

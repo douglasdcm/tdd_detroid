@@ -1,6 +1,6 @@
 import uuid
-from src.controllers.curso import CourseController
-from src.controllers.materia import DisciplineController
+from src.controllers.curso import CursoModelo
+from src.controllers.materia import MateriaModelo
 from src.controllers.student import StudentController
 from src.config import conn
 from pytest import raises
@@ -34,9 +34,9 @@ def cria_aluno_completo(conn):
 
 def cria_materia(conn, curso_id):
     nome_aleatorio = str(uuid.uuid4())
-    DisciplineController(conn).cria(nome_aleatorio, curso_id)
+    MateriaModelo(conn).cria(nome_aleatorio, curso_id)
 
 
 def cria_curso(conn):
     nome_aleatorio = str(uuid.uuid4())
-    CourseController(conn).cria(nome_aleatorio)
+    CursoModelo(conn).cria(nome_aleatorio)

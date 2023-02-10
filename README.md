@@ -79,15 +79,6 @@ create role web_anon nologin;
 grant usage on schema api to web_anon;
 grant select on api.alunos to web_anon;
 grant insert on api.alunos to web_anon;
-grant delete on api.alunos to web_anon;
-
-grant select on api.cursos to web_anon;
-grant insert on api.cursos to web_anon;
-grant delete on api.cursos to web_anon;
-
-GRANT ALL ON TABLE api.alunos TO postgres;
-GRANT ALL ON TABLE api.alunos TO web_anon;
-
 GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA api TO web_anon;
 
 create role authenticator noinherit login password 'mysecretpassword';
