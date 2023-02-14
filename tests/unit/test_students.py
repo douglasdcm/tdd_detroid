@@ -155,9 +155,9 @@ def test_inscreve_aluno_numa_materia(popula_banco_dados):
         aluno.subscribe_in_discipline(1)
 
 
-async def test_aluno_cria():
+def test_aluno_cria():
     aluno = StudentController(conn)
-    await aluno.create(nome="any")
+    aluno.create(nome="any")
     assert conn.lista(AlunoBd, 1).nome == "any"
     assert conn.lista(AlunoBd, 1).id == 1
 

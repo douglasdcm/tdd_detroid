@@ -2,7 +2,7 @@ import requests
 import json
 
 
-BASE_URL = "http://minikube:30501/"
+BASE_URL = "http://tdd-postgrest:3000/"
 HEADERS = {"Content-Type": "application/json"}
 
 
@@ -35,14 +35,14 @@ async def request(
     return response
 
 
-async def get_all(resources):
-    return await request(
-        f"{BASE_URL}{resources}",
-        "GET",
-    )
+# async def get_all(resources):
+#     return await request(
+#         f"{BASE_URL}{resources}",
+#         "GET",
+#     )
 
 
-def get_all_(resources):
+def get_all(resources):
     url = f"{BASE_URL}{resources}"
     response = requests.request("GET", url, headers={}, data={})
     return response.json()
@@ -56,46 +56,46 @@ def get_by_query(resources, query):
     return ValueError(f"Request has failed: {response.json()}")
 
 
-async def get(resources, id):
-    return await request(
-        f"{BASE_URL}{resources}?id=eq.{str(id)}",
-        "GET",
-    )
+# async def get(resources, id):
+#     return await request(
+#         f"{BASE_URL}{resources}?id=eq.{str(id)}",
+#         "GET",
+#     )
 
 
-def get_(resources, id):
+def get(resources, id):
     url = f"{BASE_URL}{resources}?id=eq.{str(id)}"
     response = requests.request("GET", url, headers={}, data={})
     return response.json()[0]
 
 
-async def post(resources, data):
-    return await request(
-        f"{BASE_URL}{resources}",
-        "POST",
-        data,
-        {"Content-Type": "application/json"},
-    )
+# async def post(resources, data):
+#     return await request(
+#         f"{BASE_URL}{resources}",
+#         "POST",
+#         data,
+#         {"Content-Type": "application/json"},
+#     )
 
 
-async def post_working(resources, data):
-    from pyodide.http import pyfetch, FetchResponse
+# async def post_working(resources, data):
+#     from pyodide.http import pyfetch, FetchResponse
 
-    url = f"{BASE_URL}{resources}"
-    body = json.dumps(data)
-    method = "POST"
-    headers = HEADERS
-    kwargs = {"method": method, "mode": "cors"}
-    if body and method not in ["GET", "HEAD"]:
-        kwargs["body"] = body
-    if headers:
-        kwargs["headers"] = headers
+#     url = f"{BASE_URL}{resources}"
+#     body = json.dumps(data)
+#     method = "POST"
+#     headers = HEADERS
+#     kwargs = {"method": method, "mode": "cors"}
+#     if body and method not in ["GET", "HEAD"]:
+#         kwargs["body"] = body
+#     if headers:
+#         kwargs["headers"] = headers
 
-    response = await pyfetch(url, **kwargs)
-    return response
+#     response = await pyfetch(url, **kwargs)
+#     return response
 
 
-def post_not_working_on_ui(resources, data):
+def post(resources, data):
     import requests
     from requests.adapters import HTTPAdapter
     from urllib3.util.retry import Retry

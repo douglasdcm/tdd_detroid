@@ -100,7 +100,7 @@ async def add_course():
         __update_terminal(e, "FAIL")
 
 
-async def add_student():
+def add_student():
     try:
         # nome = Element("student-nome").value
 
@@ -113,7 +113,7 @@ async def add_student():
 
         content = Element("student-nome").value
         students = Students(conn)
-        await students.create(content)
+        students.create(content)
         # qtde = len(students.lista_tudo())
         qtde = 42 # fake
         # text = f"Added student. id: {qtde}, Name: {students.lista(qtde).nome}"
