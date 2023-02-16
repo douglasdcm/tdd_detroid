@@ -91,13 +91,14 @@ def add_course():
         __update_terminal(e, "FAIL")
 
 
-def add_student():
+async def add_student():
     try:
         nome = Element("student-nome").value
-        students = Students(conn)
-        students.cria(content.value)
-        qtde = len(students.lista_tudo())
-        text = f"Added student. id: {qtde}, Name: {students.lista(qtde).nome}"
+        # students = Students(conn)
+        # students.cria(content.value)
+        # qtde = len(students.lista_tudo())
+        # text = f"Added student. id: {qtde}, Name: {students.lista(qtde).nome}"
+        text = await request("http://minikube:30500/alunos", "GET")
         __update_terminal(text, "INFO")
     except Exception as e:
         __update_terminal(e, "FAIL")
