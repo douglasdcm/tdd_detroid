@@ -16,7 +16,7 @@ Base = declarative_base(metadata=metadata)
 class SqlClient:
     def __init__(self, nome_banco) -> None:
         self._engine = create_engine(
-            "postgresql+pg8000://postgres:postgresql@localhost/postgres",
+            f"postgresql+pg8000://postgres:postgresql@{nome_banco}/postgres",
             echo=False,
         )
         _session_maker = sessionmaker(bind=self._engine)

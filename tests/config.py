@@ -1,3 +1,3 @@
 from src.utils.sql_client import SqlClient
 
-conn = SqlClient(":memory:")
+conn = SqlClient("localhost")
