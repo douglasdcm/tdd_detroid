@@ -8,6 +8,8 @@ from pyodide.http import pyfetch, FetchResponse
 from typing import Optional
 import json
 
+BASE_URL = "http://minikube:30500"
+
 # https://github.com/pyscript/pyscript/pull/151/commits/3e3f21c08fa0a5e081804e8fbb11e708ee2813ce
 async def request(url:str, method:str = "GET", body:Optional[str] = None,
  headers:Optional[dict[str,str]] = None) -> FetchResponse:
@@ -79,27 +81,30 @@ def subscribe_course():
         __update_terminal(e, "FAIL")
 
 
-def add_course():
+async def add_course():
     try:
-        content = Element("course-nome")
-        courses = Courses(conn_internal)
-        courses.cria(content.value)
-        qtde = len(courses.lista_tudo())
-        text = f"#Course id: {qtde}, Nome: {courses.lista(qtde).nome}"
-        __update_terminal(text, "INFO")
+        name = Element("course-nome").value
+        text = await request(
+            f"{BASE_URL}/course",
+            "POST",
+            json.dumps({"name": name}),
+            {"Content-Type":"application/json"}
+        )
+        __update_terminal(await text.json(), "INFO")
     except Exception as e:
         __update_terminal(e, "FAIL")
 
 
 async def add_student():
     try:
-        nome = Element("student-nome").value
-        # students = Students(conn)
-        # students.cria(content.value)
-        # qtde = len(students.lista_tudo())
-        # text = f"Added student. id: {qtde}, Name: {students.lista(qtde).nome}"
-        text = await request("http://minikube:30500/alunos", "GET")
-        __update_terminal(text, "INFO")
+        name = Element("student-nome").value
+        text = await request(
+            f"{BASE_URL}/student",
+            "POST",
+            json.dumps({"name": name}),
+            {"Content-Type":"application/json"}
+        )
+        __update_terminal(await text.json(), "INFO")
     except Exception as e:
         __update_terminal(e, "FAIL")
 
