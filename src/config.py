@@ -1,4 +1,5 @@
 from src.utils.sql_client import SqlClient
 
 
-conn = SqlClient("production.db")
+conn_internal = SqlClient("postgres")
+conn_external = SqlClient("localhost")

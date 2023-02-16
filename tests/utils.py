@@ -2,7 +2,7 @@ import uuid
 from src.controllers.curso import CourseController
 from src.controllers.materia import DisciplineController
 from src.controllers.student import StudentController
-from src.config import conn
+from tests.config import conn
 from pytest import raises
 from src.utils.utils import inicializa_tabelas
 

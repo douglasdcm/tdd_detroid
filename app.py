@@ -2,7 +2,7 @@
 from os import environ
 from flask import Flask, render_template
 from src.sdk.students import StudentController
-from src.config import conn
+from src.config import conn_internal
 
 app = Flask(__name__, static_folder="templates", static_url_path="")
 
@@ -14,7 +14,7 @@ def output():
 
 @app.route("/alunos")
 def alunos():
-    StudentController(conn).create("my_student")
+    StudentController(conn_internal).create("my_student")
     return 'OK'
 
 

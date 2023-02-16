@@ -1,6 +1,6 @@
 import click
 from src.utils.utils import inicializa_tabelas
-from src.config import conn
+from src.config import conn_external
 from src.commands.student import aluno
 from src.commands.discipline import materia
 from src.commands.course import curso
@@ -14,7 +14,7 @@ def cli():
 
 @cli.command()
 def init_bd():
-    inicializa_tabelas(conn)
+    inicializa_tabelas(conn_external)
     click.echo("Database initialized")
 
 
