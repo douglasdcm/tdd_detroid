@@ -1,5 +1,5 @@
 from src.utils.sql_client import SqlClient
-from src.schemes.student import AlunoBd
+from src.schemes.student import StudentDB
 from src.controllers.student import StudentController
 
 
@@ -26,7 +26,7 @@ class Students:
         StudentController(self._conn).create(nome)
 
     def lista_tudo(self):
-        return self._conn.lista_tudo(AlunoBd)
+        return self._conn.lista_tudo(StudentDB)
 
     def lista(self, id_):
-        return self._conn.lista(AlunoBd, id_)
+        return self._conn.lista(StudentDB, id_)

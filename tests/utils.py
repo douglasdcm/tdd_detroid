@@ -39,4 +39,4 @@ def cria_materia(conn, curso_id):
 
 def cria_curso(conn):
     nome_aleatorio = str(uuid.uuid4())
-    CourseController(conn).cria(nome_aleatorio)
+    CourseController(conn).create(nome_aleatorio)

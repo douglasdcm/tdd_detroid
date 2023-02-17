@@ -3,10 +3,10 @@ from sqlalchemy.orm import relationship
 from src.utils.sql_client import Base
 
 
-class CursoBd(Base):
+class CourseDB(Base):
     __tablename__ = "cursos"
 
     id = Column(Integer, primary_key=True)
     nome = Column(String)
     materia = relationship("MateriaBd")
-    aluno = relationship("AlunoBd")
+    aluno = relationship("StudentDB")

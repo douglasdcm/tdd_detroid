@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey
 from src.utils.sql_client import Base
 
 
-class AlunoBd(Base):
+class StudentDB(Base):
     __tablename__ = "alunos"
 
     id = Column(Integer, primary_key=True)

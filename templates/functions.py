@@ -11,8 +11,12 @@ import json
 BASE_URL = "http://minikube:30500"
 
 # https://github.com/pyscript/pyscript/pull/151/commits/3e3f21c08fa0a5e081804e8fbb11e708ee2813ce
-async def request(url:str, method:str = "GET", body:Optional[str] = None,
- headers:Optional[dict[str,str]] = None) -> FetchResponse:
+async def request(
+    url: str,
+    method: str = "GET",
+    body: Optional[str] = None,
+    headers: Optional[dict[str, str]] = None,
+) -> FetchResponse:
     """
     Async request function. Pass in Method and make sure to await!
     Parameters:
@@ -23,23 +27,14 @@ async def request(url:str, method:str = "GET", body:Optional[str] = None,
     Return:
         response: pyodide.http.FetchResponse = use with .status or await.json(), etc.
     """
-    kwargs = {"method":method, "mode":"cors"}
+    kwargs = {"method": method, "mode": "cors"}
     if body and method not in ["GET", "HEAD"]:
         kwargs["body"] = body
     if headers:
         kwargs["headers"] = headers
 
-
     response = await pyfetch(url, **kwargs)
     return response
-
-async def poc_postgrest():
-    url = "http://minikube:30501/alunos"
-    response = await request(url, "GET")
-    # response = await pyfetch(url="http://minikube:30501/alunos", method="GET")
-    output = f"GET request=> status:{response.status}, json:{await response.json()}"
-    # output = f"GET request=> status:{response}"
-    __update_terminal(output, "INFO")
 
 
 def subscribe_discipline():
@@ -88,7 +83,7 @@ async def add_course():
             f"{BASE_URL}/course",
             "POST",
             json.dumps({"name": name}),
-            {"Content-Type":"application/json"}
+            {"Content-Type": "application/json"},
         )
         __update_terminal(await text.json(), "INFO")
     except Exception as e:
@@ -102,7 +97,7 @@ async def add_student():
             f"{BASE_URL}/student",
             "POST",
             json.dumps({"name": name}),
-            {"Content-Type":"application/json"}
+            {"Content-Type": "application/json"},
         )
         __update_terminal(await text.json(), "INFO")
     except Exception as e:

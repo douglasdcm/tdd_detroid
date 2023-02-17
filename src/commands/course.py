@@ -1,6 +1,6 @@
 import click
 from src.sdk.courses import Courses
-from src.schemes.course import CursoBd
+from src.schemes.course import CourseDB
 from src.config import conn_external
 
 
@@ -15,7 +15,7 @@ def curso():
 def cria(nome):
     try:
         Courses(conn_external).cria(nome)
-        id_ = conn_external.lista_maximo(CursoBd).id
+        id_ = conn_external.lista_maximo(CourseDB).id
         click.echo(f"Curso definido: id {id_}, nome {nome}")
     except Exception as e:
         click.echo(e)
