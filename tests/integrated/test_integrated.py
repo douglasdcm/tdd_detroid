@@ -1,4 +1,4 @@
-from src.courses import Courses
+from src.sdk.courses import Courses
 from src.disciplines import Disciplines
 from src.sdk.students import Students
 from src.schemes.student import AlunoBd
