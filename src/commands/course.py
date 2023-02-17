@@ -1,5 +1,5 @@
 import click
-from src.courses import Courses
+from src.sdk.courses import Courses
 from src.schemes.course import CursoBd
 from src.config import conn_external
 
