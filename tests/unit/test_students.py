@@ -1,11 +1,11 @@
-from src.schemes.for_association import MateriaAlunoBd
-from src.schemes.student import AlunoBd
+from src.schemes.for_association import MateriaStudentDB
+from src.schemes.student import StudentDB
 from src.controllers.student import StudentController
 from src.utils.exceptions import (
     ErroAluno,
     ErroMateriaAluno,
     ErroMateria,
-    ErroCurso,
+    ErrorCourse,
 )
 from tests.config import conn
 from pytest import raises, mark
@@ -18,29 +18,29 @@ def test_student_name_cannot_be_empty(popula_banco_dados, input):
 
 
 def test_arredonda_o_cr_a_uma_casa_decimal(popula_banco_dados):
-    aluno_id = len(conn.lista_tudo(AlunoBd))
+    aluno_id = len(conn.lista_tudo(StudentDB))
     aluno = StudentController(conn)
     aluno.id = aluno_id
     aluno.set_grade(discipline_id=1, grade=2)
     aluno.set_grade(discipline_id=2, grade=2)
     aluno.set_grade(discipline_id=3, grade=3)
-    aluno_bd = conn.lista(AlunoBd, aluno_id)
+    aluno_bd = conn.lista(StudentDB, aluno_id)
     assert aluno_bd.coef_rend == 2.3
 
 
 def test_calcula_cr_aluno_como_media_simples_das_notas_lancadas(popula_banco_dados):
-    aluno_id = len(conn.lista_tudo(AlunoBd))
+    aluno_id = len(conn.lista_tudo(StudentDB))
     aluno = StudentController(conn)
     aluno.id = aluno_id
     aluno.set_grade(discipline_id=1, grade=1)
     aluno.set_grade(discipline_id=2, grade=2)
     aluno.set_grade(discipline_id=3, grade=3)
-    aluno_bd = conn.lista(AlunoBd, aluno_id)
+    aluno_bd = conn.lista(StudentDB, aluno_id)
     assert aluno_bd.coef_rend == 2
 
 
 def test_lanca_nota_se_aluno_existe(popula_banco_dados):
-    aluno_id = len(conn.lista_tudo(AlunoBd))
+    aluno_id = len(conn.lista_tudo(StudentDB))
     aluno = StudentController(conn)
     aluno.id = aluno_id
     materia_id = 1
@@ -49,7 +49,7 @@ def test_lanca_nota_se_aluno_existe(popula_banco_dados):
 
 
 def test_assume_maior_nota_se_duplo_lancamento_de_notas(popula_banco_dados):
-    aluno_id = len(conn.lista_tudo(AlunoBd))
+    aluno_id = len(conn.lista_tudo(StudentDB))
     aluno = StudentController(conn)
     aluno.id = aluno_id
     materia_id = 1
@@ -57,7 +57,7 @@ def test_assume_maior_nota_se_duplo_lancamento_de_notas(popula_banco_dados):
     nota_bd = None
     aluno.set_grade(materia_id, grade=nota + 1)
     aluno.set_grade(materia_id, grade=nota)
-    mas = conn.lista_tudo(MateriaAlunoBd)
+    mas = conn.lista_tudo(MateriaStudentDB)
     for ma in mas:
         if ma.aluno_id == aluno_id and ma.materia_id == materia_id:
             nota_bd = ma.aluno_nota
@@ -93,11 +93,11 @@ def test_nao_lanca_nota_se_aluno_nao_inscrito_materia():
 
 
 def test_lanca_notas_se_aluno_inscrito_materia(popula_banco_dados):
-    aluno_id = len(conn.lista_tudo(AlunoBd))
+    aluno_id = len(conn.lista_tudo(StudentDB))
     aluno = StudentController(conn)
     aluno.id = aluno_id
     aluno.set_grade(discipline_id=1, grade=5)
-    assert conn.lista(AlunoBd, aluno_id).coef_rend == 5.0
+    assert conn.lista(StudentDB, aluno_id).coef_rend == 5.0
 
 
 def test_nao_inscreeve_aluno_se_curso_nao_existe():
@@ -122,7 +122,7 @@ def test_mensagem_sobre_3_materias_para_apos_inscricao_em_3_materias(
 
 
 def test_aluno_nao_pode_se_inscrever_em_materia_inexistente(popula_banco_dados):
-    aluno_id = len(conn.lista_tudo(AlunoBd))
+    aluno_id = len(conn.lista_tudo(StudentDB))
     aluno = StudentController(conn)
     aluno.id = aluno_id
     with raises(ErroMateriaAluno):
@@ -134,7 +134,7 @@ def test_aluno_nao_pode_se_inscrever_em_materia_inexistente(popula_banco_dados):
 
 
 def test_aluno_nao_pode_se_inscrever_duas_vezes_na_mesma_materia(popula_banco_dados):
-    aluno_id = len(conn.lista_tudo(AlunoBd))
+    aluno_id = len(conn.lista_tudo(StudentDB))
     aluno = StudentController(conn)
     aluno.id = aluno_id
     with raises(ErroMateriaAluno):
@@ -158,15 +158,15 @@ def test_inscreve_aluno_numa_materia(popula_banco_dados):
 def test_aluno_cria():
     aluno = StudentController(conn)
     aluno.create(nome="any")
-    assert conn.lista(AlunoBd, 1).nome == "any"
-    assert conn.lista(AlunoBd, 1).id == 1
+    assert conn.lista(StudentDB, 1).nome == "any"
+    assert conn.lista(StudentDB, 1).id == 1
 
 
 def test_inscreve_aluno_se_curso_existe():
     aluno = StudentController(conn)
     aluno.create("any")
     with raises(Exception):
-        with raises(ErroCurso, match="Curso 42 nao existe"):
+        with raises(ErrorCourse, match="Curso 42 nao existe"):
             aluno.subscribe_in_course(curso_id=42)
 
 
@@ -174,7 +174,7 @@ def test_inscreve_aluno_curso(popula_banco_dados):
     aluno = StudentController(conn)
     aluno.create("any")
     aluno.subscribe_in_course(curso_id=1)
-    assert conn.lista(AlunoBd, 1).curso_id == 1
+    assert conn.lista(StudentDB, 1).curso_id == 1
 
 
 def test_verifica_aluno_existe():
@@ -194,17 +194,17 @@ def test_alunos_lista_por_id():
     aluno = StudentController(conn)
     aluno.create(nome="any")
     aluno.create(nome="other")
-    assert conn.lista(AlunoBd, id_=2).nome == "other"
+    assert conn.lista(StudentDB, id_=2).nome == "other"
 
 
 def test_alunos_lista_tudo():
     aluno = StudentController(conn)
     aluno.create(nome="any")
     aluno.create(nome="other")
-    assert len(conn.lista_tudo(AlunoBd)) == 2
+    assert len(conn.lista_tudo(StudentDB)) == 2
 
 
 def test_alunos_cria_banco_dados():
     aluno = StudentController(conn)
     aluno.create(nome="any")
-    assert conn.lista(AlunoBd, id_=1).nome == "any"
+    assert conn.lista(StudentDB, id_=1).nome == "any"

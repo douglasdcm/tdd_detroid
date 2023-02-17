@@ -2,7 +2,7 @@ from sqlalchemy import Column, ForeignKey, Integer
 from src.utils.sql_client import Base
 
 
-class MateriaAlunoBd(Base):
+class MateriaStudentDB(Base):
     __tablename__ = "materia_aluno"
 
     aluno_nota = Column(Integer)

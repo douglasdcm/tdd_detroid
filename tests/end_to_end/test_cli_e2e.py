@@ -2,10 +2,10 @@ import subprocess
 from src.sdk.courses import Courses
 from src.sdk.students import Students
 from src.disciplines import Disciplines
-from src.schemes.course import CursoBd
-from src.schemes.student import AlunoBd
+from src.schemes.course import CourseDB
+from src.schemes.student import StudentDB
 from src.schemes.discipline import MateriaBd
-from src.schemes.for_association import MateriaAlunoBd
+from src.schemes.for_association import MateriaStudentDB
 from src.config import conn_external
 from pytest import fixture
 from time import sleep
@@ -37,7 +37,7 @@ def test_init_data_base():
 
 
 def test_aluno_pode_lancar_notas(__popula_banco_dados):
-    aluno_id = len(conn_external.lista_tudo(AlunoBd))
+    aluno_id = len(conn_external.lista_tudo(StudentDB))
     materia_id = 1
     nota = 7
     nota_bd = None
@@ -60,7 +60,7 @@ def test_aluno_pode_lancar_notas(__popula_banco_dados):
     output = str(temp.communicate())
 
     # verifica pelo banco
-    materia_aluno = conn_external.lista_tudo(MateriaAlunoBd)
+    materia_aluno = conn_external.lista_tudo(MateriaStudentDB)
     for ma in materia_aluno:
         if ma.aluno_id == aluno_id and ma.materia_id == materia_id:
             nota_bd = ma.aluno_nota
@@ -101,7 +101,7 @@ def test_alunos_deve_inscreve_3_materias_no_minimo(__popula_banco_dados):
     output = str(temp.communicate())
 
     # verifica pelo banco
-    materia_aluno = conn_external.lista_tudo(MateriaAlunoBd)
+    materia_aluno = conn_external.lista_tudo(MateriaStudentDB)
     assert len(materia_aluno) > 1
     assert f"Aluno deve se inscrever em 3 materias no minimo" in output
 
@@ -134,7 +134,7 @@ def test_aluno_pode_se_inscrever_em_curso(__popula_banco_dados):
     # verifica pela API
     assert aluno.curso_id == curso_id
     # verifica pelo banco
-    assert conn_external.lista(AlunoBd, aluno_id).curso_id == 4
+    assert conn_external.lista(StudentDB, aluno_id).curso_id == 4
     assert f"Aluno inscrito no curso 4" in output
 
 
@@ -184,9 +184,9 @@ def test_cli_aluno_deve_ter_nome(setup):
     assert alunos.lista(1).nome == "any"
     assert alunos.lista(2).nome == "other"
     # verifica banco de dados
-    assert len(conn_external.lista_tudo(AlunoBd)) == 2
-    assert conn_external.lista(AlunoBd, 1).nome == "any"
-    assert conn_external.lista(AlunoBd, 2).nome == "other"
+    assert len(conn_external.lista_tudo(StudentDB)) == 2
+    assert conn_external.lista(StudentDB, 1).nome == "any"
+    assert conn_external.lista(StudentDB, 2).nome == "other"
     assert f"Aluno definido: id 2, nome other" in output
 
 
@@ -204,7 +204,7 @@ def test_cli_curso_com_nome_e_id(setup):
     assert cursos.lista(1).nome == "any"
     assert cursos.lista(2).nome == "other"
     # verifica banco de dados
-    assert len(conn_external.lista_tudo(CursoBd)) == 2
-    assert conn_external.lista(CursoBd, 1).nome == "any"
-    assert conn_external.lista(CursoBd, 2).nome == "other"
+    assert len(conn_external.lista_tudo(CourseDB)) == 2
+    assert conn_external.lista(CourseDB, 1).nome == "any"
+    assert conn_external.lista(CourseDB, 2).nome == "other"
     assert f"Curso definido: id 2, nome other" in output

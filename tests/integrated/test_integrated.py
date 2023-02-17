@@ -1,15 +1,15 @@
 from src.sdk.courses import Courses
 from src.disciplines import Disciplines
 from src.sdk.students import Students
-from src.schemes.student import AlunoBd
-from src.schemes.course import CursoBd
+from src.schemes.student import StudentDB
+from src.schemes.course import CourseDB
 from src.schemes.discipline import MateriaBd
-from src.schemes.for_association import MateriaAlunoBd
+from src.schemes.for_association import MateriaStudentDB
 from src.utils.utils import inicializa_tabelas
 from src.utils.exceptions import (
     ErroAluno,
     ErroMateria,
-    ErroCurso,
+    ErrorCourse,
     ErroMateriaAluno,
 )
 from tests.config import conn
@@ -24,7 +24,7 @@ def test_calcula_cr_aluno_de_materias_cursadas(popula_banco_dados):
     alunos.set_grade(aluno_id=aluno_id, materia_id=2, nota=0)
     alunos.set_grade(aluno_id=aluno_id, materia_id=3, nota=5)
 
-    assert conn.lista(AlunoBd, aluno_id).coef_rend == 5
+    assert conn.lista(StudentDB, aluno_id).coef_rend == 5
 
 
 def test_alunos_deve_inscreve_em_3_materias(popula_banco_dados):
@@ -38,7 +38,7 @@ def test_alunos_deve_inscreve_em_3_materias(popula_banco_dados):
     ):
         alunos.subscribe_in_discipline(aluno_id, 1)
 
-    materia_aluno = conn.lista_tudo(MateriaAlunoBd)
+    materia_aluno = conn.lista_tudo(MateriaStudentDB)
     assert len(materia_aluno) > 1
 
 
@@ -98,7 +98,7 @@ def test_nao_criar_quarto_curso_se_menos_de_tres_materias_por_curso():
     Courses(conn).cria("any_3")
     Disciplines(conn).cria(nome="any", curso_id=1)
     with raises(
-        ErroCurso,
+        ErrorCourse,
         match="Necessários 3 cursos com 3 três matérias para se criar novos cursos",
     ):
         Courses(conn).cria("quarto")
@@ -109,7 +109,7 @@ def test_nao_criar_quarto_curso_se_todos_cursos_sem_materias():
     Courses(conn).cria("any_2")
     Courses(conn).cria("any_3")
     with raises(
-        ErroCurso,
+        ErrorCourse,
         match="Necessários 3 cursos com 3 três matérias para se criar novos cursos",
     ):
         Courses(conn).cria("quatro")
@@ -128,24 +128,24 @@ def test_materia_nao_associada_curso_inexistente(popula_banco_dados):
 
 
 def test_materia_associada_curso_existente():
-    conn.cria(CursoBd(nome="any"))
+    conn.cria(CourseDB(nome="any"))
     conn.cria(MateriaBd(nome="any", curso_id=1))
     assert conn.lista(MateriaBd, 1).nome == "any"
 
 
 def test_cria_tabela_com_dados():
-    conn.cria(CursoBd(nome="any_1"))
-    conn.cria(CursoBd(nome="any_2"))
-    conn.cria(CursoBd(nome="any_3"))
-    assert len(conn.lista_tudo(CursoBd)) == 3
+    conn.cria(CourseDB(nome="any_1"))
+    conn.cria(CourseDB(nome="any_2"))
+    conn.cria(CourseDB(nome="any_3"))
+    assert len(conn.lista_tudo(CourseDB)) == 3
 
 
 def test_cria_item_bd():
-    conn.cria(CursoBd(nome="any"))
-    assert len(conn.lista_tudo(CursoBd)) == 1
+    conn.cria(CourseDB(nome="any"))
+    assert len(conn.lista_tudo(CourseDB)) == 1
 
 
 def test_lista_por_id_bd():
     Courses(conn).cria("any")
     inicializa_tabelas(conn)
-    assert len(conn.lista_tudo(CursoBd)) == 0
+    assert len(conn.lista_tudo(CourseDB)) == 0

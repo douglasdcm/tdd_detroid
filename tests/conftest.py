@@ -23,9 +23,9 @@ def popula_banco_dados(scope="function"):
     m8 c3
     m9 c3
     """
-    CourseController(conn).cria(nome="any_1")
-    CourseController(conn).cria(nome="any_2")
-    CourseController(conn).cria(nome="any_3")
+    CourseController(conn).create(nome="any_1")
+    CourseController(conn).create(nome="any_2")
+    CourseController(conn).create(nome="any_3")
     for i in range(3):
         for j in range(3):
             DisciplineController(conn).cria(nome=f"any{j}", curso_id=i + 1)

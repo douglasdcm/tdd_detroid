@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Query
-from src.schemes.course import CursoBd
+from src.schemes.course import CourseDB
 from src.utils.sql_client import SqlClient
 from src.schemes.discipline import MateriaBd
 from src.utils.exceptions import ErroBancoDados, ErroMateria
@@ -24,12 +24,12 @@ class DisciplineController:
             raise ErroMateria("O curso já possui uma matéria com este nome")
 
     def __existem_3_cursos(self):
-        if len(self._conn.lista_tudo(CursoBd)) < 3:
+        if len(self._conn.lista_tudo(CourseDB)) < 3:
             raise ErroMateria("Necessários 3 cursos para se criar a primeira matéria")
 
     def __existe_curso(self, curso_id):
         try:
-            self._conn.lista(CursoBd, curso_id)
+            self._conn.lista(CourseDB, curso_id)
         except ErroBancoDados:
             raise ErroMateria(f"Curso {curso_id} não existe")
 

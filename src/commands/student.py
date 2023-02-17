@@ -1,6 +1,6 @@
 import click
 from src.sdk.students import Students
-from src.schemes.student import AlunoBd
+from src.schemes.student import StudentDB
 from src.config import conn_external
 
 
@@ -39,7 +39,7 @@ def inscreve_materia(aluno_id, materia_id):
 @click.option("--nome", required=True, help="Student name")
 def cria(nome):
     Students(conn_external).create(nome)
-    id_ = conn_external.lista_maximo(AlunoBd).id
+    id_ = conn_external.lista_maximo(StudentDB).id
     click.echo(f"Aluno definido: id {id_}, nome {nome}")
 
 
