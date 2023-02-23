@@ -9,7 +9,7 @@ def test_aluno_tem_materia_id(popula_banco_dados):
     assert aluno.materia_id == 1
 
 
-def test_cria_novo_curso():
+def test_create_novo_curso():
     curso = CourseDB(nome="any")
-    conn.cria(curso)
-    assert conn.lista_tudo(CourseDB)[0].nome == "any"
+    conn.create(curso)
+    assert conn.get_all(CourseDB)[0].nome == "any"

@@ -7,15 +7,15 @@ class Disciplines:
     def __init__(self, conn: SqlClient) -> None:
         self._conn = conn
 
-    def cria(self, nome, curso_id: int):
+    def create(self, nome, curso_id: int):
         """
         :nome nome da matéria
         :curso curso associado à matéria
         """
-        DisciplineController(self._conn).cria(nome, curso_id)
+        DisciplineController(self._conn).create(nome, curso_id)
 
-    def lista_tudo(self):
-        return self._conn.lista_tudo(MateriaBd)
+    def get_all(self):
+        return self._conn.get_all(MateriaBd)
 
     def lista(self, id_):
         return self._conn.get(MateriaBd, id_)

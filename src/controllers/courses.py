@@ -24,14 +24,14 @@ def check_exists(course_id):
 def check_exists_three():
     query_cursos = Query([CourseDB])
 
-    resultado = len(sql_client.roda_query(query_cursos))
+    resultado = len(sql_client.run_query(query_cursos))
     if resultado < 3:
         return
 
     query_materias = Query([src.disciplines.MateriaBd]).group_by(
         src.disciplines.MateriaBd.curso_id, src.disciplines.MateriaBd.id
     )
-    resultado = len(sql_client.roda_query(query_materias))
+    resultado = len(sql_client.run_query(query_materias))
 
     if resultado < 3:
         raise ErrorCourse(
@@ -41,7 +41,7 @@ def check_exists_three():
 
 def check_non_existent(nome):
     query = Query(CourseDB).filter(CourseDB.nome == nome)
-    if len(sql_client.roda_query(query)) > 0:
+    if len(sql_client.run_query(query)) > 0:
         raise ErrorCourse(f"Existe outro curso com o nome {nome}")
 
 
