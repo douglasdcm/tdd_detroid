@@ -2,7 +2,7 @@
 from os import environ
 from flask import Flask, render_template, request
 from src.sdk.students import StudentController
-from src.sdk.courses import CourseController
+from src.sdk import courses
 from src.config import conn_internal
 from json import dumps
 from src.utils.exceptions import ErroAluno, ErrorCourse
@@ -30,7 +30,7 @@ def output():
 def course():
     try:
         name = request.json["name"]
-        CourseController(conn_internal).create(name)
+        courses.create(name)
         return SUCCESS
     except (ErrorCourse, ErroAluno) as e:
         return __failed(e, detail=True)

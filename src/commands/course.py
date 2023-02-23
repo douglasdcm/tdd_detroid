@@ -1,5 +1,5 @@
 import click
-from src.sdk.courses import Courses
+from src.sdk import courses
 from src.schemes.course import CourseDB
 from src.config import conn_external
 
@@ -14,7 +14,7 @@ def curso():
 @click.option("--nome", required=True, help="Course name")
 def cria(nome):
     try:
-        Courses(conn_external).cria(nome)
+        courses.create(nome)
         id_ = conn_external.lista_maximo(CourseDB).id
         click.echo(f"Curso definido: id {id_}, nome {nome}")
     except Exception as e:

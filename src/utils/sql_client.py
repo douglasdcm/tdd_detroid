@@ -4,6 +4,7 @@ from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import Query
 from src.utils.exceptions import ErroBancoDados
 from sqlalchemy.schema import MetaData
+from config import DATABASE_NAME
 
 # https://docs.sqlalchemy.org/en/20/orm/mapping_styles.html#orm-declarative-mapping
 # https://docs.sqlalchemy.org/en/20/orm/mapping_api.html#sqlalchemy.orm.declarative_base
@@ -13,10 +14,40 @@ metadata = MetaData(schema="api")
 Base = declarative_base(metadata=metadata)
 
 
+def get_session():
+    engine = create_engine(
+        f"postgresql+pg8000://postgres:postgresql@{DATABASE_NAME}/postgres",
+        echo=False,
+    )
+    _session_maker = sessionmaker(bind=engine)
+    return _session_maker()
+
+
+def get(modelo, id_):
+    resultado = get_session().query(modelo).filter(modelo.id == id_).first()
+    if not resultado:
+        raise ErroBancoDados(f"Registro {id_} do tipo {modelo.__name__} nao encontrado")
+    return resultado
+
+
+def get_all(modelo):
+    return get_session().query(modelo).all()
+
+
+def create(instancia):
+    session = get_session()
+    session.add(instancia)
+    session.commit()
+
+
+def roda_query(query: Query):
+    return query.with_session(get_session()).all()
+
+
 class SqlClient:
-    def __init__(self, nome_banco) -> None:
+    def __init__(self, nome_banco=None) -> None:
         self._engine = create_engine(
-            f"postgresql+pg8000://postgres:postgresql@{nome_banco}/postgres",
+            f"postgresql+pg8000://postgres:postgresql@{DATABASE_NAME}/postgres",
             echo=False,
         )
         _session_maker = sessionmaker(bind=self._engine)
@@ -88,7 +119,7 @@ class SqlClient:
     def lista_tudo(self, modelo):
         return self._session.query(modelo).all()
 
-    def lista(self, modelo, id_):
+    def get(self, modelo, id_):
         resultado = self._session.query(modelo).filter(modelo.id == id_).first()
         if not resultado:
             raise ErroBancoDados(

@@ -1,7 +1,7 @@
 from pytest import fixture
 from tests.config import conn
 from src.utils.utils import inicializa_tabelas
-from src.controllers.curso import CourseController
+from src.controllers import courses
 from src.controllers.materia import DisciplineController
 from src.controllers.student import StudentController
 from pytest import raises
@@ -23,9 +23,9 @@ def popula_banco_dados(scope="function"):
     m8 c3
     m9 c3
     """
-    CourseController(conn).create(nome="any_1")
-    CourseController(conn).create(nome="any_2")
-    CourseController(conn).create(nome="any_3")
+    courses.create(nome="any_1")
+    courses.create(nome="any_2")
+    courses.create(nome="any_3")
     for i in range(3):
         for j in range(3):
             DisciplineController(conn).cria(nome=f"any{j}", curso_id=i + 1)

@@ -24,7 +24,7 @@ def test_arredonda_o_cr_a_uma_casa_decimal(popula_banco_dados):
     aluno.set_grade(discipline_id=1, grade=2)
     aluno.set_grade(discipline_id=2, grade=2)
     aluno.set_grade(discipline_id=3, grade=3)
-    aluno_bd = conn.lista(StudentDB, aluno_id)
+    aluno_bd = conn.get(StudentDB, aluno_id)
     assert aluno_bd.coef_rend == 2.3
 
 
@@ -35,7 +35,7 @@ def test_calcula_cr_aluno_como_media_simples_das_notas_lancadas(popula_banco_dad
     aluno.set_grade(discipline_id=1, grade=1)
     aluno.set_grade(discipline_id=2, grade=2)
     aluno.set_grade(discipline_id=3, grade=3)
-    aluno_bd = conn.lista(StudentDB, aluno_id)
+    aluno_bd = conn.get(StudentDB, aluno_id)
     assert aluno_bd.coef_rend == 2
 
 
@@ -97,7 +97,7 @@ def test_lanca_notas_se_aluno_inscrito_materia(popula_banco_dados):
     aluno = StudentController(conn)
     aluno.id = aluno_id
     aluno.set_grade(discipline_id=1, grade=5)
-    assert conn.lista(StudentDB, aluno_id).coef_rend == 5.0
+    assert conn.get(StudentDB, aluno_id).coef_rend == 5.0
 
 
 def test_nao_inscreeve_aluno_se_curso_nao_existe():
@@ -158,8 +158,8 @@ def test_inscreve_aluno_numa_materia(popula_banco_dados):
 def test_aluno_cria():
     aluno = StudentController(conn)
     aluno.create(nome="any")
-    assert conn.lista(StudentDB, 1).nome == "any"
-    assert conn.lista(StudentDB, 1).id == 1
+    assert conn.get(StudentDB, 1).nome == "any"
+    assert conn.get(StudentDB, 1).id == 1
 
 
 def test_inscreve_aluno_se_curso_existe():
@@ -174,7 +174,7 @@ def test_inscreve_aluno_curso(popula_banco_dados):
     aluno = StudentController(conn)
     aluno.create("any")
     aluno.subscribe_in_course(curso_id=1)
-    assert conn.lista(StudentDB, 1).curso_id == 1
+    assert conn.get(StudentDB, 1).curso_id == 1
 
 
 def test_verifica_aluno_existe():
@@ -194,7 +194,7 @@ def test_alunos_lista_por_id():
     aluno = StudentController(conn)
     aluno.create(nome="any")
     aluno.create(nome="other")
-    assert conn.lista(StudentDB, id_=2).nome == "other"
+    assert conn.get(StudentDB, id_=2).nome == "other"
 
 
 def test_alunos_lista_tudo():
@@ -207,4 +207,4 @@ def test_alunos_lista_tudo():
 def test_alunos_cria_banco_dados():
     aluno = StudentController(conn)
     aluno.create(nome="any")
-    assert conn.lista(StudentDB, id_=1).nome == "any"
+    assert conn.get(StudentDB, id_=1).nome == "any"

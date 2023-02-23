@@ -18,4 +18,4 @@ class Disciplines:
         return self._conn.lista_tudo(MateriaBd)
 
     def lista(self, id_):
-        return self._conn.lista(MateriaBd, id_)
+        return self._conn.get(MateriaBd, id_)
