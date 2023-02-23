@@ -19,13 +19,12 @@ services:
       - 5432:5432
     environment:
       POSTGRES_PASSWORD: postgresql
-
-  tdd-postgrest:
-    image: douglasdcm/tdd-postgrest
-    container_name: tdd-postgrest
-    ports:
-      - 30501:3000
-    working_dir: /
+  # tdd-postgrest:
+  #   image: douglasdcm/tdd-postgrest
+  #   container_name: tdd-postgrest
+  #   ports:
+  #     - 30501:3000
+  #   working_dir: /
 
 volumes:
   vpm-data:
