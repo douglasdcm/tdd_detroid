@@ -7,4 +7,4 @@ def test_materia_cria(popula_banco_dados):
     materia = DisciplineController(conn)
     materia.cria(nome="any", curso_id=1)
     materia_id = conn.lista_maximo(MateriaBd).id
-    assert conn.lista(MateriaBd, materia_id).nome == "any"
+    assert conn.get(MateriaBd, materia_id).nome == "any"

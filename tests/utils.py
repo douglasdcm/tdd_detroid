@@ -1,5 +1,5 @@
 import uuid
-from src.controllers.curso import CourseController
+from src.controllers import courses
 from src.controllers.materia import DisciplineController
 from src.controllers.student import StudentController
 from tests.config import conn
@@ -39,4 +39,4 @@ def cria_materia(conn, curso_id):
 
 def cria_curso(conn):
     nome_aleatorio = str(uuid.uuid4())
-    CourseController(conn).create(nome_aleatorio)
+    courses.create(nome_aleatorio)

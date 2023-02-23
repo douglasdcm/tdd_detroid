@@ -1,5 +1,4 @@
 from src.utils.sql_client import SqlClient
-from src.controllers.curso import CourseController
 from src.controllers.materia import DisciplineController
 from src.externals.student import StudentExternals
 

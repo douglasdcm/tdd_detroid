@@ -1,4 +1,4 @@
-from src.sdk.courses import Courses
+from src.sdk import courses
 from src.disciplines import Disciplines
 from src.sdk.students import Students
 from src.schemes.student import StudentDB
@@ -24,7 +24,7 @@ def test_calcula_cr_aluno_de_materias_cursadas(popula_banco_dados):
     alunos.set_grade(aluno_id=aluno_id, materia_id=2, nota=0)
     alunos.set_grade(aluno_id=aluno_id, materia_id=3, nota=5)
 
-    assert conn.lista(StudentDB, aluno_id).coef_rend == 5
+    assert conn.get(StudentDB, aluno_id).coef_rend == 5
 
 
 def test_alunos_deve_inscreve_em_3_materias(popula_banco_dados):
@@ -50,7 +50,6 @@ def test_cria_aluno_por_api():
 
 
 def test_cli_tres_cursos_com_tres_materias_cada():
-    cursos = Courses(conn)
     materias = Disciplines(conn)
     cria_curso(conn)
     cria_curso(conn)
@@ -61,7 +60,7 @@ def test_cli_tres_cursos_com_tres_materias_cada():
         cria_materia(conn, 3)
 
     # verifica pela API
-    assert len(cursos.lista_tudo()) == 3
+    assert len(courses.get_all()) == 3
     assert len(materias.lista_tudo()) == 9
 
 
@@ -69,7 +68,7 @@ def test_aluno_pode_se_inscrever_em_apenas_um_curso(popula_banco_dados):
     alunos = Students(conn)
     alunos.create("any")
     aluno_id = len(alunos.lista_tudo())
-    Courses(conn).cria("other")
+    courses.create("other")
     alunos.subscribe_in_course(aluno_id, 4)
 
     with raises(ErroAluno, match="Aluno esta inscrito em outro curso"):
@@ -81,9 +80,9 @@ def test_aluno_pode_se_inscrever_em_apenas_um_curso(popula_banco_dados):
 
 def test_curso_nao_pode_ter_materias_com_mesmo_nome():
 
-    Courses(conn).cria("any_1")
-    Courses(conn).cria("any_2")
-    Courses(conn).cria("any_3")
+    courses.create("any_1")
+    courses.create("any_2")
+    courses.create("any_3")
     Disciplines(conn).cria("any", 1)
     with raises(
         ErroMateria,
@@ -93,26 +92,26 @@ def test_curso_nao_pode_ter_materias_com_mesmo_nome():
 
 
 def test_nao_criar_quarto_curso_se_menos_de_tres_materias_por_curso():
-    Courses(conn).cria("any_1")
-    Courses(conn).cria("any_2")
-    Courses(conn).cria("any_3")
+    courses.create("any_1")
+    courses.create("any_2")
+    courses.create("any_3")
     Disciplines(conn).cria(nome="any", curso_id=1)
     with raises(
         ErrorCourse,
         match="Necessários 3 cursos com 3 três matérias para se criar novos cursos",
     ):
-        Courses(conn).cria("quarto")
+        courses.create("quarto")
 
 
 def test_nao_criar_quarto_curso_se_todos_cursos_sem_materias():
-    Courses(conn).cria("any_1")
-    Courses(conn).cria("any_2")
-    Courses(conn).cria("any_3")
+    courses.create("any_1")
+    courses.create("any_2")
+    courses.create("any_3")
     with raises(
         ErrorCourse,
         match="Necessários 3 cursos com 3 três matérias para se criar novos cursos",
     ):
-        Courses(conn).cria("quatro")
+        courses.create("quatro")
 
 
 def test_materia_nao_criada_se_menos_de_tres_cursos_existentes():
@@ -130,7 +129,7 @@ def test_materia_nao_associada_curso_inexistente(popula_banco_dados):
 def test_materia_associada_curso_existente():
     conn.cria(CourseDB(nome="any"))
     conn.cria(MateriaBd(nome="any", curso_id=1))
-    assert conn.lista(MateriaBd, 1).nome == "any"
+    assert conn.get(MateriaBd, 1).nome == "any"
 
 
 def test_cria_tabela_com_dados():
@@ -146,6 +145,6 @@ def test_cria_item_bd():
 
 
 def test_lista_por_id_bd():
-    Courses(conn).cria("any")
+    courses.create("any")
     inicializa_tabelas(conn)
     assert len(conn.lista_tudo(CourseDB)) == 0

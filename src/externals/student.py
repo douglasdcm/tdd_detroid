@@ -3,13 +3,12 @@ from src.utils.exceptions import ErroAluno, ErroBancoDados, ErroMateriaAluno
 from src.utils.sql_client import SqlClient
 from sqlalchemy.orm import Query
 from src.schemes.student import StudentDB
-from src.externals.courses import CourseExternals
+from src.controllers import courses
 
 
 class StudentExternals:
     def __init__(self, conn: SqlClient) -> None:
         self._conn = conn
-        self._externals_course = CourseExternals(conn)
 
     def clear_name(self, name):
         name = name.strip()
@@ -25,7 +24,7 @@ class StudentExternals:
 
     def get_student(self, aluno_id):
         try:
-            return self._conn.lista(StudentDB, aluno_id)
+            return self._conn.get(StudentDB, aluno_id)
         except ErroBancoDados:
             raise ErroAluno(f"Aluno {aluno_id} não existe")
 
@@ -37,7 +36,7 @@ class StudentExternals:
         return mas
 
     def get_course_id(self, student_id):
-        curso_id = self._conn.lista(StudentDB, student_id).curso_id
+        curso_id = self._conn.get(StudentDB, student_id).curso_id
         if not curso_id:
             raise ErroAluno(f"Aluno {student_id} não está inscrito em nenhum curso")
         return curso_id
@@ -96,7 +95,7 @@ class StudentExternals:
         self._conn.cria(ma)
 
     def subscribe_in_course(self, aluno_id, curso_id):
-        self._externals_course.check_exists(curso_id)
+        courses.check_exists(curso_id)
         student = self.get_student(aluno_id)
         student.curso_id = curso_id
         self._conn.update()

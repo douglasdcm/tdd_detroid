@@ -29,7 +29,7 @@ class DisciplineController:
 
     def __existe_curso(self, curso_id):
         try:
-            self._conn.lista(CourseDB, curso_id)
+            self._conn.get(CourseDB, curso_id)
         except ErroBancoDados:
             raise ErroMateria(f"Curso {curso_id} não existe")
 

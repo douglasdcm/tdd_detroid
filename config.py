@@ -1,4 +1,4 @@
-from src.utils.sql_client import SqlClient
+# from src.utils.sql_client import SqlClient
 
-
-conn = SqlClient("production.db")
+DATABASE_NAME = "localhost"
+# conn = SqlClient("production.db")

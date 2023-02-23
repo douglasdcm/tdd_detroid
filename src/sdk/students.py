@@ -29,4 +29,4 @@ class Students:
         return self._conn.lista_tudo(StudentDB)
 
     def lista(self, id_):
-        return self._conn.lista(StudentDB, id_)
+        return self._conn.get(StudentDB, id_)

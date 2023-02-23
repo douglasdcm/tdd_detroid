@@ -1,5 +1,5 @@
 import subprocess
-from src.sdk.courses import Courses
+from src.sdk import courses
 from src.sdk.students import Students
 from src.disciplines import Disciplines
 from src.schemes.course import CourseDB
@@ -103,14 +103,13 @@ def test_alunos_deve_inscreve_3_materias_no_minimo(__popula_banco_dados):
     # verifica pelo banco
     materia_aluno = conn_external.lista_tudo(MateriaStudentDB)
     assert len(materia_aluno) > 1
-    assert f"Aluno deve se inscrever em 3 materias no minimo" in output
+    assert "Aluno deve se inscrever em 3 materias no minimo" in output
 
 
 def test_aluno_pode_se_inscrever_em_curso(__popula_banco_dados):
 
-    cursos = Courses(conn_external)
-    cursos.cria("other")
-    curso_id = len(cursos.lista_tudo())
+    courses.create("other")
+    curso_id = len(courses.get_all())
     alunos = Students(conn_external)
     alunos.create("any")
     aluno_id = len(alunos.lista_tudo())
@@ -134,8 +133,8 @@ def test_aluno_pode_se_inscrever_em_curso(__popula_banco_dados):
     # verifica pela API
     assert aluno.curso_id == curso_id
     # verifica pelo banco
-    assert conn_external.lista(StudentDB, aluno_id).curso_id == 4
-    assert f"Aluno inscrito no curso 4" in output
+    assert conn_external.get(StudentDB, aluno_id).curso_id == 4
+    assert "Aluno inscrito no curso 4" in output
 
 
 def test_cli_materia_nome_igual_mas_id_diferente(setup):
@@ -143,9 +142,8 @@ def test_cli_materia_nome_igual_mas_id_diferente(setup):
     cria_curso(conn_external)
     cria_curso(conn_external)
     cria_curso(conn_external)
-    cursos = Courses(conn_external)
     for _ in range(3):
-        if len(cursos.lista_tudo()) >= 3:
+        if len(courses.get_all()) >= 3:
             break
         sleep(1)
     materias = Disciplines(conn_external)
@@ -162,9 +160,9 @@ def test_cli_materia_nome_igual_mas_id_diferente(setup):
     assert materias.lista(2).curso_id == 1
     # verifica banco de dados
     assert len(conn_external.lista_tudo(MateriaBd)) == 2
-    assert conn_external.lista(MateriaBd, 1).nome == "any"
-    assert conn_external.lista(MateriaBd, 2).nome == "other"
-    assert f"Materia definida: id 2, nome other" in output
+    assert conn_external.get(MateriaBd, 1).nome == "any"
+    assert conn_external.get(MateriaBd, 2).nome == "other"
+    assert "Materia definida: id 2, nome other" in output
 
 
 def test_cli_aluno_deve_ter_nome(setup):
@@ -185,26 +183,25 @@ def test_cli_aluno_deve_ter_nome(setup):
     assert alunos.lista(2).nome == "other"
     # verifica banco de dados
     assert len(conn_external.lista_tudo(StudentDB)) == 2
-    assert conn_external.lista(StudentDB, 1).nome == "any"
-    assert conn_external.lista(StudentDB, 2).nome == "other"
-    assert f"Aluno definido: id 2, nome other" in output
+    assert conn_external.get(StudentDB, 1).nome == "any"
+    assert conn_external.get(StudentDB, 2).nome == "other"
+    assert "Aluno definido: id 2, nome other" in output
 
 
 def test_cli_curso_com_nome_e_id(setup):
-    cursos = Courses(conn_external)
-    cursos.cria("any")
+    courses.create("any")
     temp = subprocess.Popen(
         ["python", "cli.py", "curso", "cria", "--nome", "other"],
         stdout=subprocess.PIPE,
     )
     output = str(temp.communicate())
-    assert f"Curso definido: id 2, nome other" in output
+    assert "Curso definido: id 2, nome other" in output
     # verifica pela API
-    assert len(cursos.lista_tudo()) == 2
-    assert cursos.lista(1).nome == "any"
-    assert cursos.lista(2).nome == "other"
+    assert len(courses.get_all()) == 2
+    assert courses.get(1).nome == "any"
+    assert courses.get(2).nome == "other"
     # verifica banco de dados
     assert len(conn_external.lista_tudo(CourseDB)) == 2
-    assert conn_external.lista(CourseDB, 1).nome == "any"
-    assert conn_external.lista(CourseDB, 2).nome == "other"
-    assert f"Curso definido: id 2, nome other" in output
+    assert conn_external.get(CourseDB, 1).nome == "any"
+    assert conn_external.get(CourseDB, 2).nome == "other"
+    assert "Curso definido: id 2, nome other" in output
