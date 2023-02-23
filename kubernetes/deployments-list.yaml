@@ -24,27 +24,27 @@ items:
               image: douglasdcm/tdd-detroid
               ports:
                 - containerPort: 5000
-  - apiVersion: apps/v1
-    kind: Deployment
-    metadata: # ObjectMeta
-      name: tdd-postgrest-deployment
-      labels:
-        app: tdd-detroid
-    spec: # DeploymentSpec
-      selector: # LabelSelector
-        matchLabels:
-          app: tdd-detroid
-      template: # PodTemplateSpec
-        metadata: # ObjectMeta
-          name: tdd-detroid
-          labels:
-            app: tdd-detroid
-        spec: # PodSpec
-          containers: # Containers
-            - name: tdd-postgrest
-              image: douglasdcm/tdd-postgrest
-              ports:
-                - containerPort: 3000
+  # - apiVersion: apps/v1
+  #   kind: Deployment
+  #   metadata: # ObjectMeta
+  #     name: tdd-postgrest-deployment
+  #     labels:
+  #       app: tdd-detroid
+  #   spec: # DeploymentSpec
+  #     selector: # LabelSelector
+  #       matchLabels:
+  #         app: tdd-detroid
+  #     template: # PodTemplateSpec
+  #       metadata: # ObjectMeta
+  #         name: tdd-detroid
+  #         labels:
+  #           app: tdd-detroid
+  #       spec: # PodSpec
+  #         containers: # Containers
+  #           - name: tdd-postgrest
+  #             image: douglasdcm/tdd-postgrest
+  #             ports:
+  #               - containerPort: 3000
   - apiVersion: apps/v1
     kind: Deployment
     metadata: # ObjectMeta

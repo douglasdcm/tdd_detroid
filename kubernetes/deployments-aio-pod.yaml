@@ -21,10 +21,10 @@ spec: # DeploymentSpec
           ports:
             - containerPort: 5000
               name: detroid-port
-        - name: tdd-postgrest
-          image: douglasdcm/tdd-postgrest
-          ports:
-            - containerPort: 3000
+        # - name: tdd-postgrest
+        #   image: douglasdcm/tdd-postgrest
+        #   ports:
+        #     - containerPort: 3000
         - name: postgres
           image: postgres # Docker image
           imagePullPolicy: "IfNotPresent"
