@@ -23,25 +23,39 @@ def get_session():
     return _session_maker()
 
 
-def get(modelo, id_):
-    resultado = get_session().query(modelo).filter(modelo.id == id_).first()
-    if not resultado:
-        raise ErroBancoDados(f"Registro {id_} do tipo {modelo.__name__} nao encontrado")
+session = get_session()
+
+
+def list_maximum(modelo):
+    resultado = session.query(modelo).all()
+    if len(resultado) > 0:
+        return resultado[-1]
     return resultado
 
 
+def update():
+    session.flush()
+    session.commit()
+
+
+def get(model, id_):
+    result = session.query(model).filter(model.id == id_).first()
+    if not result:
+        raise ErroBancoDados(f"Registro {id_} do tipo {model.__name__} nao encontrado")
+    return result
+
+
 def get_all(modelo):
-    return get_session().query(modelo).all()
+    return session.query(modelo).all()
 
 
 def create(instancia):
-    session = get_session()
     session.add(instancia)
     session.commit()
 
 
-def roda_query(query: Query):
-    return query.with_session(get_session()).all()
+def run_query(query: Query):
+    return query.with_session(session).all()
 
 
 class SqlClient:
@@ -110,13 +124,13 @@ class SqlClient:
         Base.metadata.drop_all(self._engine)
         Base.metadata.create_all(self._engine)
 
-    def roda_query(self, query: Query):
+    def run_query(self, query: Query):
         return query.with_session(self._session).all()
 
     def confirma(self):
         self._session.commit()
 
-    def lista_tudo(self, modelo):
+    def get_all(self, modelo):
         return self._session.query(modelo).all()
 
     def get(self, modelo, id_):
@@ -127,6 +141,6 @@ class SqlClient:
             )
         return resultado
 
-    def cria(self, instancia):
+    def create(self, instancia):
         self._session.add(instancia)
         self._session.commit()

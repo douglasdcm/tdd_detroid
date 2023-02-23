@@ -1,32 +1,25 @@
-from src.utils.sql_client import SqlClient
-from src.schemes.student import StudentDB
-from src.controllers.student import StudentController
+from src.controllers import students as controller
 
 
-class Students:
-    def __init__(self, conn: SqlClient) -> None:
-        self._conn = conn
+def set_grade(student_id, materia_id, nota):
+    controller.set_grade(student_id, materia_id, nota)
 
-    def set_grade(self, aluno_id, materia_id, nota):
-        aluno = StudentController(self._conn)
-        aluno.id = aluno_id
-        aluno.set_grade(materia_id, nota)
 
-    def subscribe_in_course(self, aluno_id, curso_id):
-        aluno = StudentController(self._conn)
-        aluno.id = aluno_id
-        aluno.subscribe_in_course(curso_id)
+def subscribe_in_course(student_id, curso_id):
+    controller.subscribe_in_course(student_id, curso_id)
 
-    def subscribe_in_discipline(self, aluno_id, materia_id):
-        aluno = StudentController(self._conn)
-        aluno.id = aluno_id
-        aluno.subscribe_in_discipline(materia_id)
 
-    def create(self, nome):
-        StudentController(self._conn).create(nome)
+def subscribe_in_discipline(student_id, materia_id):
+    controller.subscribe_in_discipline(student_id, materia_id)
 
-    def lista_tudo(self):
-        return self._conn.lista_tudo(StudentDB)
 
-    def lista(self, id_):
-        return self._conn.get(StudentDB, id_)
+def create(nome):
+    controller.create(nome)
+
+
+def get_all():
+    return controller.get_all()
+
+
+def get(id_):
+    return controller.get(id_)

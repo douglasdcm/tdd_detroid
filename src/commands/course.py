@@ -12,7 +12,7 @@ def curso():
 
 @curso.command()
 @click.option("--nome", required=True, help="Course name")
-def cria(nome):
+def create(nome):
     try:
         courses.create(nome)
         id_ = conn_external.lista_maximo(CourseDB).id

@@ -1,9 +1,8 @@
 from pytest import fixture
 from tests.config import conn
 from src.utils.utils import inicializa_tabelas
-from src.controllers import courses
+from src.controllers import courses, students
 from src.controllers.materia import DisciplineController
-from src.controllers.student import StudentController
 from pytest import raises
 
 
@@ -28,15 +27,14 @@ def popula_banco_dados(scope="function"):
     courses.create(nome="any_3")
     for i in range(3):
         for j in range(3):
-            DisciplineController(conn).cria(nome=f"any{j}", curso_id=i + 1)
-    aluno = StudentController(conn)
-    aluno.create(nome="anyone")
-    aluno.subscribe_in_course(curso_id=1)
+            DisciplineController(conn).create(nome=f"any{j}", curso_id=i + 1)
+    students.create(nome="anyone")
+    students.subscribe_in_course(student_id=1, curso_id=1)
     with raises(Exception):
-        aluno.subscribe_in_discipline(materia_id=1)
+        students.subscribe_in_discipline(student_id=1, materia_id=1)
     with raises(Exception):
-        aluno.subscribe_in_discipline(materia_id=2)
-    aluno.subscribe_in_discipline(materia_id=3)
+        students.subscribe_in_discipline(student_id=1, materia_id=2)
+    students.subscribe_in_discipline(student_id=1, materia_id=3)
 
 
 @fixture(scope="function", autouse=True)

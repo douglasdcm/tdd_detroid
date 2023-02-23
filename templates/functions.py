@@ -1,4 +1,4 @@
-from src.sdk.students import Students
+from src.sdk import students
 from src.disciplines import Disciplines
 from src.config import conn_internal
 from datetime import datetime
@@ -38,12 +38,11 @@ async def request(
 
 def subscribe_discipline():
     try:
-        aluno_id = Element("subscribe-student-id")
+        student_id = Element("subscribe-student-id")
         materia_id = Element("subscribe-discipline-id")
-        students = Students(conn_internal)
-        students.subscribe_in_discipline(aluno_id.value, materia_id.value)
-        qtde = len(students.lista_tudo())
-        text = f"#Student id {qtde}, Name {students.lista(qtde).nome}, Discipline id {Disciplines(conn_internal).lista(qtde).materia_id}"
+        students.subscribe_in_discipline(student_id.value, materia_id.value)
+        qtde = len(students.get_all())
+        text = f"#Student id {qtde}, Name {students.get(qtde).nome}, Discipline id {Disciplines(conn_internal).lista(qtde).materia_id}"
         __update_terminal(text, "INFO")
     except Exception as e:
         __update_terminal(e, "FAIL")
@@ -54,8 +53,8 @@ def add_discipline():
         discipline_nome = Element("discipline-nome")
         curso_discipline_id = Element("course-discipline-id")
         disciplines = Disciplines(conn_internal)
-        disciplines.cria(discipline_nome.value, curso_discipline_id.value)
-        qtde = len(disciplines.lista_tudo())
+        disciplines.create(discipline_nome.value, curso_discipline_id.value)
+        qtde = len(disciplines.get_all())
         text = f"#Added discipline id: {qtde}, Name: {disciplines.lista(qtde).nome}, Course: {disciplines.lista(qtde).curso_id}"
         __update_terminal(text, "INFO")
     except Exception as e:
@@ -64,12 +63,13 @@ def add_discipline():
 
 def subscribe_course():
     try:
-        aluno_id = Element("student-id")
+        student_id = Element("student-id")
         curso_id = Element("course-id")
-        students = Students(conn_internal)
-        students.subscribe_in_course(aluno_id.value, curso_id.value)
-        qtde = len(students.lista_tudo())
-        text = f"#Student id {qtde} subscribed to course id {students.lista(qtde).curso_id}"
+        students.subscribe_in_course(student_id.value, curso_id.value)
+        qtde = len(students.get_all())
+        text = (
+            f"#Student id {qtde} subscribed to course id {students.get(qtde).curso_id}"
+        )
         __update_terminal(text, "INFO")
     except Exception as e:
         __update_terminal(e, "FAIL")
