@@ -1,8 +1,6 @@
 from pytest import fixture
-from tests.config import conn
 from src.utils.utils import inicializa_tabelas
-from src.controllers import courses, students
-from src.controllers.materia import DisciplineController
+from src.controllers import courses, students, disciplines
 from pytest import raises
 
 
@@ -27,7 +25,7 @@ def popula_banco_dados(scope="function"):
     courses.create(nome="any_3")
     for i in range(3):
         for j in range(3):
-            DisciplineController(conn).create(nome=f"any{j}", curso_id=i + 1)
+            disciplines.create(nome=f"any{j}", curso_id=i + 1)
     students.create(nome="anyone")
     students.subscribe_in_course(student_id=1, curso_id=1)
     with raises(Exception):
@@ -39,4 +37,4 @@ def popula_banco_dados(scope="function"):
 
 @fixture(scope="function", autouse=True)
 def setup_bando_dados():
-    inicializa_tabelas(conn)
+    inicializa_tabelas()

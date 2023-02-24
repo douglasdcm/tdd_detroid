@@ -1,21 +1,19 @@
-from src.utils.sql_client import SqlClient
 from src.schemes.discipline import MateriaBd
-from src.controllers.materia import DisciplineController
+from src.controllers import disciplines
+from src.utils import sql_client
 
 
-class Disciplines:
-    def __init__(self, conn: SqlClient) -> None:
-        self._conn = conn
+def create(nome, curso_id: int):
+    """
+    :nome nome da matéria
+    :curso curso associado à matéria
+    """
+    disciplines.create(nome, curso_id)
 
-    def create(self, nome, curso_id: int):
-        """
-        :nome nome da matéria
-        :curso curso associado à matéria
-        """
-        DisciplineController(self._conn).create(nome, curso_id)
 
-    def get_all(self):
-        return self._conn.get_all(MateriaBd)
+def get_all():
+    return sql_client.get_all(MateriaBd)
 
-    def lista(self, id_):
-        return self._conn.get(MateriaBd, id_)
+
+def lista(id_):
+    return sql_client.get(MateriaBd, id_)

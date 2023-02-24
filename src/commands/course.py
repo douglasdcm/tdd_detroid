@@ -1,7 +1,7 @@
 import click
 from src.sdk import courses
 from src.schemes.course import CourseDB
-from src.config import conn_external
+from src.utils import sql_client
 
 
 @click.group()
@@ -15,7 +15,7 @@ def curso():
 def create(nome):
     try:
         courses.create(nome)
-        id_ = conn_external.lista_maximo(CourseDB).id
+        id_ = sql_client.get_maximum(CourseDB).id
         click.echo(f"Curso definido: id {id_}, nome {nome}")
     except Exception as e:
         click.echo(e)

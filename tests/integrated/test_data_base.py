@@ -1,11 +1,11 @@
-from tests.config import conn
 from src.schemes.course import CourseDB
+from src.utils import sql_client
 
 
 def test_create_roles():
-    conn.grant_permissions()
+    sql_client.grant_permissions()
 
 
 def test_lista_maximo_retorna_vazio_quando_nao_ha_registros():
-    conn.init_table(CourseDB)
-    assert conn.lista_maximo(CourseDB) == []
+    sql_client.init_table()
+    assert sql_client.get_maximum(CourseDB) == []

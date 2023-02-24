@@ -1,5 +1,5 @@
 from src.schemes.course import CourseDB
-from tests.config import conn
+from src.utils import sql_client
 from src.schemes.student import StudentDB
 
 
@@ -11,5 +11,5 @@ def test_aluno_tem_materia_id(popula_banco_dados):
 
 def test_create_novo_curso():
     curso = CourseDB(nome="any")
-    conn.create(curso)
-    assert conn.get_all(CourseDB)[0].nome == "any"
+    sql_client.create(curso)
+    assert sql_client.get_all(CourseDB)[0].nome == "any"

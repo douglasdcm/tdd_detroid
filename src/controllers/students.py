@@ -1,5 +1,5 @@
 from src.utils import sql_client
-from src.controllers.materia import DisciplineController
+from src.controllers import disciplines
 from src.utils.exceptions import ErroAluno, ErroBancoDados, ErroMateriaAluno
 from src.schemes.student import StudentDB
 from src.schemes.for_association import MateriaStudentDB
@@ -32,7 +32,7 @@ def clear_name(name):
 
 
 def get_maximum_id():
-    return sql_client.list_maximum(StudentDB).id
+    return sql_client.get_maximum(StudentDB).id
 
 
 def get_course_id(student_id):
@@ -149,7 +149,7 @@ def create(nome):
 
 def subscribe_in_discipline(student_id, materia_id):
     curso_id = get_course_id(student_id)
-    DisciplineController().check_exists(materia_id, curso_id)
+    disciplines.check_exists(materia_id, curso_id)
     check_student_already_in_discipline(student_id, materia_id)
     __subscribe_in_discipline(student_id, materia_id)
     check_student_in_tree_disciplines(student_id)

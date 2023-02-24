@@ -1,11 +1,11 @@
 import subprocess
 from src.sdk import courses, students
-from src.disciplines import Disciplines
+from src.controllers import disciplines
 from src.schemes.course import CourseDB
 from src.schemes.student import StudentDB
 from src.schemes.discipline import MateriaBd
 from src.schemes.for_association import MateriaStudentDB
-from src.config import conn_external
+from src.utils import sql_client
 from pytest import fixture
 from time import sleep
 from tests.utils import create_curso, popula_banco_dados
@@ -14,7 +14,7 @@ from src.utils.utils import inicializa_tabelas
 
 @fixture
 def setup():
-    inicializa_tabelas(conn_external)
+    inicializa_tabelas()
 
 
 @fixture
@@ -34,7 +34,7 @@ def test_init_data_base():
 
 
 def test_aluno_pode_lancar_notas(__popula_banco_dados):
-    student_id = len(conn_external.get_all(StudentDB))
+    student_id = len(sql_client.get_all(StudentDB))
     materia_id = 1
     nota = 7
     nota_bd = None
@@ -57,7 +57,7 @@ def test_aluno_pode_lancar_notas(__popula_banco_dados):
     output = str(temp.communicate())
 
     # verifica pelo banco
-    materia_aluno = conn_external.get_all(MateriaStudentDB)
+    materia_aluno = sql_client.get_all(MateriaStudentDB)
     for ma in materia_aluno:
         if ma.student_id == student_id and ma.materia_id == materia_id:
             nota_bd = ma.aluno_nota
@@ -73,8 +73,7 @@ def test_students_deve_inscreve_3_materias_no_minimo(__popula_banco_dados):
     students.create("any")
     student_id = len(students.get_all())
 
-    materias = Disciplines(conn_external)
-    uma_materia = materias.get_all()[0]
+    uma_materia = disciplines.get_all()[0]
     materia_id = uma_materia.id
     curso_id = uma_materia.curso_id
 
@@ -96,7 +95,7 @@ def test_students_deve_inscreve_3_materias_no_minimo(__popula_banco_dados):
     output = str(temp.communicate())
 
     # verifica pelo banco
-    materia_aluno = conn_external.get_all(MateriaStudentDB)
+    materia_aluno = sql_client.get_all(MateriaStudentDB)
     assert len(materia_aluno) > 1
     assert "Aluno deve se inscrever em 3 materias no minimo" in output
 
@@ -127,35 +126,34 @@ def test_aluno_pode_se_inscrever_em_curso(__popula_banco_dados):
     # verifica pela API
     assert aluno.curso_id == curso_id
     # verifica pelo banco
-    assert conn_external.get(StudentDB, student_id).curso_id == 4
+    assert sql_client.get(StudentDB, student_id).curso_id == 4
     assert "Aluno inscrito no curso 4" in output
 
 
 def test_cli_materia_nome_igual_mas_id_diferente(setup):
 
-    create_curso(conn_external)
-    create_curso(conn_external)
-    create_curso(conn_external)
+    create_curso()
+    create_curso()
+    create_curso()
     for _ in range(3):
         if len(courses.get_all()) >= 3:
             break
         sleep(1)
-    materias = Disciplines(conn_external)
-    materias.create("any", 1)
+    disciplines.create("any", 1)
     temp = subprocess.Popen(
         ["python", "cli.py", "materia", "create", "--nome", "other", "--curso-id", "1"],
         stdout=subprocess.PIPE,
     )
     output = str(temp.communicate())
     # verifica pela API
-    assert len(materias.get_all()) == 2
-    assert materias.lista(1).nome == "any"
-    assert materias.lista(2).nome == "other"
-    assert materias.lista(2).curso_id == 1
+    assert len(disciplines.get_all()) == 2
+    assert disciplines.get(1).nome == "any"
+    assert disciplines.get(2).nome == "other"
+    assert disciplines.get(2).curso_id == 1
     # verifica banco de dados
-    assert len(conn_external.get_all(MateriaBd)) == 2
-    assert conn_external.get(MateriaBd, 1).nome == "any"
-    assert conn_external.get(MateriaBd, 2).nome == "other"
+    assert len(sql_client.get_all(MateriaBd)) == 2
+    assert sql_client.get(MateriaBd, 1).nome == "any"
+    assert sql_client.get(MateriaBd, 2).nome == "other"
     assert "Materia definida: id 2, nome other" in output
 
 
@@ -174,9 +172,9 @@ def test_cli_aluno_deve_ter_nome(setup):
     assert students.get(1).nome == "any"
     assert students.get(2).nome == "other"
     # verifica banco de dados
-    assert len(conn_external.get_all(StudentDB)) == 2
-    assert conn_external.get(StudentDB, 1).nome == "any"
-    assert conn_external.get(StudentDB, 2).nome == "other"
+    assert len(sql_client.get_all(StudentDB)) == 2
+    assert sql_client.get(StudentDB, 1).nome == "any"
+    assert sql_client.get(StudentDB, 2).nome == "other"
     assert "Aluno definido: id 2, nome other" in output
 
 
@@ -193,7 +191,7 @@ def test_cli_curso_com_nome_e_id(setup):
     assert courses.get(1).nome == "any"
     assert courses.get(2).nome == "other"
     # verifica banco de dados
-    assert len(conn_external.get_all(CourseDB)) == 2
-    assert conn_external.get(CourseDB, 1).nome == "any"
-    assert conn_external.get(CourseDB, 2).nome == "other"
+    assert len(sql_client.get_all(CourseDB)) == 2
+    assert sql_client.get(CourseDB, 1).nome == "any"
+    assert sql_client.get(CourseDB, 2).nome == "other"
     assert "Curso definido: id 2, nome other" in output
