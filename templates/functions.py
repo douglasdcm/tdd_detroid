@@ -1,4 +1,4 @@
-from src.sdk import students
+from src.controllers import students
 from src.controllers import disciplines
 from datetime import datetime
 from pyscript import Element, create
