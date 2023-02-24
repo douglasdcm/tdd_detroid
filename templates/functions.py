@@ -1,5 +1,3 @@
-from src.controllers import students
-from src.controllers import disciplines
 from datetime import datetime
 from pyscript import Element, create
 from pyodide.http import pyfetch, FetchResponse
@@ -36,41 +34,44 @@ async def request(
 
 
 def subscribe_discipline():
-    try:
-        student_id = Element("subscribe-student-id")
-        materia_id = Element("subscribe-discipline-id")
-        students.subscribe_in_discipline(student_id.value, materia_id.value)
-        qtde = len(students.get_all())
-        text = f"#Student id {qtde}, Name {students.get(qtde).nome}, Discipline id {disciplines.get(qtde).materia_id}"
-        __update_terminal(text, "INFO")
-    except Exception as e:
-        __update_terminal(e, "FAIL")
+    pass
+    # try:
+    #     student_id = Element("subscribe-student-id")
+    #     materia_id = Element("subscribe-discipline-id")
+    #     students.subscribe_in_discipline(student_id.value, materia_id.value)
+    #     qtde = len(students.get_all())
+    #     text = f"#Student id {qtde}, Name {students.get(qtde).nome}, Discipline id {disciplines.get(qtde).materia_id}"
+    #     __update_terminal(text, "INFO")
+    # except Exception as e:
+    #     __update_terminal(e, "FAIL")
 
 
 def add_discipline():
-    try:
-        discipline_nome = Element("discipline-nome")
-        curso_discipline_id = Element("course-discipline-id")
-        disciplines.create(discipline_nome.value, curso_discipline_id.value)
-        qtde = len(disciplines.get_all())
-        text = f"#Added discipline id: {qtde}, Name: {disciplines.lista(qtde).nome}, Course: {disciplines.get(qtde).curso_id}"
-        __update_terminal(text, "INFO")
-    except Exception as e:
-        __update_terminal(e, "FAIL")
+    pass
+    # try:
+    #     discipline_nome = Element("discipline-nome")
+    #     curso_discipline_id = Element("course-discipline-id")
+    #     disciplines.create(discipline_nome.value, curso_discipline_id.value)
+    #     qtde = len(disciplines.get_all())
+    #     text = f"#Added discipline id: {qtde}, Name: {disciplines.lista(qtde).nome}, Course: {disciplines.get(qtde).curso_id}"
+    #     __update_terminal(text, "INFO")
+    # except Exception as e:
+    #     __update_terminal(e, "FAIL")
 
 
 def subscribe_course():
-    try:
-        student_id = Element("student-id")
-        curso_id = Element("course-id")
-        students.subscribe_in_course(student_id.value, curso_id.value)
-        qtde = len(students.get_all())
-        text = (
-            f"#Student id {qtde} subscribed to course id {students.get(qtde).curso_id}"
-        )
-        __update_terminal(text, "INFO")
-    except Exception as e:
-        __update_terminal(e, "FAIL")
+    pass
+    # try:
+    #     student_id = Element("student-id")
+    #     curso_id = Element("course-id")
+    #     students.subscribe_in_course(student_id.value, curso_id.value)
+    #     qtde = len(students.get_all())
+    #     text = (
+    #         f"#Student id {qtde} subscribed to course id {students.get(qtde).curso_id}"
+    #     )
+    #     __update_terminal(text, "INFO")
+    # except Exception as e:
+    #     __update_terminal(e, "FAIL")
 
 
 async def add_course():

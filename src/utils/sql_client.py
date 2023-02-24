@@ -4,7 +4,6 @@ from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import Query
 from src.utils.exceptions import ErrorDatabase
 from sqlalchemy.schema import MetaData
-# from src.utils.config import DATABASE_NAME
 from os import getenv
 from dotenv import load_dotenv
 import logging
@@ -41,8 +40,12 @@ def get_maximum(modelo):
 
 
 def update():
-    session.flush()
-    session.commit()
+    try:
+        session.flush()
+        session.commit()
+    except Exception as e:
+        logging.error(str(e))
+        raise e
 
 
 def get(model, id_):
