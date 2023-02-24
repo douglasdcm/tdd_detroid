@@ -1,7 +1,7 @@
 #!flask/bin/python
 from os import environ
 from flask import Flask, render_template, request
-from src.sdk import courses, students
+from src.controllers import courses, students
 from json import dumps
 from src.utils.exceptions import ErroAluno, ErrorCourse
 

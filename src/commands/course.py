@@ -1,5 +1,5 @@
 import click
-from src.sdk import courses
+from src.controllers import courses
 from src.schemes.course import CourseDB
 from src.utils import sql_client
 

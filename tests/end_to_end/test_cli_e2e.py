@@ -1,6 +1,5 @@
 import subprocess
-from src.sdk import courses, students
-from src.controllers import disciplines
+from src.controllers import courses, students, disciplines
 from src.schemes.course import CourseDB
 from src.schemes.student import StudentDB
 from src.schemes.discipline import MateriaBd

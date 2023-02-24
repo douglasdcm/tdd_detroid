@@ -1,5 +1,5 @@
 import click
-from src.sdk import students
+from src.controllers import students
 from src.schemes.student import StudentDB
 from src.utils import sql_client
 
