@@ -9,6 +9,9 @@ services:
     ports:
       - 30500:5000
     working_dir: /
+    depends_on:
+      - postgres
+    env_file: .env_docker
 
   postgres:
     image: postgres
