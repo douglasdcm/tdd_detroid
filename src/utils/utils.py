@@ -1,8 +1,7 @@
-from src.schemes.for_association import MateriaStudentDB
-from src.utils.sql_client import SqlClient
+from src.utils import sql_client
 
 
-def inicializa_tabelas(conn: SqlClient):
-    conn.create_schema()
-    conn.init_table(MateriaStudentDB)
-    conn.grant_permissions()
+def inicializa_tabelas():
+    sql_client.create_schema()
+    sql_client.init_table()
+    sql_client.grant_permissions()

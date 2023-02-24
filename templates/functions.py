@@ -1,6 +1,5 @@
 from src.sdk import students
-from src.disciplines import Disciplines
-from src.config import conn_internal
+from src.controllers import disciplines
 from datetime import datetime
 from pyscript import Element, create
 from pyodide.http import pyfetch, FetchResponse
@@ -42,7 +41,7 @@ def subscribe_discipline():
         materia_id = Element("subscribe-discipline-id")
         students.subscribe_in_discipline(student_id.value, materia_id.value)
         qtde = len(students.get_all())
-        text = f"#Student id {qtde}, Name {students.get(qtde).nome}, Discipline id {Disciplines(conn_internal).lista(qtde).materia_id}"
+        text = f"#Student id {qtde}, Name {students.get(qtde).nome}, Discipline id {disciplines.get(qtde).materia_id}"
         __update_terminal(text, "INFO")
     except Exception as e:
         __update_terminal(e, "FAIL")
@@ -52,10 +51,9 @@ def add_discipline():
     try:
         discipline_nome = Element("discipline-nome")
         curso_discipline_id = Element("course-discipline-id")
-        disciplines = Disciplines(conn_internal)
         disciplines.create(discipline_nome.value, curso_discipline_id.value)
         qtde = len(disciplines.get_all())
-        text = f"#Added discipline id: {qtde}, Name: {disciplines.lista(qtde).nome}, Course: {disciplines.lista(qtde).curso_id}"
+        text = f"#Added discipline id: {qtde}, Name: {disciplines.lista(qtde).nome}, Course: {disciplines.get(qtde).curso_id}"
         __update_terminal(text, "INFO")
     except Exception as e:
         __update_terminal(e, "FAIL")

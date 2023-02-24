@@ -2,7 +2,6 @@
 from os import environ
 from flask import Flask, render_template, request
 from src.sdk import courses, students
-from src.config import conn_internal
 from json import dumps
 from src.utils.exceptions import ErroAluno, ErrorCourse
 

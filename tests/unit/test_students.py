@@ -7,7 +7,7 @@ from src.utils.exceptions import (
     ErroMateria,
     ErrorCourse,
 )
-from tests.config import conn
+from src.utils import sql_client
 from pytest import raises, mark
 
 
@@ -18,21 +18,21 @@ def test_student_name_cannot_be_empty(popula_banco_dados, input):
 
 
 def test_arredonda_o_cr_a_uma_casa_decimal(popula_banco_dados):
-    student_id = len(conn.get_all(StudentDB))
+    student_id = len(sql_client.get_all(StudentDB))
     students.id = student_id
     students.set_grade(student_id, discipline_id=1, grade=2)
     students.set_grade(student_id, discipline_id=2, grade=2)
     students.set_grade(student_id, discipline_id=3, grade=3)
-    aluno_bd = conn.get(StudentDB, student_id)
+    aluno_bd = sql_client.get(StudentDB, student_id)
     assert aluno_bd.coef_rend == 2.3
 
 
 def test_calcula_cr_aluno_como_media_simples_das_notas_lancadas(popula_banco_dados):
-    student_id = len(conn.get_all(StudentDB))
+    student_id = len(sql_client.get_all(StudentDB))
     students.set_grade(student_id, discipline_id=1, grade=1)
     students.set_grade(student_id, discipline_id=2, grade=2)
     students.set_grade(student_id, discipline_id=3, grade=3)
-    aluno_bd = conn.get(StudentDB, student_id)
+    aluno_bd = sql_client.get(StudentDB, student_id)
     assert aluno_bd.coef_rend == 2
 
 
@@ -56,7 +56,7 @@ def test_assume_maior_nota_se_duplo_lancamento_de_notas(popula_banco_dados):
     nota_bd = None
     controller.set_grade(student_id, materia_id, grade=nota + 1)
     controller.set_grade(student_id, materia_id, grade=nota)
-    mas = conn.get_all(MateriaStudentDB)
+    mas = sql_client.get_all(MateriaStudentDB)
     for ma in mas:
         if ma.student_id == student_id and ma.materia_id == materia_id:
             nota_bd = ma.aluno_nota
@@ -101,7 +101,7 @@ def test_lanca_notas_se_aluno_inscrito_materia(popula_banco_dados):
 
     controller.id = student_id
     controller.set_grade(student_id, discipline_id=1, grade=5)
-    assert conn.get(StudentDB, student_id).coef_rend == 5.0
+    assert sql_client.get(StudentDB, student_id).coef_rend == 5.0
 
 
 def test_nao_inscreeve_aluno_se_curso_nao_existe():
@@ -128,7 +128,7 @@ def test_mensagem_sobre_3_materias_para_apos_inscricao_em_3_materias(
 
 
 def test_aluno_nao_pode_se_inscrever_em_materia_inexistente(popula_banco_dados):
-    student_id = len(conn.get_all(StudentDB))
+    student_id = len(sql_client.get_all(StudentDB))
     students.id = student_id
     with raises(ErroMateriaAluno):
         students.subscribe_in_discipline(student_id, 1)
@@ -139,7 +139,7 @@ def test_aluno_nao_pode_se_inscrever_em_materia_inexistente(popula_banco_dados):
 
 
 def test_aluno_nao_pode_se_inscrever_duas_vezes_na_mesma_materia(popula_banco_dados):
-    student_id = len(conn.get_all(StudentDB))
+    student_id = len(sql_client.get_all(StudentDB))
     controller = students
     controller.id = student_id
     with raises(ErroMateriaAluno):
@@ -163,8 +163,8 @@ def test_inscreve_aluno_numa_materia(popula_banco_dados):
 
 def test_aluno_create():
     students.create(nome="any")
-    assert conn.get(StudentDB, 1).nome == "any"
-    assert conn.get(StudentDB, 1).id == 1
+    assert sql_client.get(StudentDB, 1).nome == "any"
+    assert sql_client.get(StudentDB, 1).id == 1
 
 
 def test_inscreve_aluno_se_curso_existe():
@@ -179,7 +179,7 @@ def test_inscreve_aluno_curso(popula_banco_dados):
     controller.create("any")
     student_id = len(controller.get_all())
     controller.subscribe_in_course(student_id, curso_id=1)
-    assert conn.get(StudentDB, 1).curso_id == 1
+    assert sql_client.get(StudentDB, 1).curso_id == 1
 
 
 def test_verifica_aluno_existe():
@@ -198,15 +198,15 @@ def test_nao_inscreve_aluno_se_curso_nao_existe():
 def test_alunos_lista_por_id():
     students.create(nome="any")
     students.create(nome="other")
-    assert conn.get(StudentDB, id_=2).nome == "other"
+    assert sql_client.get(StudentDB, id_=2).nome == "other"
 
 
 def test_alunos_get_all():
     students.create(nome="any")
     students.create(nome="other")
-    assert len(conn.get_all(StudentDB)) == 2
+    assert len(sql_client.get_all(StudentDB)) == 2
 
 
 def test_alunos_create_banco_dados():
     students.create(nome="any")
-    assert conn.get(StudentDB, id_=1).nome == "any"
+    assert sql_client.get(StudentDB, id_=1).nome == "any"

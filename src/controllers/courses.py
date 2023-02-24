@@ -45,6 +45,14 @@ def check_non_existent(nome):
         raise ErrorCourse(f"Existe outro curso com o nome {nome}")
 
 
+def get(id_):
+    return sql_client.get(CourseDB, id_)
+
+
+def get_all():
+    return sql_client.get_all(CourseDB)
+
+
 def create(nome):
     check_name(nome)
     check_exists_three()

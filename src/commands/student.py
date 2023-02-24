@@ -1,7 +1,7 @@
 import click
 from src.sdk import students
 from src.schemes.student import StudentDB
-from src.config import conn_external
+from src.utils import sql_client
 
 
 @click.group()
@@ -39,7 +39,7 @@ def inscreve_materia(student_id, materia_id):
 @click.option("--nome", required=True, help="Student name")
 def create(nome):
     students.create(nome)
-    id_ = conn_external.lista_maximo(StudentDB).id
+    id_ = sql_client.get_maximum(StudentDB).id
     click.echo(f"Aluno definido: id {id_}, nome {nome}")
 
 
