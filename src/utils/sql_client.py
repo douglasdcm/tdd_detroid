@@ -4,17 +4,22 @@ from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import Query
 from src.utils.exceptions import ErrorDatabase
 from sqlalchemy.schema import MetaData
-from src.utils.config import DATABASE_NAME
+# from src.utils.config import DATABASE_NAME
+from os import getenv
+from dotenv import load_dotenv
 import logging
 
 # https://docs.sqlalchemy.org/en/20/orm/mapping_styles.html#orm-declarative-mapping
 # https://docs.sqlalchemy.org/en/20/orm/mapping_api.html#sqlalchemy.orm.declarative_base
 # https://docs.sqlalchemy.org/en/20/orm/mapping_api.html#sqlalchemy.orm.registry.generate_base
 
+load_dotenv()
+
+database_name = getenv("DATABASE_NAME", "postgres")
 metadata = MetaData(schema="api")
 Base = declarative_base(metadata=metadata)
 engine = create_engine(
-    f"postgresql+pg8000://postgres:postgresql@{DATABASE_NAME}/postgres",
+    f"postgresql+pg8000://postgres:postgresql@{database_name}/postgres",
     echo=False,
 )
 
