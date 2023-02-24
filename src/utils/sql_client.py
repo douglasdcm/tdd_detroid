@@ -5,6 +5,7 @@ from sqlalchemy.orm import Query
 from src.utils.exceptions import ErrorDatabase
 from sqlalchemy.schema import MetaData
 from src.utils.config import DATABASE_NAME
+import logging
 
 # https://docs.sqlalchemy.org/en/20/orm/mapping_styles.html#orm-declarative-mapping
 # https://docs.sqlalchemy.org/en/20/orm/mapping_api.html#sqlalchemy.orm.declarative_base
@@ -51,8 +52,12 @@ def get_all(modelo):
 
 
 def create(instancia):
-    session.add(instancia)
-    session.commit()
+    try:
+        session.add(instancia)
+        session.commit()
+    except Exception as e:
+        logging.error(str(e))
+        raise e
 
 
 def run_query(query: Query):
@@ -70,7 +75,8 @@ def create_schema():
                 s.execute(statement)
                 s.commit()
         # catch any exception
-        except:
+        except (BaseException) as e:
+            logging.error(str(e))
             continue
 
 
@@ -98,7 +104,8 @@ def grant_permissions():
                 s.execute(statement)
                 s.commit()
         # catch any exception
-        except:
+        except (BaseException) as e:
+            logging.error(str(e))
             continue
 
 
