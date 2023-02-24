@@ -1,4 +1,4 @@
-from src.utils.exceptions import ErrorCourse, ErroBancoDados, ErroAluno
+from src.utils.exceptions import ErrorCourse, ErrorDatabase, ErrorStudent
 from sqlalchemy.orm import Query
 from src.schemes.course import CourseDB
 from src.utils import sql_client
@@ -13,8 +13,8 @@ def check_name(nome):
 def get_course(curso_id):
     try:
         return sql_client.get(CourseDB, curso_id)
-    except ErroBancoDados:
-        raise ErroAluno(f"Curso {curso_id} não existe")
+    except ErrorDatabase:
+        raise ErrorStudent(f"Curso {curso_id} não existe")
 
 
 def check_exists(course_id):

@@ -3,7 +3,7 @@ from os import environ
 from flask import Flask, render_template, request
 from src.controllers import courses, students
 from json import dumps
-from src.utils.exceptions import ErroAluno, ErrorCourse
+from src.utils.exceptions import ErrorStudent, ErrorCourse
 
 app = Flask(__name__, static_folder="templates", static_url_path="")
 SUCCESS = dumps({"status": "ok", "message": "success"})
@@ -30,7 +30,7 @@ def course():
         name = request.json["name"]
         courses.create(name)
         return SUCCESS
-    except (ErrorCourse, ErroAluno) as e:
+    except (ErrorCourse, ErrorStudent) as e:
         return __failed(e, detail=True)
     except Exception as e:
         return __failed(e)
@@ -42,7 +42,7 @@ def student():
         name = request.json["name"]
         students.create(name)
         return SUCCESS
-    except (ErrorCourse, ErroAluno) as e:
+    except (ErrorCourse, ErrorStudent) as e:
         return __failed(e, detail=True)
     except Exception as e:
         return __failed(e)

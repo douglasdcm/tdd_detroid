@@ -7,10 +7,10 @@ from src.schemes.discipline import MateriaBd
 from src.schemes.for_association import MateriaStudentDB
 from src.utils.utils import inicializa_tabelas
 from src.utils.exceptions import (
-    ErroAluno,
-    ErroMateria,
+    ErrorStudent,
+    ErrorDiscipline,
     ErrorCourse,
-    ErroMateriaAluno,
+    ErroDisciplineStudent,
 )
 from src.utils import sql_client
 from tests.utils import create_curso, create_materia
@@ -33,7 +33,7 @@ def test_students_deve_inscreve_em_3_materias(popula_banco_dados):
     student_id = len(students.get_all())
     students.subscribe_in_course(student_id, curso_id=1)
     with raises(
-        ErroMateriaAluno, match="Aluno deve se inscrever em 3 materias no minimo"
+        ErroDisciplineStudent, match="Aluno deve se inscrever em 3 materias no minimo"
     ):
         students.subscribe_in_discipline(student_id, 1)
 
@@ -69,7 +69,7 @@ def test_aluno_pode_se_inscrever_em_apenas_um_curso(popula_banco_dados):
     courses.create("other")
     students.subscribe_in_course(student_id, 4)
 
-    with raises(ErroAluno, match="Aluno esta inscrito em outro curso"):
+    with raises(ErrorStudent, match="Aluno esta inscrito em outro curso"):
         students.subscribe_in_course(student_id, 3)
 
     aluno = students.get(student_id)
@@ -83,7 +83,7 @@ def test_curso_nao_pode_ter_materias_com_mesmo_nome():
     courses.create("any_3")
     disciplines.create("any", 1)
     with raises(
-        ErroMateria,
+        ErrorDiscipline,
         match="O curso já possui uma matéria com este nome",
     ):
         disciplines.create("any", 1)
@@ -114,13 +114,13 @@ def test_nao_criar_quarto_curso_se_todos_cursos_sem_materias():
 
 def test_materia_nao_createda_se_menos_de_tres_cursos_existentes():
     with raises(
-        ErroMateria, match="Necessários 3 cursos para se criar a primeira matéria"
+        ErrorDiscipline, match="Necessários 3 cursos para se criar a primeira matéria"
     ):
         disciplines.create("any", 1)
 
 
 def test_materia_nao_associada_curso_inexistente(popula_banco_dados):
-    with raises(ErroMateria):
+    with raises(ErrorDiscipline):
         disciplines.create("any", 42)
 
 

@@ -1,12 +1,12 @@
-class ErroMateria(Exception):
+class ErrorDiscipline(Exception):
     pass
 
 
-class ErroBancoDados(Exception):
+class ErrorDatabase(Exception):
     pass
 
 
-class ErroMateriaAluno(Exception):
+class ErroDisciplineStudent(Exception):
     pass
 
 
@@ -14,5 +14,5 @@ class ErrorCourse(Exception):
     pass
 
 
-class ErroAluno(Exception):
+class ErrorStudent(Exception):
     pass
