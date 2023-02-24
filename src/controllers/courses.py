@@ -2,7 +2,7 @@ from src.utils.exceptions import ErrorCourse, ErroBancoDados, ErroAluno
 from sqlalchemy.orm import Query
 from src.schemes.course import CourseDB
 from src.utils import sql_client
-import src.disciplines
+from src.schemes.discipline import MateriaBd
 
 
 def check_name(nome):
@@ -28,8 +28,8 @@ def check_exists_three():
     if resultado < 3:
         return
 
-    query_materias = Query([src.disciplines.MateriaBd]).group_by(
-        src.disciplines.MateriaBd.curso_id, src.disciplines.MateriaBd.id
+    query_materias = Query([MateriaBd]).group_by(
+        MateriaBd.curso_id, MateriaBd.id
     )
     resultado = len(sql_client.run_query(query_materias))
 
