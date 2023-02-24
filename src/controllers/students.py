@@ -1,6 +1,6 @@
 from src.utils import sql_client
 from src.controllers import disciplines
-from src.utils.exceptions import ErroAluno, ErroBancoDados, ErroMateriaAluno
+from src.utils.exceptions import ErrorStudent, ErrorDatabase, ErroDisciplineStudent
 from src.schemes.student import StudentDB
 from src.schemes.for_association import MateriaStudentDB
 from sqlalchemy.orm import Query
@@ -20,14 +20,14 @@ def update_grade(student_id, materia_id, grade):
 def get_student(student_id):
     try:
         return sql_client.get(StudentDB, student_id)
-    except ErroBancoDados:
-        raise ErroAluno(f"Aluno {student_id} não existe")
+    except ErrorDatabase:
+        raise ErrorStudent(f"Aluno {student_id} não existe")
 
 
 def clear_name(name):
     name = name.strip()
     if len(name) == 0:
-        raise ErroAluno("Invalid student name")
+        raise ErrorStudent("Invalid student name")
     return name
 
 
@@ -38,7 +38,7 @@ def get_maximum_id():
 def get_course_id(student_id):
     curso_id = sql_client.get(StudentDB, student_id).curso_id
     if not curso_id:
-        raise ErroAluno(f"Aluno {student_id} não está inscrito em nenhum curso")
+        raise ErrorStudent(f"Aluno {student_id} não está inscrito em nenhum curso")
     return curso_id
 
 
@@ -48,7 +48,7 @@ def check_student_already_in_discipline(student_id, materia_id):
         if instancia.student_id == int(student_id) and instancia.materia_id == int(
             materia_id
         ):
-            raise ErroMateriaAluno(
+            raise ErroDisciplineStudent(
                 f"Aluno {student_id} já está inscrito na matéria {materia_id}"
             )
 
@@ -60,14 +60,14 @@ def check_student_in_discipline(student_id, materia_id):
             materia_id
         ):
             return
-    raise ErroAluno(f"Aluno {student_id} não está inscrito na matéria {materia_id}")
+    raise ErrorStudent(f"Aluno {student_id} não está inscrito na matéria {materia_id}")
 
 
 def check_grade_boundaries(nota):
     if nota > 10:
-        raise ErroAluno("Nota não pode ser maior que 10")
+        raise ErrorStudent("Nota não pode ser maior que 10")
     if nota < 0:
-        raise ErroAluno("Nota não pode ser menor que 0")
+        raise ErrorStudent("Nota não pode ser menor que 0")
 
 
 def __get_disciplines_of_student(student_id):
@@ -110,13 +110,13 @@ def check_student_in_tree_disciplines(student_id):
             qtde_materias += 1
         if qtde_materias >= 3:
             return
-    raise ErroMateriaAluno("Aluno deve se inscrever em 3 materias no minimo")
+    raise ErroDisciplineStudent("Aluno deve se inscrever em 3 materias no minimo")
 
 
 def can_subscribe_course(student_id):
     aluno = get_student(student_id)
     if aluno.curso_id is not None:
-        raise ErroAluno("Aluno esta inscrito em outro curso")
+        raise ErrorStudent("Aluno esta inscrito em outro curso")
 
 
 def __subscribe_in_course(student_id, curso_id):

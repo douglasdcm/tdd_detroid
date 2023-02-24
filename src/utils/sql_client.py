@@ -2,9 +2,9 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import Query
-from src.utils.exceptions import ErroBancoDados
+from src.utils.exceptions import ErrorDatabase
 from sqlalchemy.schema import MetaData
-from config import DATABASE_NAME
+from src.utils.config import DATABASE_NAME
 
 # https://docs.sqlalchemy.org/en/20/orm/mapping_styles.html#orm-declarative-mapping
 # https://docs.sqlalchemy.org/en/20/orm/mapping_api.html#sqlalchemy.orm.declarative_base
@@ -42,7 +42,7 @@ def update():
 def get(model, id_):
     result = session.query(model).filter(model.id == id_).first()
     if not result:
-        raise ErroBancoDados(f"Registro {id_} do tipo {model.__name__} nao encontrado")
+        raise ErrorDatabase(f"Registro {id_} do tipo {model.__name__} nao encontrado")
     return result
 
 
