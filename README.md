@@ -13,6 +13,7 @@ Run the commnands and access "http://localhost:5000"
 ```
 chmod +x utils/build_container.sh
 ./utils/build_container.sh
+./utils/build_dist.sh
 docker-compose up -d
 ```
 ## Option 2: Kubernetes
