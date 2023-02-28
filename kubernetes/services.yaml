@@ -7,4 +7,5 @@ spec: # ServiceSpec
     app: tdd-detroid
   ports:
     - port: 5000
+      nodePort: 30500
   type: NodePort
