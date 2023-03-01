@@ -12,9 +12,11 @@ Definition of Done:
 Run the commnands and access "http://localhost:5000"
 ```
 chmod +x utils/build_container.sh
+chmod +x utils/build_dist.sh
 ./utils/build_container.sh
 ./utils/build_dist.sh
 docker-compose up -d
+docker exec -it tdd-detroid python /webapp/cli.py init-bd
 ```
 ## Option 2: Kubernetes
 Cosidering the Minikube and Virtual Box are installed, [Push the image](#publish-image) to Docker Hub and run the commands
@@ -81,9 +83,9 @@ grant select on api.alunos to web_anon;
 grant insert on api.alunos to web_anon;
 grant delete on api.alunos to web_anon;
 
-grant select on api.cursos to web_anon;
-grant insert on api.cursos to web_anon;
-grant delete on api.cursos to web_anon;
+grant select on api.courses to web_anon;
+grant insert on api.courses to web_anon;
+grant delete on api.courses to web_anon;
 
 GRANT ALL ON TABLE api.alunos TO postgres;
 GRANT ALL ON TABLE api.alunos TO web_anon;

@@ -6,5 +6,5 @@ class MateriaBd(Base):
     __tablename__ = "materias"
 
     id = Column(Integer, primary_key=True)
-    nome = Column(String)
-    curso_id = Column(Integer, ForeignKey("cursos.id"))
+    name = Column(String)
+    course_id = Column(Integer, ForeignKey("courses.id"))

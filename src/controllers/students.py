@@ -1,16 +1,17 @@
 from src.utils import sql_client
 from src.controllers import disciplines
-from src.utils.exceptions import ErrorStudent, ErrorDatabase, ErroDisciplineStudent
+from src.utils.exceptions import ErrorStudent, ErrorDatabase, ErrorInvalidInteger
 from src.schemes.student import StudentDB
 from src.schemes.for_association import MateriaStudentDB
 from sqlalchemy.orm import Query
 from src.controllers import courses
+from src.utils.utils import convert_id_to_integer
 
 
-def update_grade(student_id, materia_id, grade):
+def update_grade(student_id, discipline_id, grade):
     query = Query(MateriaStudentDB).filter(
         MateriaStudentDB.student_id == student_id,
-        MateriaStudentDB.materia_id == materia_id,
+        MateriaStudentDB.discipline_id == discipline_id,
     )
     mas = sql_client.run_query(query)
     mas[0].aluno_nota = grade
@@ -36,31 +37,31 @@ def get_maximum_id():
 
 
 def get_course_id(student_id):
-    curso_id = sql_client.get(StudentDB, student_id).curso_id
-    if not curso_id:
-        raise ErrorStudent(f"Aluno {student_id} não está inscrito em nenhum curso")
-    return curso_id
+    course_id = sql_client.get(StudentDB, student_id).course_id
+    if not course_id:
+        raise ErrorStudent(f"Aluno {student_id} não está inscrito em nenhum course")
+    return course_id
 
 
-def check_student_already_in_discipline(student_id, materia_id):
+def check_student_already_in_discipline(student_id, discipline_id):
     resultado = sql_client.get_all(MateriaStudentDB)
     for instancia in resultado:
-        if instancia.student_id == int(student_id) and instancia.materia_id == int(
-            materia_id
+        if instancia.student_id == int(student_id) and instancia.discipline_id == int(
+            discipline_id
         ):
-            raise ErroDisciplineStudent(
-                f"Aluno {student_id} já está inscrito na matéria {materia_id}"
+            raise ErrorStudent(
+                f"Aluno {student_id} já está inscrito na matéria {discipline_id}"
             )
 
 
-def check_student_in_discipline(student_id, materia_id):
+def check_student_in_discipline(student_id, discipline_id):
     resultado = sql_client.get_all(MateriaStudentDB)
     for instancia in resultado:
-        if instancia.student_id == int(student_id) and instancia.materia_id == int(
-            materia_id
+        if instancia.student_id == int(student_id) and instancia.discipline_id == int(
+            discipline_id
         ):
             return
-    raise ErrorStudent(f"Aluno {student_id} não está inscrito na matéria {materia_id}")
+    raise ErrorStudent(f"Aluno {student_id} não está inscrito na matéria {discipline_id}")
 
 
 def check_grade_boundaries(nota):
@@ -78,13 +79,13 @@ def __get_disciplines_of_student(student_id):
     return mas
 
 
-def __subscribe_in_discipline(student_id, materia_id):
-    ma = MateriaStudentDB(student_id=student_id, materia_id=materia_id)
+def __subscribe_in_discipline(student_id, discipline_id):
+    ma = MateriaStudentDB(student_id=student_id, discipline_id=discipline_id)
     sql_client.create(ma)
 
 
-def __create(nome):
-    aluno = StudentDB(nome=nome)
+def __create(name):
+    aluno = StudentDB(name=name)
     sql_client.create(aluno)
 
 
@@ -110,19 +111,19 @@ def check_student_in_tree_disciplines(student_id):
             qtde_materias += 1
         if qtde_materias >= 3:
             return
-    raise ErroDisciplineStudent("Aluno deve se inscrever em 3 materias no minimo")
+    raise ErrorStudent("Aluno deve se inscrever em 3 materias no minimo")
 
 
 def can_subscribe_course(student_id):
     aluno = get_student(student_id)
-    if aluno.curso_id is not None:
-        raise ErrorStudent("Aluno esta inscrito em outro curso")
+    if aluno.course_id is not None:
+        raise ErrorStudent("Aluno esta inscrito em outro course")
 
 
-def __subscribe_in_course(student_id, curso_id):
-    courses.check_exists(curso_id)
+def __subscribe_in_course(student_id, course_id):
+    courses.check_exists(course_id)
     student = get_student(student_id)
-    student.curso_id = curso_id
+    student.course_id = course_id
     sql_client.update()
 
 
@@ -142,20 +143,36 @@ def set_grade(student_id, discipline_id, grade):
     calculate_coef_rend(student_id)
 
 
-def create(nome):
-    nome = clear_name(nome)
-    __create(nome)
+def create(name):
+    name = clear_name(name)
+    __create(name)
 
 
-def subscribe_in_discipline(student_id, materia_id):
-    curso_id = get_course_id(student_id)
-    disciplines.check_exists(materia_id, curso_id)
-    check_student_already_in_discipline(student_id, materia_id)
-    __subscribe_in_discipline(student_id, materia_id)
+def subscribe_in_discipline(student_id, discipline_id):
+    try:
+        student_id = convert_id_to_integer(student_id)
+    except ErrorInvalidInteger:
+        raise ErrorStudent("The student id is not a valid integer")
+    try:
+        discipline_id = convert_id_to_integer(discipline_id)
+    except ErrorInvalidInteger:
+        raise ErrorStudent("The discipline id is not a valid integer")
+    course_id = get_course_id(student_id)
+    disciplines.check_exists(discipline_id, course_id)
+    check_student_already_in_discipline(student_id, discipline_id)
+    __subscribe_in_discipline(student_id, discipline_id)
     check_student_in_tree_disciplines(student_id)
 
 
-def subscribe_in_course(student_id, curso_id):
+def subscribe_in_course(student_id, course_id):
+    try:
+        student_id = convert_id_to_integer(student_id)
+    except ErrorInvalidInteger:
+        raise ErrorStudent("The student id is not a valid integer")
+    try:
+        course_id = convert_id_to_integer(course_id)
+    except ErrorInvalidInteger:
+        raise ErrorStudent("The course id is not a valid integer")
     get_student(student_id)
     can_subscribe_course(student_id)
-    __subscribe_in_course(student_id, curso_id)
+    __subscribe_in_course(student_id, course_id)

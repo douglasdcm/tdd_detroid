@@ -7,7 +7,7 @@ from src.schemes.for_association import MateriaStudentDB
 from src.utils import sql_client
 from pytest import fixture
 from time import sleep
-from tests.utils import create_curso, popula_banco_dados
+from tests.utils import create_course, popula_banco_dados
 from src.utils.utils import inicializa_tabelas
 
 
@@ -34,7 +34,7 @@ def test_init_data_base():
 
 def test_aluno_pode_lancar_notas(__popula_banco_dados):
     student_id = len(sql_client.get_all(StudentDB))
-    materia_id = 1
+    discipline_id = 1
     nota = 7
     nota_bd = None
 
@@ -46,8 +46,8 @@ def test_aluno_pode_lancar_notas(__popula_banco_dados):
             "lanca-nota",
             "--student-id",
             f"{student_id}",
-            "--materia-id",
-            f"{materia_id}",
+            "--discipline-id",
+            f"{discipline_id}",
             "--nota",
             f"{nota}",
         ],
@@ -58,12 +58,12 @@ def test_aluno_pode_lancar_notas(__popula_banco_dados):
     # verifica pelo banco
     materia_aluno = sql_client.get_all(MateriaStudentDB)
     for ma in materia_aluno:
-        if ma.student_id == student_id and ma.materia_id == materia_id:
+        if ma.student_id == student_id and ma.discipline_id == discipline_id:
             nota_bd = ma.aluno_nota
             break
     assert nota == nota_bd
     assert (
-        f"Nota {nota} do aluno {student_id} na materia {materia_id} lancada com sucesso"
+        f"Nota {nota} do aluno {student_id} na materia {discipline_id} lancada com sucesso"
         in output
     )
 
@@ -73,10 +73,10 @@ def test_students_deve_inscreve_3_materias_no_minimo(__popula_banco_dados):
     student_id = len(students.get_all())
 
     uma_materia = disciplines.get_all()[0]
-    materia_id = uma_materia.id
-    curso_id = uma_materia.curso_id
+    discipline_id = uma_materia.id
+    course_id = uma_materia.course_id
 
-    students.subscribe_in_course(student_id, curso_id)
+    students.subscribe_in_course(student_id, course_id)
 
     temp = subprocess.Popen(
         [
@@ -86,8 +86,8 @@ def test_students_deve_inscreve_3_materias_no_minimo(__popula_banco_dados):
             "inscreve-materia",
             "--student-id",
             f"{student_id}",
-            "--materia-id",
-            f"{materia_id}",
+            "--discipline-id",
+            f"{discipline_id}",
         ],
         stdout=subprocess.PIPE,
     )
@@ -99,10 +99,10 @@ def test_students_deve_inscreve_3_materias_no_minimo(__popula_banco_dados):
     assert "Aluno deve se inscrever em 3 materias no minimo" in output
 
 
-def test_aluno_pode_se_inscrever_em_curso(__popula_banco_dados):
+def test_aluno_pode_se_inscrever_em_course(__popula_banco_dados):
 
     courses.create("other")
-    curso_id = len(courses.get_all())
+    course_id = len(courses.get_all())
     students.create("any")
     student_id = len(students.get_all())
 
@@ -111,11 +111,11 @@ def test_aluno_pode_se_inscrever_em_curso(__popula_banco_dados):
             "python",
             "cli.py",
             "aluno",
-            "inscreve-curso",
+            "inscreve-course",
             "--student-id",
             f"{student_id}",
-            "--curso-id",
-            f"{curso_id}",
+            "--course-id",
+            f"{course_id}",
         ],
         stdout=subprocess.PIPE,
     )
@@ -123,74 +123,74 @@ def test_aluno_pode_se_inscrever_em_curso(__popula_banco_dados):
 
     aluno = students.get(student_id)
     # verifica pela API
-    assert aluno.curso_id == curso_id
+    assert aluno.course_id == course_id
     # verifica pelo banco
-    assert sql_client.get(StudentDB, student_id).curso_id == 4
-    assert "Aluno inscrito no curso 4" in output
+    assert sql_client.get(StudentDB, student_id).course_id == 4
+    assert "Aluno inscrito no course 4" in output
 
 
-def test_cli_materia_nome_igual_mas_id_diferente(setup):
+def test_cli_materia_name_igual_mas_id_diferente(setup):
 
-    create_curso()
-    create_curso()
-    create_curso()
+    create_course()
+    create_course()
+    create_course()
     for _ in range(3):
         if len(courses.get_all()) >= 3:
             break
         sleep(1)
     disciplines.create("any", 1)
     temp = subprocess.Popen(
-        ["python", "cli.py", "materia", "create", "--nome", "other", "--curso-id", "1"],
+        ["python", "cli.py", "materia", "create", "--name", "other", "--course-id", "1"],
         stdout=subprocess.PIPE,
     )
     output = str(temp.communicate())
     # verifica pela API
     assert len(disciplines.get_all()) == 2
-    assert disciplines.get(1).nome == "any"
-    assert disciplines.get(2).nome == "other"
-    assert disciplines.get(2).curso_id == 1
+    assert disciplines.get(1).name == "any"
+    assert disciplines.get(2).name == "other"
+    assert disciplines.get(2).course_id == 1
     # verifica banco de dados
     assert len(sql_client.get_all(MateriaBd)) == 2
-    assert sql_client.get(MateriaBd, 1).nome == "any"
-    assert sql_client.get(MateriaBd, 2).nome == "other"
-    assert "Materia definida: id 2, nome other" in output
+    assert sql_client.get(MateriaBd, 1).name == "any"
+    assert sql_client.get(MateriaBd, 2).name == "other"
+    assert "Materia definida: id 2, name other" in output
 
 
-def test_cli_aluno_deve_ter_nome(setup):
+def test_cli_aluno_deve_ter_name(setup):
     subprocess.Popen(
-        ["python", "cli.py", "aluno", "create", "--nome", "any"],
+        ["python", "cli.py", "aluno", "create", "--name", "any"],
         stdout=subprocess.PIPE,
     ).communicate()
     temp = subprocess.Popen(
-        ["python", "cli.py", "aluno", "create", "--nome", "other"],
+        ["python", "cli.py", "aluno", "create", "--name", "other"],
         stdout=subprocess.PIPE,
     )
     output = str(temp.communicate())
     # verifica pela API
     assert len(students.get_all()) == 2
-    assert students.get(1).nome == "any"
-    assert students.get(2).nome == "other"
+    assert students.get(1).name == "any"
+    assert students.get(2).name == "other"
     # verifica banco de dados
     assert len(sql_client.get_all(StudentDB)) == 2
-    assert sql_client.get(StudentDB, 1).nome == "any"
-    assert sql_client.get(StudentDB, 2).nome == "other"
-    assert "Aluno definido: id 2, nome other" in output
+    assert sql_client.get(StudentDB, 1).name == "any"
+    assert sql_client.get(StudentDB, 2).name == "other"
+    assert "Aluno definido: id 2, name other" in output
 
 
-def test_cli_curso_com_nome_e_id(setup):
+def test_cli_course_com_name_e_id(setup):
     courses.create("any")
     temp = subprocess.Popen(
-        ["python", "cli.py", "curso", "create", "--nome", "other"],
+        ["python", "cli.py", "course", "create", "--name", "other"],
         stdout=subprocess.PIPE,
     )
     output = str(temp.communicate())
-    assert "Curso definido: id 2, nome other" in output
+    assert "course definido: id 2, name other" in output
     # verifica pela API
     assert len(courses.get_all()) == 2
-    assert courses.get(1).nome == "any"
-    assert courses.get(2).nome == "other"
+    assert courses.get(1).name == "any"
+    assert courses.get(2).name == "other"
     # verifica banco de dados
     assert len(sql_client.get_all(CourseDB)) == 2
-    assert sql_client.get(CourseDB, 1).nome == "any"
-    assert sql_client.get(CourseDB, 2).nome == "other"
-    assert "Curso definido: id 2, nome other" in output
+    assert sql_client.get(CourseDB, 1).name == "any"
+    assert sql_client.get(CourseDB, 2).name == "other"
+    assert "course definido: id 2, name other" in output

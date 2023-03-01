@@ -6,6 +6,6 @@ class StudentDB(Base):
     __tablename__ = "alunos"
 
     id = Column(Integer, primary_key=True)
-    nome = Column(String)
+    name = Column(String)
     coef_rend = Column(Integer)
-    curso_id = Column(Integer, ForeignKey("cursos.id"))
+    course_id = Column(Integer, ForeignKey("courses.id"))

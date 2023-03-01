@@ -1,4 +1,4 @@
-"""muda coluna curso de tabela materias para curso_id
+"""muda coluna course de tabela materias para course_id
 
 Revision ID: aff28b5a130a
 Revises: 4eef0f0750b6

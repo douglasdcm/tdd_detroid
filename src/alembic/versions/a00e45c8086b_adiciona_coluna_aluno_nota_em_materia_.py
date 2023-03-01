@@ -24,10 +24,10 @@ def upgrade():
     op.create_table(
         "materia_aluno",
         sa.Column("aluno_nota", sa.INTEGER(), nullable=True),
-        sa.Column("materia_id", sa.INTEGER(), nullable=True),
+        sa.Column("discipline_id", sa.INTEGER(), nullable=True),
         sa.Column("student_id", sa.INTEGER(), nullable=True),
         sa.ForeignKeyConstraint(
-            ["materia_id"],
+            ["discipline_id"],
             ["materias.id"],
         ),
         sa.ForeignKeyConstraint(
@@ -44,10 +44,10 @@ def downgrade():
         pass
     op.create_table(
         "materia_aluno",
-        sa.Column("materia_id", sa.INTEGER(), nullable=True),
+        sa.Column("discipline_id", sa.INTEGER(), nullable=True),
         sa.Column("student_id", sa.INTEGER(), nullable=True),
         sa.ForeignKeyConstraint(
-            ["materia_id"],
+            ["discipline_id"],
             ["materias.id"],
         ),
         sa.ForeignKeyConstraint(

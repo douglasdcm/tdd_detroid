@@ -12,13 +12,13 @@ def aluno():
 
 @aluno.command()
 @click.option("--student-id", type=int, required=True, help="Student identification")
-@click.option("--materia-id", type=int, required=True, help="Discipline ientification")
+@click.option("--discipline-id", type=int, required=True, help="Discipline ientification")
 @click.option("--nota", type=int, required=True, help="Student grade")
-def lanca_nota(student_id, materia_id, nota):
+def lanca_nota(student_id, discipline_id, nota):
     try:
-        students.set_grade(student_id, materia_id, nota)
+        students.set_grade(student_id, discipline_id, nota)
         click.echo(
-            f"Nota {nota} do aluno {student_id} na materia {materia_id} lancada com sucesso"
+            f"Nota {nota} do aluno {student_id} na materia {discipline_id} lancada com sucesso"
         )
     except Exception as e:
         click.echo(e)
@@ -26,29 +26,29 @@ def lanca_nota(student_id, materia_id, nota):
 
 @aluno.command()
 @click.option("--student-id", type=int, required=True, help="Student identification")
-@click.option("--materia-id", type=int, required=True, help="Discipline identification")
-def inscreve_materia(student_id, materia_id):
+@click.option("--discipline-id", type=int, required=True, help="Discipline identification")
+def inscreve_materia(student_id, discipline_id):
     try:
-        students.subscribe_in_discipline(student_id, materia_id)
-        click.echo(f"Aluno {student_id} inscrito na materia {materia_id}")
+        students.subscribe_in_discipline(student_id, discipline_id)
+        click.echo(f"Aluno {student_id} inscrito na materia {discipline_id}")
     except Exception as e:
         click.echo(e)
 
 
 @aluno.command()
-@click.option("--nome", required=True, help="Student name")
-def create(nome):
-    students.create(nome)
+@click.option("--name", required=True, help="Student name")
+def create(name):
+    students.create(name)
     id_ = sql_client.get_maximum(StudentDB).id
-    click.echo(f"Aluno definido: id {id_}, nome {nome}")
+    click.echo(f"Aluno definido: id {id_}, name {name}")
 
 
 @aluno.command()
 @click.option("--student-id", type=int, required=True, help="Student identification")
-@click.option("--curso-id", type=int, required=True, help="Course identification")
-def inscreve_curso(student_id, curso_id):
+@click.option("--course-id", type=int, required=True, help="Course identification")
+def inscreve_course(student_id, course_id):
     try:
-        students.subscribe_in_course(student_id, curso_id)
-        click.echo(f"Aluno inscrito no curso {curso_id}")
+        students.subscribe_in_course(student_id, course_id)
+        click.echo(f"Aluno inscrito no course {course_id}")
     except Exception as e:
         click.echo(e)

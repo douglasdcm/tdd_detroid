@@ -5,16 +5,16 @@ from src.utils import sql_client
 from src.schemes.discipline import MateriaBd
 
 
-def check_name(nome):
-    if len(nome.strip()) == 0:
-        raise ErrorCourse("Nome do curso invalido")
+def check_name(name):
+    if len(name.strip()) == 0:
+        raise ErrorCourse("name do course invalido")
 
 
-def get_course(curso_id):
+def get_course(course_id):
     try:
-        return sql_client.get(CourseDB, curso_id)
+        return sql_client.get(CourseDB, course_id)
     except ErrorDatabase:
-        raise ErrorStudent(f"Curso {curso_id} não existe")
+        raise ErrorStudent(f"course {course_id} não existe")
 
 
 def check_exists(course_id):
@@ -22,27 +22,27 @@ def check_exists(course_id):
 
 
 def check_exists_three():
-    query_cursos = Query([CourseDB])
+    query_courses = Query([CourseDB])
 
-    resultado = len(sql_client.run_query(query_cursos))
+    resultado = len(sql_client.run_query(query_courses))
     if resultado < 3:
         return
 
     query_materias = Query([MateriaBd]).group_by(
-        MateriaBd.curso_id, MateriaBd.id
+        MateriaBd.course_id, MateriaBd.id
     )
     resultado = len(sql_client.run_query(query_materias))
 
     if resultado < 3:
         raise ErrorCourse(
-            "Necessários 3 cursos com 3 três matérias para se criar novos cursos"
+            "Necessários 3 courses com 3 três matérias para se criar novos courses"
         )
 
 
-def check_non_existent(nome):
-    query = Query(CourseDB).filter(CourseDB.nome == nome)
+def check_non_existent(name):
+    query = Query(CourseDB).filter(CourseDB.name == name)
     if len(sql_client.run_query(query)) > 0:
-        raise ErrorCourse(f"Existe outro curso com o nome {nome}")
+        raise ErrorCourse(f"Existe outro course com o name {name}")
 
 
 def get(id_):
@@ -53,8 +53,8 @@ def get_all():
     return sql_client.get_all(CourseDB)
 
 
-def create(nome):
-    check_name(nome)
+def create(name):
+    check_name(name)
     check_exists_three()
-    check_non_existent(nome)
-    sql_client.create(CourseDB(nome=nome))
+    check_non_existent(name)
+    sql_client.create(CourseDB(name=name))
