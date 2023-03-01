@@ -10,10 +10,9 @@ from src.utils.exceptions import (
     ErrorStudent,
     ErrorDiscipline,
     ErrorCourse,
-    ErroDisciplineStudent,
 )
 from src.utils import sql_client
-from tests.utils import create_curso, create_materia
+from tests.utils import create_course, create_materia
 from pytest import raises
 
 
@@ -31,9 +30,9 @@ def test_students_deve_inscreve_em_3_materias(popula_banco_dados):
 
     students.create("any")
     student_id = len(students.get_all())
-    students.subscribe_in_course(student_id, curso_id=1)
+    students.subscribe_in_course(student_id, course_id=1)
     with raises(
-        ErroDisciplineStudent, match="Aluno deve se inscrever em 3 materias no minimo"
+        ErrorStudent, match="Aluno deve se inscrever em 3 materias no minimo"
     ):
         students.subscribe_in_discipline(student_id, 1)
 
@@ -48,10 +47,10 @@ def test_create_aluno_por_api():
     assert aluno.id == 1
 
 
-def test_cli_tres_cursos_com_tres_materias_cada():
-    create_curso()
-    create_curso()
-    create_curso()
+def test_cli_tres_courses_com_tres_materias_cada():
+    create_course()
+    create_course()
+    create_course()
     for _ in range(3):
         create_materia(1)
         create_materia(2)
@@ -62,21 +61,21 @@ def test_cli_tres_cursos_com_tres_materias_cada():
     assert len(disciplines.get_all()) == 9
 
 
-def test_aluno_pode_se_inscrever_em_apenas_um_curso(popula_banco_dados):
+def test_aluno_pode_se_inscrever_em_apenas_um_course(popula_banco_dados):
 
     students.create("any")
     student_id = len(students.get_all())
     courses.create("other")
     students.subscribe_in_course(student_id, 4)
 
-    with raises(ErrorStudent, match="Aluno esta inscrito em outro curso"):
+    with raises(ErrorStudent, match="Aluno esta inscrito em outro course"):
         students.subscribe_in_course(student_id, 3)
 
     aluno = students.get(student_id)
-    assert aluno.curso_id == 4
+    assert aluno.course_id == 4
 
 
-def test_curso_nao_pode_ter_materias_com_mesmo_nome():
+def test_course_nao_pode_ter_materias_com_mesmo_name():
 
     courses.create("any_1")
     courses.create("any_2")
@@ -84,61 +83,61 @@ def test_curso_nao_pode_ter_materias_com_mesmo_nome():
     disciplines.create("any", 1)
     with raises(
         ErrorDiscipline,
-        match="O curso já possui uma matéria com este nome",
+        match="O course já possui uma matéria com este name",
     ):
         disciplines.create("any", 1)
 
 
-def test_nao_criar_quarto_curso_se_menos_de_tres_materias_por_curso():
+def test_nao_criar_quarto_course_se_menos_de_tres_materias_por_course():
     courses.create("any_1")
     courses.create("any_2")
     courses.create("any_3")
-    disciplines.create(nome="any", curso_id=1)
+    disciplines.create(name="any", course_id=1)
     with raises(
         ErrorCourse,
-        match="Necessários 3 cursos com 3 três matérias para se criar novos cursos",
+        match="Necessários 3 courses com 3 três matérias para se criar novos courses",
     ):
         courses.create("quarto")
 
 
-def test_nao_criar_quarto_curso_se_todos_cursos_sem_materias():
+def test_nao_criar_quarto_course_se_todos_courses_sem_materias():
     courses.create("any_1")
     courses.create("any_2")
     courses.create("any_3")
     with raises(
         ErrorCourse,
-        match="Necessários 3 cursos com 3 três matérias para se criar novos cursos",
+        match="Necessários 3 courses com 3 três matérias para se criar novos courses",
     ):
         courses.create("quatro")
 
 
-def test_materia_nao_createda_se_menos_de_tres_cursos_existentes():
+def test_materia_nao_createda_se_menos_de_tres_courses_existentes():
     with raises(
-        ErrorDiscipline, match="Necessários 3 cursos para se criar a primeira matéria"
+        ErrorDiscipline, match="Necessários 3 courses para se criar a primeira matéria"
     ):
         disciplines.create("any", 1)
 
 
-def test_materia_nao_associada_curso_inexistente(popula_banco_dados):
+def test_materia_nao_associada_course_inexistente(popula_banco_dados):
     with raises(ErrorDiscipline):
         disciplines.create("any", 42)
 
 
-def test_materia_associada_curso_existente():
-    sql_client.create(CourseDB(nome="any"))
-    sql_client.create(MateriaBd(nome="any", curso_id=1))
-    assert sql_client.get(MateriaBd, 1).nome == "any"
+def test_materia_associada_course_existente():
+    sql_client.create(CourseDB(name="any"))
+    sql_client.create(MateriaBd(name="any", course_id=1))
+    assert sql_client.get(MateriaBd, 1).name == "any"
 
 
 def test_create_tabela_com_dados():
-    sql_client.create(CourseDB(nome="any_1"))
-    sql_client.create(CourseDB(nome="any_2"))
-    sql_client.create(CourseDB(nome="any_3"))
+    sql_client.create(CourseDB(name="any_1"))
+    sql_client.create(CourseDB(name="any_2"))
+    sql_client.create(CourseDB(name="any_3"))
     assert len(sql_client.get_all(CourseDB)) == 3
 
 
 def test_create_item_bd():
-    sql_client.create(CourseDB(nome="any"))
+    sql_client.create(CourseDB(name="any"))
     assert len(sql_client.get_all(CourseDB)) == 1
 
 

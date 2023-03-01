@@ -7,11 +7,11 @@ from src.utils.utils import inicializa_tabelas
 
 
 def popula_banco_dados():
-    "create 3 cursos com 3 matérias cada, create aluno, inscreve em um dos cursos e inscreve em 3 matérias"
+    "create 3 courses com 3 matérias cada, create aluno, inscreve em um dos courses e inscreve em 3 matérias"
     inicializa_tabelas()
-    create_curso()
-    create_curso()
-    create_curso()
+    create_course()
+    create_course()
+    create_course()
     for i in range(3):
         for _ in range(3):
             create_materia(i + 1)
@@ -31,11 +31,11 @@ def create_aluno_completo():
     students.subscribe_in_discipline(student_id, 3)
 
 
-def create_materia(curso_id):
-    nome_aleatorio = str(uuid.uuid4())
-    disciplines.create(nome_aleatorio, curso_id)
+def create_materia(course_id):
+    name_aleatorio = str(uuid.uuid4())
+    disciplines.create(name_aleatorio, course_id)
 
 
-def create_curso():
-    nome_aleatorio = str(uuid.uuid4())
-    courses.create(nome_aleatorio)
+def create_course():
+    name_aleatorio = str(uuid.uuid4())
+    courses.create(name_aleatorio)

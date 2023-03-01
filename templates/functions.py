@@ -1,17 +1,17 @@
 from datetime import datetime
 from pyscript import Element, create
 from pyodide.http import pyfetch, FetchResponse
-from typing import Optional
 import json
 
 BASE_URL = "http://minikube:30500"
+CONTENT_TYPE = "application/json"
 
 # https://github.com/pyscript/pyscript/pull/151/commits/3e3f21c08fa0a5e081804e8fbb11e708ee2813ce
 async def request(
-    url: str,
-    method: str = "GET",
-    body: Optional[str] = None,
-    headers: Optional[dict[str, str]] = None,
+    url,
+    method = "GET",
+    body = None,
+    headers = None,
 ) -> FetchResponse:
     """
     Async request function. Pass in Method and make sure to await!
@@ -19,7 +19,7 @@ async def request(
         method: str = {"GET", "POST", "PUT", "DELETE"} from javascript global fetch())
         body: str = body as json string. Example, body=json.dumps(my_dict)
         header: dict[str,str] = header as dict, will be converted to string...
-            Example, header:json.dumps({"Content-Type":"application/json"})
+            Example, header:json.dumps({"Content-Type":CONTENT_TYPE})
     Return:
         response: pyodide.http.FetchResponse = use with .status or await.json(), etc.
     """
@@ -33,55 +33,68 @@ async def request(
     return response
 
 
-def subscribe_discipline():
-    pass
-    # try:
-    #     student_id = Element("subscribe-student-id")
-    #     materia_id = Element("subscribe-discipline-id")
-    #     students.subscribe_in_discipline(student_id.value, materia_id.value)
-    #     qtde = len(students.get_all())
-    #     text = f"#Student id {qtde}, Name {students.get(qtde).nome}, Discipline id {disciplines.get(qtde).materia_id}"
-    #     __update_terminal(text, "INFO")
-    # except Exception as e:
-    #     __update_terminal(e, "FAIL")
+async def subscribe_discipline():
+    try:
+        student_id = Element("subscribe-student-id").value
+        discipline_id = Element("subscribe-discipline-id").value
+        text = await request(
+            f"{BASE_URL}/subscription-discipline",
+            "POST",
+            json.dumps({
+                "student_id": student_id,
+                "discipline_id": discipline_id
+            }),
+            {"Content-Type": CONTENT_TYPE},
+        )
+        __update_terminal(await text.json(), "INFO")
+    except Exception as e:
+        __update_terminal(e, "FAIL")
 
 
-def add_discipline():
-    pass
-    # try:
-    #     discipline_nome = Element("discipline-nome")
-    #     curso_discipline_id = Element("course-discipline-id")
-    #     disciplines.create(discipline_nome.value, curso_discipline_id.value)
-    #     qtde = len(disciplines.get_all())
-    #     text = f"#Added discipline id: {qtde}, Name: {disciplines.lista(qtde).nome}, Course: {disciplines.get(qtde).curso_id}"
-    #     __update_terminal(text, "INFO")
-    # except Exception as e:
-    #     __update_terminal(e, "FAIL")
+async def add_discipline():
+    try:
+        name = Element("discipline-name").value
+        course_id = Element("course-discipline-id").value
+        text = await request(
+            f"{BASE_URL}/discipline",
+            "POST",
+            json.dumps({
+                "name": name,
+                "course_id": course_id
+            }),
+            {"Content-Type": CONTENT_TYPE},
+        )
+        __update_terminal(await text.json(), "INFO")
+    except Exception as e:
+        __update_terminal(e, "FAIL")
 
 
-def subscribe_course():
-    pass
-    # try:
-    #     student_id = Element("student-id")
-    #     curso_id = Element("course-id")
-    #     students.subscribe_in_course(student_id.value, curso_id.value)
-    #     qtde = len(students.get_all())
-    #     text = (
-    #         f"#Student id {qtde} subscribed to course id {students.get(qtde).curso_id}"
-    #     )
-    #     __update_terminal(text, "INFO")
-    # except Exception as e:
-    #     __update_terminal(e, "FAIL")
+async def subscribe_course():
+    try:
+        student_id = Element("student-id").value
+        course_id = Element("course-id").value
+        text = await request(
+            f"{BASE_URL}/subscription-course",
+            "POST",
+            json.dumps({
+                "student_id": student_id,
+                "course_id": course_id
+            }),
+            {"Content-Type": CONTENT_TYPE},
+        )
+        __update_terminal(await text.json(), "INFO")
+    except Exception as e:
+        __update_terminal(e, "FAIL")
 
 
 async def add_course():
     try:
-        name = Element("course-nome").value
+        name = Element("course-name").value
         text = await request(
             f"{BASE_URL}/course",
             "POST",
             json.dumps({"name": name}),
-            {"Content-Type": "application/json"},
+            {"Content-Type": CONTENT_TYPE},
         )
         __update_terminal(await text.json(), "INFO")
     except Exception as e:
@@ -90,12 +103,12 @@ async def add_course():
 
 async def add_student():
     try:
-        name = Element("student-nome").value
+        name = Element("student-name").value
         text = await request(
             f"{BASE_URL}/student",
             "POST",
             json.dumps({"name": name}),
-            {"Content-Type": "application/json"},
+            {"Content-Type": CONTENT_TYPE},
         )
         __update_terminal(await text.json(), "INFO")
     except Exception as e:

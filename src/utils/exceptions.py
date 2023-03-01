@@ -1,12 +1,10 @@
 class ErrorDiscipline(Exception):
     pass
 
-
-class ErrorDatabase(Exception):
+class ErrorInvalidInteger(Exception):
     pass
 
-
-class ErroDisciplineStudent(Exception):
+class ErrorDatabase(Exception):
     pass
 
 

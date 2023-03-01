@@ -1,5 +1,16 @@
 from src.utils import sql_client
+from src.utils.exceptions import ErrorInvalidInteger
 
+
+
+def convert_id_to_integer(id_):
+    if isinstance(id_, int):
+        return id_
+    try:
+        id_ = int(id_)
+    except Exception:
+        raise ErrorInvalidInteger("Id is not a valid integer")
+    return id_
 
 def inicializa_tabelas():
     sql_client.create_schema()

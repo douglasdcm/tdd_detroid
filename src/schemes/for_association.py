@@ -6,5 +6,5 @@ class MateriaStudentDB(Base):
     __tablename__ = "materia_aluno"
 
     aluno_nota = Column(Integer)
-    materia_id = Column(ForeignKey("materias.id"), primary_key=True)
+    discipline_id = Column(ForeignKey("materias.id"), primary_key=True)
     student_id = Column(ForeignKey("alunos.id"), primary_key=True)

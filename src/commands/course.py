@@ -5,17 +5,17 @@ from src.utils import sql_client
 
 
 @click.group()
-def curso():
+def course():
     # do nothing #
     pass
 
 
-@curso.command()
-@click.option("--nome", required=True, help="Course name")
-def create(nome):
+@course.command()
+@click.option("--name", required=True, help="Course name")
+def create(name):
     try:
-        courses.create(nome)
+        courses.create(name)
         id_ = sql_client.get_maximum(CourseDB).id
-        click.echo(f"Curso definido: id {id_}, nome {nome}")
+        click.echo(f"course definido: id {id_}, name {name}")
     except Exception as e:
         click.echo(e)

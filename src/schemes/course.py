@@ -4,9 +4,9 @@ from src.utils.sql_client import Base
 
 
 class CourseDB(Base):
-    __tablename__ = "cursos"
+    __tablename__ = "courses"
 
     id = Column(Integer, primary_key=True)
-    nome = Column(String)
+    name = Column(String)
     materia = relationship("MateriaBd")
     aluno = relationship("StudentDB")

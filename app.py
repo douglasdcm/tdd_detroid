@@ -1,9 +1,9 @@
 #!flask/bin/python
 from os import environ
 from flask import Flask, render_template, request
-from src.controllers import courses, students
+from src.controllers import courses, students, disciplines
 from json import dumps
-from src.utils.exceptions import ErrorStudent, ErrorCourse
+from src.utils.exceptions import ErrorStudent, ErrorCourse, ErrorDiscipline
 import logging
 logging.basicConfig(format='%(asctime)s %(levelname)-8s %(message)s',
                     filename='application.log', level=logging.ERROR,
@@ -13,7 +13,7 @@ app = Flask(__name__, static_folder="templates", static_url_path="")
 SUCCESS = dumps({"status": "ok", "message": "success"})
 
 
-def __failed(e, detail=False):
+def __failed(e, detail=True):
     fail = {"status": "failed", "message": None}
     if detail:
         fail["message"] = str(e)
@@ -40,6 +40,41 @@ def course():
     except Exception as e:
         return __failed(e)
 
+@app.route("/discipline", methods=["POST"])
+def discipline():
+    try:
+        name = request.json["name"]
+        course_id = request.json["course_id"]
+        disciplines.create(name, course_id)
+        return SUCCESS
+    except (ErrorCourse, ErrorDiscipline) as e:
+        return __failed(e)
+    except Exception as e:
+        return __failed(e)
+
+@app.route("/subscription-discipline", methods=["POST"])
+def subscription_discipline():
+    try:
+        student_id = request.json["student_id"]
+        discipline_id = request.json["discipline_id"]
+        students.subscribe_in_discipline(student_id, discipline_id)
+        return SUCCESS
+    except (ErrorStudent) as e:
+        return __failed(e)
+    except Exception as e:
+        return __failed(e)
+
+@app.route("/subscription-course", methods=["POST"])
+def subscription_course():
+    try:
+        student_id = request.json["student_id"]
+        course_id = request.json["course_id"]
+        students.subscribe_in_course(student_id, course_id)
+        return SUCCESS
+    except (ErrorStudent) as e:
+        return __failed(e)
+    except Exception as e:
+        return __failed(e)
 
 @app.route("/student", methods=["POST"])
 def student():
@@ -48,7 +83,7 @@ def student():
         students.create(name)
         return SUCCESS
     except (ErrorCourse, ErrorStudent) as e:
-        return __failed(e, detail=True)
+        return __failed(e)
     except Exception as e:
         logging.error(str(e))
         return __failed(e)

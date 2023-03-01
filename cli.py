@@ -2,7 +2,7 @@ import click
 from src.utils.utils import inicializa_tabelas
 from src.commands.student import aluno
 from src.commands.discipline import materia
-from src.commands.course import curso
+from src.commands.course import course
 
 
 @click.group()
@@ -19,7 +19,7 @@ def init_bd():
 
 cli.add_command(aluno)
 cli.add_command(materia)
-cli.add_command(curso)
+cli.add_command(course)
 
 
 if __name__ == "__main__":
