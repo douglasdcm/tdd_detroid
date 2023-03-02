@@ -25,9 +25,10 @@ minikube start --driver=virtualbox
 ```
 ### Declarative way
 ```
-kubectl create -f kubernetes/deployments.yaml
-kubectl create -f kubernetes/services.yaml
+kubectl create -f kubernetes/deployments-aio-pod.yaml
 ```
+
+Add the $(minikube ip) to /etc/hosts like "minikube" DNS 
 
 ### Or Imperative way
 ```
@@ -38,6 +39,11 @@ Create services
 ```
 kubectl expose deployment tdd-detroid --type=NodePort --port=5000
 kubectl get services
+```
+
+Install database
+```
+kubectl exec -it <pod name> -c tdd-detroid -- python /webapp/cli.py init-b
 ```
 ### Check access
 ```
@@ -70,7 +76,7 @@ python app.py
 python cli. init-bd
 python cli.py --help
 ```
-# Config database for postgREST manually
+# Config database manually
 ```
 python cli.py init-bd
 docker exec -it postgres psql -U postgres
