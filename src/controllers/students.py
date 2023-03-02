@@ -99,7 +99,7 @@ def calculate_coef_rend(student_id):
             conta += 1
     aluno = get_student(student_id)
 
-    aluno.coef_rend = int(round(soma_nota / conta, 1))
+    aluno.coef_rend = round(soma_nota / conta, 1)
     sql_client.update()
 
 
@@ -132,8 +132,10 @@ def get_all():
 
 
 def get(id):
-    return sql_client.get(StudentDB, id)
-
+    try:
+        return sql_client.get(StudentDB, id)
+    except ErrorDatabase:
+        raise ErrorStudent(f"Aluno {id} não existe")
 
 def set_grade(student_id, discipline_id, grade):
     grade = int(grade)

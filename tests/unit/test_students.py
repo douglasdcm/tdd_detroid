@@ -194,7 +194,7 @@ def test_inscreve_aluno_course(popula_banco_dados):
 
 def test_verifica_aluno_existe():
     with raises(ErrorStudent, match="Aluno 42 não existe"):
-        students.id = 42
+        students.get(42)
 
 
 def test_nao_inscreve_aluno_se_course_nao_existe():

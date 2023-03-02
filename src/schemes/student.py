@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, Float
 from src.utils.sql_client import Base
 
 
@@ -7,5 +7,5 @@ class StudentDB(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String)
-    coef_rend = Column(Integer)
+    coef_rend = Column(Float)
     course_id = Column(Integer, ForeignKey("courses.id"))
