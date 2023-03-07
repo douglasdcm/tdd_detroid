@@ -23,6 +23,9 @@ Create the pods pointing to the file, for example:
 kubectl create -f /home/dmorais/calico-crd.yaml
 ```
 
+## Post-install attention
+After start the application, install de database, for example
+```python cli.py init-bd```
 ## Option 1: docker-compose
 Run the commnands and access "http://localhost:5000"
 ```
