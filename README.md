@@ -8,6 +8,21 @@ Definition of Done:
 2. The functionality is designed to be used via CLI
 3. Data is being saved to the database
 # How to use
+## Installing Calico plugin
+https://docs.tigera.io/calico/3.25/getting-started/kubernetes/quickstart
+
+Get the CIDR from Kubernetes
+```
+kubectl cluster-info dump | grep -m 1 cluster-cidr
+```
+In https://docs.tigera.io/calico/3.25/getting-started/kubernetes/quickstart#install-calico, step 2, downlaod the yaml file and replace the cidr with the one got from K8s
+
+Create the pods pointing to the file, for example:
+
+```
+kubectl create -f /home/dmorais/calico-crd.yaml
+```
+
 ## Option 1: docker-compose
 Run the commnands and access "http://localhost:5000"
 ```
