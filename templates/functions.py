@@ -1,10 +1,11 @@
 from datetime import datetime
 from pyscript import Element, create
 from pyodide.http import pyfetch, FetchResponse
-import json
+
 
 BASE_URL = "http://minikube:30500"
 CONTENT_TYPE = "application/json"
+
 
 # https://github.com/pyscript/pyscript/pull/151/commits/3e3f21c08fa0a5e081804e8fbb11e708ee2813ce
 async def request(
@@ -33,86 +34,11 @@ async def request(
     return response
 
 
-async def subscribe_discipline():
-    try:
-        student_id = Element("subscribe-student-id").value
-        discipline_id = Element("subscribe-discipline-id").value
-        text = await request(
-            f"{BASE_URL}/subscription-discipline",
-            "POST",
-            json.dumps({
-                "student_id": student_id,
-                "discipline_id": discipline_id
-            }),
-            {"Content-Type": CONTENT_TYPE},
-        )
-        __update_terminal(await text.json(), "INFO")
-    except Exception as e:
-        __update_terminal(e, "FAIL")
-
-
-async def add_discipline():
-    try:
-        name = Element("discipline-name").value
-        course_id = Element("course-discipline-id").value
-        text = await request(
-            f"{BASE_URL}/discipline",
-            "POST",
-            json.dumps({
-                "name": name,
-                "course_id": course_id
-            }),
-            {"Content-Type": CONTENT_TYPE},
-        )
-        __update_terminal(await text.json(), "INFO")
-    except Exception as e:
-        __update_terminal(e, "FAIL")
-
-
-async def subscribe_course():
-    try:
-        student_id = Element("student-id").value
-        course_id = Element("course-id").value
-        text = await request(
-            f"{BASE_URL}/subscription-course",
-            "POST",
-            json.dumps({
-                "student_id": student_id,
-                "course_id": course_id
-            }),
-            {"Content-Type": CONTENT_TYPE},
-        )
-        __update_terminal(await text.json(), "INFO")
-    except Exception as e:
-        __update_terminal(e, "FAIL")
-
-
-async def add_course():
-    try:
-        name = Element("course-name").value
-        text = await request(
-            f"{BASE_URL}/course",
-            "POST",
-            json.dumps({"name": name}),
-            {"Content-Type": CONTENT_TYPE},
-        )
-        __update_terminal(await text.json(), "INFO")
-    except Exception as e:
-        __update_terminal(e, "FAIL")
-
-
-async def add_student():
-    try:
-        name = Element("student-name").value
-        text = await request(
-            f"{BASE_URL}/student",
-            "POST",
-            json.dumps({"name": name}),
-            {"Content-Type": CONTENT_TYPE},
-        )
-        __update_terminal(await text.json(), "INFO")
-    except Exception as e:
-        __update_terminal(e, "FAIL")
+async def poc_postgrest():
+    url = "http://minikube:30501/alunos"
+    response = await request(url, "GET")
+    output = f"GET request=> status:{response.status}, json:{await response.json()}"
+    __update_terminal(output, "INFO")
 
 
 def __update_terminal(text, message_type):
