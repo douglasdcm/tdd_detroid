@@ -6,24 +6,13 @@ from src.services.subject_handler import SubjectHandler
 class StudentHandler:
     LOCKED = "locked"
 
-    def __init__(self, database=None):
+    def __init__(self, database):
         self.__identifier = None
         self.__state = None
         self.__gpa = 0
         self.__subjects = []
         self.__course = None
-
         self.__database = database
-        if not database:
-
-            class Database:
-                class DbStudent:
-                    name = None
-                    state = None
-
-                student = DbStudent()
-
-            self.__database = Database()
 
     @property
     def identifier(self):

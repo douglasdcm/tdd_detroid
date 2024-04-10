@@ -14,7 +14,8 @@ def restart_database():
 
 
 def test_unlock_course():
-    student = StudentHandler()
+    database = mock_database.Database()
+    student = StudentHandler(database)
     student.name = "any"
     student.cpf = "123.456.789-10"
 
@@ -23,14 +24,7 @@ def test_unlock_course():
 
 
 def test_lock_course():
-    class Database:
-        class DbStudent:
-            name = None
-            state = None
-
-        student = DbStudent()
-
-    database = Database()
+    database = mock_database.Database()
     student = StudentHandler(database)
     student.name = "any"
     student.cpf = "123.456.789-10"
@@ -41,8 +35,8 @@ def test_lock_course():
 
 
 def test_take_subject_from_course_when_locked_stuend_return_error():
-
-    student = StudentHandler()
+    database = mock_database.Database()
+    student = StudentHandler(database)
     student.name = "any"
     student.cpf = "123.456.789-10"
     student.lock_course()
@@ -54,7 +48,8 @@ def test_take_subject_from_course_when_locked_stuend_return_error():
 
 
 def test_take_full_subject_from_course_return_error():
-    student = StudentHandler()
+    database = mock_database.Database()
+    student = StudentHandler(database)
     student.name = "any"
     student.cpf = "123.456.789-10"
     subject = "invalid"
@@ -66,7 +61,8 @@ def test_take_full_subject_from_course_return_error():
 
 
 def test_take_invalid_subject_from_course_return_error():
-    student = StudentHandler()
+    database = mock_database.Database()
+    student = StudentHandler(database)
     student.name = "any"
     student.cpf = "123.456.789-10"
     subject = "invalid"
@@ -78,7 +74,8 @@ def test_take_invalid_subject_from_course_return_error():
 
 
 def test_take_subject_from_course():
-    student = StudentHandler()
+    database = mock_database.Database()
+    student = StudentHandler(database)
     student.name = "any"
     student.cpf = "123.456.789-10"
     subject = "any"
@@ -89,7 +86,8 @@ def test_take_subject_from_course():
 
 
 def test_enroll_invalid_student_to_course_retunr_error():
-    student = StudentHandler()
+    database = mock_database.Database()
+    student = StudentHandler(database)
     student.name = "invalid"
     student.cpf = "123.456.789-10"
 
@@ -98,7 +96,8 @@ def test_enroll_invalid_student_to_course_retunr_error():
 
 
 def test_enroll_student_to_course():
-    student = StudentHandler()
+    database = mock_database.Database()
+    student = StudentHandler(database)
     student.name = "any"
     student.cpf = "123.456.789-10"
 

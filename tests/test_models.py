@@ -2,6 +2,7 @@ from src.services.student_handler import StudentHandler
 from src.services.course_handler import CourseHandler
 from src.services.subject_handler import SubjectHandler
 from src.services.semester_monitor import SemesterHandler
+from src import mock_database
 
 
 def test_semester_model():
@@ -36,7 +37,8 @@ def test_course_model():
 
 
 def test_student_model():
-    student = StudentHandler()
+    database = mock_database.Database()
+    student = StudentHandler(database)
     student.name = "any_name"
     student.cpf = "123.456.789-10"
 
