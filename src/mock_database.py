@@ -1,0 +1,2 @@
+SUBJECT = "any"
+SUBJECT_MAX_ENROLL = 10
