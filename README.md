@@ -12,6 +12,23 @@ sqlite3 university.db
 sqlite> .quit
 ```
 
+# CLI Usage
+```
+python cli.py --help
+Usage: cli.py [OPTIONS]
+
+Options:
+  --name TEXT               Name of the student.
+  --cpf TEXT                CPD of the student.
+  --course-identifier TEXT  Course number identifier.
+  --help                    Show this message and exit.
+
+
+# enroll student to course
+python cli.py --name any --cpf 123.456.789-10 --course-identifier any
+
+```
+
 
 Below is the specification of the application:
 Definition of Done:

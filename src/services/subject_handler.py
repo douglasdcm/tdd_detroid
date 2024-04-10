@@ -1,6 +1,6 @@
 import uuid
 import datetime
-from src import mock_database
+from src import mocks
 
 
 class SubjectHandler:
@@ -19,8 +19,8 @@ class SubjectHandler:
         self.__max_enrollment = 0
         if subject_identifier:
             # TODO get from database
-            self.__course = mock_database.SUBJECT
-            self.__max_enrollment = mock_database.SUBJECT_MAX_ENROLL
+            self.__course = mocks.SUBJECT
+            self.__max_enrollment = mocks.SUBJECT_MAX_ENROLL
 
     @property
     def identifier(self):

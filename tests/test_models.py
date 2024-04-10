@@ -2,7 +2,7 @@ from src.services.student_handler import StudentHandler
 from src.services.course_handler import CourseHandler
 from src.services.subject_handler import SubjectHandler
 from src.services.semester_monitor import SemesterHandler
-from src import mock_database
+from src import mocks
 
 
 def test_semester_model():
@@ -37,10 +37,11 @@ def test_course_model():
 
 
 def test_student_model():
-    database = mock_database.Database()
+    database = mocks.Database()
     student = StudentHandler(database)
     student.name = "any_name"
     student.cpf = "123.456.789-10"
+    student.save()
 
     assert student.name == "any_name"
     assert student.cpf == "123.456.789-10"
@@ -48,3 +49,10 @@ def test_student_model():
     assert student.state == None
     assert student.gpa == 0
     assert student.subjects == []
+
+    assert database.student.name == "any_name"
+    assert database.student.cpf == "123.456.789-10"
+    assert database.student.identifier is None
+    assert database.student.state == None
+    assert database.student.gpa == 0
+    assert database.student.subjects == []

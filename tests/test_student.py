@@ -4,56 +4,57 @@ from src.services.student_handler import (
     NonValidStudent,
     NonValidSubject,
 )
-from src import mock_database
+from src import mocks
 
 
 @pytest.fixture(autouse=True)
 def restart_database():
-    mock_database.SUBJECT = "any"
-    mock_database.SUBJECT_MAX_ENROLL = 10
+    mocks.SUBJECT = "any"
+    mocks.SUBJECT_MAX_ENROLL = 10
 
 
 def test_unlock_course():
-    database = mock_database.Database()
+    database = mocks.Database()
     student = StudentHandler(database)
     student.name = "any"
     student.cpf = "123.456.789-10"
+    student.enroll_to_course("any")
 
     student.unlock_course()
     assert student.state == None
 
 
 def test_lock_course():
-    database = mock_database.Database()
+    database = mocks.Database()
     student = StudentHandler(database)
     student.name = "any"
     student.cpf = "123.456.789-10"
+    student.enroll_to_course("any")
 
-    student.lock_course()
-    assert student.state == "locked"
+    assert student.lock_course() == "locked"
     assert database.student.state == "locked"
 
 
-def test_take_subject_from_course_when_locked_stuend_return_error():
-    database = mock_database.Database()
+def test_take_subject_from_course_when_locked_student_return_error():
+    database = mocks.Database()
     student = StudentHandler(database)
     student.name = "any"
     student.cpf = "123.456.789-10"
-    student.lock_course()
     subject = "any"
 
     student.enroll_to_course("any")
+    student.lock_course()
     with pytest.raises(NonValidStudent):
         student.take_subject(subject)
 
 
 def test_take_full_subject_from_course_return_error():
-    database = mock_database.Database()
+    database = mocks.Database()
     student = StudentHandler(database)
     student.name = "any"
     student.cpf = "123.456.789-10"
     subject = "invalid"
-    mock_database.SUBJECT_MAX_ENROLL = -1
+    mocks.SUBJECT_MAX_ENROLL = -1
 
     student.enroll_to_course("any")
     with pytest.raises(NonValidSubject):
@@ -61,12 +62,12 @@ def test_take_full_subject_from_course_return_error():
 
 
 def test_take_invalid_subject_from_course_return_error():
-    database = mock_database.Database()
+    database = mocks.Database()
     student = StudentHandler(database)
     student.name = "any"
     student.cpf = "123.456.789-10"
     subject = "invalid"
-    mock_database.SUBJECT = "invalid"
+    mocks.SUBJECT = "invalid"
 
     student.enroll_to_course("any")
     with pytest.raises(NonValidSubject):
@@ -74,7 +75,7 @@ def test_take_invalid_subject_from_course_return_error():
 
 
 def test_take_subject_from_course():
-    database = mock_database.Database()
+    database = mocks.Database()
     student = StudentHandler(database)
     student.name = "any"
     student.cpf = "123.456.789-10"
@@ -86,7 +87,7 @@ def test_take_subject_from_course():
 
 
 def test_enroll_invalid_student_to_course_retunr_error():
-    database = mock_database.Database()
+    database = mocks.Database()
     student = StudentHandler(database)
     student.name = "invalid"
     student.cpf = "123.456.789-10"
@@ -96,7 +97,7 @@ def test_enroll_invalid_student_to_course_retunr_error():
 
 
 def test_enroll_student_to_course():
-    database = mock_database.Database()
+    database = mocks.Database()
     student = StudentHandler(database)
     student.name = "any"
     student.cpf = "123.456.789-10"
@@ -105,3 +106,8 @@ def test_enroll_student_to_course():
 
     # generate using student name, cpf and course
     assert student.identifier == "290f2113c2e6579c8bb6ec395ea56572"
+
+    assert database.student.identifier == "290f2113c2e6579c8bb6ec395ea56572"
+    assert database.student.state == "enrolled"
+    assert database.student.course == "any"
+    assert database.student.subjects == []

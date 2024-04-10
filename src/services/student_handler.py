@@ -5,6 +5,7 @@ from src.services.subject_handler import SubjectHandler
 
 class StudentHandler:
     LOCKED = "locked"
+    ENROLLED = "enrolled"
 
     def __init__(self, database):
         self.__identifier = None
@@ -53,30 +54,39 @@ class StudentHandler:
     def __is_locked(self):
         return self.__state == self.LOCKED
 
-    def __save(self):
+    def __is_valid_student(self, course_identifier=None):
+        course = self.__course
+        if course_identifier:
+            course = course_identifier
+        return EnrollmentValidator().validate_student(self.name, self.cpf, course)
+
+    def save(self):
         self.__database.student.name = self.name
         self.__database.student.state = self.state
+        self.__database.student.cpf = self.cpf
+        self.__database.student.identifier = self.identifier
+        self.__database.student.gpa = self.gpa
+        self.__database.student.subjects = self.subjects
+        self.__database.student.course = self.__course
+        self.__database.student.save()
 
     def enroll_to_course(self, course_identifier):
-        enrollment_validator = EnrollmentValidator()
-        is_valid_student = enrollment_validator.validate_student(
-            self.name, self.cpf, course_identifier
-        )
+        is_valid_student = self.__is_valid_student(course_identifier)
         if is_valid_student:
+            enrollment_validator = EnrollmentValidator()
             self.__identifier = enrollment_validator.generate_student_identifier(
                 self.name, self.cpf, course_identifier
             )
             self.__course = course_identifier
             course = CourseHandler(course_identifier)
             course.enroll_student(self.identifier)
+            self.__state = self.ENROLLED
+            self.save()
             return self.identifier in course.enrolled_students
         raise NonValidStudent()
 
     def take_subject(self, subject_identifier):
-        enrollment_validator = EnrollmentValidator()
-        is_valid_student = enrollment_validator.validate_student(
-            self.name, self.cpf, self.__course
-        )
+        is_valid_student = self.__is_valid_student()
         if not is_valid_student:
             raise NonValidStudent()
 
@@ -92,13 +102,18 @@ class StudentHandler:
         return self.subjects.append(subject_identifier)
 
     def unlock_course(self):
-        self.__state = None
-        return self.state
+        if self.__is_valid_student():
+            self.__state = None
+            self.save()
+            return self.state
+        raise NonValidStudent()
 
     def lock_course(self):
-        self.__state = self.LOCKED
-        self.__save()
-        return self.state
+        if self.__is_valid_student():
+            self.__state = self.LOCKED
+            self.save()
+            return self.state
+        raise NonValidStudent()
 
 
 class NonValidStudent(Exception):

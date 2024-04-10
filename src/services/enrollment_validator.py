@@ -1,14 +1,16 @@
 import uuid
+from src import mocks
 
 
 class EnrollmentValidator:
+    def __init__(self, database=None):
+        database = mocks.Database()
+        self.__database = database
+
     def validate_student(self, name, cpf, course_identifier):
-        # TODO do the true check
-        dummy_identifier = "290f2113c2e6579c8bb6ec395ea56572"
-        return (
-            self.generate_student_identifier(name, cpf, course_identifier)
-            == dummy_identifier
-        )
+        # the valid students are predifined as the list of approved person in the given course
+        identifier = self.generate_student_identifier(name, cpf, course_identifier)
+        return identifier in self.__database.enrollment.select(identifier)
 
     def generate_student_identifier(self, name, cpf, course_identifier):
         return uuid.uuid5(
