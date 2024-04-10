@@ -13,15 +13,44 @@ def restart_database():
     mock_database.SUBJECT_MAX_ENROLL = 10
 
 
-# def test_lock_course():
-#     student = Student()
-#     student.name = "any"
-#     student.cpf = "123.456.789-10"
-#     subject = "any"
+def test_unlock_course():
+    student = StudentHandler()
+    student.name = "any"
+    student.cpf = "123.456.789-10"
 
-#     student.enroll_to_course("any")
-#     student.take_subject(subject)
-#     assert subject in student.subjects
+    student.unlock_course()
+    assert student.state == None
+
+
+def test_lock_course():
+    class Database:
+        class DbStudent:
+            name = None
+            state = None
+
+        student = DbStudent()
+
+    database = Database()
+    student = StudentHandler(database)
+    student.name = "any"
+    student.cpf = "123.456.789-10"
+
+    student.lock_course()
+    assert student.state == "locked"
+    assert database.student.state == "locked"
+
+
+def test_take_subject_from_course_when_locked_stuend_return_error():
+
+    student = StudentHandler()
+    student.name = "any"
+    student.cpf = "123.456.789-10"
+    student.lock_course()
+    subject = "any"
+
+    student.enroll_to_course("any")
+    with pytest.raises(NonValidStudent):
+        student.take_subject(subject)
 
 
 def test_take_full_subject_from_course_return_error():
@@ -29,7 +58,6 @@ def test_take_full_subject_from_course_return_error():
     student.name = "any"
     student.cpf = "123.456.789-10"
     subject = "invalid"
-    mock_database.SUBJECT = "invalid"
     mock_database.SUBJECT_MAX_ENROLL = -1
 
     student.enroll_to_course("any")

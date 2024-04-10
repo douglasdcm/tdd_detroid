@@ -4,12 +4,26 @@ from src.services.subject_handler import SubjectHandler
 
 
 class StudentHandler:
-    def __init__(self) -> None:
+    LOCKED = "locked"
+
+    def __init__(self, database=None):
         self.__identifier = None
         self.__state = None
         self.__gpa = 0
         self.__subjects = []
         self.__course = None
+
+        self.__database = database
+        if not database:
+
+            class Database:
+                class DbStudent:
+                    name = None
+                    state = None
+
+                student = DbStudent()
+
+            self.__database = Database()
 
     @property
     def identifier(self):
@@ -47,6 +61,13 @@ class StudentHandler:
     def cpf(self, value):
         self.__cpf = value
 
+    def __is_locked(self):
+        return self.__state == self.LOCKED
+
+    def __save(self):
+        self.__database.student.name = self.name
+        self.__database.student.state = self.state
+
     def enroll_to_course(self, course_identifier):
         enrollment_validator = EnrollmentValidator()
         is_valid_student = enrollment_validator.validate_student(
@@ -70,6 +91,9 @@ class StudentHandler:
         if not is_valid_student:
             raise NonValidStudent()
 
+        if self.__is_locked():
+            raise NonValidStudent
+
         subject_handler = SubjectHandler(subject_identifier)
         if subject_handler.course != self.__course:
             raise NonValidSubject()
@@ -77,6 +101,15 @@ class StudentHandler:
             raise NonValidSubject()
 
         return self.subjects.append(subject_identifier)
+
+    def unlock_course(self):
+        self.__state = None
+        return self.state
+
+    def lock_course(self):
+        self.__state = self.LOCKED
+        self.__save()
+        return self.state
 
 
 class NonValidStudent(Exception):
