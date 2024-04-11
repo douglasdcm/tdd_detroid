@@ -2,7 +2,7 @@ import sqlite3
 import logging
 
 # TODO test concurrency
-DATABASE_NAME = "university.db"
+DATABASE_NAME = ":memory:"
 con = sqlite3.connect(DATABASE_NAME)
 cur = con.cursor()
 
@@ -37,6 +37,18 @@ class Database:
             cur.execute(
                 f"CREATE TABLE IF NOT EXISTS {self.TABLE} (name, state, cpf, identifier, gpa, subjects, course)"
             )
+
+        def load(self, identifier):
+            result = cur.execute(
+                f"SELECT * FROM {self.TABLE} WHERE identifier = '{identifier}'"
+            ).fetchone()
+            self.name = result[0]
+            self.state = result[1]
+            self.cpf = result[2]
+            self.identifier = result[3]
+            self.gpq = result[4]
+            self.subjects = result[5].split(",")
+            self.course = result[6]
 
     class DbEnrollment:
         TABLE = "enrollment"
@@ -129,6 +141,78 @@ class Database:
             self.max_enrollment = result[4]
             self.subjects = result[5].split(",")
 
+    class DbSubject:
+        TABLE = "subject"
+        name = None
+        state = None
+        enrolled_students = None
+        max_enrollment = None
+        identifier = None
+        course = None
+
+        def __init__(self):
+            cur.execute(
+                f"CREATE TABLE IF NOT EXISTS {self.TABLE} (name, state, identifier, enrolled_students, max_enrollment, course)"
+            )
+
+        # Just for admin. The university has a predefined list of approved students to each course.
+        # TODO create a public funtion
+        def populate(self, course, name, max_enrollment=10):
+            import uuid
+
+            identifier = uuid.uuid5(uuid.NAMESPACE_URL, str(f"{name}{course}")).hex
+            cur.execute(
+                f"""
+                    INSERT INTO {self.TABLE} VALUES
+                        ('{name}', 
+                        'active', 
+                        '{identifier}', 
+                        '', 
+                        {max_enrollment}, 
+                        '{course}')
+                """
+            )
+            con.commit()
+
+        def load(self, subject_identifier):
+            try:
+                result = cur.execute(
+                    f"SELECT * FROM {self.TABLE} WHERE identifier = '{subject_identifier}'"
+                ).fetchone()
+                if not result:
+                    raise NotFoundError()
+
+                self.name = result[0]
+                self.state = result[1]
+                self.identifier = result[2]
+                self.enrolled_students = result[3].split(",")
+                self.max_enrollment = result[4]
+                self.course = result[5]
+            except Exception as e:
+                logging.error(str(e))
+                raise
+
+        def save(self):
+            try:
+                cmd = f"""
+                    UPDATE {self.TABLE}
+                    SET state = '{self.state}',
+                        enrolled_students = '{self.enrolled_students}',
+                        max_enrollment = '{self.max_enrollment}'
+                    WHERE identifier = '{self.identifier}';
+                    """
+                cur.execute(cmd)
+
+                con.commit()
+            except Exception as e:
+                logging.error(str(e))
+                raise
+
     student = DbStudent()
     enrollment = DbEnrollment()
     course = DbCourse()
+    subject = DbSubject()
+
+
+class NotFoundError(Exception):
+    pass

@@ -11,7 +11,7 @@ class SubjectHandler:
 
     def __init__(self, database, subject_identifier=None) -> None:
         self.__database = database
-        self.__identifier = -1
+        self.__identifier = subject_identifier
         if self.__database.subject.identifier:
             self.__identifier = database.subject.identifier
         self.__state = None
@@ -63,27 +63,37 @@ class SubjectHandler:
         return self.__state == self.ACTIVE
 
     def activate(self):
-        if not self.name:
+        if not self.identifier:
             raise NonValidSubject()
 
         if self.state == self.REMOVED:
             raise NonValidSubject()
 
         self.__state = self.ACTIVE
+        self.__save()
+
+        # post condition
+        self.__database.subject.load(self.identifier)
+        assert self.__database.subject.state == self.ACTIVE
         return self.__state
 
     def remove(self):
-        if not self.name:
+        print("xxxxx ", self.state)
+        if not self.state == self.ACTIVE:
             raise NonValidSubject()
+
         self.__state = self.REMOVED
+        self.__save()
+
+        # post condition
+        self.__database.subject.load(self.identifier)
+        assert self.__database.subject.state == self.REMOVED
         return self.__state
 
-    def save(self):
-        self.__database.subject.name = self.name
-        self.__database.subject.identifier = self.identifier
-        self.__database.subject.course = self.__course
+    def __save(self):
         self.__database.subject.enrolled_students = self.__enrolled_students
         self.__database.subject.max_enrollment = self.__max_enrollment
+        self.__database.subject.state = self.__state
         self.__database.subject.save()
 
     def load_from_database(self, subject_identifier):

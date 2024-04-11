@@ -1,5 +1,6 @@
+import logging
 from src.services.enrollment_validator import EnrollmentValidator
-from src.services.course_handler import CourseHandler, NonValidCourse
+from src.services.course_handler import CourseHandler
 from src.services.subject_handler import SubjectHandler
 
 
@@ -72,22 +73,30 @@ class StudentHandler:
         self.__database.student.course = self.__course
         self.__database.student.save()
 
-    def enroll_to_course(self, name):
-        if not self.__is_valid_student(name):
+    def enroll_to_course(self, course_name):
+        if not self.__is_valid_student(course_name):
             raise NonValidStudent()
 
         course = CourseHandler(self.__database)
-        course.load_from_database(name)
+        course.load_from_database(course_name)
 
         enrollment_validator = EnrollmentValidator(self.__database)
         self.__identifier = enrollment_validator.generate_student_identifier(
-            self.name, self.cpf, name
+            self.name, self.cpf, course_name
         )
-        self.__course = name
+        self.__course = course_name
         course.enroll_student(self.identifier)
         self.__state = self.ENROLLED
         self.save()
-        return self.identifier in course.enrolled_students
+
+        # post condition
+        self.__database.student.load(self.identifier)
+        assert self.__database.student.identifier == self.identifier
+        assert self.__database.student.state == self.ENROLLED
+        assert self.__database.student.course == self.__course
+        assert self.identifier in course.enrolled_students
+
+        return True
 
     def take_subject(self, subject_identifier):
         """
@@ -99,12 +108,18 @@ class StudentHandler:
             raise NonValidStudent()
 
         if self.__is_locked():
-            raise NonValidStudent
+            raise NonValidStudent()
 
         subject_handler = SubjectHandler(self.__database)
-        subject_handler.load_from_database(subject_identifier)
+        try:
+            subject_handler.load_from_database(subject_identifier)
+        except Exception as e:
+            logging.error(str(e))
+            raise NonValidSubject()
+
         if subject_handler.course != self.__course:
             raise NonValidSubject()
+
         if not subject_handler.is_available() or not subject_handler.is_active():
             raise NonValidSubject()
 

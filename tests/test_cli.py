@@ -1,5 +1,7 @@
+import pytest
 from src import cli_helper
 from src import mocks
+from src import database as db
 
 
 def test_cancel_course_by_cli():
@@ -28,9 +30,9 @@ def test_enroll_student_to_invalid_course():
     assert cli_helper.enroll_student(database, name, cpf, course_identifier) == False
 
 
-def test_enroll_student_to_course():
+def test_enroll_student_to_course_by_cli():
     name = "any"
     cpf = "123.456.789-10"
     course_identifier = "any"
-    database = mocks.Database()
+    database = db.Database()
     assert cli_helper.enroll_student(database, name, cpf, course_identifier) == True

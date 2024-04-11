@@ -5,6 +5,7 @@ from src.services.student_handler import (
     NonValidSubject,
 )
 from src import mocks
+from src import database as db
 
 
 @pytest.fixture(autouse=True)
@@ -15,7 +16,7 @@ def restart_database():
 
 
 def test_unlock_course():
-    database = mocks.Database()
+    database = db.Database()
     student = StudentHandler(database)
     student.name = "any"
     student.cpf = "123.456.789-10"
@@ -26,7 +27,7 @@ def test_unlock_course():
 
 
 def test_lock_course():
-    database = mocks.Database()
+    database = db.Database()
     student = StudentHandler(database)
     student.name = "any"
     student.cpf = "123.456.789-10"
@@ -37,7 +38,7 @@ def test_lock_course():
 
 
 def test_take_subject_from_course_when_locked_student_return_error():
-    database = mocks.Database()
+    database = db.Database()
     student = StudentHandler(database)
     student.name = "any"
     student.cpf = "123.456.789-10"
@@ -50,11 +51,11 @@ def test_take_subject_from_course_when_locked_student_return_error():
 
 
 def test_take_full_subject_from_course_return_error():
-    database = mocks.Database()
+    database = db.Database()
     student = StudentHandler(database)
     student.name = "any"
     student.cpf = "123.456.789-10"
-    subject = "invalid"
+    subject = "ef15a071407953bd858cfca59ad99056"
     mocks.SUBJECT_MAX_ENROLL = -1
 
     student.enroll_to_course("any")
@@ -63,7 +64,7 @@ def test_take_full_subject_from_course_return_error():
 
 
 def test_take_invalid_subject_from_course_return_error():
-    database = mocks.Database()
+    database = db.Database()
     student = StudentHandler(database)
     student.name = "any"
     student.cpf = "123.456.789-10"
@@ -77,12 +78,12 @@ def test_take_invalid_subject_from_course_return_error():
 
 
 def test_take_subject_from_course():
-    database = mocks.Database()
+    database = db.Database()
     student = StudentHandler(database)
     student.name = "any"
     student.cpf = "123.456.789-10"
     student.enroll_to_course("any")
-    subject_identifier = "any-subject"
+    subject_identifier = "e4c858cd917f518194c9d93c9d13def8"
 
     student.enroll_to_course("any")
     student.take_subject(subject_identifier)
@@ -90,7 +91,7 @@ def test_take_subject_from_course():
 
 
 def test_enroll_invalid_student_to_course_retunr_error():
-    database = mocks.Database()
+    database = db.Database()
     student = StudentHandler(database)
     student.name = "invalid"
     student.cpf = "123.456.789-10"
@@ -99,18 +100,10 @@ def test_enroll_invalid_student_to_course_retunr_error():
         student.enroll_to_course("any")
 
 
-def test_enroll_student_to_course():
-    database = mocks.Database()
+def test_enroll_student_to_course_x():
+    database = db.Database()
     student = StudentHandler(database)
     student.name = "any"
     student.cpf = "123.456.789-10"
 
-    student.enroll_to_course("any")
-
-    # generate using student name, cpf and course
-    assert student.identifier == "290f2113c2e6579c8bb6ec395ea56572"
-
-    assert database.student.identifier == "290f2113c2e6579c8bb6ec395ea56572"
-    assert database.student.state == "enrolled"
-    assert database.student.course == "any"
-    assert database.student.subjects == []
+    assert student.enroll_to_course("any") is True
