@@ -1,10 +1,10 @@
 import pytest
 from src.services.course_handler import CourseHandler, NonValidCourse
-from src import mocks
+from src import database as db
 
 
 def test_enroll_student_to_inactive_course_return_error():
-    database = mocks.Database()
+    database = db.Database()
     course_handler = CourseHandler(database)
     course_handler.name = "adm"
     course_handler.add_subject("any1")
@@ -17,7 +17,7 @@ def test_enroll_student_to_inactive_course_return_error():
 
 
 def test_enroll_student_to_active_course():
-    database = mocks.Database()
+    database = db.Database()
     course_handler = CourseHandler(database)
     course_handler.name = "adm"
     course_handler.add_subject("any1")
@@ -31,7 +31,7 @@ def test_enroll_student_to_active_course():
 
 
 def test_cancel_inactive_course():
-    database = mocks.Database()
+    database = db.Database()
     course_handler = CourseHandler(database)
     course_handler.name = "adm"
     course_handler.add_subject("any1")
@@ -44,7 +44,7 @@ def test_cancel_inactive_course():
 
 
 def test_cancel_active_course():
-    database = mocks.Database()
+    database = db.Database()
     course_handler = CourseHandler(database)
     course_handler.name = "adm"
     course_handler.add_subject("any1")
@@ -57,7 +57,7 @@ def test_cancel_active_course():
 
 
 def test_deactivate_non_active_course_return_error():
-    database = mocks.Database()
+    database = db.Database()
     course_handler = CourseHandler(database)
     with pytest.raises(NonValidCourse):
         course_handler.deactivate()
@@ -66,7 +66,7 @@ def test_deactivate_non_active_course_return_error():
 
 
 def test_deactivate_course():
-    database = mocks.Database()
+    database = db.Database()
     course_handler = CourseHandler(database)
     course_handler.name = "adm"
     course_handler.add_subject("any1")
@@ -79,7 +79,7 @@ def test_deactivate_course():
 
 
 def test_activate_course_without_minimum_subjects_return_error():
-    database = mocks.Database()
+    database = db.Database()
     course_handler = CourseHandler(database)
     course_handler.name = "any"
     with pytest.raises(NonValidCourse):
@@ -88,7 +88,7 @@ def test_activate_course_without_minimum_subjects_return_error():
 
 
 def test_activate_course_without_name_return_error():
-    database = mocks.Database()
+    database = db.Database()
     course_handler = CourseHandler(database)
     with pytest.raises(NonValidCourse):
         course_handler.activate()
@@ -96,7 +96,7 @@ def test_activate_course_without_name_return_error():
 
 
 def test_activate_course():
-    database = mocks.Database()
+    database = db.Database()
     course_handler = CourseHandler(database)
     course_handler.name = "adm"
     course_handler.add_subject("any1")

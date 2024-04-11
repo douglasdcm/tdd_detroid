@@ -1,5 +1,6 @@
 import sqlite3
 import logging
+from src.utils import generate_subject_identifier
 
 # TODO test concurrency
 DATABASE_NAME = ":memory:"
@@ -157,15 +158,13 @@ class Database:
 
         # Just for admin. The university has a predefined list of approved students to each course.
         # TODO create a public funtion
-        def populate(self, course, name, max_enrollment=10):
-            import uuid
-
-            identifier = uuid.uuid5(uuid.NAMESPACE_URL, str(f"{name}{course}")).hex
+        def populate(self, course, name, max_enrollment=10, state="active"):
+            identifier = generate_subject_identifier(course, name)
             cur.execute(
                 f"""
                     INSERT INTO {self.TABLE} VALUES
                         ('{name}', 
-                        'active', 
+                        '{state}', 
                         '{identifier}', 
                         '', 
                         {max_enrollment}, 

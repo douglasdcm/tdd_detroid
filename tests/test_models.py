@@ -2,7 +2,7 @@ from src.services.student_handler import StudentHandler
 from src.services.course_handler import CourseHandler
 from src.services.subject_handler import SubjectHandler
 from src.services.semester_monitor import SemesterHandler
-from src import mocks
+from src import database as db
 
 
 def test_semester_model():
@@ -13,7 +13,7 @@ def test_semester_model():
 
 
 def test_subject_model():
-    database = mocks.Database()
+    database = db.Database()
     subject = SubjectHandler(database)
     subject.name = "any_name"
 
@@ -26,7 +26,7 @@ def test_subject_model():
 
 
 def test_course_model():
-    database = mocks.Database()
+    database = db.Database()
     course_handler = CourseHandler(database)
     course_handler.name = "any_name"
     course_handler.save()
@@ -47,7 +47,7 @@ def test_course_model():
 
 
 def test_student_model():
-    database = mocks.Database()
+    database = db.Database()
     student = StudentHandler(database)
     student.name = "any_name"
     student.cpf = "123.456.789-10"

@@ -4,15 +4,8 @@ from src.services.student_handler import (
     NonValidStudent,
     NonValidSubject,
 )
-from src import mocks
 from src import database as db
-
-
-@pytest.fixture(autouse=True)
-def restart_database():
-    mocks.SUBJECT = "any"
-    mocks.SUBJECT_MAX_ENROLL = 10
-    mocks.COURSE = "any"
+from src.utils import generate_subject_identifier
 
 
 def test_unlock_course():
@@ -55,8 +48,7 @@ def test_take_full_subject_from_course_return_error():
     student = StudentHandler(database)
     student.name = "any"
     student.cpf = "123.456.789-10"
-    subject = "ef15a071407953bd858cfca59ad99056"
-    mocks.SUBJECT_MAX_ENROLL = -1
+    subject = generate_subject_identifier("course1", "subject_full")
 
     student.enroll_to_course("any")
     with pytest.raises(NonValidSubject):
@@ -69,8 +61,6 @@ def test_take_invalid_subject_from_course_return_error():
     student.name = "any"
     student.cpf = "123.456.789-10"
     subject = "invalid"
-    mocks.SUBJECT = "invalid"
-    mocks.COURSE = "other"
 
     student.enroll_to_course("any")
     with pytest.raises(NonValidSubject):

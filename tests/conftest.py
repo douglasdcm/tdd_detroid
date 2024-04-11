@@ -24,4 +24,9 @@ def set_in_memory_database():
     db.subject.populate("any", "any1")  # e4c858cd917f518194c9d93c9d13def8
     db.subject.populate("any", "any2")  # 283631d2292c54879b9aa72e27a1b4ff
     db.subject.populate("any", "any3")  # 0eaaeb1a39ed5d04a62b31cd951f34ce
-    db.subject.populate("any", "any4", 0)  # ef15a071407953bd858cfca59ad99056
+    db.subject.populate(
+        "course1", "subject_full", 0
+    )  # ef15a071407953bd858cfca59ad99056
+    db.subject.populate(
+        "course1", "subject_removed", 0, "removed"
+    )  # ef15a071407953bd858cfca59ad99056

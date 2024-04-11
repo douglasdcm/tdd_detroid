@@ -1,7 +1,4 @@
-import uuid
-import datetime
 import logging
-from src import mocks
 
 
 class SubjectHandler:
@@ -19,10 +16,6 @@ class SubjectHandler:
         self.__course = None
         self.__max_enrollment = 0
         self.__name = None
-        if subject_identifier:
-            # TODO get from database
-            self.__course = mocks.SUBJECT
-            self.__max_enrollment = mocks.SUBJECT_MAX_ENROLL
 
     @property
     def identifier(self):
