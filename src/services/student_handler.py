@@ -1,5 +1,5 @@
 from src.services.enrollment_validator import EnrollmentValidator
-from src.services.course_handler import CourseHandler
+from src.services.course_handler import CourseHandler, NonValidCourse
 from src.services.subject_handler import SubjectHandler
 
 
@@ -58,7 +58,9 @@ class StudentHandler:
         course = self.__course
         if course_identifier:
             course = course_identifier
-        return EnrollmentValidator().validate_student(self.name, self.cpf, course)
+        return EnrollmentValidator(self.__database).validate_student(
+            self.name, self.cpf, course
+        )
 
     def save(self):
         self.__database.student.name = self.name
@@ -70,20 +72,22 @@ class StudentHandler:
         self.__database.student.course = self.__course
         self.__database.student.save()
 
-    def enroll_to_course(self, course_identifier):
-        is_valid_student = self.__is_valid_student(course_identifier)
-        if is_valid_student:
-            enrollment_validator = EnrollmentValidator()
-            self.__identifier = enrollment_validator.generate_student_identifier(
-                self.name, self.cpf, course_identifier
-            )
-            self.__course = course_identifier
-            course = CourseHandler(course_identifier)
-            course.enroll_student(self.identifier)
-            self.__state = self.ENROLLED
-            self.save()
-            return self.identifier in course.enrolled_students
-        raise NonValidStudent()
+    def enroll_to_course(self, name):
+        if not self.__is_valid_student(name):
+            raise NonValidStudent()
+
+        course = CourseHandler(self.__database)
+        course.load_from_database(name)
+
+        enrollment_validator = EnrollmentValidator(self.__database)
+        self.__identifier = enrollment_validator.generate_student_identifier(
+            self.name, self.cpf, name
+        )
+        self.__course = name
+        course.enroll_student(self.identifier)
+        self.__state = self.ENROLLED
+        self.save()
+        return self.identifier in course.enrolled_students
 
     def take_subject(self, subject_identifier):
         is_valid_student = self.__is_valid_student()

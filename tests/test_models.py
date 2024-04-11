@@ -25,15 +25,24 @@ def test_subject_model():
 
 
 def test_course_model():
-    course = CourseHandler()
-    course.name = "any_name"
+    database = mocks.Database()
+    course_handler = CourseHandler(database)
+    course_handler.name = "any_name"
+    course_handler.save()
 
-    assert course.name == "any_name"
-    assert course.identifier is not None
-    assert course.state == "inactive"
-    assert course.enrolled_students == []
-    assert course.max_enrollment == 0
-    assert course.subjects == []
+    assert course_handler.name == "any_name"
+    assert course_handler.identifier is not None
+    assert course_handler.state == "inactive"
+    assert course_handler.enrolled_students == []
+    assert course_handler.max_enrollment == 0
+    assert course_handler.subjects == []
+
+    assert database.course.name == "any_name"
+    assert database.course.identifier is not None
+    assert database.course.state == "inactive"
+    assert database.course.enrolled_students == []
+    assert database.course.max_enrollment == 0
+    assert database.course.subjects == []
 
 
 def test_student_model():
