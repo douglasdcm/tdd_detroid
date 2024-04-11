@@ -90,6 +90,10 @@ class StudentHandler:
         return self.identifier in course.enrolled_students
 
     def take_subject(self, subject_identifier):
+        """
+        subject_identifier (str): The unique identifier of the subject. It follows the pattern
+        <course name>-<subject name>
+        """
         is_valid_student = self.__is_valid_student()
         if not is_valid_student:
             raise NonValidStudent()
@@ -97,10 +101,11 @@ class StudentHandler:
         if self.__is_locked():
             raise NonValidStudent
 
-        subject_handler = SubjectHandler(subject_identifier)
+        subject_handler = SubjectHandler(self.__database)
+        subject_handler.load_from_database(subject_identifier)
         if subject_handler.course != self.__course:
             raise NonValidSubject()
-        if not subject_handler.is_available():
+        if not subject_handler.is_available() or not subject_handler.is_active():
             raise NonValidSubject()
 
         return self.subjects.append(subject_identifier)

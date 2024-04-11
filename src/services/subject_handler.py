@@ -1,22 +1,24 @@
 import uuid
 import datetime
+import logging
 from src import mocks
 
 
 class SubjectHandler:
 
-    def __init__(self, subject_identifier=None) -> None:
-        # TODO get from database
-        if subject_identifier:
-            self.__identifier = uuid.uuid5(uuid.NAMESPACE_URL, subject_identifier).hex
-        else:
-            self.__identifier = uuid.uuid5(
-                uuid.NAMESPACE_URL, str(datetime.datetime.now())
-            )
+    REMOVED = "removed"
+    ACTIVE = "active"
+
+    def __init__(self, database, subject_identifier=None) -> None:
+        self.__database = database
+        self.__identifier = -1
+        if self.__database.subject.identifier:
+            self.__identifier = database.subject.identifier
         self.__state = None
         self.__enrolled_students = []
         self.__course = None
         self.__max_enrollment = 0
+        self.__name = None
         if subject_identifier:
             # TODO get from database
             self.__course = mocks.SUBJECT
@@ -56,3 +58,49 @@ class SubjectHandler:
 
     def is_available(self):
         return len(self.enrolled_students) < self.__max_enrollment
+
+    def is_active(self):
+        return self.__state == self.ACTIVE
+
+    def activate(self):
+        if not self.name:
+            raise NonValidSubject()
+
+        if self.state == self.REMOVED:
+            raise NonValidSubject()
+
+        self.__state = self.ACTIVE
+        return self.__state
+
+    def remove(self):
+        if not self.name:
+            raise NonValidSubject()
+        self.__state = self.REMOVED
+        return self.__state
+
+    def save(self):
+        self.__database.subject.name = self.name
+        self.__database.subject.identifier = self.identifier
+        self.__database.subject.course = self.__course
+        self.__database.subject.enrolled_students = self.__enrolled_students
+        self.__database.subject.max_enrollment = self.__max_enrollment
+        self.__database.subject.save()
+
+    def load_from_database(self, subject_identifier):
+        try:
+            self.__database.subject.load(subject_identifier)
+
+            self.name = self.__database.subject.name
+            self.__state = self.__database.subject.state
+            self.__identifier = self.__database.subject.identifier
+            self.__enrolled_students = self.__database.subject.enrolled_students
+            self.max_enrollment = self.__database.subject.max_enrollment
+            self.__course = self.__database.subject.course
+
+        except Exception as e:
+            logging.error(str(e))
+            raise NonValidSubject("Subject not found.")
+
+
+class NonValidSubject(Exception):
+    pass

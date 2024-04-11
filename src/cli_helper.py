@@ -5,10 +5,41 @@ from src.services.course_handler import CourseHandler, NonValidCourse
 UNEXPECTED_ERROR = "Unexpected error. Consult the system adminstrator."
 
 
+def cancel_course(database, name):
+    try:
+        course_handler = CourseHandler(database)
+        course_handler.load_from_database(name)
+        course_handler.cancel()
+        print(f"Course cancelled.")
+        return True
+    except NonValidCourse as e:
+        logging.error(str(e))
+        print(f"Course '{name}' is not valid.")
+    except Exception as e:
+        logging.error(str(e))
+        print(UNEXPECTED_ERROR)
+    return False
+
+
+def deactivate_course(database, name):
+    try:
+        course_handler = CourseHandler(database)
+        course_handler.load_from_database(name)
+        course_handler.deactivate()
+        print(f"Course deactivated.")
+        return True
+    except NonValidCourse as e:
+        logging.error(str(e))
+        print(f"Course '{name}' is not valid.")
+    except Exception as e:
+        logging.error(str(e))
+        print(UNEXPECTED_ERROR)
+    return False
+
+
 def activate_course(database, name):
     try:
         course_handler = CourseHandler(database)
-        course_handler.name = name
         course_handler.load_from_database(name)
         course_handler.activate()
         print(f"Course activated.")

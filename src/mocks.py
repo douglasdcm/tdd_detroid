@@ -1,5 +1,6 @@
 SUBJECT = "any"
 SUBJECT_MAX_ENROLL = 10
+COURSE = "any"
 
 
 class Database:
@@ -45,6 +46,26 @@ class Database:
         def select(self, course_identifier):
             return "anything not None"
 
+    class DbSubject:
+        name = None
+        state = None
+        enrolled_students = None
+        max_enrollment = None
+        identifier = None
+        course = None
+
+        def load(self, course_identifier):
+            self.name = SUBJECT
+            self.state = "active"
+            self.identifier = None
+            self.enrolled_students = []
+            self.max_enrollment = SUBJECT_MAX_ENROLL
+            self.course = COURSE
+
+        def save(self):
+            pass
+
     student = DbStudent()
     enrollment = DbEnrollment()
     course = DbCourse()
+    subject = DbSubject()

@@ -19,6 +19,20 @@ def cli():
 
 @click.command()
 @click.option("--name", prompt="Course name", help="Name of the course.")
+def cancel_course(name):
+    database = Database()
+    cli_helper.cancel_course(database, name)
+
+
+@click.command()
+@click.option("--name", prompt="Course name", help="Name of the course.")
+def deactivate_course(name):
+    database = Database()
+    cli_helper.deactivate_course(database, name)
+
+
+@click.command()
+@click.option("--name", prompt="Course name", help="Name of the course.")
 def activate_course(name):
     database = Database()
     cli_helper.activate_course(database, name)
@@ -41,6 +55,8 @@ def enroll_student(name, cpf, course_identifier):
 
 cli.add_command(enroll_student)
 cli.add_command(activate_course)
+cli.add_command(deactivate_course)
+cli.add_command(cancel_course)
 
 if __name__ == "__main__":
     cli()

@@ -11,6 +11,7 @@ from src import mocks
 def restart_database():
     mocks.SUBJECT = "any"
     mocks.SUBJECT_MAX_ENROLL = 10
+    mocks.COURSE = "any"
 
 
 def test_unlock_course():
@@ -68,6 +69,7 @@ def test_take_invalid_subject_from_course_return_error():
     student.cpf = "123.456.789-10"
     subject = "invalid"
     mocks.SUBJECT = "invalid"
+    mocks.COURSE = "other"
 
     student.enroll_to_course("any")
     with pytest.raises(NonValidSubject):
@@ -79,11 +81,12 @@ def test_take_subject_from_course():
     student = StudentHandler(database)
     student.name = "any"
     student.cpf = "123.456.789-10"
-    subject = "any"
+    student.enroll_to_course("any")
+    subject_identifier = "any-subject"
 
     student.enroll_to_course("any")
-    student.take_subject(subject)
-    assert subject in student.subjects
+    student.take_subject(subject_identifier)
+    assert subject_identifier in student.subjects
 
 
 def test_enroll_invalid_student_to_course_retunr_error():

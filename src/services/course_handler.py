@@ -1,5 +1,4 @@
 import uuid
-import datetime
 import logging
 
 
@@ -8,8 +7,8 @@ class CourseHandler:
     INACTIVE = "inactive"
     CANCELLED = "cancelled"
 
-    def __init__(self, database, identifier=-1) -> None:
-        self.__identifier = identifier
+    def __init__(self, database) -> None:
+        self.__identifier = -1
         self.__name = None
         self.__state = self.INACTIVE  # TODO use enum
         self.__enrolled_students = []

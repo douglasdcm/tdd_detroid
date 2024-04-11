@@ -13,8 +13,10 @@ def test_semester_model():
 
 
 def test_subject_model():
-    subject = SubjectHandler()
+    database = mocks.Database()
+    subject = SubjectHandler(database)
     subject.name = "any_name"
+    subject.save()
 
     assert subject.name == "any_name"
     assert subject.identifier is not None
@@ -22,6 +24,13 @@ def test_subject_model():
     assert subject.enrolled_students == []
     assert subject.max_enrollment == 0
     assert subject.course == None
+
+    assert database.subject.name == "any_name"
+    assert database.subject.identifier is not None
+    assert database.subject.state == None
+    assert database.subject.enrolled_students == []
+    assert database.subject.max_enrollment == 0
+    assert database.subject.course == None
 
 
 def test_course_model():

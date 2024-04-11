@@ -2,7 +2,19 @@ from src import cli_helper
 from src import mocks
 
 
-def test_activate_course():
+def test_cancel_course_by_cli():
+    name = "any"
+    database = mocks.Database()
+    assert cli_helper.cancel_course(database, name) == True
+
+
+def test_deactivate_course_by_cli():
+    name = "act"
+    database = mocks.Database()
+    assert cli_helper.deactivate_course(database, name) == True
+
+
+def test_activate_course_cli():
     name = "deact"
     database = mocks.Database()
     assert cli_helper.activate_course(database, name) == True
