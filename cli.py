@@ -6,9 +6,22 @@ from src.database import Database
 logging.basicConfig(
     filename="cli.log",
     datefmt="%Y-%m-%d %H:%M:%S",
-    format="%(asctime)s - %(levelname)s: %(message)s",
+    format="%(asctime)s - %(levelname)s: [%(filename)s:%(lineno)s - %(funcName)20s() ] %(message)s",
     filemode="a",
 )
+
+
+@click.group()
+def cli():
+    # do nothing #
+    pass
+
+
+@click.command()
+@click.option("--name", prompt="Course name", help="Name of the course.")
+def activate_course(name):
+    database = Database()
+    cli_helper.activate_course(database, name)
 
 
 @click.command()
@@ -26,5 +39,8 @@ def enroll_student(name, cpf, course_identifier):
     cli_helper.enroll_student(database, name, cpf, course_identifier)
 
 
+cli.add_command(enroll_student)
+cli.add_command(activate_course)
+
 if __name__ == "__main__":
-    enroll_student()
+    cli()

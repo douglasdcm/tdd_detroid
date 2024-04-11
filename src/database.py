@@ -1,4 +1,5 @@
 import sqlite3
+import logging
 
 # TODO test concurrency
 DATABASE_NAME = "university.db"
@@ -92,26 +93,30 @@ class Database:
                         ('{name}', 
                         'active', 
                         '{identifier}', 
-                        '[]', 
+                        '', 
                         '10', 
-                        '[]')
+                        'any1,any2,any3')
                 """
             )
             con.commit()
 
         def save(self):
-            cur.execute(
-                f"""
-                    INSERT INTO {self.TABLE} VALUES
-                        ('{self.name}', 
-                        '{self.state}', 
-                        '{self.identifier}', 
-                         {self.enrolled_students}, 
-                        '{self.max_enrollment}', 
-                        '{self.subjects}')
-                """
-            )
-            con.commit()
+            try:
+                cur.execute(
+                    f"""
+                        INSERT INTO {self.TABLE} VALUES
+                            ('{self.name}', 
+                            '{self.state}', 
+                            '{self.identifier}', 
+                            '{self.enrolled_students}', 
+                            '{self.max_enrollment}', 
+                            '{self.subjects}')
+                    """
+                )
+                con.commit()
+            except Exception as e:
+                logging.error(str(e))
+                raise
 
         def load_from_database(self, name):
             result = cur.execute(

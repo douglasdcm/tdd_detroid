@@ -2,12 +2,10 @@ from src import cli_helper
 from src import mocks
 
 
-def test_enroll_student_to_invalid_course():
-    name = "any"
-    cpf = "123.456.789-10"
-    course_identifier = "invalid"
+def test_activate_course():
+    name = "deact"
     database = mocks.Database()
-    assert cli_helper.enroll_student(database, name, cpf, course_identifier) == False
+    assert cli_helper.activate_course(database, name) == True
 
 
 def test_enroll_student_to_invalid_course():

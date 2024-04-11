@@ -27,7 +27,7 @@ def test_enroll_student_to_active_course():
 
     assert course_handler.enroll_student("any") == True
 
-    assert database.course.enrolled_students == ["any"]
+    assert database.course.enrolled_students == "any"
 
 
 def test_cancel_inactive_course():

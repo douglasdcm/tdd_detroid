@@ -40,9 +40,9 @@ def test_course_model():
     assert database.course.name == "any_name"
     assert database.course.identifier is not None
     assert database.course.state == "inactive"
-    assert database.course.enrolled_students == []
+    assert database.course.enrolled_students == ""
     assert database.course.max_enrollment == 0
-    assert database.course.subjects == []
+    assert database.course.subjects == ""
 
 
 def test_student_model():

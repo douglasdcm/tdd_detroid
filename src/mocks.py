@@ -40,7 +40,7 @@ class Database:
             self.identifier = None
             self.enrolled_students = []
             self.max_enrollment = None
-            self.subjects = []
+            self.subjects = ["any1", "any2", "any3"]
 
         def select(self, course_identifier):
             return "anything not None"

@@ -8,12 +8,8 @@ class CourseHandler:
     INACTIVE = "inactive"
     CANCELLED = "cancelled"
 
-    def __init__(self, database, identifier=None) -> None:
-        # TODO check necessity of this conditions. It is weird.
-        if not identifier:
-            self.__identifier = uuid.uuid5(
-                uuid.NAMESPACE_URL, str(datetime.datetime.now())
-            )
+    def __init__(self, database, identifier=-1) -> None:
+        self.__identifier = identifier
         self.__name = None
         self.__state = self.INACTIVE  # TODO use enum
         self.__enrolled_students = []
@@ -57,9 +53,9 @@ class CourseHandler:
         self.__database.course.name = self.name
         self.__database.course.state = self.state
         self.__database.course.identifier = self.identifier
-        self.__database.course.enrolled_students = self.enrolled_students
+        self.__database.course.enrolled_students = ",".join(self.enrolled_students)
         self.__database.course.max_enrollment = self.max_enrollment
-        self.__database.course.subjects = self.subjects
+        self.__database.course.subjects = ",".join(self.subjects)
         self.__database.course.save()
 
     def load_from_database(self, name):
@@ -81,10 +77,12 @@ class CourseHandler:
         if not self.state == self.ACTIVE:
             raise NonValidCourse("Course is not active.")
         self.__enrolled_students.append(student_identifier)
+        self.save()
         return True
 
     def add_subject(self, subject):
         self.subjects.append(subject)
+        self.save()
 
     def cancel(self):
         if not self.name:
@@ -112,7 +110,7 @@ class CourseHandler:
                 f"Need '{MINIMUM}' subjects. Set '{len(self.subjects)}'"
             )
 
-        self.__identifier = uuid.uuid5(uuid.NAMESPACE_URL, f"{self.name}")
+        self.__identifier = uuid.uuid5(uuid.NAMESPACE_URL, f"{self.name}").hex
         self.__state = self.ACTIVE
         self.save()
         return self.__state
