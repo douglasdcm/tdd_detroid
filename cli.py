@@ -3,6 +3,7 @@ import click
 from src import cli_helper
 from src.database import Database
 
+
 logging.basicConfig(
     filename="cli.log",
     datefmt="%Y-%m-%d %H:%M:%S",

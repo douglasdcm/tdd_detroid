@@ -1,8 +1,9 @@
 import sqlite3
 import logging
-from src.utils import generate_subject_identifier
+from src import utils
 
 # TODO test concurrency
+DATABASE_NAME = "university.db"
 DATABASE_NAME = ":memory:"
 con = sqlite3.connect(DATABASE_NAME)
 cur = con.cursor()
@@ -60,11 +61,9 @@ class Database:
         # Just for admin. The university has a predefined list of approved students to each course.
         # TODO create a public funtion
         def populate(self, name, cpf, course_identifier):
-            import uuid
-
-            student_identifier = uuid.uuid5(
-                uuid.NAMESPACE_URL, str(f"{name}{cpf}{course_identifier}")
-            ).hex
+            student_identifier = utils.generate_student_identifier(
+                name, cpf, course_identifier
+            )
             cur.execute(
                 f"""
                     INSERT INTO {self.TABLE} VALUES ('{student_identifier}')
@@ -97,9 +96,7 @@ class Database:
         # Just for admin. Necessary because there is not a user story to create courses
         # TODO create a public funtion
         def populate(self, name):
-            import uuid
-
-            identifier = uuid.uuid5(uuid.NAMESPACE_URL, str(f"{name}")).hex
+            identifier = utils.generate_course_identifier(name)
             cur.execute(
                 f"""
                     INSERT INTO {self.TABLE} VALUES
@@ -159,7 +156,7 @@ class Database:
         # Just for admin. The university has a predefined list of approved students to each course.
         # TODO create a public funtion
         def populate(self, course, name, max_enrollment=10, state="active"):
-            identifier = generate_subject_identifier(course, name)
+            identifier = utils.generate_subject_identifier(course, name)
             cur.execute(
                 f"""
                     INSERT INTO {self.TABLE} VALUES

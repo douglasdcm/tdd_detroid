@@ -1,12 +1,11 @@
 import pytest
 from src import database
-from src.database import Database
 
 
 @pytest.fixture(autouse=True, scope="session")
 def set_in_memory_database():
-    database.DATABASE_NAME = ":memory:"
-    db = Database()
+    database.db_name = ":memory:"
+    db = database.Database()
     # TODO need to check if the courses are available
     db.enrollment.populate("douglas", "098.765.432.12", "adm")
     db.enrollment.populate("maria", "028.745.462.18", "mat")

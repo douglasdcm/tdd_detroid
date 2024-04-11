@@ -71,7 +71,6 @@ class SubjectHandler:
         return self.__state
 
     def remove(self):
-        print("xxxxx ", self.state)
         if not self.state == self.ACTIVE:
             raise NonValidSubject()
 
