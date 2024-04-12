@@ -6,11 +6,9 @@ class SubjectHandler:
     REMOVED = "removed"
     ACTIVE = "active"
 
-    def __init__(self, database, subject_identifier=None) -> None:
+    def __init__(self, database, subject_identifier=-1) -> None:
         self.__database = database
         self.__identifier = subject_identifier
-        if self.__database.subject.identifier:
-            self.__identifier = database.subject.identifier
         self.__state = None
         self.__enrolled_students = []
         self.__course = None
@@ -83,7 +81,7 @@ class SubjectHandler:
         return self.__state
 
     def __save(self):
-        self.__database.subject.enrolled_students = self.__enrolled_students
+        self.__database.subject.enrolled_students = ",".join(self.__enrolled_students)
         self.__database.subject.max_enrollment = self.__max_enrollment
         self.__database.subject.state = self.__state
         self.__database.subject.save()
@@ -92,11 +90,11 @@ class SubjectHandler:
         try:
             self.__database.subject.load(subject_identifier)
 
-            self.name = self.__database.subject.name
+            self.__name = self.__database.subject.name
             self.__state = self.__database.subject.state
             self.__identifier = self.__database.subject.identifier
             self.__enrolled_students = self.__database.subject.enrolled_students
-            self.max_enrollment = self.__database.subject.max_enrollment
+            self.__max_enrollment = self.__database.subject.max_enrollment
             self.__course = self.__database.subject.course
 
         except Exception as e:

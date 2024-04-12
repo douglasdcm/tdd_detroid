@@ -14,6 +14,8 @@ class StudentHandler:
         self.__gpa = 0
         self.__subjects = []
         self.__course = None
+        self.__name = None
+        self.__cpf = None
         self.__database = database
 
     @property
@@ -63,13 +65,13 @@ class StudentHandler:
             self.name, self.cpf, course
         )
 
-    def save(self):
+    def __save(self):
         self.__database.student.name = self.name
         self.__database.student.state = self.state
         self.__database.student.cpf = self.cpf
         self.__database.student.identifier = self.identifier
         self.__database.student.gpa = self.gpa
-        self.__database.student.subjects = self.subjects
+        self.__database.student.subjects = ",".join(self.subjects)
         self.__database.student.course = self.__course
         self.__database.student.save()
 
@@ -87,7 +89,7 @@ class StudentHandler:
         self.__course = course_name
         course.enroll_student(self.identifier)
         self.__state = self.ENROLLED
-        self.save()
+        self.__save()
 
         # post condition
         self.__database.student.load(self.identifier)
@@ -123,21 +125,45 @@ class StudentHandler:
         if not subject_handler.is_available() or not subject_handler.is_active():
             raise NonValidSubject()
 
-        return self.subjects.append(subject_identifier)
+        self.subjects.append(subject_identifier)
+        self.__save()
+
+        # post condition
+        subject_handler.load_from_database(subject_identifier)
+        assert subject_identifier in self.subjects
+
+        return True
 
     def unlock_course(self):
         if self.__is_valid_student():
             self.__state = None
-            self.save()
+            self.__save()
             return self.state
         raise NonValidStudent()
 
     def lock_course(self):
         if self.__is_valid_student():
             self.__state = self.LOCKED
-            self.save()
+            self.__save()
             return self.state
         raise NonValidStudent()
+
+    def load_from_database(self, student_identifier):
+        try:
+            self.__database.student.load(student_identifier)
+
+            self.__name = self.__database.student.name
+            self.__state = self.__database.student.state
+            self.__cpf = self.__database.student.cpf
+            self.__identifier = self.__database.student.identifier
+            self.__gpa = self.__database.student.gpa
+            self.__subjects = self.__database.student.subjects
+            self.__course = self.__database.student.course
+
+        except Exception as e:
+            print("exxxxx ", str(e))
+            logging.error(str(e))
+            raise NonValidStudent("Student not found.")
 
 
 class NonValidStudent(Exception):

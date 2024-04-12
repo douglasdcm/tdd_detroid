@@ -5,6 +5,14 @@ This project aims to practice "code smells" related to unit tests using an appli
 The code will be developed using the TDD technique in the Detroit style, hence the name of the repository.
 The application simulates the control of grades for university students.
 
+# Setup and Test
+```
+python3.11 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+pytest --random-order
+```
+
 # Installation
 ```
 # create database

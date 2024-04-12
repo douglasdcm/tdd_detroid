@@ -14,15 +14,15 @@ def test_semester_model():
 
 def test_subject_model():
     database = db.Database()
-    subject = SubjectHandler(database)
-    subject.name = "any_name"
+    subject_handler = SubjectHandler(database)
+    subject_handler.name = "any_name"
 
-    assert subject.name == "any_name"
-    assert subject.identifier is None
-    assert subject.state == None
-    assert subject.enrolled_students == []
-    assert subject.max_enrollment == 0
-    assert subject.course == None
+    assert subject_handler.name == "any_name"
+    assert subject_handler.identifier is -1
+    assert subject_handler.state == None
+    assert subject_handler.enrolled_students == []
+    assert subject_handler.max_enrollment == 0
+    assert subject_handler.course == None
 
 
 def test_course_model():
@@ -51,7 +51,6 @@ def test_student_model():
     student = StudentHandler(database)
     student.name = "any_name"
     student.cpf = "123.456.789-10"
-    student.save()
 
     assert student.name == "any_name"
     assert student.cpf == "123.456.789-10"
@@ -59,10 +58,3 @@ def test_student_model():
     assert student.state == None
     assert student.gpa == 0
     assert student.subjects == []
-
-    assert database.student.name == "any_name"
-    assert database.student.cpf == "123.456.789-10"
-    assert database.student.identifier is None
-    assert database.student.state == None
-    assert database.student.gpa == 0
-    assert database.student.subjects == []

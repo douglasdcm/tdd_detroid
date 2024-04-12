@@ -4,13 +4,11 @@ from src.services.student_handler import (
     NonValidStudent,
     NonValidSubject,
 )
-from src import database as db
 from src.utils import generate_subject_identifier
 
 
-def test_unlock_course():
-    database = db.Database()
-    student = StudentHandler(database)
+def test_unlock_course(set_in_memory_database):
+    student = StudentHandler(set_in_memory_database)
     student.name = "any"
     student.cpf = "123.456.789-10"
     student.enroll_to_course("any")
@@ -19,8 +17,8 @@ def test_unlock_course():
     assert student.state == None
 
 
-def test_lock_course():
-    database = db.Database()
+def test_lock_course(set_in_memory_database):
+    database = set_in_memory_database
     student = StudentHandler(database)
     student.name = "any"
     student.cpf = "123.456.789-10"
@@ -30,9 +28,10 @@ def test_lock_course():
     assert database.student.state == "locked"
 
 
-def test_take_subject_from_course_when_locked_student_return_error():
-    database = db.Database()
-    student = StudentHandler(database)
+def test_take_subject_from_course_when_locked_student_return_error(
+    set_in_memory_database,
+):
+    student = StudentHandler(set_in_memory_database)
     student.name = "any"
     student.cpf = "123.456.789-10"
     subject = "any"
@@ -43,9 +42,8 @@ def test_take_subject_from_course_when_locked_student_return_error():
         student.take_subject(subject)
 
 
-def test_take_full_subject_from_course_return_error():
-    database = db.Database()
-    student = StudentHandler(database)
+def test_take_full_subject_from_course_return_error(set_in_memory_database):
+    student = StudentHandler(set_in_memory_database)
     student.name = "any"
     student.cpf = "123.456.789-10"
     subject = generate_subject_identifier("course1", "subject_full")
@@ -55,9 +53,8 @@ def test_take_full_subject_from_course_return_error():
         student.take_subject(subject)
 
 
-def test_take_invalid_subject_from_course_return_error():
-    database = db.Database()
-    student = StudentHandler(database)
+def test_take_invalid_subject_from_course_return_error(set_in_memory_database):
+    student = StudentHandler(set_in_memory_database)
     student.name = "any"
     student.cpf = "123.456.789-10"
     subject = "invalid"
@@ -67,22 +64,20 @@ def test_take_invalid_subject_from_course_return_error():
         student.take_subject(subject)
 
 
-def test_take_subject_from_course():
-    database = db.Database()
-    student = StudentHandler(database)
+def test_take_subject_from_course(set_in_memory_database):
+    student = StudentHandler(set_in_memory_database)
     student.name = "any"
     student.cpf = "123.456.789-10"
+    course = "any"
     student.enroll_to_course("any")
-    subject_identifier = "e4c858cd917f518194c9d93c9d13def8"
+    subject_identifier = generate_subject_identifier(course, "any1")
 
-    student.enroll_to_course("any")
-    student.take_subject(subject_identifier)
-    assert subject_identifier in student.subjects
+    student.enroll_to_course(course)
+    assert student.take_subject(subject_identifier) is True
 
 
-def test_enroll_invalid_student_to_course_retunr_error():
-    database = db.Database()
-    student = StudentHandler(database)
+def test_enroll_invalid_student_to_course_retunr_error(set_in_memory_database):
+    student = StudentHandler(set_in_memory_database)
     student.name = "invalid"
     student.cpf = "123.456.789-10"
 
@@ -90,9 +85,8 @@ def test_enroll_invalid_student_to_course_retunr_error():
         student.enroll_to_course("any")
 
 
-def test_enroll_student_to_course_x():
-    database = db.Database()
-    student = StudentHandler(database)
+def test_enroll_student_to_course_x(set_in_memory_database):
+    student = StudentHandler(set_in_memory_database)
     student.name = "any"
     student.cpf = "123.456.789-10"
 

@@ -1,36 +1,36 @@
 from src import cli_helper
-from src import database as db
 
 
-def test_cancel_course_by_cli():
+def test_cancel_course_by_cli(set_in_memory_database):
     name = "any"
-    database = db.Database()
-    assert cli_helper.cancel_course(database, name) == True
+    assert cli_helper.cancel_course(set_in_memory_database, name) == True
 
 
-def test_deactivate_course_by_cli():
+def test_deactivate_course_by_cli(set_in_memory_database):
     name = "act"
-    database = db.Database()
-    assert cli_helper.deactivate_course(database, name) == True
+    assert cli_helper.deactivate_course(set_in_memory_database, name) == True
 
 
-def test_activate_course_cli():
+def test_activate_course_cli(set_in_memory_database):
     name = "deact"
-    database = db.Database()
-    assert cli_helper.activate_course(database, name) == True
+    assert cli_helper.activate_course(set_in_memory_database, name) == True
 
 
-def test_enroll_student_to_invalid_course():
+def test_enroll_student_to_invalid_course(set_in_memory_database):
     name = "any"
     cpf = "123.456.789-10"
     course_identifier = "invalid"
-    database = db.Database()
-    assert cli_helper.enroll_student(database, name, cpf, course_identifier) == False
+    assert (
+        cli_helper.enroll_student(set_in_memory_database, name, cpf, course_identifier)
+        == False
+    )
 
 
-def test_enroll_student_to_course_by_cli():
+def test_enroll_student_to_course_by_cli(set_in_memory_database):
     name = "any"
     cpf = "123.456.789-10"
     course_identifier = "any"
-    database = db.Database()
-    assert cli_helper.enroll_student(database, name, cpf, course_identifier) == True
+    assert (
+        cli_helper.enroll_student(set_in_memory_database, name, cpf, course_identifier)
+        == True
+    )
