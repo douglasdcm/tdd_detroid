@@ -61,7 +61,7 @@ class SubjectHandler:
             raise NonValidSubject()
 
         self.__state = self.ACTIVE
-        self.__save()
+        self.save()
 
         # post condition
         self.__database.subject.load(self.identifier)
@@ -73,14 +73,14 @@ class SubjectHandler:
             raise NonValidSubject()
 
         self.__state = self.REMOVED
-        self.__save()
+        self.save()
 
         # post condition
         self.__database.subject.load(self.identifier)
         assert self.__database.subject.state == self.REMOVED
         return self.__state
 
-    def __save(self):
+    def save(self):
         self.__database.subject.enrolled_students = ",".join(self.__enrolled_students)
         self.__database.subject.max_enrollment = self.__max_enrollment
         self.__database.subject.state = self.__state

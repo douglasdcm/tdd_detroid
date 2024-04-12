@@ -6,9 +6,6 @@ from src import utils
 # TODO use inmemory just for tests
 DATABASE_NAME = "university.db"
 DATABASE_NAME = ":memory:"
-# con = sqlite3.connect(DATABASE_NAME)
-# cur = con.cursor()
-# print("conxxx ", con)
 
 
 class Database:
@@ -116,8 +113,8 @@ class Database:
         subjects = None
 
         def __init__(self, con, cur):
-            self.con = sqlite3.connect(DATABASE_NAME)
-            self.cur = self.con.cursor()
+            self.con = con
+            self.cur = cur
             self.cur.execute(
                 f"CREATE TABLE IF NOT EXISTS {self.TABLE} (name, state, identifier, enrolled_students, max_enrollment, subjects)"
             )
@@ -235,6 +232,52 @@ class Database:
                 logging.error(str(e))
                 raise
 
+    class DbGradeCalculator:
+        TABLE = "grade_calculator"
+        subject_identifier = None
+        student_identifier = None
+        grade = None
+
+        def __init__(self, con, cur):
+            self.con = con
+            self.cur = cur
+            cur.execute(
+                f"CREATE TABLE IF NOT EXISTS {self.TABLE} (student_identifier, subject_identifier, grade)"
+            )
+
+        def load(self, student_identifier, subject_identifier):
+            try:
+                result = self.cur.execute(
+                    f"""SELECT * FROM {self.TABLE}
+                        WHERE subject_identifier = '{subject_identifier}'
+                        AND student_identifier = '{student_identifier}'
+                    """
+                ).fetchone()
+                if not result:
+                    raise NotFoundError()
+
+                self.student_identifier = result[0]
+                self.subject_identifier = result[1]
+                self.grade = result[2]
+            except Exception as e:
+                logging.error(str(e))
+                raise
+
+        def add(self):
+            try:
+                cmd = f"""
+                    INSERT INTO {self.TABLE} VALUES
+                        ('{self.student_identifier}', 
+                        '{self.subject_identifier}', 
+                        {self.grade})
+                """
+                self.cur.execute(cmd)
+
+                self.con.commit()
+            except Exception as e:
+                logging.error(str(e))
+                raise
+
     def __init__(self) -> None:
         con = sqlite3.connect(DATABASE_NAME)
         cur = con.cursor()
@@ -242,6 +285,7 @@ class Database:
         self.enrollment = self.DbEnrollment(con, cur)
         self.course = self.DbCourse(con, cur)
         self.subject = self.DbSubject(con, cur)
+        self.grade_calculator = self.DbGradeCalculator(con, cur)
 
 
 class NotFoundError(Exception):

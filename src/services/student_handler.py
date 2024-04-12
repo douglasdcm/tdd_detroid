@@ -2,6 +2,7 @@ import logging
 from src.services.enrollment_validator import EnrollmentValidator
 from src.services.course_handler import CourseHandler
 from src.services.subject_handler import SubjectHandler
+from src.services.grade_calculator import GradeCalculator
 
 
 class StudentHandler:
@@ -128,9 +129,23 @@ class StudentHandler:
         self.subjects.append(subject_identifier)
         self.__save()
 
+        subject_handler.enrolled_students.append(self.identifier)
+        subject_handler.save()
+
+        grade_calculator = GradeCalculator(self.__database)
+        grade_calculator.add(self.identifier, subject_identifier, grade=0)
+
         # post condition
         subject_handler.load_from_database(subject_identifier)
+        assert self.identifier in subject_handler.enrolled_students
+
+        self.load_from_database(self.identifier)
         assert subject_identifier in self.subjects
+
+        grade_calculator.load_from_database(self.identifier, subject_identifier)
+        assert self.identifier in grade_calculator.student_identifier
+        assert subject_identifier in grade_calculator.subject_identifier
+        assert grade_calculator.grade == 0
 
         return True
 
