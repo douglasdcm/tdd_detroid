@@ -2,13 +2,19 @@ import sqlite3
 import logging
 from src import utils
 
+
 # TODO test concurrency
-# TODO use inmemory just for tests
-DATABASE_NAME = "university.db"
-DATABASE_NAME = ":memory:"
-
-
 class Database:
+
+    def __init__(self, database="university.db"):
+        con = sqlite3.connect(database)
+        cur = con.cursor()
+        self.student = self.DbStudent(con, cur)
+        self.enrollment = self.DbEnrollment(con, cur)
+        self.course = self.DbCourse(con, cur)
+        self.subject = self.DbSubject(con, cur)
+        self.grade_calculator = self.DbGradeCalculator(con, cur)
+
     class DbStudent:
         TABLE = "student"
         name = None
@@ -80,13 +86,15 @@ class Database:
         def __init__(self, con, cur):
             self.cur = cur
             self.con = con
-            cur.execute(f"CREATE TABLE IF NOT EXISTS {self.TABLE} (student_identifier)")
+            self.cur.execute(
+                f"CREATE TABLE IF NOT EXISTS {self.TABLE} (student_identifier)"
+            )
 
         # Just for admin. The university has a predefined list of approved students to each course.
         # TODO create a public funtion
-        def populate(self, name, cpf, course_identifier):
+        def populate(self, name, cpf, course_name):
             student_identifier = utils.generate_student_identifier(
-                name, cpf, course_identifier
+                name, cpf, course_name
             )
             self.cur.execute(
                 f"""
@@ -96,12 +104,8 @@ class Database:
             self.con.commit()
 
         def select(self, student_identifier):
-            return (
-                self.cur.execute(
-                    f"SELECT * FROM {self.TABLE} WHERE student_identifier = '{student_identifier}'"
-                ).fetchone()
-                is not None
-            )
+            cmd = f"SELECT * FROM {self.TABLE} WHERE student_identifier = '{student_identifier}'"
+            return self.cur.execute(cmd).fetchone() is not None
 
     class DbCourse:
         TABLE = "course"
@@ -245,6 +249,34 @@ class Database:
                 f"CREATE TABLE IF NOT EXISTS {self.TABLE} (student_identifier, subject_identifier, grade)"
             )
 
+        def load_all_by_student_identifier(self, student_identifier):
+            try:
+                cmd = f"""SELECT * FROM {self.TABLE}
+                        WHERE student_identifier = '{student_identifier}'
+                    """
+                result = self.cur.execute(cmd).fetchall()
+                if not result:
+                    raise NotFoundError(
+                        f"Student '{student_identifier}' not found in table '{self.TABLE}'"
+                    )
+
+                class GradeCalculatorRow:
+                    student_identifier = None
+                    subject_identifier = None
+                    grade = None
+
+                grade_calculators = []
+                for row in result:
+                    grade_calculator_row = GradeCalculatorRow()
+                    grade_calculator_row.student_identifier = row[0]
+                    grade_calculator_row.subject_identifier = row[1]
+                    grade_calculator_row.grade = row[2]
+                    grade_calculators.append(grade_calculator_row)
+                return grade_calculators
+            except Exception as e:
+                logging.error(str(e))
+                raise
+
         def load(self, student_identifier, subject_identifier):
             try:
                 result = self.cur.execute(
@@ -278,14 +310,21 @@ class Database:
                 logging.error(str(e))
                 raise
 
-    def __init__(self) -> None:
-        con = sqlite3.connect(DATABASE_NAME)
-        cur = con.cursor()
-        self.student = self.DbStudent(con, cur)
-        self.enrollment = self.DbEnrollment(con, cur)
-        self.course = self.DbCourse(con, cur)
-        self.subject = self.DbSubject(con, cur)
-        self.grade_calculator = self.DbGradeCalculator(con, cur)
+        def save(self):
+            try:
+                cmd = f"""
+                    UPDATE {self.TABLE}
+                    SET student_identifier = '{self.student_identifier}',
+                        subject_identifier = '{self.subject_identifier}',
+                        grade = {self.grade}
+                    WHERE student_identifier = '{self.student_identifier}';
+                    """
+                self.cur.execute(cmd)
+
+                self.con.commit()
+            except Exception as e:
+                logging.error(str(e))
+                raise
 
 
 class NotFoundError(Exception):

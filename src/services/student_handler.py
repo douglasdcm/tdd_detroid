@@ -3,6 +3,7 @@ from src.services.enrollment_validator import EnrollmentValidator
 from src.services.course_handler import CourseHandler
 from src.services.subject_handler import SubjectHandler
 from src.services.grade_calculator import GradeCalculator
+from src import utils
 
 
 class StudentHandler:
@@ -17,6 +18,7 @@ class StudentHandler:
         self.__course = None
         self.__name = None
         self.__cpf = None
+        self.__subjects_2 = []
         self.__database = database
 
     @property
@@ -58,12 +60,9 @@ class StudentHandler:
     def __is_locked(self):
         return self.__state == self.LOCKED
 
-    def __is_valid_student(self, course_identifier=None):
-        course = self.__course
-        if course_identifier:
-            course = course_identifier
+    def __is_enrolled_student(self, course_name):
         return EnrollmentValidator(self.__database).validate_student(
-            self.name, self.cpf, course
+            self.name, self.cpf, course_name
         )
 
     def __save(self):
@@ -76,15 +75,51 @@ class StudentHandler:
         self.__database.student.course = self.__course
         self.__database.student.save()
 
+    def set_grade_to_subject(self, grade, subject_identifier):
+        if grade < 0 or grade > 10:
+            raise NonValidGrade("Grade must be between '0' and '10'")
+        if not self.__is_valid_subject(subject_identifier):
+            return NonValidSubject(
+                f"The student is not enrolled to this subject '{subject_identifier}'"
+            )
+
+        class Subject:
+            identifier = None
+            grade = None
+
+        subject = Subject()
+        subject.identifier = subject_identifier
+        subject.grade = grade
+        self.__subjects_2.append(subject)
+
+        grade_calculator = GradeCalculator(self.__database)
+        grade_calculator.student_identifier = self.identifier
+        grade_calculator.subject_identifier = subject_identifier
+        grade_calculator.grade = grade
+        grade_calculator.save()
+        grade_calculator.load_from_database(self.identifier, subject_identifier)
+
+        # post condition
+        assert grade_calculator.student_identifier == self.identifier
+        assert grade_calculator.subject_identifier in [
+            s.identifier for s in self.__subjects_2
+        ]
+
+    def __is_valid_subject(self, subject_identifier):
+        return subject_identifier in self.subjects
+
     def enroll_to_course(self, course_name):
-        if not self.__is_valid_student(course_name):
-            raise NonValidStudent()
+        if not self.__name:
+            raise NonValidStudent("Need to set the student's name.")
+        if not self.__cpf:
+            raise NonValidStudent("Need to set the student's CPF.")
+        if not self.__is_enrolled_student(course_name):
+            raise NonValidStudent("Student does not appears in enrollment list.")
 
         course = CourseHandler(self.__database)
         course.load_from_database(course_name)
 
-        enrollment_validator = EnrollmentValidator(self.__database)
-        self.__identifier = enrollment_validator.generate_student_identifier(
+        self.__identifier = utils.generate_student_identifier(
             self.name, self.cpf, course_name
         )
         self.__course = course_name
@@ -106,7 +141,7 @@ class StudentHandler:
         subject_identifier (str): The unique identifier of the subject. It follows the pattern
         <course name>-<subject name>
         """
-        is_valid_student = self.__is_valid_student()
+        is_valid_student = self.__is_enrolled_student(self.__course)
         if not is_valid_student:
             raise NonValidStudent()
 
@@ -150,14 +185,14 @@ class StudentHandler:
         return True
 
     def unlock_course(self):
-        if self.__is_valid_student():
+        if self.__is_enrolled_student(self.__course):
             self.__state = None
             self.__save()
             return self.state
         raise NonValidStudent()
 
     def lock_course(self):
-        if self.__is_valid_student():
+        if self.__is_enrolled_student(self.__course):
             self.__state = self.LOCKED
             self.__save()
             return self.state
@@ -176,7 +211,6 @@ class StudentHandler:
             self.__course = self.__database.student.course
 
         except Exception as e:
-            print("exxxxx ", str(e))
             logging.error(str(e))
             raise NonValidStudent("Student not found.")
 
@@ -186,4 +220,8 @@ class NonValidStudent(Exception):
 
 
 class NonValidSubject(Exception):
+    pass
+
+
+class NonValidGrade(Exception):
     pass

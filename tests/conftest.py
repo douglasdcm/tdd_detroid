@@ -4,7 +4,7 @@ from src import database
 
 @pytest.fixture(autouse=True, scope="function")
 def set_in_memory_database():
-    db = database.Database()
+    db = database.Database(":memory:")
     # TODO need to check if the courses are available
     db.enrollment.populate("douglas", "098.765.432.12", "adm")
     db.enrollment.populate("maria", "028.745.462.18", "mat")

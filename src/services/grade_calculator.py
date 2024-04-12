@@ -1,14 +1,45 @@
 class GradeCalculator:
-    row = None
-
     def __init__(self, database) -> None:
+        self.__student_identifier = None
+        self.__subject_identifier = None
+        self.__grade = None
+        self.__rows = None
         self.__databse = database
+
+    @property
+    def student_identifier(self):
+        return self.__student_identifier
+
+    @student_identifier.setter
+    def student_identifier(self, value):
+        self.__student_identifier = value
+
+    @property
+    def subject_identifier(self):
+        return self.__subject_identifier
+
+    @subject_identifier.setter
+    def subject_identifier(self, value):
+        self.__subject_identifier = value
+
+    @property
+    def grade(self):
+        return self.__grade
+
+    @grade.setter
+    def grade(self, value):
+        self.__grade = value
 
     def load_from_database(self, student_identifier, subject_identifier):
         self.__databse.grade_calculator.load(student_identifier, subject_identifier)
-        self.student_identifier = self.__databse.grade_calculator.student_identifier
-        self.subject_identifier = self.__databse.grade_calculator.subject_identifier
-        self.grade = self.__databse.grade_calculator.grade
+        self.__student_identifier = self.__databse.grade_calculator.student_identifier
+        self.__subject_identifier = self.__databse.grade_calculator.subject_identifier
+        self.__grade = self.__databse.grade_calculator.grade
+
+    def __load_all_from_database_by(self, student_identifier):
+        return self.__databse.grade_calculator.load_all_by_student_identifier(
+            student_identifier
+        )
 
     def add(self, student_identifier, subject_identifier, grade):
         self.__databse.grade_calculator.student_identifier = student_identifier
@@ -16,12 +47,16 @@ class GradeCalculator:
         self.__databse.grade_calculator.grade = grade
         self.__databse.grade_calculator.add()
 
-    # def calculate_for(self, student_identifier):
-    #     student_handler = StudentHandler(self.__databse)
-    #     student_handler.load_from_database(student_identifier)
-    #     total = 0
-    #     for subject in student_handler.subjects:
-    #         # get grade
-    #         total += subject.grade
+    def save(self):
+        self.__databse.grade_calculator.student_identifier = self.student_identifier
+        self.__databse.grade_calculator.subject_identifier = self.subject_identifier
+        self.__databse.grade_calculator.grade = self.grade
+        self.__databse.grade_calculator.save()
 
-    #     return total / len(student_handler.subjects)
+    def calculate_gpa_for_student(self, student_identifier):
+        self.__rows = self.__load_all_from_database_by(student_identifier)
+        total = 0
+        for row in self.__rows:
+            total += row.grade
+
+        return total / len(self.__rows)

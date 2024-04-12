@@ -2,7 +2,6 @@ from src.services.student_handler import StudentHandler
 from src.services.course_handler import CourseHandler
 from src.services.subject_handler import SubjectHandler
 from src.services.semester_monitor import SemesterHandler
-from src import database as db
 
 
 def test_semester_model():
@@ -12,8 +11,8 @@ def test_semester_model():
     assert semester.state == "open"
 
 
-def test_subject_model():
-    database = db.Database()
+def test_subject_model(set_in_memory_database):
+    database = set_in_memory_database
     subject_handler = SubjectHandler(database)
     subject_handler.name = "any_name"
 
@@ -25,8 +24,8 @@ def test_subject_model():
     assert subject_handler.course == None
 
 
-def test_course_model():
-    database = db.Database()
+def test_course_model(set_in_memory_database):
+    database = set_in_memory_database
     course_handler = CourseHandler(database)
     course_handler.name = "any_name"
     course_handler.save()
@@ -46,8 +45,8 @@ def test_course_model():
     assert database.course.subjects == ""
 
 
-def test_student_model():
-    database = db.Database()
+def test_student_model(set_in_memory_database):
+    database = set_in_memory_database
     student = StudentHandler(database)
     student.name = "any_name"
     student.cpf = "123.456.789-10"
