@@ -3,8 +3,36 @@ from src.services.student_handler import (
     StudentHandler,
     NonValidStudent,
     NonValidSubject,
+    NonValidGrade,
 )
-from src.utils import generate_subject_identifier
+from src import utils
+
+
+@pytest.mark.parametrize(
+    "grade",
+    [
+        (-1),
+        (11),
+    ],
+)
+def test_calculate_student_gpa_when_subjects_have_invalid_grades(
+    set_in_memory_database, grade
+):
+    course_name = "any"
+    database = set_in_memory_database
+    student_handler = StudentHandler(database)
+    student_handler.name = "any"
+    student_handler.cpf = "123.456.789-10"
+    student_handler.enroll_to_course(course_name)
+
+    subject_identifier1 = utils.generate_subject_identifier(course_name, "any1")
+
+    student_handler.take_subject(subject_identifier1)
+
+    with pytest.raises(NonValidGrade):
+        student_handler.set_grade_to_subject(
+            grade=grade, subject_identifier=subject_identifier1
+        )
 
 
 def test_unlock_course(set_in_memory_database):
@@ -46,7 +74,7 @@ def test_take_full_subject_from_course_return_error(set_in_memory_database):
     student = StudentHandler(set_in_memory_database)
     student.name = "any"
     student.cpf = "123.456.789-10"
-    subject = generate_subject_identifier("course1", "subject_full")
+    subject = utils.generate_subject_identifier("course1", "subject_full")
 
     student.enroll_to_course("any")
     with pytest.raises(NonValidSubject):
@@ -70,7 +98,7 @@ def test_take_subject_from_course(set_in_memory_database):
     student.cpf = "123.456.789-10"
     course = "any"
     student.enroll_to_course("any")
-    subject_identifier = generate_subject_identifier(course, "any1")
+    subject_identifier = utils.generate_subject_identifier(course, "any1")
 
     student.enroll_to_course(course)
     assert student.take_subject(subject_identifier) is True
