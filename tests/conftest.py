@@ -11,8 +11,6 @@ def set_in_memory_database():
     db.enrollment.populate("joana", "038.745.452.19", "port")
     db.enrollment.populate("any", "123.456.789-10", "any")
 
-    db.student.populate("any", "123.456.789-10", "any")
-
     db.course.populate("adm")
     db.course.populate("mat")
     db.course.populate("port")
@@ -30,4 +28,8 @@ def set_in_memory_database():
     db.subject.populate(
         "course1", "subject_removed", 0, "removed"
     )  # ef15a071407953bd858cfca59ad99056
+
+    db.semester.populate("2023-2", "closed")
+    db.semester.populate("2024-1", "open")
+
     yield db

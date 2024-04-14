@@ -14,6 +14,7 @@ class Database:
         self.course = self.DbCourse(con, cur)
         self.subject = self.DbSubject(con, cur)
         self.grade_calculator = self.DbGradeCalculator(con, cur)
+        self.semester = self.DbSemester(con, cur)
 
     class DbStudent:
         TABLE = "student"
@@ -32,6 +33,25 @@ class Database:
             cur.execute(
                 f"CREATE TABLE IF NOT EXISTS {self.TABLE} (name, state, cpf, identifier, gpa, subjects, course)"
             )
+
+        def add(self):
+            try:
+                cmd = f"""
+                    INSERT INTO {self.TABLE} VALUES
+                        ('{self.name}', 
+                        '{self.state}', 
+                        '{self.cpf}', 
+                        '{self.identifier}', 
+                        '{self.gpa}', 
+                        '{self.subjects}', 
+                        '{self.course}')
+                """
+                self.cur.execute(cmd)
+
+                self.con.commit()
+            except Exception as e:
+                logging.error(str(e))
+                raise
 
         def save(self):
             cmd = f"""
@@ -68,17 +88,23 @@ class Database:
             self.con.commit()
 
         def load(self, identifier):
-            cmd = f"SELECT * FROM {self.TABLE} WHERE identifier = '{identifier}'"
-            result = self.cur.execute(cmd).fetchone()
-            if not result:
-                raise NotFoundError()
-            self.name = result[0]
-            self.state = result[1]
-            self.cpf = result[2]
-            self.identifier = result[3]
-            self.gpq = result[4]
-            self.subjects = result[5].split(",")
-            self.course = result[6]
+            try:
+                cmd = f"SELECT * FROM {self.TABLE} WHERE identifier = '{identifier}'"
+                result = self.cur.execute(cmd).fetchone()
+                if not result:
+                    raise NotFoundError(
+                        f"Student '{self.identifier}' not found in table '{self.TABLE}'."
+                    )
+                self.name = result[0]
+                self.state = result[1]
+                self.cpf = result[2]
+                self.identifier = result[3]
+                self.gpq = result[4]
+                self.subjects = result[5].split(",")
+                self.course = result[6]
+            except Exception as e:
+                logging.error(str(e))
+                raise
 
     class DbEnrollment:
         TABLE = "enrollment"
@@ -238,8 +264,8 @@ class Database:
 
     class DbGradeCalculator:
         TABLE = "grade_calculator"
-        subject_identifier = None
         student_identifier = None
+        subject_identifier = None
         grade = None
 
         def __init__(self, con, cur):
@@ -322,6 +348,77 @@ class Database:
                 self.cur.execute(cmd)
 
                 self.con.commit()
+            except Exception as e:
+                logging.error(str(e))
+                raise
+
+    class DbSemester:
+        TABLE = "semester"
+        identifier = None
+        state = None
+
+        def __init__(self, con, cur):
+            self.con = con
+            self.cur = cur
+            cur.execute(f"CREATE TABLE IF NOT EXISTS {self.TABLE} (identifier, state)")
+
+        # Just for admin.
+        # TODO create a public funtion
+        def populate(self, identifier, state):
+            self.cur.execute(
+                f"""
+                    INSERT INTO {self.TABLE} VALUES
+                        ('{identifier}', 
+                        '{state}')
+                """
+            )
+            self.con.commit()
+
+            x = self.cur.execute(f"select * from {self.TABLE}").fetchall()
+
+        def save(self):
+            try:
+                cmd = f"""
+                    UPDATE {self.TABLE}
+                    SET state = '{self.state}'
+                    WHERE identifier = '{self.identifier}';
+                    """
+                self.cur.execute(cmd)
+
+                self.con.commit()
+            except Exception as e:
+                logging.error(str(e))
+                raise
+
+        def load_open(self):
+            try:
+                result = self.cur.execute(
+                    f"""SELECT * FROM {self.TABLE}
+                        WHERE state = 'open'
+                    """
+                ).fetchone()
+
+                if not result:
+                    raise NotFoundError("No open semester found")
+
+                self.identifier = result[0]
+                self.state = result[1]
+            except Exception as e:
+                logging.error(str(e))
+                raise
+
+        def load_by_identifier(self):
+            try:
+                result = self.cur.execute(
+                    f"""SELECT * FROM {self.TABLE}
+                        WHERE identifier = '{self.identifier}'
+                    """
+                ).fetchone()
+                if not result:
+                    raise NotFoundError(f"Semester '{self.identifier}' not found")
+
+                self.identifier = result[0]
+                self.state = result[1]
             except Exception as e:
                 logging.error(str(e))
                 raise

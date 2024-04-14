@@ -30,7 +30,7 @@ def test_calculate_student_gpa_when_subjects_have_invalid_grades(
     student_handler.take_subject(subject_identifier1)
 
     with pytest.raises(NonValidGrade):
-        student_handler.set_grade_to_subject(
+        student_handler.update_grade_to_subject(
             grade=grade, subject_identifier=subject_identifier1
         )
 
@@ -113,9 +113,13 @@ def test_enroll_invalid_student_to_course_retunr_error(set_in_memory_database):
         student.enroll_to_course("any")
 
 
-def test_enroll_student_to_course_x(set_in_memory_database):
+def test_enroll_student_to_course(set_in_memory_database):
     student = StudentHandler(set_in_memory_database)
     student.name = "any"
     student.cpf = "123.456.789-10"
+    course_name = "any"
+    identifier = utils.generate_student_identifier(
+        student.name, student.cpf, course_name
+    )
 
-    assert student.enroll_to_course("any") is True
+    assert student.enroll_to_course(course_name) == identifier

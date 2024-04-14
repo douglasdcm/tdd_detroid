@@ -75,7 +75,23 @@ class StudentHandler:
         self.__database.student.course = self.__course
         self.__database.student.save()
 
-    def set_grade_to_subject(self, grade, subject_identifier):
+    def __add(self):
+        self.__database.student.name = self.name
+        self.__database.student.state = self.state
+        self.__database.student.cpf = self.cpf
+        self.__database.student.identifier = self.identifier
+        self.__database.student.gpa = self.gpa
+        self.__database.student.subjects = ",".join(self.subjects)
+        self.__database.student.course = self.__course
+        self.__database.student.add()
+
+    def __add_to_grade_calculator(self):
+        self.__database.grade_calculator.student_identifier = self.identifier
+        self.__database.grade_calculator.subject_identifier = -1
+        self.__database.grade_calculator.grade = 0
+        self.__database.grade_calculator.add()
+
+    def update_grade_to_subject(self, grade, subject_identifier):
         if grade < 0 or grade > 10:
             raise NonValidGrade("Grade must be between '0' and '10'")
         if not self.__is_valid_subject(subject_identifier):
@@ -109,32 +125,48 @@ class StudentHandler:
         return subject_identifier in self.subjects
 
     def enroll_to_course(self, course_name):
-        if not self.__name:
-            raise NonValidStudent("Need to set the student's name.")
-        if not self.__cpf:
-            raise NonValidStudent("Need to set the student's CPF.")
-        if not self.__is_enrolled_student(course_name):
-            raise NonValidStudent("Student does not appears in enrollment list.")
+        try:
+            if not self.__name:
+                raise NonValidStudent("Need to set the student's name.")
+            if not self.__cpf:
+                raise NonValidStudent("Need to set the student's CPF.")
+            if not self.__is_enrolled_student(course_name):
+                raise NonValidStudent(
+                    f"Student '{self.identifier}' does not appears in enrollment list."
+                )
 
-        course = CourseHandler(self.__database)
-        course.load_from_database(course_name)
+            course = CourseHandler(self.__database)
+            course.load_from_database(course_name)
 
-        self.__identifier = utils.generate_student_identifier(
-            self.name, self.cpf, course_name
-        )
-        self.__course = course_name
-        course.enroll_student(self.identifier)
-        self.__state = self.ENROLLED
-        self.__save()
+            self.__identifier = utils.generate_student_identifier(
+                self.name, self.cpf, course_name
+            )
+            self.__course = course_name
+            course.enroll_student(self.identifier)
+            self.__state = self.ENROLLED
+            self.__add()
+            self.__add_to_grade_calculator()
 
-        # post condition
-        self.__database.student.load(self.identifier)
-        assert self.__database.student.identifier == self.identifier
-        assert self.__database.student.state == self.ENROLLED
-        assert self.__database.student.course == self.__course
-        assert self.identifier in course.enrolled_students
+            # post condition
+            self.__database.student.load(self.identifier)
+            assert self.__database.student.identifier == self.identifier
+            assert self.__database.student.state == self.ENROLLED
+            assert self.__database.student.course == self.__course
+            assert self.identifier in course.enrolled_students
 
-        return True
+            result = self.__database.grade_calculator.load_all_by_student_identifier(
+                self.identifier
+            )
+            for row in result:
+                assert row.student_identifier == self.identifier
+                # assert row.subject_identifier
+                # assert self.__database.grade_calculator.course == self.__course
+                # assert self.identifier in course.enrolled_students
+
+            return self.identifier
+        except Exception as e:
+            logging.error(str(e))
+            raise
 
     def take_subject(self, subject_identifier):
         """

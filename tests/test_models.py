@@ -1,11 +1,11 @@
 from src.services.student_handler import StudentHandler
 from src.services.course_handler import CourseHandler
 from src.services.subject_handler import SubjectHandler
-from src.services.semester_monitor import SemesterHandler
+from src.services.semester_monitor import SemesterMonitor
 
 
-def test_semester_model():
-    semester = SemesterHandler()
+def test_semester_model(set_in_memory_database):
+    semester = SemesterMonitor(set_in_memory_database, "2024-1")
 
     assert semester.identifier == "2024-1"
     assert semester.state == "open"

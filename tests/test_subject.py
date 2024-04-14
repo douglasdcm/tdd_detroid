@@ -1,6 +1,5 @@
 import pytest
 from src.services.subject_handler import SubjectHandler, NonValidSubject
-from src import database as db
 from src import utils
 
 

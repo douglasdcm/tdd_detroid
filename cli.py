@@ -45,16 +45,34 @@ def activate_course(name):
     "--cpf", prompt="Student CPF. E.g. 123.456.789-10", help="CPF of the student."
 )
 @click.option(
-    "--course-identifier",
+    "--course-name",
     prompt="Course number identifier",
     help="Course number identifier.",
 )
-def enroll_student(name, cpf, course_identifier):
-    database = Database()
-    cli_helper.enroll_student(database, name, cpf, course_identifier)
+def enroll_student(name, cpf, course_name):
+    try:
+        database = Database()
+        cli_helper.enroll_student(database, name, cpf, course_name)
+    except Exception as e:
+        logging.error(str(e))
+
+
+@click.command()
+@click.option(
+    "--student-identifier",
+    prompt="Student identifier",
+    help="Student identifier number.",
+)
+def calculate_student_gpa(student_identifier):
+    try:
+        database = Database()
+        cli_helper.calculate_student_gpa(database, student_identifier)
+    except Exception as e:
+        logging.error(str(e))
 
 
 cli.add_command(enroll_student)
+cli.add_command(calculate_student_gpa)
 cli.add_command(activate_course)
 cli.add_command(deactivate_course)
 cli.add_command(cancel_course)

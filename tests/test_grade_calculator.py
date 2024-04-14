@@ -31,13 +31,13 @@ def test_calculate_student_gpa_when_subjects_have_grades(
     student_handler.take_subject(subject_identifier2)
     student_handler.take_subject(subject_identifier3)
 
-    student_handler.set_grade_to_subject(
+    student_handler.update_grade_to_subject(
         grade=grade1, subject_identifier=subject_identifier1
     )
-    student_handler.set_grade_to_subject(
+    student_handler.update_grade_to_subject(
         grade=grade2, subject_identifier=subject_identifier2
     )
-    student_handler.set_grade_to_subject(
+    student_handler.update_grade_to_subject(
         grade=grade3, subject_identifier=subject_identifier3
     )
 
