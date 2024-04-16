@@ -49,21 +49,25 @@ Definition of Done:
 3. Data is being saved in the database.
 # Deliverables
 Construction of the basic functions of the system
-1. DONE Each student will have a grade control called "grade point average" (GPA).
-2. DONE The GPA is the average of the student's grades in the ~~courses~~ subjects already taken.
+1. **DONE** Each student will have a grade control called "grade point average" (GPA).
+2. **DONE** The GPA is the average of the student's grades in the ~~courses~~ subjects already taken.
 3. The student is considered approved at the university if their GPA is above or equal to 7 (seven) at the end of the course.
 4. If a student takes the same subject more than once, the highest grade will be considered in the GPA calculation.
 <!-- Required setup to allow enrollments -->
 5. Initially, the university will have 3 courses with 3 subjects each.
-6. DONE Subjects in each course may have the same names but will be differentiated by a unique identifier (niu).
-7. DONE The system must calculate the student's situation taking into account the subjects taken and the total number of subjects in each course.
-8. The student can only take subjects from their course.
+6. **DONE** Subjects in each course may have the same names but will be differentiated by a unique identifier (niu).
+7. **DONE** The system must calculate the student's situation taking into account the subjects taken and the total number of subjects in each course.
+8. **DONE** The student can only take subjects from their course.
 9. Courses must have a unique identifier and name.
-10. ~~Course~~ Subject names can be the same, but the unique identifier for each ~~course~~ subject must be different.
-11. A course cannot have two subjects with the same name, even if the niu is different.
-12. The maximum grade for a student in a subject is 10.
-13. The minimum grade for a student in a subject is 0.
-14. The student can lock the course, and in this case, they cannot update their grades or the subjects taken.
+<!-- 
+Same as requirement 6
+10. ~~Course~~ Subject names can be the same, but the unique identifier for each ~~course~~ subject must be different. -->
+<!-- 
+Same as requirement 6
+11. A course cannot have two subjects with the same name, even if the niu is different. -->
+12. **DONE** The maximum grade for a student in a subject is 10.
+13. **DONE** The minimum grade for a student in a subject is 0.
+14. **DONE** The student can lock the course, and in this case, they cannot update their grades or the subjects taken.
 15. The course coordinator can list the students, grades in each subject, and GPAs of the students.
 16. The student can unlock the course, and their situation returns to the previous state.
 17. Students must have names.

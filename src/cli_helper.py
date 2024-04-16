@@ -80,9 +80,24 @@ def take_subject(database, student_identifier, subject_name):
         student_handler.take_subject(subject_name)
         print(f"Student '{student_identifier}' toke subject '{subject_name}'.")
         return True
-    except NonValidStudent as e:
+    except (NonValidStudent, NonValidSubject, NonValidGrade) as e:
         logging.error(str(e))
-        print(f"Student '{student_identifier}' is not valid'")
+        print(str(e))
+    except Exception as e:
+        logging.error(str(e))
+        print(UNEXPECTED_ERROR)
+    return False
+
+
+def lock_course(database, student_identifier):
+    try:
+        student_handler = StudentHandler(database, student_identifier)
+        student_handler.lock_course()
+        print(f"Student '{student_identifier}' locked the course.")
+        return True
+    except (NonValidStudent, NonValidSubject, NonValidGrade) as e:
+        logging.error(str(e))
+        print(str(e))
     except Exception as e:
         logging.error(str(e))
         print(UNEXPECTED_ERROR)

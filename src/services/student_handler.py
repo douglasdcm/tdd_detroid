@@ -88,6 +88,9 @@ class StudentHandler:
 
         self.load_from_database(self.identifier)
 
+        if self.__is_locked():
+            raise NonValidStudent(f"Student '{self.identifier}' is locked.")
+
         subject_identifier = utils.generate_subject_identifier(
             self.__course, subject_name
         )
