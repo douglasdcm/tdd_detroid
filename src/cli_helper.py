@@ -104,6 +104,21 @@ def lock_course(database, student_identifier):
     return False
 
 
+def unlock_course(database, student_identifier):
+    try:
+        student_handler = StudentHandler(database, student_identifier)
+        student_handler.unlock_course()
+        print(f"Student '{student_identifier}' unlocked the course.")
+        return True
+    except (NonValidStudent, NonValidSubject, NonValidGrade) as e:
+        logging.error(str(e))
+        print(str(e))
+    except Exception as e:
+        logging.error(str(e))
+        print(UNEXPECTED_ERROR)
+    return False
+
+
 def update_grade(database, student_identifier, subject_name, grade):
     try:
         student_handler = StudentHandler(database, student_identifier)

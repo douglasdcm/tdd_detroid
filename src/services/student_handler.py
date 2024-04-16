@@ -208,18 +208,18 @@ class StudentHandler:
         return True
 
     def unlock_course(self):
-        if self.__is_enrolled_student(self.__course):
-            self.__state = None
-            self.__save()
-            return self.state
-        raise NonValidStudent()
+        if not self.__is_enrolled_student(self.__course):
+            raise NonValidStudent(f"Student is not not enrolled in any course.")
+        self.__state = None
+        self.__save()
+        return self.state
 
     def lock_course(self):
-        if self.__is_enrolled_student(self.__course):
-            self.__state = self.LOCKED
-            self.__save()
-            return self.state
-        raise NonValidStudent()
+        if not self.__is_enrolled_student(self.__course):
+            raise NonValidStudent(f"Student is not not enrolled in any course.")
+        self.__state = self.LOCKED
+        self.__save()
+        return self.state
 
     def load_from_database(self, student_identifier):
         try:

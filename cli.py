@@ -130,11 +130,26 @@ def lock_course(student_identifier):
         logging.error(str(e))
 
 
+@click.command()
+@click.option(
+    "--student-identifier",
+    prompt="Student identifier",
+    help="Student identifier number.",
+)
+def unlock_course(student_identifier):
+    try:
+        database = Database()
+        cli_helper.unlock_course(database, student_identifier)
+    except Exception as e:
+        logging.error(str(e))
+
+
 cli.add_command(enroll_student)
 cli.add_command(take_subject)
 cli.add_command(update_grade)
 cli.add_command(calculate_student_gpa)
 cli.add_command(lock_course)
+cli.add_command(unlock_course)
 cli.add_command(activate_course)
 cli.add_command(deactivate_course)
 cli.add_command(cancel_course)

@@ -63,7 +63,7 @@ class GradeCalculator:
         for row in self.__rows:
             total += row.grade
 
-        return total / len(self.__rows)
+        return round(total / len(self.__rows), 1)
 
 
 class NonValidGradeOperation(Exception):
