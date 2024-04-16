@@ -36,11 +36,6 @@ class GradeCalculator:
         self.__subject_identifier = self.__databse.grade_calculator.subject_identifier
         self.__grade = self.__databse.grade_calculator.grade
 
-    def __load_all_from_database_by(self, student_identifier):
-        return self.__databse.grade_calculator.load_all_by_student_identifier(
-            student_identifier
-        )
-
     def add(self, student_identifier, subject_identifier, grade):
         self.__databse.grade_calculator.student_identifier = student_identifier
         self.__databse.grade_calculator.subject_identifier = subject_identifier
@@ -54,9 +49,22 @@ class GradeCalculator:
         self.__databse.grade_calculator.save()
 
     def calculate_gpa_for_student(self, student_identifier):
-        self.__rows = self.__load_all_from_database_by(student_identifier)
+        try:
+            self.__rows = (
+                self.__databse.grade_calculator.load_all_by_student_identifier(
+                    student_identifier
+                )
+            )
+        except Exception:
+            raise NonValidGradeOperation(
+                f"Student '{student_identifier}' not enrolled to any subject."
+            )
         total = 0
         for row in self.__rows:
             total += row.grade
 
         return total / len(self.__rows)
+
+
+class NonValidGradeOperation(Exception):
+    pass

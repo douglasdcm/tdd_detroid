@@ -83,6 +83,31 @@ def calculate_student_gpa(student_identifier):
     prompt="Subject name",
     help="The name of the subject the student wants to take.",
 )
+@click.option(
+    "--grade",
+    type=int,
+    prompt="Subject name",
+    help="The name of the subject the student wants to take.",
+)
+def update_grade(student_identifier, subject_name, grade):
+    try:
+        database = Database()
+        cli_helper.update_grade(database, student_identifier, subject_name, grade)
+    except Exception as e:
+        logging.error(str(e))
+
+
+@click.command()
+@click.option(
+    "--student-identifier",
+    prompt="Student identifier",
+    help="Student identifier number.",
+)
+@click.option(
+    "--subject-name",
+    prompt="Subject name",
+    help="The name of the subject the student wants to take.",
+)
 def take_subject(student_identifier, subject_name):
     try:
         database = Database()
@@ -93,6 +118,7 @@ def take_subject(student_identifier, subject_name):
 
 cli.add_command(enroll_student)
 cli.add_command(take_subject)
+cli.add_command(update_grade)
 cli.add_command(calculate_student_gpa)
 cli.add_command(activate_course)
 cli.add_command(deactivate_course)

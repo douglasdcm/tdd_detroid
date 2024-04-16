@@ -1,7 +1,12 @@
 import logging
-from src.services.student_handler import StudentHandler, NonValidStudent
+from src.services.student_handler import (
+    StudentHandler,
+    NonValidStudent,
+    NonValidGrade,
+    NonValidSubject,
+)
 from src.services.course_handler import CourseHandler, NonValidCourse
-from src.services.grade_calculator import GradeCalculator
+from src.services.grade_calculator import GradeCalculator, NonValidGradeOperation
 
 UNEXPECTED_ERROR = "Unexpected error. Consult the system adminstrator."
 
@@ -60,6 +65,21 @@ def calculate_student_gpa(database, student_identifier):
         gpa = grade_calculator.calculate_gpa_for_student(student_identifier)
         print(f"GPA of student '{student_identifier}' is '{gpa}'.")
         return True
+    except (NonValidStudent, NonValidGradeOperation) as e:
+        logging.error(str(e))
+        print(str(e))
+    except Exception as e:
+        logging.error(str(e))
+        print(UNEXPECTED_ERROR)
+    return False
+
+
+def take_subject(database, student_identifier, subject_name):
+    try:
+        student_handler = StudentHandler(database, student_identifier)
+        student_handler.take_subject(subject_name)
+        print(f"Student '{student_identifier}' toke subject '{subject_name}'.")
+        return True
     except NonValidStudent as e:
         logging.error(str(e))
         print(f"Student '{student_identifier}' is not valid'")
@@ -69,16 +89,17 @@ def calculate_student_gpa(database, student_identifier):
     return False
 
 
-def take_subject(database, student_identifier, subject_name):
+def update_grade(database, student_identifier, subject_name, grade):
     try:
-        student_handler = StudentHandler(database)
-        student_handler.identifier = student_identifier
-        student_handler.take_subject(subject_name)
-        print(f"Student '{student_identifier}' toke subject '{subject_name}'.")
+        student_handler = StudentHandler(database, student_identifier)
+        student_handler.update_grade_to_subject(grade, subject_name)
+        print(
+            f"Student '{student_identifier}' updated grade of subject '{subject_name}' to '{grade}'."
+        )
         return True
-    except NonValidStudent as e:
+    except (NonValidStudent, NonValidSubject, NonValidGrade) as e:
         logging.error(str(e))
-        print(f"Student '{student_identifier}' is not valid'")
+        print(str(e))
     except Exception as e:
         logging.error(str(e))
         print(UNEXPECTED_ERROR)
