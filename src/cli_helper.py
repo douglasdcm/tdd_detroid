@@ -3,12 +3,28 @@ from src.services.student_handler import (
     StudentHandler,
     NonValidStudent,
     NonValidGrade,
-    NonValidSubject,
 )
 from src.services.course_handler import CourseHandler, NonValidCourse
 from src.services.grade_calculator import GradeCalculator, NonValidGradeOperation
+from src.services.subject_handler import SubjectHandler, NonValidSubject
 
 UNEXPECTED_ERROR = "Unexpected error. Consult the system adminstrator."
+
+
+def remove_subject(database, course_name, subject_name):
+    try:
+        subject_handler = SubjectHandler(database, course=course_name)
+        subject_handler.name = subject_name
+        subject_handler.remove()
+        print(f"Subject removed from course.")
+        return True
+    except NonValidSubject as e:
+        logging.error(str(e))
+        print(str(e))
+    except Exception as e:
+        logging.error(str(e))
+        print(UNEXPECTED_ERROR)
+    return False
 
 
 def cancel_course(database, name):

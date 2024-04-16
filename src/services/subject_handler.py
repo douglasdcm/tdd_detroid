@@ -1,4 +1,6 @@
 import logging
+from src import utils
+from src.constants import DUMMY_IDENTIFIER
 
 
 class SubjectHandler:
@@ -6,12 +8,14 @@ class SubjectHandler:
     REMOVED = "removed"
     ACTIVE = "active"
 
-    def __init__(self, database, subject_identifier=-1) -> None:
+    def __init__(
+        self, database, subject_identifier=DUMMY_IDENTIFIER, course=None
+    ) -> None:
         self.__database = database
         self.__identifier = subject_identifier
         self.__state = None
         self.__enrolled_students = []
-        self.__course = None
+        self.__course = course
         self.__max_enrollment = 0
         self.__name = None
 
@@ -54,11 +58,13 @@ class SubjectHandler:
         return self.__state == self.ACTIVE
 
     def activate(self):
-        if not self.identifier:
-            raise NonValidSubject()
+        if self.identifier == DUMMY_IDENTIFIER:
+            raise NonValidSubject(f"Subject not found.'")
 
         if self.state == self.REMOVED:
-            raise NonValidSubject()
+            raise NonValidSubject(
+                f"Subject '{self.identifier}' is removed and can not be activated."
+            )
 
         self.__state = self.ACTIVE
         self.save()
@@ -69,8 +75,18 @@ class SubjectHandler:
         return self.__state
 
     def remove(self):
+        self.__generate_identifier()
+
+        try:
+            self.load_from_database(self.identifier)
+        except Exception as e:
+            logging.error(str(e))
+            raise NonValidSubject(
+                f"Subject '{self.name}' not found in course '{self.course}'.'"
+            )
+
         if not self.state == self.ACTIVE:
-            raise NonValidSubject()
+            raise NonValidSubject(f"Subject '{self.identifier} is not active.'")
 
         self.__state = self.REMOVED
         self.save()
@@ -79,6 +95,16 @@ class SubjectHandler:
         self.__database.subject.load(self.identifier)
         assert self.__database.subject.state == self.REMOVED
         return self.__state
+
+    def __generate_identifier(self):
+        if self.identifier != DUMMY_IDENTIFIER:
+            return
+        if not self.name:
+            raise NonValidSubject("Need to set a name to subject.")
+        if not self.course:
+            raise NonValidSubject("Need to set a course to subject.")
+
+        self.__identifier = utils.generate_subject_identifier(self.course, self.name)
 
     def save(self):
         self.__database.subject.enrolled_students = ",".join(self.__enrolled_students)

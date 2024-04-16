@@ -70,7 +70,7 @@ Same as requirement 6
 14. **DONE** The student can lock the course, and in this case, they cannot update their grades or the subjects taken.
 15. The course coordinator can list the students, grades in each subject, and GPAs of the students.
 16. **DONE** The student can unlock the course, and their situation returns to the previous state.
-17. Students must have names.
+17. **DONE** Students must have names.
 18. The general coordinator can list all courses, students, grades in each subject, and GPAs of each student.
 19. The course coordinator can remove subjects, and in this case, students cannot update their grades in that subject.
 20. Students can only update their grades in the subjects they are enrolled in.

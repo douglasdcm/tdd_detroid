@@ -6,3 +6,4 @@ htmlcov/
 *.pyc
 *.log
 .coverage
+.~lock.architecture.odp#

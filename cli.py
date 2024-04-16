@@ -20,6 +20,14 @@ def cli():
 
 
 @click.command()
+@click.option("--course-name", prompt="Course name", help="Name of the course.")
+@click.option("--subject-name", prompt="Subject name", help="Name of the subject.")
+def remove_subject(course_name, subject_name):
+    database = Database()
+    cli_helper.remove_subject(database, course_name, subject_name)
+
+
+@click.command()
 @click.option("--name", prompt="Course name", help="Name of the course.")
 def cancel_course(name):
     database = Database()
@@ -150,9 +158,11 @@ cli.add_command(update_grade)
 cli.add_command(calculate_student_gpa)
 cli.add_command(lock_course)
 cli.add_command(unlock_course)
+
 cli.add_command(activate_course)
 cli.add_command(deactivate_course)
 cli.add_command(cancel_course)
+cli.add_command(remove_subject)
 
 if __name__ == "__main__":
     cli()

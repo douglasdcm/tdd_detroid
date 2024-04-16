@@ -1,5 +1,6 @@
 import uuid
 import logging
+from src.constants import DUMMY_IDENTIFIER
 
 
 class CourseHandler:
@@ -8,7 +9,7 @@ class CourseHandler:
     CANCELLED = "cancelled"
 
     def __init__(self, database) -> None:
-        self.__identifier = -1
+        self.__identifier = DUMMY_IDENTIFIER
         self.__name = None
         self.__state = self.INACTIVE  # TODO use enum
         self.__enrolled_students = []

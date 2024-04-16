@@ -11,8 +11,8 @@ def test_remove_invalid_subject_return_error(set_in_memory_database):
 
 
 def test_remove(set_in_memory_database):
-    subject_handler = SubjectHandler(set_in_memory_database)
-    subject_handler.load_from_database(utils.generate_subject_identifier("any", "any1"))
+    subject_handler = SubjectHandler(set_in_memory_database, course="any")
+    subject_handler.name = "any1"
     assert subject_handler.remove() == "removed"
 
 
