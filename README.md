@@ -50,13 +50,13 @@ Definition of Done:
 # Deliverables
 Construction of the basic functions of the system
 1. DONE Each student will have a grade control called "grade point average" (GPA).
-2. The GPA is the average of the student's grades in the ~~courses~~ subjects already taken.
+2. DONE The GPA is the average of the student's grades in the ~~courses~~ subjects already taken.
 3. The student is considered approved at the university if their GPA is above or equal to 7 (seven) at the end of the course.
 4. If a student takes the same subject more than once, the highest grade will be considered in the GPA calculation.
 <!-- Required setup to allow enrollments -->
 5. Initially, the university will have 3 courses with 3 subjects each.
-6. Subjects in each course may have the same names but will be differentiated by a unique identifier (niu).
-7. The system must calculate the student's situation taking into account the subjects taken and the total number of subjects in each course.
+6. DONE Subjects in each course may have the same names but will be differentiated by a unique identifier (niu).
+7. DONE The system must calculate the student's situation taking into account the subjects taken and the total number of subjects in each course.
 8. The student can only take subjects from their course.
 9. Courses must have a unique identifier and name.
 10. ~~Course~~ Subject names can be the same, but the unique identifier for each ~~course~~ subject must be different.

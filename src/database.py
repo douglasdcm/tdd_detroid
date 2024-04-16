@@ -342,10 +342,9 @@ class Database:
             try:
                 cmd = f"""
                     UPDATE {self.TABLE}
-                    SET student_identifier = '{self.student_identifier}',
-                        subject_identifier = '{self.subject_identifier}',
-                        grade = {self.grade}
-                    WHERE student_identifier = '{self.student_identifier}';
+                    SET grade = {self.grade}
+                    WHERE student_identifier = '{self.student_identifier}'
+                    AND subject_identifier = '{self.subject_identifier}';
                     """
                 self.cur.execute(cmd)
 
