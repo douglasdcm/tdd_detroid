@@ -162,9 +162,7 @@ def enroll_student(database, name, cpf, course_name):
         return True
     except NonValidStudent as e:
         logging.error(str(e))
-        print(
-            f"Student '{name}' with CPF '{cpf}' is not valid in course '{course_name}'"
-        )
+        print(str(e))
     except Exception as e:
         logging.error(str(e))
         print(UNEXPECTED_ERROR)

@@ -1,8 +1,9 @@
 import logging
 from src.services.enrollment_validator import EnrollmentValidator
 from src.services.course_handler import CourseHandler
-from src.services.subject_handler import SubjectHandler
+from src.services.subject_handler import SubjectHandler, NonValidSubject
 from src.services.grade_calculator import GradeCalculator
+from src.services.cpf_validator import is_valide_cpf
 from src import utils
 
 
@@ -51,6 +52,8 @@ class StudentHandler:
 
     @cpf.setter
     def cpf(self, value):
+        if not is_valide_cpf(value):
+            raise NonValidStudent(f"CPF {value} is not valid.")
         self.__cpf = value
 
     def __is_locked(self):
@@ -239,10 +242,6 @@ class StudentHandler:
 
 
 class NonValidStudent(Exception):
-    pass
-
-
-class NonValidSubject(Exception):
     pass
 
 

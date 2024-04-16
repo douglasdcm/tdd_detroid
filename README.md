@@ -72,9 +72,10 @@ Same as requirement 6
 16. **DONE** The student can unlock the course, and their situation returns to the previous state.
 17. **DONE** Students must have names.
 18. The general coordinator can list all courses, students, grades in each subject, and GPAs of each student.
-19. The course coordinator can remove subjects, and in this case, students cannot update their grades in that subject.
-20. Students can only update their grades in the subjects they are enrolled in.
+19. **DONE** The course coordinator can remove subjects, and in this case, students cannot update their grades in that subject.
+20. **DONE** Students can only update their grades in the subjects they are enrolled in.
 21. Course and subject names must have a maximum of 10 letters.
+<!-- What are units? Not clear -->
 22. Courses can have the same names if they are from different units.
 <!-- The student can do any time. Don't need to wai the next semester -->
 23. The student can only enroll in one course.
@@ -82,7 +83,7 @@ Same as requirement 6
 25. The coordinator can list the students, subjects, grades, and GPAs of all their courses (coordinator of more than one course).
 <!-- this requirement wasn't informing the actor. Figured out while making the diagrams of use cases -->
 <!-- 26. The course can be canceled. -->
-26. The course can be canceled by the general cordinator.
+26. **DONE** The course can be canceled by the general cordinator.
 27. Canceled courses cannot accept student enrollments.
 <!-- How o set coordinators? -->
 28. Canceled courses cannot have coordinators.
@@ -90,10 +91,11 @@ Same as requirement 6
 30. The student must enroll in a minimum of 3 subjects.
 31. If the number of subjects missing for a student is less than 3, they can enroll in 1 subject.
 32. If the student does not enroll in the minimum number of subjects per semester, they will be automatically failed.
-33. The student must have a validated CPF (Brazilian Social Security Number) in the external CPF validation system (government system).
+33. **DONE** The student must have a validated CPF (Brazilian Social Security Number) in the external CPF validation system (government system).
 34. Add the course name to the coordinator's reports.
 35. The student is only approved if they achieve the minimum grade in all course subjects, even if their GPA is above the minimum.
-36. The ~~user~~ student (person) must be able to create students with basic information.
+<!-- The user can create student with cpf and name. Considering DONE -->
+36. **DONE** The ~~user~~ student (person) must be able to create students with basic information.
 <!-- The basic information is enough for enrollment -->
 37. ~~The user must be able to enroll the student in a course.~~
 38. The ~~user~~ general coordinator must be able to create courses with the minimum number of subjects.
