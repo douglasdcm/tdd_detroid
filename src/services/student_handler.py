@@ -61,9 +61,10 @@ class StudentHandler:
         return self.__state == self.LOCKED
 
     def __is_enrolled_student(self, course_name):
-        return EnrollmentValidator(self.__database).validate_student(
+        enrollment_validator = EnrollmentValidator(self.__database)
+        return enrollment_validator.validate_student_by_data(
             self.name, self.cpf, course_name
-        )
+        ) or enrollment_validator.validate_student_by_identifier(self.identifier)
 
     def __save(self):
         self.__database.student.name = self.name
@@ -91,12 +92,16 @@ class StudentHandler:
         self.__database.grade_calculator.grade = 0
         self.__database.grade_calculator.add()
 
-    def update_grade_to_subject(self, grade, subject_identifier):
+    def update_grade_to_subject(self, grade, subject_name):
         if grade < 0 or grade > 10:
             raise NonValidGrade("Grade must be between '0' and '10'")
+
+        subject_identifier = utils.generate_subject_identifier(
+            self.__course, subject_name
+        )
         if not self.__is_valid_subject(subject_identifier):
             return NonValidSubject(
-                f"The student is not enrolled to this subject '{subject_identifier}'"
+                f"The student is not enrolled to this subject '{subject_name}'"
             )
 
         class Subject:
@@ -168,24 +173,24 @@ class StudentHandler:
             logging.error(str(e))
             raise
 
-    def take_subject(self, subject_identifier):
-        """
-        subject_identifier (str): The unique identifier of the subject. It follows the pattern
-        <course name>-<subject name>
-        """
-        is_valid_student = self.__is_enrolled_student(self.__course)
-        if not is_valid_student:
-            raise NonValidStudent()
+    def take_subject(self, subject_name):
+        if not self.__is_enrolled_student(self.__course):
+            raise NonValidStudent(f"Student '{self.identifier}' is not valid.")
+
+        self.load_from_database(self.identifier)
 
         if self.__is_locked():
-            raise NonValidStudent()
+            raise NonValidStudent(f"Student '{self.identifier}' is locked.")
 
+        subject_identifier = utils.generate_subject_identifier(
+            self.__course, subject_name
+        )
         subject_handler = SubjectHandler(self.__database)
         try:
             subject_handler.load_from_database(subject_identifier)
         except Exception as e:
             logging.error(str(e))
-            raise NonValidSubject()
+            raise NonValidSubject(f"Subject '{subject_identifier}' not found.")
 
         if subject_handler.course != self.__course:
             raise NonValidSubject()

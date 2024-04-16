@@ -49,7 +49,7 @@ Definition of Done:
 3. Data is being saved in the database.
 # Deliverables
 Construction of the basic functions of the system
-1. Each student will have a grade control called "grade point average" (GPA).
+1. DONE Each student will have a grade control called "grade point average" (GPA).
 2. The GPA is the average of the student's grades in the ~~courses~~ subjects already taken.
 3. The student is considered approved at the university if their GPA is above or equal to 7 (seven) at the end of the course.
 4. If a student takes the same subject more than once, the highest grade will be considered in the GPA calculation.
@@ -105,3 +105,13 @@ Construction of the basic functions of the system
 48. If the student exceeds the 10 semesters, they are automatically failed.
 49. The coordinator can only coordinate a maximum of 3 courses.
 50. The general coordinator cannot be a coordinator of courses.
+
+# Features add after architecture analisys
+These features were introduced after analysis in architecture and specifications. Some features does not make sense without them:
+51. The teacher sets thes grade for all students of his/her subjects
+52. Each teacher may teach in 3 subjects at maximum
+53. The general coordinator is responsible to open and close the semesters
+54. The general coordinator is responible to add students to enrollment list after manual analysis of thier documentation
+55. The corse coordinator is responsible to add new subjects to his/her course
+56. The general coordinator is responsible to add new courses to the university
+57. The student, teacher and coordinators need to authenticate with valid credentials before perfom any action in the system

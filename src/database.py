@@ -234,7 +234,9 @@ class Database:
                     f"SELECT * FROM {self.TABLE} WHERE identifier = '{subject_identifier}'"
                 ).fetchone()
                 if not result:
-                    raise NotFoundError()
+                    raise NotFoundError(
+                        f"Subject '{subject_identifier}' not found in table '{self.TABLE}'"
+                    )
 
                 self.name = result[0]
                 self.state = result[1]

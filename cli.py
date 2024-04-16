@@ -9,6 +9,7 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S",
     format="%(asctime)s - %(levelname)s: [%(filename)s:%(lineno)s - %(funcName)20s() ] %(message)s",
     filemode="a",
+    level="DEBUG",
 )
 
 
@@ -71,7 +72,27 @@ def calculate_student_gpa(student_identifier):
         logging.error(str(e))
 
 
+@click.command()
+@click.option(
+    "--student-identifier",
+    prompt="Student identifier",
+    help="Student identifier number.",
+)
+@click.option(
+    "--subject-name",
+    prompt="Subject name",
+    help="The name of the subject the student wants to take.",
+)
+def take_subject(student_identifier, subject_name):
+    try:
+        database = Database()
+        cli_helper.take_subject(database, student_identifier, subject_name)
+    except Exception as e:
+        logging.error(str(e))
+
+
 cli.add_command(enroll_student)
+cli.add_command(take_subject)
 cli.add_command(calculate_student_gpa)
 cli.add_command(activate_course)
 cli.add_command(deactivate_course)

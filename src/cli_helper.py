@@ -69,6 +69,22 @@ def calculate_student_gpa(database, student_identifier):
     return False
 
 
+def take_subject(database, student_identifier, subject_name):
+    try:
+        student_handler = StudentHandler(database)
+        student_handler.identifier = student_identifier
+        student_handler.take_subject(subject_name)
+        print(f"Student '{student_identifier}' toke subject '{subject_name}'.")
+        return True
+    except NonValidStudent as e:
+        logging.error(str(e))
+        print(f"Student '{student_identifier}' is not valid'")
+    except Exception as e:
+        logging.error(str(e))
+        print(UNEXPECTED_ERROR)
+    return False
+
+
 def enroll_student(database, name, cpf, course_name):
     try:
         student = StudentHandler(database)

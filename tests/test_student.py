@@ -25,14 +25,12 @@ def test_calculate_student_gpa_when_subjects_have_invalid_grades(
     student_handler.cpf = "123.456.789-10"
     student_handler.enroll_to_course(course_name)
 
-    subject_identifier1 = utils.generate_subject_identifier(course_name, "any1")
+    subject_name = "any1"
 
-    student_handler.take_subject(subject_identifier1)
+    student_handler.take_subject(subject_name)
 
     with pytest.raises(NonValidGrade):
-        student_handler.update_grade_to_subject(
-            grade=grade, subject_identifier=subject_identifier1
-        )
+        student_handler.update_grade_to_subject(grade=grade, subject_name=subject_name)
 
 
 def test_unlock_course(set_in_memory_database):
@@ -62,7 +60,7 @@ def test_take_subject_from_course_when_locked_student_return_error(
     student = StudentHandler(set_in_memory_database)
     student.name = "any"
     student.cpf = "123.456.789-10"
-    subject = "any"
+    subject = "any1"
 
     student.enroll_to_course("any")
     student.lock_course()
@@ -97,11 +95,9 @@ def test_take_subject_from_course(set_in_memory_database):
     student.name = "any"
     student.cpf = "123.456.789-10"
     course = "any"
-    student.enroll_to_course("any")
-    subject_identifier = utils.generate_subject_identifier(course, "any1")
-
     student.enroll_to_course(course)
-    assert student.take_subject(subject_identifier) is True
+
+    assert student.take_subject("any1") is True
 
 
 def test_enroll_invalid_student_to_course_retunr_error(set_in_memory_database):
