@@ -1,9 +1,12 @@
 {Translated from Portuguese to English using AI}
 # College Student Grade Control
 ## Introduction
-This project aims to practice "code smells" related to unit tests using an application that simulates a real business scenario.
+This project aims to practice architecture skills using an application that simulates a real business scenario.
 The code will be developed using the TDD technique in the Detroit style, hence the name of the repository.
 The application simulates the control of grades for university students.
+
+# Architecture
+[text](architecture.odp)
 
 # Setup and Test
 ```
@@ -37,6 +40,7 @@ python cli.py --name any --cpf 123.456.789-10 --course-identifier any
 
 ```
 
+# Application specification
 
 Below is the specification of the application:
 Definition of Done:
