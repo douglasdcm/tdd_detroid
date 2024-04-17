@@ -68,7 +68,7 @@ Same as requirement 6
 12. **DONE** The maximum grade for a student in a subject is 10.
 13. **DONE** The minimum grade for a student in a subject is 0.
 14. **DONE** The student can lock the course, and in this case, they cannot update their grades or the subjects taken.
-15. The course coordinator can list the students, grades in each subject, and GPAs of the students.
+15. **DONE**  The course coordinator can list the students, grades in each subject, and GPAs of the students.
 16. **DONE** The student can unlock the course, and their situation returns to the previous state.
 17. **DONE** Students must have names.
 18. The general coordinator can list all courses, students, grades in each subject, and GPAs of each student.

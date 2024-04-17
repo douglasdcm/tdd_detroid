@@ -1,4 +1,5 @@
 import logging
+import json
 from src.services.student_handler import (
     StudentHandler,
     NonValidStudent,
@@ -158,7 +159,9 @@ def enroll_student(database, name, cpf, course_name):
         student.name = name
         student.cpf = cpf
         identifier = student.enroll_to_course(course_name)
-        print(f"Student '{name}' enrolled with identifier '{identifier}'.")
+        print(
+            f"Student '{name}' enrolled in course '{course_name}' with identifier '{identifier}'."
+        )
         return True
     except NonValidStudent as e:
         logging.error(str(e))
@@ -173,11 +176,9 @@ def list_students(database, course_name):
     try:
         course_handler = CourseHandler(database)
         course_handler.name = course_name
-        students = course_handler.list_students()
+        students = course_handler.list_student_details()
         print(f"List of students:")
-        print(f"Student identifier, Student name, Subjects, GPA")
-        for student in students:
-            print(f"  {student}")
+        print(json.dumps(students, sort_keys=True, indent=4))
         return True
     except NonValidStudent as e:
         logging.error(str(e))

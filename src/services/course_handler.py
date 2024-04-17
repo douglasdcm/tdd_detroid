@@ -1,7 +1,7 @@
 import uuid
 import logging
 from src.constants import DUMMY_IDENTIFIER
-from src.database import NotFoundError
+from src.services.grade_calculator import GradeCalculator
 
 
 class CourseHandler:
@@ -74,23 +74,25 @@ class CourseHandler:
             logging.error(str(e))
             raise NonValidCourse("Course not found.")
 
-    def list_students(self):
+    def list_student_details(self):
         self.load_from_database(self.name)
         enrolled_students = self.__database.course.enrolled_students
-        result = []
+        result = {}
         for student_identifier in enrolled_students:
-            try:
+            self.__database.student.load(student_identifier)
+            result[self.__database.student.identifier] = {
+                "name": self.__database.student.name,
+                "gpa": self.__database.student.gpa,
+            }
 
-                self.__database.student.load(student_identifier)
-                student_identifer = self.__database.student.identifier
-                student_name = self.__database.student.name
-                subjects = self.__database.student.subjects
-                gpa = self.__database.student.gpa
-
-                result.append([student_identifer, student_name, subjects, gpa])
-            except Exception as e:
-                logging.error(str(e))
-                raise
+        for student_identifier in enrolled_students:
+            self.__database.student.load(student_identifier)
+            for subject_identifier in self.__database.student.subjects:
+                grade_calculator = GradeCalculator(self.__database)
+                grade_calculator.load_from_database(
+                    student_identifier, subject_identifier
+                )
+                result[student_identifier][subject_identifier] = grade_calculator.grade
         return result
 
     def enroll_student(self, student_identifier):
