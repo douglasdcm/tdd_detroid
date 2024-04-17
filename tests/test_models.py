@@ -25,24 +25,26 @@ def test_subject_model(set_in_memory_database):
 
 
 def test_course_model(set_in_memory_database):
+    course = "any"
     database = set_in_memory_database
     course_handler = CourseHandler(database)
-    course_handler.name = "any_name"
+    course_handler.name = course
     course_handler.save()
 
-    assert course_handler.name == "any_name"
+    assert course_handler.name == course
     assert course_handler.identifier is not None
     assert course_handler.state == "inactive"
     assert course_handler.enrolled_students == []
     assert course_handler.max_enrollment == 0
     assert course_handler.subjects == []
 
-    assert database.course.name == "any_name"
+    course_handler.load_from_database(course)
+    assert database.course.name == course
     assert database.course.identifier is not None
     assert database.course.state == "inactive"
-    assert database.course.enrolled_students == ""
+    assert database.course.enrolled_students == []
     assert database.course.max_enrollment == 0
-    assert database.course.subjects == ""
+    assert database.course.subjects == []
 
 
 def test_student_model(set_in_memory_database):

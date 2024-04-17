@@ -66,6 +66,26 @@ def deactivate_course(name):
 
 @click.command()
 @click.option("--name", prompt="Course name", help="Name of the course.")
+@click.option(
+    "--max-enrollment",
+    prompt="Course maximum number of students",
+    help="The maximum number of students in a course.",
+)
+def create_course(name, max_enrollment):
+    database = Database()
+    cli_helper.create_course(database, name, max_enrollment)
+
+
+@click.command()
+@click.option("--course-name", prompt="Course name", help="Name of the course.")
+@click.option("--subject-name", prompt="Subject name", help="Name of the subject.")
+def add_subject(course_name, subject_name):
+    database = Database()
+    cli_helper.add_subject_to_course(database, course_name, subject_name)
+
+
+@click.command()
+@click.option("--name", prompt="Course name", help="Name of the course.")
 def activate_course(name):
     database = Database()
     cli_helper.activate_course(database, name)
@@ -188,6 +208,9 @@ cli.add_command(cancel_course)
 cli.add_command(remove_subject)
 cli.add_command(list_students)
 cli.add_command(list_courses)
+cli.add_command(create_course)
+cli.add_command(add_subject)
+
 
 if __name__ == "__main__":
     cli()

@@ -11,11 +11,14 @@ python cli.py lock-course --student-identifier 25a5a5c24a5252968097e5d5c80e6352
 python cli.py unlock-course --student-identifier 25a5a5c24a5252968097e5d5c80e6352
 
 python cli.py enroll-student --name maria --cpf 028.745.462.18 --course-name mat
-python cli.py enroll-student --name aline --cpf 028.745.462.18 --course-name adm
+# python cli.py enroll-student --name aline --cpf 028.745.462.18 --course-name adm
 python cli.py list-students --course-name mat
+python cli.py list-courses
 
 
 python cli.py remove-subject --course-name adm --subject-name management
 python cli.py activate-course --name deact
 python cli.py deactivate-course --name act
 python cli.py cancel-course --name adm
+python cli.py create-course --name geography --max-enrollment 11
+python cli.py add-subject --course-name geography --subject-name minerals

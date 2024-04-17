@@ -20,6 +20,7 @@ def set_in_memory_database():
     db.course.populate("noise")
     db.course.populate("deact")
     db.course.populate("act")
+    db.course.populate("nosubjects", state="", subjects="")
 
     db.subject.populate("any", "any1")  # e4c858cd917f518194c9d93c9d13def8
     db.subject.populate("any", "any2")  # 283631d2292c54879b9aa72e27a1b4ff

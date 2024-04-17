@@ -2,6 +2,8 @@ import uuid
 import logging
 from src.constants import DUMMY_IDENTIFIER
 from src.services.grade_calculator import GradeCalculator
+from src.database import Database, NotFoundError
+from src import utils
 
 
 class CourseHandler:
@@ -9,7 +11,7 @@ class CourseHandler:
     INACTIVE = "inactive"
     CANCELLED = "cancelled"
 
-    def __init__(self, database) -> None:
+    def __init__(self, database: Database) -> None:
         self.__identifier = DUMMY_IDENTIFIER
         self.__name = None
         self.__state = self.INACTIVE  # TODO use enum
@@ -44,6 +46,7 @@ class CourseHandler:
             raise NonValidCourse(
                 f"The maximum number of characters to course's name is '10'. Set with '{len(value)}'."
             )
+        self.__identifier = utils.generate_course_identifier(value)
         self.__name = value
 
     @property
@@ -58,15 +61,14 @@ class CourseHandler:
         self.__database.course.name = self.name
         self.__database.course.state = self.state
         self.__database.course.identifier = self.identifier
-        self.__database.course.enrolled_students = ",".join(self.enrolled_students)
+        self.__database.course.enrolled_students = self.enrolled_students
         self.__database.course.max_enrollment = self.max_enrollment
-        self.__database.course.subjects = ",".join(self.subjects)
+        self.__database.course.subjects.extend(self.subjects)
         self.__database.course.save()
 
     def load_from_database(self, name):
         try:
             self.__database.course.load_from_database(name)
-
             self.name = self.__database.course.name
             self.__state = self.__database.course.state
             self.__identifier = self.__database.course.identifier
@@ -74,9 +76,12 @@ class CourseHandler:
             self.max_enrollment = self.__database.course.max_enrollment
             self.__subjects = self.__database.course.subjects
 
+        except NotFoundError as e:
+            logging.error(str(e))
+            raise
         except Exception as e:
             logging.error(str(e))
-            raise NonValidCourse("Course not found.")
+            raise
 
     def list_student_details(self):
         self.load_from_database(self.name)
@@ -109,18 +114,22 @@ class CourseHandler:
 
     def enroll_student(self, student_identifier):
         if not self.state == self.ACTIVE:
-            raise NonValidCourse("Course is not active.")
+            raise NonValidCourse(f"Course '{self.name}' is not active.")
         self.__enrolled_students.append(student_identifier)
         self.save()
         return True
 
     def add_subject(self, subject):
-        self.subjects.append(subject)
+        self.load_from_database(self.name)
+        self.__subjects.append(subject)
         self.save()
+        return True
 
     def cancel(self):
         if not self.name:
             raise NonValidCourse("No name set to course.")
+
+        self.load_from_database(self.name)
         self.__state = self.CANCELLED
         self.save()
         return self.__state
@@ -129,26 +138,41 @@ class CourseHandler:
         if not self.name:
             raise NonValidCourse("No name set to course.")
 
-        if self.state == self.ACTIVE:
-            self.__state = self.INACTIVE
-            self.save()
+        self.load_from_database(self.name)
+        self.__state = self.INACTIVE
+        self.save()
         return self.__state
 
     def activate(self):
         if not self.name:
             raise NonValidCourse("No name set to course.")
 
+        self.load_from_database(self.name)
         MINIMUM = 3
         if not len(self.subjects) >= MINIMUM:
-            raise NonValidCourse(
+            raise NonMinimunSubjects(
                 f"Need '{MINIMUM}' subjects. Set '{len(self.subjects)}'"
             )
 
-        self.__identifier = uuid.uuid5(uuid.NAMESPACE_URL, f"{self.name}").hex
         self.__state = self.ACTIVE
         self.save()
         return self.__state
 
+    def create(self, course_name, max_enrollmet):
+        self.name = course_name
+        self.__max_enrollment = max_enrollmet
+        self.__database.course.identifier = self.identifier
+        self.__database.course.name = course_name
+        self.__database.course.state = self.state
+        self.__database.course.enrolled_students = self.enrolled_students
+        self.__database.course.max_enrollment = self.max_enrollment
+        self.__database.course.add()
+        return True
+
 
 class NonValidCourse(Exception):
+    pass
+
+
+class NonMinimunSubjects(Exception):
     pass

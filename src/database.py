@@ -3,10 +3,14 @@ import logging
 from src import utils
 
 
-def convert_list_with_empty_string_to_empty_list(the_list):
-    if len(the_list[0]) == 0:
-        the_list = []
-    return the_list
+def convert_csv_to_list(the_csv):
+    if len(the_csv) == 0 or the_csv is None:
+        return []
+    return the_csv.split(",")
+
+
+def convert_list_to_csv(the_list):
+    return ",".join(set(the_list))
 
 
 # TODO test concurrency
@@ -40,9 +44,6 @@ class Database:
                 f"CREATE TABLE IF NOT EXISTS {self.TABLE} (name, state, cpf, identifier, gpa, subjects, course)"
             )
 
-        def __convert_subjects_to_csv(self):
-            return ",".join(set(self.subjects))
-
         def add(self):
             try:
                 cmd = f"""
@@ -52,7 +53,7 @@ class Database:
                         '{self.cpf}', 
                         '{self.identifier}', 
                          {self.gpa}, 
-                        '{self.__convert_subjects_to_csv()}', 
+                        '{convert_list_to_csv(self.subjects)}', 
                         '{self.course}')
                 """
                 self.cur.execute(cmd)
@@ -67,7 +68,7 @@ class Database:
                 UPDATE {self.TABLE}
                 SET state = '{self.state}',
                     gpa = {self.gpa},
-                    subjects = '{self.__convert_subjects_to_csv()}'
+                    subjects = '{convert_list_to_csv(self.subjects)}'
                 WHERE identifier = '{self.identifier}';
                 """
             self.cur.execute(cmd)
@@ -109,9 +110,7 @@ class Database:
                 self.cpf = result[2]
                 self.identifier = result[3]
                 self.gpa = result[4]
-                self.subjects = convert_list_with_empty_string_to_empty_list(
-                    result[5].split(",")
-                )
+                self.subjects = convert_csv_to_list(result[5])
                 self.course = result[6]
             except Exception as e:
                 logging.error(str(e))
@@ -124,7 +123,7 @@ class Database:
             self.cur = cur
             self.con = con
             self.cur.execute(
-                f"CREATE TABLE IF NOT EXISTS {self.TABLE} (student_identifier)"
+                f"CREATE TABLE IF NOT EXISTS {self.TABLE} (student_identifier TEXT NOT NULL UNIQUE)"
             )
 
         # Just for admin. The university has a predefined list of approved students to each course.
@@ -151,28 +150,34 @@ class Database:
         identifier = None
         enrolled_students = None
         max_enrollment = None
-        subjects = None
+        subjects = []
 
         def __init__(self, con, cur):
             self.con = con
             self.cur = cur
             self.cur.execute(
-                f"CREATE TABLE IF NOT EXISTS {self.TABLE} (name, state, identifier, enrolled_students, max_enrollment, subjects)"
+                f"CREATE TABLE IF NOT EXISTS {self.TABLE}"
+                " (name TEXT NOT NULL UNIQUE,"
+                " state TEXT NOT NULL,"
+                " identifier TEXT NOT NULL UNIQUE,"
+                " enrolled_students TEXT,"
+                " max_enrollment INTEGER NOT NULL,"
+                " subjects TEXT)"
             )
 
         # Just for admin. Necessary because there is not a user story to create courses
         # TODO create a public funtion
-        def populate(self, name):
+        def populate(self, name, state="active", subjects="any1,any2,any3"):
             identifier = utils.generate_course_identifier(name)
             self.cur.execute(
                 f"""
                     INSERT INTO {self.TABLE} VALUES
                         ('{name}', 
-                        'active', 
+                        '{state}', 
                         '{identifier}', 
                         '', 
-                        '10', 
-                        'any1,any2,any3')
+                        10, 
+                        '{subjects}')
                 """
             )
             self.con.commit()
@@ -181,7 +186,10 @@ class Database:
             try:
                 cmd = f"""
                     UPDATE {self.TABLE}
-                    SET enrolled_students = '{self.enrolled_students}'
+                    SET enrolled_students = '{convert_list_to_csv(self.enrolled_students)}',
+                    state = '{self.state}',
+                    max_enrollment = '{self.max_enrollment}',
+                    subjects = '{convert_list_to_csv(self.subjects)}'
                     WHERE identifier = '{self.identifier}';
                     """
                 self.cur.execute(cmd)
@@ -198,9 +206,9 @@ class Database:
                             ('{self.name}', 
                             '{self.state}', 
                             '{self.identifier}', 
-                            '{self.enrolled_students}', 
-                            '{self.max_enrollment}', 
-                            '{self.subjects}')
+                            '{convert_list_to_csv(self.enrolled_students)}', 
+                            {self.max_enrollment}, 
+                            '{convert_list_to_csv(self.subjects)}')
                     """
                 )
                 self.con.commit()
@@ -225,32 +233,30 @@ class Database:
                 course_row.name = row[0]
                 course_row.state = row[1]
                 course_row.identifier = row[2]
-                course_row.enrolled_students = (
-                    convert_list_with_empty_string_to_empty_list(
-                        the_list=row[3].split(",")
-                    )
-                )
+                course_row.enrolled_students = convert_csv_to_list(the_csv=row[3])
                 course_row.max_enrollment = row[4]
-                course_row.subjects = convert_list_with_empty_string_to_empty_list(
-                    row[5].split(",")
-                )
+                course_row.subjects = convert_csv_to_list(row[5])
                 courses.append(course_row)
             return courses
 
         def load_from_database(self, name):
-            result = self.cur.execute(
-                f"SELECT * FROM {self.TABLE} WHERE name = '{name}'"
-            ).fetchone()
-            self.name = result[0]
-            self.state = result[1]
-            self.identifier = result[2]
-            self.enrolled_students = convert_list_with_empty_string_to_empty_list(
-                the_list=result[3].split(",")
-            )
-            self.max_enrollment = result[4]
-            self.subjects = convert_list_with_empty_string_to_empty_list(
-                result[5].split(",")
-            )
+            try:
+                result = self.cur.execute(
+                    f"SELECT * FROM {self.TABLE} WHERE name = '{name}'"
+                ).fetchone()
+                if not result:
+                    raise NotFoundError(
+                        f"Course '{name}' not found in table {self.TABLE}."
+                    )
+                self.name = result[0]
+                self.state = result[1]
+                self.identifier = result[2]
+                self.enrolled_students = convert_csv_to_list(the_csv=result[3])
+                self.max_enrollment = result[4]
+                self.subjects = convert_csv_to_list(result[5])
+            except Exception as e:
+                logging.error(str(e))
+                raise
 
     class DbSubject:
         TABLE = "subject"
@@ -260,12 +266,15 @@ class Database:
         max_enrollment = None
         identifier = None
         course = None
+        MAX_ENROLLMENT = 30
 
         def __init__(self, con, cur):
             self.cur = cur
             self.con = con
             cur.execute(
-                f"CREATE TABLE IF NOT EXISTS {self.TABLE} (name, state, identifier, enrolled_students, max_enrollment, course)"
+                f"CREATE TABLE IF NOT EXISTS {self.TABLE}"
+                " (name, state, identifier, enrolled_students,"
+                f" max_enrollment CHECK (max_enrollment <= {self.MAX_ENROLLMENT}) , course)"
             )
 
         # Just for admin. The university has a predefined list of approved students to each course.

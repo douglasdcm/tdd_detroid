@@ -5,7 +5,11 @@ from src.services.student_handler import (
     NonValidStudent,
     NonValidGrade,
 )
-from src.services.course_handler import CourseHandler, NonValidCourse
+from src.services.course_handler import (
+    CourseHandler,
+    NonValidCourse,
+    NonMinimunSubjects,
+)
 from src.services.grade_calculator import GradeCalculator, NonValidGradeOperation
 from src.services.subject_handler import SubjectHandler, NonValidSubject
 
@@ -33,7 +37,7 @@ def cancel_course(database, name):
         course_handler = CourseHandler(database)
         course_handler.load_from_database(name)
         course_handler.cancel()
-        print(f"Course cancelled.")
+        print(f"Course '{name}' cancelled.")
         return True
     except NonValidCourse as e:
         logging.error(str(e))
@@ -49,7 +53,7 @@ def deactivate_course(database, name):
         course_handler = CourseHandler(database)
         course_handler.load_from_database(name)
         course_handler.deactivate()
-        print(f"Course deactivated.")
+        print(f"Course '{name}' deactivated.")
         return True
     except NonValidCourse as e:
         logging.error(str(e))
@@ -65,11 +69,42 @@ def activate_course(database, name):
         course_handler = CourseHandler(database)
         course_handler.load_from_database(name)
         course_handler.activate()
-        print(f"Course activated.")
+        print(f"Course '{name}' activated.")
+        return True
+    except (NonValidCourse, NonMinimunSubjects) as e:
+        logging.error(str(e))
+        print(str(e))
+    except Exception as e:
+        logging.error(str(e))
+        print(UNEXPECTED_ERROR)
+    return False
+
+
+def create_course(database, name, max_enrollment):
+    try:
+        course_handler = CourseHandler(database)
+        course_handler.create(name, max_enrollment)
+        print(f"Course '{name}' created.")
         return True
     except NonValidCourse as e:
         logging.error(str(e))
         print(f"Course '{name}' is not valid.")
+    except Exception as e:
+        logging.error(str(e))
+        print(UNEXPECTED_ERROR)
+    return False
+
+
+def add_subject_to_course(database, course_name, subject_name):
+    try:
+        course_handler = CourseHandler(database)
+        course_handler.name = course_name
+        course_handler.add_subject(subject_name)
+        print(f"Subject '{subject_name}' added to course '{course_name}'.")
+        return True
+    except NonValidCourse as e:
+        logging.error(str(e))
+        print(f"Course '{course_name}' is not valid.")
     except Exception as e:
         logging.error(str(e))
         print(UNEXPECTED_ERROR)
@@ -163,7 +198,7 @@ def enroll_student(database, name, cpf, course_name):
             f"Student '{name}' enrolled in course '{course_name}' with identifier '{identifier}'."
         )
         return True
-    except NonValidStudent as e:
+    except (NonValidStudent, NonValidCourse) as e:
         logging.error(str(e))
         print(str(e))
     except Exception as e:
@@ -177,7 +212,7 @@ def list_student_details(database, course_name):
         course_handler = CourseHandler(database)
         course_handler.name = course_name
         students = course_handler.list_student_details()
-        print(f"List of students:")
+        print(f"List of students in course {course_name}:")
         print(json.dumps(students, sort_keys=True, indent=4))
         return True
     except NonValidStudent as e:

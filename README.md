@@ -58,7 +58,7 @@ Construction of the basic functions of the system
 6. **DONE** Subjects in each course may have the same names but will be differentiated by a unique identifier (niu).
 7. **DONE** The system must calculate the student's situation taking into account the subjects taken and the total number of subjects in each course.
 8. **DONE** The student can only take subjects from their course.
-9. Courses must have a unique identifier and name.
+9. **DONE** Courses must have a unique identifier and name.
 <!-- 
 Same as requirement 6
 10. ~~Course~~ Subject names can be the same, but the unique identifier for each ~~course~~ subject must be different. -->
@@ -77,28 +77,28 @@ Same as requirement 6
 21. **DONE** Course and subject names must have a maximum of 10 letters.
 <!-- What are units? Not clear -->
 22. Courses can have the same names if they are from different units.
-<!-- The student can do any time. Don't need to wai the next semester -->
-23. The student can only enroll in one course.
+<!-- The student can do it any time. Don't need to wait the next semester -->
+23. **DONE** The student can only enroll in one course.
 24. The coordinator can coordinate a maximum of three courses.
-25. The coordinator can list the students, subjects, grades, and GPAs of all their courses (coordinator of more than one course).
+25. **DONE** The coordinator can list the students, subjects, grades, and GPAs of all their courses (coordinator of more than one course).
 <!-- this requirement wasn't informing the actor. Figured out while making the diagrams of use cases -->
 <!-- 26. The course can be canceled. -->
 26. **DONE** The course can be canceled by the general cordinator.
-27. Canceled courses cannot accept student enrollments.
+27. **DONE** Canceled courses cannot accept student enrollments.
 <!-- How o set coordinators? -->
 28. Canceled courses cannot have coordinators.
-29. Each subject can have a maximum of 30 enrolled students.
+29. **DONE** Each subject can have a maximum of 30 enrolled students.
 30. The student must enroll in a minimum of 3 subjects.
 31. If the number of subjects missing for a student is less than 3, they can enroll in 1 subject.
-32. If the student does not enroll in the minimum number of subjects per semester, they will be automatically failed.
+32. If the student does not enroll in the minimum number of subjects per semester, they will be automatically ~~failed~~ locked.
 33. **DONE** The student must have a validated CPF (Brazilian Social Security Number) in the external CPF validation system (government system).
-34. Add the course name to the coordinator's reports.
-35. The student is only approved if they achieve the minimum grade in all course subjects, even if their GPA is above the minimum.
+34. **DONE** Add the course name to the coordinator's reports.
+35. The students are only approved if they achieve the minimum grade in all course subjects, even if their GPA is above the minimum.
 <!-- The user can create student with cpf and name. Considering DONE -->
 36. **DONE** The ~~user~~ student (person) must be able to create students with basic information.
 <!-- The basic information is enough for enrollment -->
 37. ~~The user must be able to enroll the student in a course.~~
-38. The ~~user~~ general coordinator must be able to create courses with the minimum number of subjects.
+38. **DONE** The ~~user~~ general coordinator must be able to create courses with the minimum number of subjects.
 39. The administrator, and only the administrator, must be able to list all students with detailed information (all available information).
 40. The administrator, and only the administrator, must be able to list all courses with all available information.
 41. The administrator, and only the administrator, must be able to list the list of students per course.
@@ -121,3 +121,5 @@ These features were introduced after analysis in architecture and specifications
 55. The corse coordinator is responsible to add new subjects to his/her course
 56. The general coordinator is responsible to add new courses to the university
 57. The student, teacher and coordinators need to authenticate with valid credentials before perfom any action in the system
+56. The course need a minimum enrollment of 100 students
+56. The subject need a minimum enrollment of 10 students
