@@ -35,13 +35,21 @@ class Database:
         gpa = None
         subjects = []
         course = None
+        semester_counter = None
 
         def __init__(self, con, cur):
             self.cur = cur
             self.con = con
             # TODO move to installation file
             cur.execute(
-                f"CREATE TABLE IF NOT EXISTS {self.TABLE} (name, state, cpf, identifier, gpa, subjects, course)"
+                f"CREATE TABLE IF NOT EXISTS {self.TABLE} (name,"
+                " state,"
+                " cpf,"
+                " identifier,"
+                " gpa,"
+                " subjects,"
+                " course,"
+                " semester_counter)"
             )
 
         def add(self):
@@ -54,7 +62,8 @@ class Database:
                         '{self.identifier}', 
                          {self.gpa}, 
                         '{convert_list_to_csv(self.subjects)}', 
-                        '{self.course}')
+                        '{self.course}',
+                        {self.semester_counter})
                 """
                 self.cur.execute(cmd)
 
@@ -68,6 +77,7 @@ class Database:
                 UPDATE {self.TABLE}
                 SET state = '{self.state}',
                     gpa = {self.gpa},
+                    semester_counter = {self.semester_counter},
                     subjects = '{convert_list_to_csv(self.subjects)}'
                 WHERE identifier = '{self.identifier}';
                 """
@@ -92,10 +102,44 @@ class Database:
                         '{student_identifier}',
                         '{gpa}',
                         '{subject}',
-                        '{course_identifier}')
+                        '{course_identifier}',
+                        0)
                 """
             )
             self.con.commit()
+
+        def search_all(self):
+            class StudentRow:
+                name = None
+                state = None
+                cpf = None
+                identifier = None
+                gpa = None
+                subjects = None
+                course = None
+                semester_counter = None
+
+            try:
+                cmd = f"SELECT * FROM {self.TABLE}"
+                result = self.cur.execute(cmd).fetchall()
+                if not result:
+                    return []
+                student_rows = []
+                for row in result:
+                    student_row = StudentRow()
+                    student_row.name = row[0]
+                    student_row.state = row[1]
+                    student_row.cpf = row[2]
+                    student_row.identifier = row[3]
+                    student_row.gpa = row[4]
+                    student_row.subjects = convert_csv_to_list(row[5])
+                    student_row.course = row[6]
+                    student_row.semester_counter = row[7]
+                    student_rows.append(student_row)
+                return student_rows
+            except Exception as e:
+                logging.error(str(e))
+                raise
 
         def load(self, identifier):
             try:
@@ -112,6 +156,7 @@ class Database:
                 self.gpa = result[4]
                 self.subjects = convert_csv_to_list(result[5])
                 self.course = result[6]
+                self.semester_counter = result[7]
             except Exception as e:
                 logging.error(str(e))
                 raise
@@ -335,17 +380,22 @@ class Database:
             student_identifier = None
             subject_identifier = None
             grade = None
+            subject_situation = None
 
         TABLE = "grade_calculator"
         student_identifier = None
         subject_identifier = None
         grade = None
+        subject_situation = None
 
         def __init__(self, con, cur):
             self.con = con
             self.cur = cur
             cur.execute(
-                f"CREATE TABLE IF NOT EXISTS {self.TABLE} (student_identifier, subject_identifier, grade)"
+                f"CREATE TABLE IF NOT EXISTS {self.TABLE} (student_identifier,"
+                " subject_identifier,"
+                " grade INTEGER,"
+                " subject_situation)"
             )
 
         def load_all_by_student_identifier(self, student_identifier):
@@ -365,6 +415,7 @@ class Database:
                     grade_calculator_row.student_identifier = row[0]
                     grade_calculator_row.subject_identifier = row[1]
                     grade_calculator_row.grade = row[2]
+                    grade_calculator_row.subject_situation = row[3]
                     grade_calculators.append(grade_calculator_row)
                 return grade_calculators
             except Exception as e:
@@ -386,8 +437,29 @@ class Database:
                 grade_calculator_row.student_identifier = result[0]
                 grade_calculator_row.subject_identifier = result[1]
                 grade_calculator_row.grade = result[2]
+                grade_calculator_row.subject_situation = result[3]
 
                 return grade_calculator_row
+            except Exception as e:
+                logging.error(str(e))
+                raise
+
+        def search_all(self):
+            try:
+                result = self.cur.execute(f"""SELECT * FROM {self.TABLE}""").fetchall()
+                if not result:
+                    return
+
+                grade_calculators = []
+                for row in result:
+                    grade_calculator_row = self.GradeCalculatorRow()
+                    grade_calculator_row.student_identifier = row[0]
+                    grade_calculator_row.subject_identifier = row[1]
+                    grade_calculator_row.grade = row[2]
+                    grade_calculator_row.subject_situation = row[3]
+                    grade_calculators.append(grade_calculator_row)
+
+                return grade_calculators
             except Exception as e:
                 logging.error(str(e))
                 raise
@@ -409,6 +481,7 @@ class Database:
                 self.student_identifier = result[0]
                 self.subject_identifier = result[1]
                 self.grade = result[2]
+                self.subject_situation = result[3]
             except Exception as e:
                 logging.error(str(e))
                 raise
@@ -419,7 +492,8 @@ class Database:
                     INSERT INTO {self.TABLE} VALUES
                         ('{self.student_identifier}', 
                         '{self.subject_identifier}', 
-                        {self.grade})
+                        {self.grade},
+                        '{self.subject_situation}')
                 """
                 self.cur.execute(cmd)
 
@@ -432,7 +506,8 @@ class Database:
             try:
                 cmd = f"""
                     UPDATE {self.TABLE}
-                    SET grade = {self.grade}
+                    SET grade = {self.grade},
+                        subject_situation = '{self.subject_situation}'
                     WHERE student_identifier = '{self.student_identifier}'
                     AND subject_identifier = '{self.subject_identifier}';
                     """
@@ -478,8 +553,7 @@ class Database:
                 """
             )
             self.con.commit()
-
-            x = self.cur.execute(f"select * from {self.TABLE}").fetchall()
+            self.cur.execute(f"select * from {self.TABLE}").fetchall()
 
         def save(self):
             try:
@@ -488,7 +562,12 @@ class Database:
                     SET state = '{self.state}'
                     WHERE identifier = '{self.identifier}';
                     """
-                self.cur.execute(cmd)
+                result = self.cur.execute(cmd)
+
+                if not result:
+                    raise NotFoundError(
+                        f"Semester '{self.identifier}' not found in table '{self.TABLE}'"
+                    )
 
                 self.con.commit()
             except Exception as e:

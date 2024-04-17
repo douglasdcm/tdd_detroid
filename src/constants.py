@@ -1,1 +1,2 @@
 DUMMY_IDENTIFIER = -1
+SUBJECT_IN_PROGRESS = "inprogress"

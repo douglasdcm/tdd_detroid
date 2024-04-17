@@ -1,9 +1,15 @@
+import logging
+from src.database import Database, NotFoundError
+from src.constants import SUBJECT_IN_PROGRESS
+
+
 class GradeCalculator:
-    def __init__(self, database) -> None:
+    def __init__(self, database: Database) -> None:
         self.__student_identifier = None
         self.__subject_identifier = None
         self.__grade = None
         self.__rows = None
+        self.__subject_situation = SUBJECT_IN_PROGRESS
         self.__database = database
 
     @property
@@ -23,6 +29,14 @@ class GradeCalculator:
         self.__subject_identifier = value
 
     @property
+    def subject_situation(self):
+        return self.__subject_situation
+
+    @subject_situation.setter
+    def subject_situation(self, value):
+        self.__subject_situation = value
+
+    @property
     def grade(self):
         return self.__grade
 
@@ -35,11 +49,15 @@ class GradeCalculator:
         self.__student_identifier = self.__database.grade_calculator.student_identifier
         self.__subject_identifier = self.__database.grade_calculator.subject_identifier
         self.__grade = self.__database.grade_calculator.grade
+        self.__subject_situation = self.__database.grade_calculator.subject_situation
 
     def search(self, student_identifier, subject_identifier):
         return self.__database.grade_calculator.search(
             student_identifier, subject_identifier
         )
+
+    def search_all(self):
+        return self.__database.grade_calculator.search_all()
 
     def remove(self, student_identifier, subject_identifier):
         return self.__database.grade_calculator.remove(
@@ -50,12 +68,14 @@ class GradeCalculator:
         self.__database.grade_calculator.student_identifier = student_identifier
         self.__database.grade_calculator.subject_identifier = subject_identifier
         self.__database.grade_calculator.grade = grade
+        self.__database.grade_calculator.subject_situation = self.subject_situation
         self.__database.grade_calculator.add()
 
     def save(self):
         self.__database.grade_calculator.student_identifier = self.student_identifier
         self.__database.grade_calculator.subject_identifier = self.subject_identifier
         self.__database.grade_calculator.grade = self.grade
+        self.__database.grade_calculator.subject_situation = self.subject_situation
         self.__database.grade_calculator.save()
 
     def calculate_gpa_for_student(self, student_identifier):
@@ -65,15 +85,17 @@ class GradeCalculator:
                     student_identifier
                 )
             )
-        except Exception:
+        except NotFoundError as e:
             raise NonValidGradeOperation(
                 f"Student '{student_identifier}' not enrolled to any subject."
             )
+        except Exception:
+            logging.error(str(e))
+            raise
         total = 0
         for row in self.__rows:
             total += row.grade
 
-        # When the
         return round(total / len(self.__rows), 1)
 
 

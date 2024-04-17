@@ -1,9 +1,12 @@
 import logging
+from src.database import Database, NotFoundError
+from src.services.grade_calculator import GradeCalculator
+from src.services.student_handler import StudentHandler
 
 
 class SemesterMonitor:
 
-    def __init__(self, database, identifier) -> None:
+    def __init__(self, database: Database, identifier) -> None:
         self.__CLOSED = "closed"
         self.__OPEN = "open"
         self.__identifier = identifier  # TODO get next from database
@@ -48,19 +51,27 @@ class SemesterMonitor:
         if not self.identifier:
             raise NonValidSemester("Need to set the semester identifier.")
 
-        self.__state = self.__CLOSED
         self.__database.semester.identifier = self.identifier
+        try:
+            self.__database.semester.load_by_identifier()
+        except NotFoundError as e:
+            logging.error(str(e))
+            raise NonValidOperation(f"Semester '{self.identifier}' not found")
+        except Exception as e:
+            logging.error(str(e))
+            raise
+        self.__state = self.__CLOSED
         self.__database.semester.state = self.state
         self.__database.semester.save()
 
-        # post condition
-        try:
-            self.__database.semester.load_by_identifier()
-        except Exception as e:
-            logging.error(str(e))
-            raise NonValidOperation(f"Semester '{self.identifier}' is not valid.")
-        assert self.identifier == self.__database.semester.identifier
-        assert self.__state == self.__database.semester.state
+        student_handler = StudentHandler(self.__database)
+        student_rows = student_handler.search_all()
+
+        for row in student_rows:
+            student_handler = StudentHandler(self.__database, row.identifier)
+            student_handler.calculate_gpa()
+            student_handler.increment_semester()
+
         return self.__state
 
 

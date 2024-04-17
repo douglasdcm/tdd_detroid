@@ -5,9 +5,9 @@ from src.services.subject_handler import SubjectHandler, NonValidSubject
 from src.services.grade_calculator import GradeCalculator
 from src.services.cpf_validator import is_valide_cpf
 from src import utils
-from src.database import NotFoundError
-from src.services.grade_calculator import GradeCalculator
-from src.constants import DUMMY_IDENTIFIER
+from src.database import Database, NotFoundError
+from src.services.grade_calculator import GradeCalculator, NonValidGradeOperation
+from src.constants import DUMMY_IDENTIFIER, SUBJECT_IN_PROGRESS
 
 
 class StudentHandler:
@@ -15,21 +15,35 @@ class StudentHandler:
         identifier = None
         grade = None
 
-    def __init__(self, database, identifier=None):
+    def __init__(self, database: Database, identifier=None):
         self.__LOCKED = "locked"
         self.__ENROLLED = "enrolled"
-        self.__identifier = identifier
         self.__state = None
         self.__gpa = 0
         self.__course = None
         self.__name = None
         self.__cpf = None
+        self.__semester_counter = 0
         self.__subject_identifiers = []
         self.__database = database
+        self.__identifier = None
+        if identifier:
+            self.__identifier = identifier
+            self.load_from_database(identifier)
+
+    def __generate_identifier_when_student_ready(self):
+        if self.name and self.cpf and self.__course:
+            self.__identifier = utils.generate_student_identifier(
+                self.name, self.cpf, self.__course
+            )
 
     @property
     def identifier(self):
         return self.__identifier
+
+    @property
+    def semester_counter(self):
+        return self.__semester_counter
 
     @property
     def state(self):
@@ -37,6 +51,7 @@ class StudentHandler:
 
     @property
     def gpa(self):
+        self.calculate_gpa()
         return self.__gpa
 
     @property
@@ -50,6 +65,7 @@ class StudentHandler:
     @name.setter
     def name(self, value):
         self.__name = value
+        self.__generate_identifier_when_student_ready()
 
     @property
     def cpf(self):
@@ -60,6 +76,7 @@ class StudentHandler:
         if not is_valide_cpf(value):
             raise NonValidStudent(f"CPF {value} is not valid.")
         self.__cpf = value
+        self.__generate_identifier_when_student_ready()
 
     def __is_locked(self):
         return self.__state == self.__LOCKED
@@ -81,10 +98,29 @@ class StudentHandler:
             ).calculate_gpa_for_student(self.identifier)
             self.__database.student.subjects.extend(self.subjects)
             self.__database.student.course = self.__course
+            self.__database.student.semester_counter = self.__semester_counter
             self.__database.student.save()
         except Exception as e:
             logging.error(str(e))
             raise
+
+    def calculate_gpa(self):
+        try:
+            self.__gpa = GradeCalculator(self.__database).calculate_gpa_for_student(
+                self.identifier
+            )
+        except NonValidGradeOperation as e:
+            raise NonValidGrade(
+                f"Student '{self.identifier}' may not be enrolled to any subject."
+            )
+        except Exception as e:
+            logging.error(str(e))
+            raise
+
+    def increment_semester(self):
+        self.load_from_database(self.identifier)
+        self.__semester_counter += 1
+        self.__save()
 
     def update_grade_to_subject(self, grade, subject_name):
         if grade < 0 or grade > 10:
@@ -109,13 +145,15 @@ class StudentHandler:
         grade_calculator.student_identifier = self.identifier
         grade_calculator.subject_identifier = subject_identifier
         grade_calculator.grade = grade
-        grade_calculator.save()
-        grade_calculator.load_from_database(self.identifier, subject_identifier)
 
-        # post condition
-        assert grade_calculator.student_identifier == self.identifier
-        assert grade_calculator.subject_identifier in self.__subject_identifiers
-        assert grade_calculator.grade == grade
+        subject_situation = self.__return_subject_situation(grade)
+        grade_calculator.subject_situation = subject_situation
+        grade_calculator.save()
+
+    def __return_subject_situation(self, grade):
+        if grade < 7:
+            return "failed"
+        return "passed"
 
     def __is_valid_subject(self, subject_identifier):
         return subject_identifier in self.subjects
@@ -133,10 +171,8 @@ class StudentHandler:
 
             course = CourseHandler(self.__database)
             course.load_from_database(course_name)
-            self.__identifier = utils.generate_student_identifier(
-                self.name, self.cpf, course_name
-            )
             self.__course = course_name
+            self.__generate_identifier_when_student_ready()
             course.enroll_student(self.identifier)
 
             self.__state = self.__ENROLLED
@@ -147,6 +183,7 @@ class StudentHandler:
             self.__database.student.gpa = 0
             self.__database.student.subjects.extend(self.subjects)
             self.__database.student.course = self.__course
+            self.__database.student.semester_counter = self.__semester_counter
             self.__database.student.add()
 
             grade_calculator = GradeCalculator(self.__database)
@@ -207,6 +244,7 @@ class StudentHandler:
         grade_calculator = GradeCalculator(self.__database)
         if grade_calculator.search(self.identifier, DUMMY_IDENTIFIER):
             grade_calculator.remove(self.identifier, DUMMY_IDENTIFIER)
+        grade_calculator.subject_situation = SUBJECT_IN_PROGRESS
         grade_calculator.add(self.identifier, subject_identifier, grade=0)
 
         # post condition
@@ -241,6 +279,9 @@ class StudentHandler:
         self.__save()
         return self.state
 
+    def search_all(self):
+        return self.__database.student.search_all()
+
     def load_from_database(self, student_identifier):
         try:
             self.__database.student.load(student_identifier)
@@ -252,6 +293,7 @@ class StudentHandler:
             self.__gpa = self.__database.student.gpa
             self.__subject_identifiers.extend(self.__database.student.subjects)
             self.__course = self.__database.student.course
+            self.__semester_counter = self.__database.student.semester_counter
 
         except NotFoundError as e:
             raise NonValidStudent(str(e))

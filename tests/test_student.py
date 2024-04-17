@@ -6,6 +6,37 @@ from src.services.student_handler import (
     NonValidGrade,
 )
 from src import utils
+from src.services.grade_calculator import GradeCalculator
+
+
+@pytest.mark.parametrize(
+    "grade, expected",
+    [
+        (6.99, "failed"),
+        (7.01, "passed"),
+    ],
+)
+def test_subject_situation_after_upgrade_grades(
+    set_in_memory_database, grade, expected
+):
+    course_name = "any"
+    subject_name = "any1"
+    database = set_in_memory_database
+    student_handler = StudentHandler(database)
+    student_handler.name = "any"
+    student_handler.cpf = "123.456.789-10"
+    student_handler.enroll_to_course(course_name)
+    student_handler.take_subject(subject_name)
+    student_handler.update_grade_to_subject(grade=grade, subject_name=subject_name)
+
+    # post condition
+    grade_calculator = GradeCalculator(database)
+    subject_identifier = utils.generate_subject_identifier(course_name, subject_name)
+    grade_calculator.load_from_database(student_handler.identifier, subject_identifier)
+    assert grade_calculator.student_identifier == student_handler.identifier
+    assert grade_calculator.subject_identifier in student_handler.subjects
+    assert grade_calculator.grade == grade
+    assert grade_calculator.subject_situation == expected
 
 
 @pytest.mark.parametrize(
@@ -100,7 +131,7 @@ def test_take_subject_from_course(set_in_memory_database):
     assert student.take_subject("any1") is True
 
 
-def test_enroll_invalid_student_to_course_retunr_error(set_in_memory_database):
+def test_enroll_invalid_student_to_course_return_error(set_in_memory_database):
     student = StudentHandler(set_in_memory_database)
     student.name = "invalid"
     student.cpf = "123.456.789-10"
@@ -109,7 +140,7 @@ def test_enroll_invalid_student_to_course_retunr_error(set_in_memory_database):
         student.enroll_to_course("any")
 
 
-def test_enroll_student_to_course(set_in_memory_database):
+def test_enroll_student_to_course_x(set_in_memory_database):
     student = StudentHandler(set_in_memory_database)
     student.name = "any"
     student.cpf = "123.456.789-10"

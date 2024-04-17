@@ -1,4 +1,5 @@
-from src.services.student_handler import StudentHandler
+import pytest
+from src.services.student_handler import StudentHandler, NonValidGrade
 from src.services.course_handler import CourseHandler
 from src.services.subject_handler import SubjectHandler
 from src.services.semester_monitor import SemesterMonitor
@@ -50,12 +51,13 @@ def test_course_model(set_in_memory_database):
 def test_student_model(set_in_memory_database):
     database = set_in_memory_database
     student = StudentHandler(database)
-    student.name = "any_name"
+    student.name = "any"
     student.cpf = "123.456.789-10"
 
-    assert student.name == "any_name"
+    assert student.name == "any"
     assert student.cpf == "123.456.789-10"
     assert student.identifier is None
     assert student.state == None
-    assert student.gpa == 0
+    with pytest.raises(NonValidGrade):
+        assert student.gpa == 0
     assert student.subjects == []
