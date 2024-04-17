@@ -208,6 +208,35 @@ class Database:
                 logging.error(str(e))
                 raise
 
+        def search_all(self):
+            result = self.cur.execute(f"SELECT * FROM {self.TABLE}").fetchall()
+
+            class CourseRow:
+                name = None
+                state = None
+                identifier = None
+                enrolled_students = None
+                max_enrollment = None
+                subjects = None
+
+            courses = []
+            for row in result:
+                course_row = CourseRow()
+                course_row.name = row[0]
+                course_row.state = row[1]
+                course_row.identifier = row[2]
+                course_row.enrolled_students = (
+                    convert_list_with_empty_string_to_empty_list(
+                        the_list=row[3].split(",")
+                    )
+                )
+                course_row.max_enrollment = row[4]
+                course_row.subjects = convert_list_with_empty_string_to_empty_list(
+                    row[5].split(",")
+                )
+                courses.append(course_row)
+            return courses
+
         def load_from_database(self, name):
             result = self.cur.execute(
                 f"SELECT * FROM {self.TABLE} WHERE name = '{name}'"

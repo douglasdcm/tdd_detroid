@@ -172,13 +172,29 @@ def enroll_student(database, name, cpf, course_name):
     return False
 
 
-def list_students(database, course_name):
+def list_student_details(database, course_name):
     try:
         course_handler = CourseHandler(database)
         course_handler.name = course_name
         students = course_handler.list_student_details()
         print(f"List of students:")
         print(json.dumps(students, sort_keys=True, indent=4))
+        return True
+    except NonValidStudent as e:
+        logging.error(str(e))
+        print(str(e))
+    except Exception as e:
+        logging.error(str(e))
+        print(UNEXPECTED_ERROR)
+    return False
+
+
+def list_all_course_details(database):
+    try:
+        course_handler = CourseHandler(database)
+        courses = course_handler.list_all_courses_with_details()
+        print(f"List of courses:")
+        print(json.dumps(courses, sort_keys=True, indent=4))
         return True
     except NonValidStudent as e:
         logging.error(str(e))

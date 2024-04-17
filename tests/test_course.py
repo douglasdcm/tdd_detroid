@@ -4,6 +4,22 @@ from src.services.student_handler import StudentHandler
 from src import utils
 
 
+def test_list_all_courses(set_in_memory_database):
+    name = "any"
+    cpf = "123.456.789-10"
+    course = "any"
+    student_handler = StudentHandler(set_in_memory_database)
+    student_handler.name = name
+    student_handler.cpf = cpf
+    student_handler.enroll_to_course(course)
+    course_handler = CourseHandler(set_in_memory_database)
+
+    actual = course_handler.list_all_courses_with_details()
+
+    assert len(actual) > 0
+    assert "mat" in actual
+
+
 def test_list_empty_when_no_enrolled_students(set_in_memory_database):
     course_handler = CourseHandler(set_in_memory_database)
     course_handler.name = "any"
@@ -13,7 +29,7 @@ def test_list_empty_when_no_enrolled_students(set_in_memory_database):
     assert len(actual) == 0
 
 
-def test_list_enrolled_students(set_in_memory_database):
+def test_list_enrolled_students_in_specific_course(set_in_memory_database):
     name = "any"
     cpf = "123.456.789-10"
     course = "any"

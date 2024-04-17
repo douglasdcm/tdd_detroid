@@ -63,7 +63,7 @@ def test_take_subject_from_course_when_locked_student_return_error(
     subject = "any1"
 
     student.enroll_to_course("any")
-    x = student.lock_course()
+    student.lock_course()
     with pytest.raises(NonValidStudent):
         student.take_subject(subject)
 

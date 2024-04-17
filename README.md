@@ -71,10 +71,10 @@ Same as requirement 6
 15. **DONE**  The course coordinator can list the students, grades in each subject, and GPAs of the students.
 16. **DONE** The student can unlock the course, and their situation returns to the previous state.
 17. **DONE** Students must have names.
-18. The general coordinator can list all courses, students, grades in each subject, and GPAs of each student.
+18. **DONE** The general coordinator can list all courses, students, grades in each subject, and GPAs of each student.
 19. **DONE** The course coordinator can remove subjects, and in this case, students cannot update their grades in that subject.
 20. **DONE** Students can only update their grades in the subjects they are enrolled in.
-21. Course and subject names must have a maximum of 10 letters.
+21. **DONE** Course and subject names must have a maximum of 10 letters.
 <!-- What are units? Not clear -->
 22. Courses can have the same names if they are from different units.
 <!-- The student can do any time. Don't need to wai the next semester -->

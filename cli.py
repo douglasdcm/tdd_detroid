@@ -20,6 +20,15 @@ def cli():
 
 
 @click.command()
+def list_courses():
+    try:
+        database = Database()
+        cli_helper.list_all_course_details(database)
+    except Exception as e:
+        logging.error(str(e))
+
+
+@click.command()
 @click.option(
     "--course-name",
     prompt="Course name",
@@ -28,7 +37,7 @@ def cli():
 def list_students(course_name):
     try:
         database = Database()
-        cli_helper.list_students(database, course_name)
+        cli_helper.list_student_details(database, course_name)
     except Exception as e:
         logging.error(str(e))
 
@@ -178,6 +187,7 @@ cli.add_command(deactivate_course)
 cli.add_command(cancel_course)
 cli.add_command(remove_subject)
 cli.add_command(list_students)
+cli.add_command(list_courses)
 
 if __name__ == "__main__":
     cli()

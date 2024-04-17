@@ -40,6 +40,10 @@ class CourseHandler:
 
     @name.setter
     def name(self, value):
+        if len(value) > 10:
+            raise NonValidCourse(
+                f"The maximum number of characters to course's name is '10'. Set with '{len(value)}'."
+            )
         self.__name = value
 
     @property
@@ -83,6 +87,7 @@ class CourseHandler:
             result[self.__database.student.identifier] = {
                 "name": self.__database.student.name,
                 "gpa": self.__database.student.gpa,
+                "course": self.__database.student.course,
             }
 
         for student_identifier in enrolled_students:
@@ -94,6 +99,13 @@ class CourseHandler:
                 )
                 result[student_identifier][subject_identifier] = grade_calculator.grade
         return result
+
+    def list_all_courses_with_details(self):
+        all_details = {}
+        for course in self.__database.course.search_all():
+            self.name = course.name
+            all_details[self.name] = self.list_student_details()
+        return all_details
 
     def enroll_student(self, student_identifier):
         if not self.state == self.ACTIVE:

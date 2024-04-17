@@ -41,6 +41,10 @@ class SubjectHandler:
 
     @name.setter
     def name(self, value):
+        if len(value) > 10:
+            raise NonValidSubject(
+                f"The maximum number of characters to subject's name is '10'. Set with '{len(value)}'."
+            )
         self.__name = value
 
     @property

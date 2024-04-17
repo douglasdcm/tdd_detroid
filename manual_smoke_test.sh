@@ -11,6 +11,7 @@ python cli.py lock-course --student-identifier 25a5a5c24a5252968097e5d5c80e6352
 python cli.py unlock-course --student-identifier 25a5a5c24a5252968097e5d5c80e6352
 
 python cli.py enroll-student --name maria --cpf 028.745.462.18 --course-name mat
+python cli.py enroll-student --name aline --cpf 028.745.462.18 --course-name adm
 python cli.py list-students --course-name mat
 
 
