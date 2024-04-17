@@ -214,6 +214,11 @@ class Database:
         # TODO create a public funtion
         def populate(self, name, state="active", subjects="any1,any2,any3"):
             identifier = utils.generate_course_identifier(name)
+            subjects = subjects.split(",")
+            list_of_subjects = []
+            for subject in subjects:
+                subject_identifier = utils.generate_subject_identifier(name, subject)
+                list_of_subjects.append(subject_identifier)
             self.cur.execute(
                 f"""
                     INSERT INTO {self.TABLE} VALUES
@@ -222,7 +227,7 @@ class Database:
                         '{identifier}', 
                         '', 
                         10, 
-                        '{subjects}')
+                        '{",".join(list_of_subjects)}')
                 """
             )
             self.con.commit()

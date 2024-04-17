@@ -7,7 +7,12 @@ from src.services.cpf_validator import is_valide_cpf
 from src import utils
 from src.database import Database, NotFoundError
 from src.services.grade_calculator import GradeCalculator, NonValidGradeOperation
-from src.constants import DUMMY_IDENTIFIER, SUBJECT_IN_PROGRESS
+from src.constants import (
+    DUMMY_IDENTIFIER,
+    SUBJECT_IN_PROGRESS,
+    STUDENT_APPROVED,
+    STUDENT_FAILED,
+)
 
 
 class StudentHandler:
@@ -49,6 +54,12 @@ class StudentHandler:
     def state(self):
         return self.__state
 
+    @state.setter
+    def state(self, value):
+        self.load_from_database(self.identifier)
+        self.__state = value
+        self.__save()
+
     @property
     def gpa(self):
         self.calculate_gpa()
@@ -70,6 +81,10 @@ class StudentHandler:
     @property
     def cpf(self):
         return self.__cpf
+
+    @property
+    def course(self):
+        return self.__course
 
     @cpf.setter
     def cpf(self, value):
@@ -168,6 +183,10 @@ class StudentHandler:
                 raise NonValidStudent(
                     f"Student '{self.identifier}' does not appears in enrollment list."
                 )
+            if self.state == STUDENT_APPROVED or self.state == STUDENT_FAILED:
+                raise NonValidStudent(
+                    f"Can not perform the operation. The student is '{self.state}' in course '{self.course}'"
+                )
 
             course = CourseHandler(self.__database)
             course.load_from_database(course_name)
@@ -206,6 +225,11 @@ class StudentHandler:
     def take_subject(self, subject_name):
         if not self.__is_enrolled_student(self.__course):
             raise NonValidStudent(f"Student '{self.identifier}' is not valid.")
+
+        if self.state == STUDENT_APPROVED or self.state == STUDENT_FAILED:
+            raise NonValidStudent(
+                f"Can not perform the operation. The student is '{self.state}' in course '{self.course}'"
+            )
 
         self.load_from_database(self.identifier)
 
@@ -264,7 +288,10 @@ class StudentHandler:
     def unlock_course(self):
         if not self.__is_enrolled_student(self.__course):
             raise NonValidStudent(f"Student is not not enrolled in any course.")
-
+        if self.state == STUDENT_APPROVED or self.state == STUDENT_FAILED:
+            raise NonValidStudent(
+                f"Can not perform the operation. The student is '{self.state}' in course '{self.course}'"
+            )
         self.load_from_database(self.identifier)
         self.__state = self.__ENROLLED
         self.__save()
@@ -273,7 +300,10 @@ class StudentHandler:
     def lock_course(self):
         if not self.__is_enrolled_student(self.__course):
             raise NonValidStudent(f"Student is not not enrolled in any course.")
-
+        if self.state == STUDENT_APPROVED or self.state == STUDENT_FAILED:
+            raise NonValidStudent(
+                f"Can not perform the operation. The student is '{self.state}' in course '{self.course}'"
+            )
         self.load_from_database(self.identifier)
         self.__state = self.__LOCKED
         self.__save()

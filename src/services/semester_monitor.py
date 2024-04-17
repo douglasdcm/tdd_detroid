@@ -1,6 +1,9 @@
 import logging
 from src.database import Database, NotFoundError
 from src.services.student_handler import StudentHandler
+from src.services.course_handler import CourseHandler
+from src.services.grade_calculator import GradeCalculator
+from src.constants import STUDENT_APPROVED, STUDENT_FAILED
 
 
 class SemesterMonitor:
@@ -71,7 +74,22 @@ class SemesterMonitor:
             student_handler.calculate_gpa()
             student_handler.increment_semester()
 
+            course_handler = CourseHandler(self.__database)
+            course_handler.load_from_database(student_handler.course)
+            course_handler.name = student_handler.course
+            if self.__is_course_completed(student_handler, course_handler):
+                grade_calculator = GradeCalculator(self.__database)
+                if grade_calculator.is_approved(student_handler.identifier):
+                    student_handler.state = STUDENT_APPROVED
+                else:
+                    student_handler.state = STUDENT_FAILED
+
         return self.__state
+
+    def __is_course_completed(self, student_handler, course_handler):
+        return set(student_handler.subjects).intersection(
+            course_handler.subjects
+        ) == set(student_handler.subjects)
 
 
 class NonValidOperation(Exception):

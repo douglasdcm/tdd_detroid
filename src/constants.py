@@ -1,2 +1,6 @@
 DUMMY_IDENTIFIER = -1
 SUBJECT_IN_PROGRESS = "inprogress"
+SUBJECT_FAILED = "failed"
+SUBJECT_PASSED = "passed"
+STUDENT_APPROVED = "approved"
+STUDENT_FAILED = "failed"
