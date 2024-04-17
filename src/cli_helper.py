@@ -158,7 +158,26 @@ def enroll_student(database, name, cpf, course_name):
         student.name = name
         student.cpf = cpf
         identifier = student.enroll_to_course(course_name)
-        print(f"Student enrolled with identifier '{identifier}'.")
+        print(f"Student '{name}' enrolled with identifier '{identifier}'.")
+        return True
+    except NonValidStudent as e:
+        logging.error(str(e))
+        print(str(e))
+    except Exception as e:
+        logging.error(str(e))
+        print(UNEXPECTED_ERROR)
+    return False
+
+
+def list_students(database, course_name):
+    try:
+        course_handler = CourseHandler(database)
+        course_handler.name = course_name
+        students = course_handler.list_students()
+        print(f"List of students:")
+        print(f"Student identifier, Student name, Subjects, GPA")
+        for student in students:
+            print(f"  {student}")
         return True
     except NonValidStudent as e:
         logging.error(str(e))

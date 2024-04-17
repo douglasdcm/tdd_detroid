@@ -40,7 +40,7 @@ def test_unlock_course(set_in_memory_database):
     student.enroll_to_course("any")
 
     student.unlock_course()
-    assert student.state == None
+    assert student.state == "enrolled"
 
 
 def test_lock_course(set_in_memory_database):
@@ -63,7 +63,7 @@ def test_take_subject_from_course_when_locked_student_return_error(
     subject = "any1"
 
     student.enroll_to_course("any")
-    student.lock_course()
+    x = student.lock_course()
     with pytest.raises(NonValidStudent):
         student.take_subject(subject)
 

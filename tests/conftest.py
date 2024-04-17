@@ -10,6 +10,8 @@ def set_in_memory_database():
     db.enrollment.populate("maria", "028.745.462.18", "mat")
     db.enrollment.populate("joana", "038.745.452.19", "port")
     db.enrollment.populate("any", "123.456.789-10", "any")
+    db.enrollment.populate("other", "123.456.789-10", "any")
+    db.enrollment.populate("another", "123.456.789-10", "any")
 
     db.course.populate("adm")
     db.course.populate("mat")

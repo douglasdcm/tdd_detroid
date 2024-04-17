@@ -1,5 +1,33 @@
 import pytest
 from src.services.course_handler import CourseHandler, NonValidCourse
+from src.services.student_handler import StudentHandler
+from src import utils
+
+
+def test_list_empty_when_no_enrolled_students(set_in_memory_database):
+    course_handler = CourseHandler(set_in_memory_database)
+    course_handler.name = "any"
+
+    actual = course_handler.list_students()
+
+    assert len(actual) == 0
+
+
+def test_list_enrolled_students(set_in_memory_database):
+    name = "any"
+    cpf = "123.456.789-10"
+    course = "any"
+    student_handler = StudentHandler(set_in_memory_database)
+    student_handler.name = name
+    student_handler.cpf = cpf
+    student_handler.enroll_to_course(course)
+    course_handler = CourseHandler(set_in_memory_database)
+    course_handler.name = course
+
+    actual = course_handler.list_students()
+
+    assert utils.generate_student_identifier(name, cpf, course) in actual[0]
+    assert len(actual) == 1
 
 
 def test_enroll_student_to_inactive_course_return_error(set_in_memory_database):

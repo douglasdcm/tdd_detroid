@@ -3,6 +3,12 @@ import logging
 from src import utils
 
 
+def convert_list_with_empty_string_to_empty_list(the_list):
+    if len(the_list[0]) == 0:
+        the_list = []
+    return the_list
+
+
 # TODO test concurrency
 class Database:
 
@@ -23,7 +29,7 @@ class Database:
         cpf = None
         identifier = None
         gpa = None
-        subjects = None
+        subjects = []
         course = None
 
         def __init__(self, con, cur):
@@ -34,6 +40,9 @@ class Database:
                 f"CREATE TABLE IF NOT EXISTS {self.TABLE} (name, state, cpf, identifier, gpa, subjects, course)"
             )
 
+        def __convert_subjects_to_csv(self):
+            return ",".join(set(self.subjects))
+
         def add(self):
             try:
                 cmd = f"""
@@ -42,8 +51,8 @@ class Database:
                         '{self.state}', 
                         '{self.cpf}', 
                         '{self.identifier}', 
-                        '{self.gpa}', 
-                        '{self.subjects}', 
+                         {self.gpa}, 
+                        '{self.__convert_subjects_to_csv()}', 
                         '{self.course}')
                 """
                 self.cur.execute(cmd)
@@ -57,8 +66,8 @@ class Database:
             cmd = f"""
                 UPDATE {self.TABLE}
                 SET state = '{self.state}',
-                    gpa = '{self.gpa}',
-                    subjects = '{self.subjects}'
+                    gpa = {self.gpa},
+                    subjects = '{self.__convert_subjects_to_csv()}'
                 WHERE identifier = '{self.identifier}';
                 """
             self.cur.execute(cmd)
@@ -99,8 +108,10 @@ class Database:
                 self.state = result[1]
                 self.cpf = result[2]
                 self.identifier = result[3]
-                self.gpq = result[4]
-                self.subjects = result[5].split(",")
+                self.gpa = result[4]
+                self.subjects = convert_list_with_empty_string_to_empty_list(
+                    result[5].split(",")
+                )
                 self.course = result[6]
             except Exception as e:
                 logging.error(str(e))
@@ -168,6 +179,19 @@ class Database:
 
         def save(self):
             try:
+                cmd = f"""
+                    UPDATE {self.TABLE}
+                    SET enrolled_students = '{self.enrolled_students}'
+                    WHERE identifier = '{self.identifier}';
+                    """
+                self.cur.execute(cmd)
+                self.con.commit()
+            except Exception as e:
+                logging.error(str(e))
+                raise
+
+        def add(self):
+            try:
                 self.cur.execute(
                     f"""
                         INSERT INTO {self.TABLE} VALUES
@@ -191,9 +215,13 @@ class Database:
             self.name = result[0]
             self.state = result[1]
             self.identifier = result[2]
-            self.enrolled_students = result[3].split(",")
+            self.enrolled_students = convert_list_with_empty_string_to_empty_list(
+                the_list=result[3].split(",")
+            )
             self.max_enrollment = result[4]
-            self.subjects = result[5].split(",")
+            self.subjects = convert_list_with_empty_string_to_empty_list(
+                result[5].split(",")
+            )
 
     class DbSubject:
         TABLE = "subject"
@@ -265,6 +293,11 @@ class Database:
                 raise
 
     class DbGradeCalculator:
+        class GradeCalculatorRow:
+            student_identifier = None
+            subject_identifier = None
+            grade = None
+
         TABLE = "grade_calculator"
         student_identifier = None
         subject_identifier = None
@@ -288,19 +321,35 @@ class Database:
                         f"Student '{student_identifier}' not found in table '{self.TABLE}'"
                     )
 
-                class GradeCalculatorRow:
-                    student_identifier = None
-                    subject_identifier = None
-                    grade = None
-
                 grade_calculators = []
                 for row in result:
-                    grade_calculator_row = GradeCalculatorRow()
+                    grade_calculator_row = self.GradeCalculatorRow()
                     grade_calculator_row.student_identifier = row[0]
                     grade_calculator_row.subject_identifier = row[1]
                     grade_calculator_row.grade = row[2]
                     grade_calculators.append(grade_calculator_row)
                 return grade_calculators
+            except Exception as e:
+                logging.error(str(e))
+                raise
+
+        def search(self, student_identifier, subject_identifier):
+            try:
+                result = self.cur.execute(
+                    f"""SELECT * FROM {self.TABLE}
+                        WHERE subject_identifier = '{subject_identifier}'
+                        AND student_identifier = '{student_identifier}'
+                    """
+                ).fetchone()
+                if not result:
+                    return
+
+                grade_calculator_row = self.GradeCalculatorRow()
+                grade_calculator_row.student_identifier = result[0]
+                grade_calculator_row.subject_identifier = result[1]
+                grade_calculator_row.grade = result[2]
+
+                return grade_calculator_row
             except Exception as e:
                 logging.error(str(e))
                 raise
@@ -314,7 +363,10 @@ class Database:
                     """
                 ).fetchone()
                 if not result:
-                    raise NotFoundError()
+                    raise NotFoundError(
+                        f"Student '{student_identifier}' and subject '{subject_identifier}'"
+                        f" not found in table '{self.TABLE}'."
+                    )
 
                 self.student_identifier = result[0]
                 self.subject_identifier = result[1]
@@ -345,6 +397,20 @@ class Database:
                     SET grade = {self.grade}
                     WHERE student_identifier = '{self.student_identifier}'
                     AND subject_identifier = '{self.subject_identifier}';
+                    """
+                self.cur.execute(cmd)
+
+                self.con.commit()
+            except Exception as e:
+                logging.error(str(e))
+                raise
+
+        def remove(self, student_identifier, subject_identifier):
+            try:
+                cmd = f"""
+                    DELETE FROM {self.TABLE}
+                    WHERE student_identifier = '{student_identifier}'
+                    AND subject_identifier = '{subject_identifier}';
                     """
                 self.cur.execute(cmd)
 

@@ -20,6 +20,20 @@ def cli():
 
 
 @click.command()
+@click.option(
+    "--course-name",
+    prompt="Course name",
+    help="Course name.",
+)
+def list_students(course_name):
+    try:
+        database = Database()
+        cli_helper.list_students(database, course_name)
+    except Exception as e:
+        logging.error(str(e))
+
+
+@click.command()
 @click.option("--course-name", prompt="Course name", help="Name of the course.")
 @click.option("--subject-name", prompt="Subject name", help="Name of the subject.")
 def remove_subject(course_name, subject_name):
@@ -163,6 +177,7 @@ cli.add_command(activate_course)
 cli.add_command(deactivate_course)
 cli.add_command(cancel_course)
 cli.add_command(remove_subject)
+cli.add_command(list_students)
 
 if __name__ == "__main__":
     cli()
