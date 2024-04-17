@@ -27,3 +27,5 @@ db.subject.populate("mat", "calculus")
 db.subject.populate("mat", "algebra")
 db.subject.populate("mat", "analysis")
 db.subject.populate("mat", "geometry")
+
+db.semester.populate("2024-1", "open")

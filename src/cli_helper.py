@@ -12,8 +12,29 @@ from src.services.course_handler import (
 )
 from src.services.grade_calculator import GradeCalculator, NonValidGradeOperation
 from src.services.subject_handler import SubjectHandler, NonValidSubject
+from src.services.semester_monitor import (
+    SemesterMonitor,
+    NonValidOperation,
+    NonValidSemester,
+)
+
 
 UNEXPECTED_ERROR = "Unexpected error. Consult the system adminstrator."
+
+
+def close_semester(database, identifier):
+    try:
+        course_handler = SemesterMonitor(database, identifier)
+        course_handler.close()
+        print(f"Semester '{identifier}' closed.")
+        return True
+    except (NonValidOperation, NonValidSemester) as e:
+        logging.error(str(e))
+        print(str(e))
+    except Exception as e:
+        logging.error(str(e))
+        print(UNEXPECTED_ERROR)
+    return False
 
 
 def remove_subject(database, course_name, subject_name):

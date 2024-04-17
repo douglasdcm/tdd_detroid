@@ -20,6 +20,20 @@ def cli():
 
 
 @click.command()
+@click.option(
+    "--identifier",
+    prompt="Semester identifier",
+    help="Semester identifier. E.g. '2024-1'.",
+)
+def close_semester(identifier):
+    try:
+        database = Database()
+        cli_helper.close_semester(database, identifier)
+    except Exception as e:
+        logging.error(str(e))
+
+
+@click.command()
 def list_courses():
     try:
         database = Database()
@@ -210,6 +224,8 @@ cli.add_command(list_students)
 cli.add_command(list_courses)
 cli.add_command(create_course)
 cli.add_command(add_subject)
+
+cli.add_command(close_semester)
 
 
 if __name__ == "__main__":

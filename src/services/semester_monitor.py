@@ -1,6 +1,5 @@
 import logging
 from src.database import Database, NotFoundError
-from src.services.grade_calculator import GradeCalculator
 from src.services.student_handler import StudentHandler
 
 
