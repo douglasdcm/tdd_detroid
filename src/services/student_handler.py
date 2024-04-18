@@ -32,9 +32,8 @@ class StudentHandler:
         self.__semester_counter = 0
         self.__subject_identifiers = []
         self.__database = database
-        self.__identifier = None
+        self.__identifier = identifier
         if identifier:
-            self.__identifier = identifier
             self.load_from_database(identifier)
 
     def __generate_identifier_when_student_ready(self):
@@ -42,6 +41,98 @@ class StudentHandler:
             self.__identifier = utils.generate_student_identifier(
                 self.name, self.cpf, self.__course
             )
+
+    def __check_cpf_validity(self, value):
+        if not is_valide_cpf(value):
+            raise NonValidStudent(f"CPF {value} is not valid.")
+
+    def __check_cpf(self):
+        if not self.__cpf:
+            raise NonValidStudent("Need to set the student's CPF.")
+
+    def __check_locked(self):
+        if self.__state == self.__LOCKED:
+            raise NonValidStudent(f"Student '{self.identifier}' is locked.")
+
+    def __check_enrolled_student(self, course_name):
+        enrollment_validator = EnrollmentValidator(self.__database)
+        if not (
+            enrollment_validator.validate_student_by_data(
+                self.name, self.cpf, course_name
+            )
+            or enrollment_validator.validate_student_by_identifier(self.identifier)
+        ):
+            raise NonValidStudent(
+                f"Student '{self.identifier}' does not appears in enrollment list."
+            )
+
+    def __check_grade_range(self, grade):
+        if grade < 0 or grade > 10:
+            raise NonValidGrade("Grade must be between '0' and '10'.")
+
+    def __remove_dummy_subject(self, grade_calculator):
+        if grade_calculator.search(self.identifier, DUMMY_IDENTIFIER):
+            grade_calculator.remove(self.identifier, DUMMY_IDENTIFIER)
+
+    def __check_subject_activation(self, subject_handler):
+        if not subject_handler.is_active():
+            raise NonValidSubject(
+                f"Subject '{subject_handler.identifier}' is not active."
+            )
+
+    def __check_subject_availability(self, subject_handler):
+        if not subject_handler.is_available():
+            raise NonValidSubject(
+                f"Subject '{subject_handler.identifier}' is not available."
+            )
+
+    def __check_course_is_same_of_subject(self, subject_handler):
+        if subject_handler.course != self.__course:
+            raise NonValidSubject(
+                f"The subject '{subject_handler.identifier}' is not part of course '{self.__course}'."
+            )
+
+    def __return_subject_situation(self, grade):
+        if grade < 7:
+            return "failed"
+        return "passed"
+
+    def __check_valid_subject(self, subject_identifier):
+        if not subject_identifier in self.subjects:
+            raise NonValidSubject(
+                f"The student '{self.identifier}' is not enrolled to this subject '{subject_identifier}'"
+            )
+
+    def __check_finished_course(self):
+        if self.state == STUDENT_APPROVED or self.state == STUDENT_FAILED:
+            raise NonValidStudent(
+                f"Can not perform the operation. The student is '{self.state}' in course '{self.course}'"
+            )
+
+    def __check_name(self):
+        if not self.__name:
+            raise NonValidStudent("Need to set the student's name.")
+
+    def __fail_course_if_exceed_max_semester(self):
+        if self.__semester_counter > MAX_SEMESTERS_TO_FINISH_COURSE:
+            self.__state = STUDENT_FAILED
+
+    def __save(self):
+        try:
+            self.__database.student.name = self.name
+            self.__database.student.state = self.state
+            self.__database.student.cpf = self.cpf
+            self.__database.student.identifier = self.identifier
+            self.__database.student.gpa = GradeCalculator(
+                self.__database
+            ).calculate_gpa_for_student(self.identifier)
+            self.__database.student.subjects.extend(self.subjects)
+            self.__database.student.course = self.__course
+            self.__database.student.semester_counter = self.__semester_counter
+            self.__database.student.save()
+        except Exception as e:
+            logging.error(str(e))
+            raise
 
     @property
     def identifier(self):
@@ -90,61 +181,9 @@ class StudentHandler:
 
     @cpf.setter
     def cpf(self, value):
-        self.__check_cpf(value)
+        self.__check_cpf_validity(value)
         self.__cpf = value
         self.__generate_identifier_when_student_ready()
-
-    def __check_cpf(self, value):
-        if not is_valide_cpf(value):
-            raise NonValidStudent(f"CPF {value} is not valid.")
-
-    def __check_locked(self):
-        if self.__state == self.__LOCKED:
-            raise NonValidStudent(f"Student '{self.identifier}' is locked.")
-
-    def __check_enrolled_student(self, course_name):
-        enrollment_validator = EnrollmentValidator(self.__database)
-        if not (
-            enrollment_validator.validate_student_by_data(
-                self.name, self.cpf, course_name
-            )
-            or enrollment_validator.validate_student_by_identifier(self.identifier)
-        ):
-            raise NonValidStudent(
-                f"Student '{self.identifier}' does not appears in enrollment list."
-            )
-
-    def __check_grade_range(self, grade):
-        if grade < 0 or grade > 10:
-            raise NonValidGrade("Grade must be between '0' and '10'.")
-
-    def __return_subject_situation(self, grade):
-        if grade < 7:
-            return "failed"
-        return "passed"
-
-    def __check_valid_subject(self, subject_identifier):
-        if not subject_identifier in self.subjects:
-            raise NonValidSubject(
-                f"The student '{self.identifier}' is not enrolled to this subject '{subject_identifier}'"
-            )
-
-    def __save(self):
-        try:
-            self.__database.student.name = self.name
-            self.__database.student.state = self.state
-            self.__database.student.cpf = self.cpf
-            self.__database.student.identifier = self.identifier
-            self.__database.student.gpa = GradeCalculator(
-                self.__database
-            ).calculate_gpa_for_student(self.identifier)
-            self.__database.student.subjects.extend(self.subjects)
-            self.__database.student.course = self.__course
-            self.__database.student.semester_counter = self.__semester_counter
-            self.__database.student.save()
-        except Exception as e:
-            logging.error(str(e))
-            raise
 
     def calculate_gpa(self):
         try:
@@ -164,10 +203,6 @@ class StudentHandler:
         self.__semester_counter += 1
         self.__fail_course_if_exceed_max_semester()
         self.__save()
-
-    def __fail_course_if_exceed_max_semester(self):
-        if self.__semester_counter > MAX_SEMESTERS_TO_FINISH_COURSE:
-            self.__state = STUDENT_FAILED
 
     def update_grade_to_subject(self, grade, subject_name):
         self.__check_grade_range(grade)
@@ -192,14 +227,9 @@ class StudentHandler:
     def enroll_to_course(self, course_name):
         try:
             self.__check_name()
-            if not self.__cpf:
-                raise NonValidStudent("Need to set the student's CPF.")
+            self.__check_cpf()
             self.__check_enrolled_student(course_name)
-
-            if self.state == STUDENT_APPROVED or self.state == STUDENT_FAILED:
-                raise NonValidStudent(
-                    f"Can not perform the operation. The student is '{self.state}' in course '{self.course}'"
-                )
+            self.__check_finished_course()
 
             course = CourseHandler(self.__database)
             course.load_from_database(course_name)
@@ -235,23 +265,11 @@ class StudentHandler:
             logging.error(str(e))
             raise
 
-    def __check_name(self):
-        if not self.__name:
-            raise NonValidStudent("Need to set the student's name.")
-
     def take_subject(self, subject_name):
         self.__check_enrolled_student(self.__course)
-
-        if self.state == STUDENT_APPROVED or self.state == STUDENT_FAILED:
-            raise NonValidStudent(
-                f"Can not perform the operation."
-                f" The student is '{self.state}' in course '{self.course}'"
-            )
-
+        self.__check_finished_course()
         self.load_from_database(self.identifier)
-
-        if self.__check_locked():
-            raise NonValidStudent(f"Student '{self.identifier}' is locked.")
+        self.__check_locked()
 
         subject_identifier = utils.generate_subject_identifier(
             self.__course, subject_name
@@ -266,20 +284,9 @@ class StudentHandler:
             logging.error(str(e))
             raise
 
-        if subject_handler.course != self.__course:
-            raise NonValidSubject(
-                f"The subject '{subject_handler.identifier}' is not part of course '{self.__course}'."
-            )
-
-        if not subject_handler.is_available():
-            raise NonValidSubject(
-                f"Subject '{subject_handler.identifier}' is not available."
-            )
-
-        if not subject_handler.is_active():
-            raise NonValidSubject(
-                f"Subject '{subject_handler.identifier}' is not active."
-            )
+        self.__check_course_is_same_of_subject(subject_handler)
+        self.__check_subject_availability(subject_handler)
+        self.__check_subject_activation(subject_handler)
 
         self.__subject_identifiers.append(subject_identifier)
         self.__save()
@@ -288,8 +295,7 @@ class StudentHandler:
         subject_handler.save()
 
         grade_calculator = GradeCalculator(self.__database)
-        if grade_calculator.search(self.identifier, DUMMY_IDENTIFIER):
-            grade_calculator.remove(self.identifier, DUMMY_IDENTIFIER)
+        self.__remove_dummy_subject(grade_calculator)
         grade_calculator.subject_situation = SUBJECT_IN_PROGRESS
         grade_calculator.add(self.identifier, subject_identifier, grade=0)
 
@@ -309,10 +315,7 @@ class StudentHandler:
 
     def unlock_course(self):
         self.__check_enrolled_student(self.__course)
-        if self.state == STUDENT_APPROVED or self.state == STUDENT_FAILED:
-            raise NonValidStudent(
-                f"Can not perform the operation. The student is '{self.state}' in course '{self.course}'"
-            )
+        self.__check_finished_course()
         self.load_from_database(self.identifier)
         self.__state = self.__ENROLLED
         self.__save()
@@ -320,10 +323,7 @@ class StudentHandler:
 
     def lock_course(self):
         self.__check_enrolled_student(self.__course)
-        if self.state == STUDENT_APPROVED or self.state == STUDENT_FAILED:
-            raise NonValidStudent(
-                f"Can not perform the operation. The student is '{self.state}' in course '{self.course}'"
-            )
+        self.__check_finished_course()
         self.load_from_database(self.identifier)
         self.__state = self.__LOCKED
         self.__save()
