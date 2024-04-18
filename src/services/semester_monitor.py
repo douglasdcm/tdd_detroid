@@ -1,8 +1,7 @@
 import logging
 from src.database import Database, NotFoundError
-from src.services.student_handler import StudentHandler
+from src.services.student_handler import StudentHandler, NonValidStudent
 from src.services.course_handler import CourseHandler
-from src.services.grade_calculator import GradeCalculator
 from src.constants import (
     STUDENT_APPROVED,
     STUDENT_FAILED,
@@ -105,18 +104,25 @@ class SemesterMonitor:
         student_rows = student_handler.search_all()
 
         for row in student_rows:
-            student_handler = StudentHandler(self.__database, row.identifier)
-            student_handler.calculate_gpa()
-            student_handler.increment_semester()
+            try:
+                student_handler = StudentHandler(self.__database, row.identifier)
+                student_handler.increment_semester()
+                student_handler.calculate_gpa()
 
-            course_handler = CourseHandler(self.__database)
-            course_handler.load_from_database(student_handler.course)
-            course_handler.name = student_handler.course
-            if self.__is_course_completed(student_handler, course_handler):
-                if self.__is_approved(student_handler.identifier):
-                    student_handler.state = STUDENT_APPROVED
-                else:
-                    student_handler.state = STUDENT_FAILED
+                course_handler = CourseHandler(self.__database)
+                course_handler.load_from_database(student_handler.course)
+                course_handler.name = student_handler.course
+                if self.__is_course_completed(student_handler, course_handler):
+                    if self.__is_approved(student_handler.identifier):
+                        student_handler.state = STUDENT_APPROVED
+                    else:
+                        student_handler.state = STUDENT_FAILED
+            except NonValidStudent as e:
+                logging.error(str(e))
+                continue
+            except Exception as e:
+                logging.error(str(e))
+                raise
 
         return self.__state
 

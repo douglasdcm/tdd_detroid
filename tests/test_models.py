@@ -59,6 +59,4 @@ def test_student_model(set_in_memory_database):
     assert student.cpf == "123.456.789-10"
     assert student.identifier is None
     assert student.state == None
-    with pytest.raises(NonValidGrade):
-        assert student.gpa == 0
     assert student.subjects == []

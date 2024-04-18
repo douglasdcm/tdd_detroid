@@ -186,6 +186,9 @@ class StudentHandler:
         self.__generate_identifier_when_student_ready()
 
     def calculate_gpa(self):
+        self.__check_enrolled_student(self.course)
+        self.load_from_database(self.identifier)
+        self.__check_locked()
         try:
             self.__gpa = GradeCalculator(self.__database).calculate_gpa_for_student(
                 self.identifier

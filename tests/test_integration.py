@@ -1,6 +1,6 @@
 import pytest
 from src.services.student_handler import StudentHandler
-from src.services.course_handler import CourseHandler
+from src.services.course_handler import CourseHandler, NonValidCourse
 from src.services.subject_handler import SubjectHandler
 from src.services.semester_monitor import SemesterMonitor
 from src.constants import MAX_SEMESTERS_TO_FINISH_COURSE
@@ -60,6 +60,7 @@ def __add_all_subjects_to_course(course, subjects, database):
         subject_handler.max_enrollment = 5
         subject_handler.activate()
     course_handler.activate()
+    return course_handler
 
 
 def test_student_locked_by_minimun_subjects_per_semester():
@@ -78,12 +79,74 @@ def test_coordinator_cancel_course_before_studend_conclude_it_not_affecting_grad
     pass
 
 
-def test_coordinator_cancel_course_before_studend_conclude_it_not_affecting_student_situation():
-    pass
+def test_coordinator_cancel_course_before_studend_conclude_it_not_affecting_student_situation(
+    set_in_memory_database,
+):
+    course = "adm"
+    grade = 9
+    situation = "approved"
+    database = set_in_memory_database
+
+    subjects = __get_subjects()
+    course_handler = __add_all_subjects_to_course(course, subjects, database)
+    student_handler = __enroll_student_to_course(course, database)
+    __add_all_subjects_to_course(course, subjects, database)
+    __update_grade_of_all_subjects(grade, subjects, student_handler)
+    course_handler.cancel()
+    course_handler.activate()
+    __close_maximum_semesters(database)
+
+    assert student_handler.semester_counter == MAX_SEMESTERS_TO_FINISH_COURSE + 1
+    assert student_handler.gpa == grade
+    assert student_handler.state == situation
 
 
-def test_student_locks_course_and_forget_and_fail_by_maximum_semesters():
-    pass
+def test_coordinator_cancel_course_and_not_allow_any_student_operation(
+    set_in_memory_database,
+):
+    course = "adm"
+    grade = 0
+    situation = "failed"
+    database = set_in_memory_database
+
+    subjects = __get_subjects()
+    course_handler = __add_all_subjects_to_course(course, subjects, database)
+    student_handler = __enroll_student_to_course(course, database)
+    course_handler.cancel()
+    with pytest.raises(NonValidCourse):
+        __update_grade_of_3_subjects_only(grade, subjects, student_handler)
+    with pytest.raises(NonValidCourse):
+        student_handler.lock_course()
+    with pytest.raises(NonValidCourse):
+        student_handler.unlock_course()
+    with pytest.raises(NonValidCourse):
+        student_handler.calculate_gpa()
+    course_handler.activate()
+    __close_maximum_semesters(database)
+
+    assert student_handler.semester_counter == MAX_SEMESTERS_TO_FINISH_COURSE + 1
+    assert student_handler.gpa == grade
+    assert student_handler.state == situation
+
+
+def test_student_locks_course_and_forget_and_fail_by_maximum_semesters(
+    set_in_memory_database,
+):
+    course = "adm"
+    grade = 9
+    situation = "failed"
+    database = set_in_memory_database
+
+    subjects = __get_subjects()
+    __add_all_subjects_to_course(course, subjects, database)
+    student_handler = __enroll_student_to_course(course, database)
+    __update_grade_of_3_subjects_only(grade, subjects, student_handler)
+    student_handler.lock_course()
+    __close_maximum_semesters(database)
+
+    assert student_handler.semester_counter == MAX_SEMESTERS_TO_FINISH_COURSE + 1
+    assert student_handler.gpa == grade
+    assert student_handler.state == situation
 
 
 def test_student_failed_by_maximum_semesters(set_in_memory_database):

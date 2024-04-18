@@ -8,11 +8,10 @@ from src import utils
 
 
 class CourseHandler:
-    ACTIVE = "active"
-    INACTIVE = "inactive"
-    CANCELLED = "cancelled"
-
     def __init__(self, database: Database) -> None:
+        self.ACTIVE = "active"
+        self.INACTIVE = "inactive"
+        self.CANCELLED = "cancelled"
         self.__identifier = DUMMY_IDENTIFIER
         self.__name = None
         self.__state = self.INACTIVE  # TODO use enum
@@ -20,6 +19,38 @@ class CourseHandler:
         self.__subjects = []
         self.__max_enrollment = 0
         self.__database = database
+
+    def __check_name_lenght(self, value):
+        if not value or len(value) > 10:
+            raise NonValidCourse(
+                f"The maximum number of characters to course's " f"name is '10'."
+            )
+
+    def __check_name(self):
+        if not self.name:
+            raise NonValidCourse("Need to set the name.")
+
+    def __check_active(self):
+        if not self.state == self.ACTIVE:
+            raise NonValidCourse(f"Course '{self.name}' is not active.")
+
+    def __check_cancelled(self):
+        if self.state == self.CANCELLED:
+            raise NonValidCourse(f"Course '{self.name}' is cancelled.")
+
+    def __check_minimum_number_of_subjects(self):
+        MINIMUM = 3
+        if not len(self.subjects) >= MINIMUM:
+            raise NonMinimunSubjects(
+                f"Need '{MINIMUM}' subjects. Set '{len(self.subjects)}'"
+            )
+
+    def __check_maximum_enrollment(self):
+        if len(self.__database.course.subjects) > self.max_enrollment:
+            raise NonValidCourse(
+                f"Exceeded the maximum number of subjects."
+                f" Expected '{self.max_enrollment}. Set '{len(self.subjects)}'."
+            )
 
     @property
     def identifier(self):
@@ -48,35 +79,6 @@ class CourseHandler:
         self.__identifier = utils.generate_course_identifier(value)
         self.__name = value
 
-    def __check_name_lenght(self, value):
-        if len(value) > 10:
-            raise NonValidCourse(
-                f"The maximum number of characters to course's "
-                "name is '10'. Set with '{len(value)}'."
-            )
-
-    def __check_name(self):
-        if not self.name:
-            raise NonValidCourse("Need to set the name.")
-
-    def __check_active(self):
-        if not self.state == self.ACTIVE:
-            raise NonValidCourse(f"Course '{self.name}' is not active.")
-
-    def __check_minimum_number_of_subjects(self):
-        MINIMUM = 3
-        if not len(self.subjects) >= MINIMUM:
-            raise NonMinimunSubjects(
-                f"Need '{MINIMUM}' subjects. Set '{len(self.subjects)}'"
-            )
-
-    def __check_maximum_enrollment(self):
-        if len(self.__database.course.subjects) > self.max_enrollment:
-            raise NonValidCourse(
-                f"Exceeded the maximum number of subjects."
-                f" Expected '{self.max_enrollment}. Set '{len(self.subjects)}'."
-            )
-
     @property
     def max_enrollment(self):
         return self.__max_enrollment
@@ -84,6 +86,10 @@ class CourseHandler:
     @max_enrollment.setter
     def max_enrollment(self, value):
         self.__max_enrollment = value
+
+    def is_active(self):
+        self.load_from_database(self.name)
+        return self.state == self.ACTIVE
 
     def save(self):
         self.__database.course.name = self.name
@@ -143,6 +149,7 @@ class CourseHandler:
 
     def enroll_student(self, student_identifier):
         self.__check_active()
+        self.load_from_database(self.name)
         self.__enrolled_students.append(student_identifier)
         self.save()
         return True
@@ -150,6 +157,7 @@ class CourseHandler:
     def add_subject(self, subject):
         self.__check_name()
         self.load_from_database(self.name)
+        self.__check_cancelled()
         subject_identifier = utils.generate_subject_identifier(self.name, subject)
         self.__subjects.append(subject_identifier)
         self.save()

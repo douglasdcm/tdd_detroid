@@ -15,6 +15,9 @@ def test_add_subject_to_new_course(set_in_memory_database):
     database = set_in_memory_database
     course_handler = CourseHandler(database)
     course_handler.create(course, max_enrollment)
+    for i in range(3):
+        course_handler.add_subject(f"subject{i}")
+    course_handler.activate()
     assert course_handler.add_subject(subject) is True
 
     # post conditions
