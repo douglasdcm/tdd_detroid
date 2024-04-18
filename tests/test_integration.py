@@ -41,6 +41,17 @@ def __update_grade_of_all_subjects(grade, subjects, student_handler):
         student_handler.update_grade_to_subject(grade, subject)
 
 
+def __pass_all_subjects_but_fails_one(subjects, student_handler):
+    grade1 = 10
+    grade2 = 6
+    for subject in subjects:
+        student_handler.take_subject(subject)
+        if subject == "mgmt":
+            student_handler.update_grade_to_subject(grade2, subject)
+            continue
+        student_handler.update_grade_to_subject(grade1, subject)
+
+
 def __enroll_student_to_course(course, database):
     student_handler = StudentHandler(database)
     student_handler.name = "douglas"
@@ -67,8 +78,25 @@ def test_student_locked_by_minimun_subjects_per_semester():
     pass
 
 
-def test_student_can_enroll_to_course_after_fail_it_losing_all_history():
-    pass
+def test_student_failed_in_a_course_fails_even_if_gpa_is_above_the_minimum(
+    set_in_memory_database,
+):
+    course = "adm"
+    minimum_gpa = 7
+    situation = "failed"
+    database = set_in_memory_database
+
+    subjects = __get_subjects()
+    __add_all_subjects_to_course(course, subjects, database)
+    student_handler = __enroll_student_to_course(course, database)
+    __pass_all_subjects_but_fails_one(subjects, student_handler)
+
+    assert student_handler.gpa > minimum_gpa
+
+    __close_maximum_semesters(database)
+
+    assert student_handler.semester_counter == MAX_SEMESTERS_TO_FINISH_COURSE + 1
+    assert student_handler.state == situation
 
 
 def test_student_cannot_do_any_operation_after_pass_or_fail_course(

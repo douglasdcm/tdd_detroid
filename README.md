@@ -51,10 +51,10 @@ Definition of Done:
 Construction of the basic functions of the system
 1. **DONE** Each student will have a grade control called "grade point average" (GPA).
 2. **DONE** The GPA is the average of the student's grades in the ~~courses~~ subjects already taken.
-3. The student is considered approved at the university if their GPA is above or equal to 7 (seven) at the end of the course.
+3. **DONE** The student is considered approved at the university if their GPA is above or equal to 7 (seven) at the end of the course.
 4. If a student takes the same subject more than once, the highest grade will be considered in the GPA calculation.
 <!-- Required setup to allow enrollments -->
-5. Initially, the university will have 3 courses with 3 subjects each.
+5. **DONE** Initially, the university will have 3 courses with 3 subjects each.
 6. **DONE** Subjects in each course may have the same names but will be differentiated by a unique identifier (niu).
 7. **DONE** The system must calculate the student's situation taking into account the subjects taken and the total number of subjects in each course.
 8. **DONE** The student can only take subjects from their course.
@@ -88,12 +88,13 @@ Same as requirement 6
 <!-- How o set coordinators? -->
 28. Canceled courses cannot have coordinators.
 29. **DONE** Each subject can have a maximum of 30 enrolled students.
+<!-- ... 3 subjects per semester -->
 30. The student must enroll in a minimum of 3 subjects.
 31. If the number of subjects missing for a student is less than 3, they can enroll in 1 subject.
 32. If the student does not enroll in the minimum number of subjects per semester, they will be automatically ~~failed~~ locked.
 33. **DONE** The student must have a validated CPF (Brazilian Social Security Number) in the external CPF validation system (government system).
 34. **DONE** Add the course name to the coordinator's reports.
-35. The students are only approved if they achieve the minimum grade in all course subjects, even if their GPA is above the minimum.
+35. **DONE** The students are only approved if they achieve the minimum grade in all course subjects, even if their GPA is above the minimum.
 <!-- The user can create student with cpf and name. Considering DONE -->
 36. **DONE** The ~~user~~ student (person) must be able to create students with basic information.
 <!-- The basic information is enough for enrollment -->
@@ -123,5 +124,6 @@ These features were introduced after analysis in architecture and specifications
 55. The corse coordinator is responsible to add new subjects to his/her course
 56. The general coordinator is responsible to add new courses to the university
 57. The student, teacher and coordinators need to authenticate with valid credentials before perfom any action in the system
-56. The course need a minimum enrollment of 100 students
-56. The subject need a minimum enrollment of 10 students
+58. The course need a minimum enrollment of 100 students
+59. The subject need a minimum enrollment of 10 students
+60. Student can enroll to course again after fail it losing all his/her history
