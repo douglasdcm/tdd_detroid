@@ -1,5 +1,5 @@
 import pytest
-from src.services.student_handler import StudentHandler
+from src.services.student_handler import StudentHandler, NonValidStudent
 from src.services.course_handler import CourseHandler, NonValidCourse
 from src.services.subject_handler import SubjectHandler
 from src.services.semester_monitor import SemesterMonitor
@@ -71,15 +71,37 @@ def test_student_can_enroll_to_course_after_fail_it_losing_all_history():
     pass
 
 
-def test_student_cannot_do_anythin_after_pass_or_fail_course():
-    pass
+def test_student_cannot_do_any_operation_after_pass_or_fail_course(
+    set_in_memory_database,
+):
+    course = "adm"
+    grade = 9
+    situation = "approved"
+    database = set_in_memory_database
+
+    subjects = __get_subjects()
+    __add_all_subjects_to_course(course, subjects, database)
+    student_handler = __enroll_student_to_course(course, database)
+    __update_grade_of_all_subjects(grade, subjects, student_handler)
+    __close_maximum_semesters(database)
+
+    assert student_handler.state == situation
+
+    with pytest.raises(NonValidStudent):
+        student_handler.lock_course()
+    with pytest.raises(NonValidStudent):
+        student_handler.unlock_course()
+    with pytest.raises(NonValidStudent):
+        student_handler.enroll_to_course(course)
+    with pytest.raises(NonValidStudent):
+        student_handler.increment_semester()
+    with pytest.raises(NonValidStudent):
+        student_handler.take_subject(subjects[0])
+    with pytest.raises(NonValidStudent):
+        student_handler.update_grade_to_subject(1, subjects[0])
 
 
-def test_coordinator_cancel_course_before_studend_conclude_it_not_affecting_grades():
-    pass
-
-
-def test_coordinator_cancel_course_before_studend_conclude_it_not_affecting_student_situation(
+def test_coordinator_cancel_course_before_studend_conclude_it_not_affecting_student_situation_or_grades(
     set_in_memory_database,
 ):
     course = "adm"
@@ -90,7 +112,6 @@ def test_coordinator_cancel_course_before_studend_conclude_it_not_affecting_stud
     subjects = __get_subjects()
     course_handler = __add_all_subjects_to_course(course, subjects, database)
     student_handler = __enroll_student_to_course(course, database)
-    __add_all_subjects_to_course(course, subjects, database)
     __update_grade_of_all_subjects(grade, subjects, student_handler)
     course_handler.cancel()
     course_handler.activate()
@@ -120,7 +141,7 @@ def test_coordinator_cancel_course_and_not_allow_any_student_operation(
     with pytest.raises(NonValidCourse):
         student_handler.unlock_course()
     with pytest.raises(NonValidCourse):
-        student_handler.calculate_gpa()
+        student_handler.gpa
     course_handler.activate()
     __close_maximum_semesters(database)
 
@@ -181,8 +202,10 @@ def test_student_finishes_course(set_in_memory_database, grade, situation):
     __add_all_subjects_to_course(course, subjects, database)
     student_handler = __enroll_student_to_course(course, database)
     __update_grade_of_all_subjects(grade, subjects, student_handler)
+
+    assert student_handler.gpa == grade
+
     __close_maximum_semesters(database)
 
     assert student_handler.semester_counter == MAX_SEMESTERS_TO_FINISH_COURSE + 1
-    assert student_handler.gpa == grade
     assert student_handler.state == situation

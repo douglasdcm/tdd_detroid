@@ -107,7 +107,7 @@ class SemesterMonitor:
             try:
                 student_handler = StudentHandler(self.__database, row.identifier)
                 student_handler.increment_semester()
-                student_handler.calculate_gpa()
+                student_handler.gpa
 
                 course_handler = CourseHandler(self.__database)
                 course_handler.load_from_database(student_handler.course)

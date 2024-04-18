@@ -51,12 +51,14 @@ def test_course_model(set_in_memory_database):
 
 def test_student_model(set_in_memory_database):
     database = set_in_memory_database
-    student = StudentHandler(database)
-    student.name = "any"
-    student.cpf = "123.456.789-10"
+    student_handler = StudentHandler(database)
+    student_handler.name = "any"
+    student_handler.cpf = "123.456.789-10"
+    student_handler.enroll_to_course("any")
 
-    assert student.name == "any"
-    assert student.cpf == "123.456.789-10"
-    assert student.identifier is None
-    assert student.state == None
-    assert student.subjects == []
+    assert student_handler.name == "any"
+    assert student_handler.cpf == "123.456.789-10"
+    assert student_handler.identifier is not None
+    assert student_handler.state == "enrolled"
+    assert student_handler.gpa == 0
+    assert student_handler.subjects == []

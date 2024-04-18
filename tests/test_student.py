@@ -140,13 +140,13 @@ def test_enroll_invalid_student_to_course_return_error(set_in_memory_database):
         student.enroll_to_course("any")
 
 
-def test_enroll_student_to_course_x(set_in_memory_database):
+def test_enroll_student_to_course(set_in_memory_database):
+    name = "any"
+    cpf = "123.456.789-10"
     student = StudentHandler(set_in_memory_database)
-    student.name = "any"
-    student.cpf = "123.456.789-10"
+    student.name = name
+    student.cpf = cpf
     course_name = "any"
-    identifier = utils.generate_student_identifier(
-        student.name, student.cpf, course_name
-    )
+    identifier = utils.generate_student_identifier(name, cpf, course_name)
 
     assert student.enroll_to_course(course_name) == identifier
