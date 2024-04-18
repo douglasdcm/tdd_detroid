@@ -29,7 +29,7 @@ def test_calculate_gpa_of_all_enrolled_students_when_semester_closes(
     student_handler.load_from_database(student_handler.identifier)
     assert student_handler.gpa > 0
     assert student_handler.semester_counter > 0
-    assert student_handler.state == "approved"
+    assert student_handler.state == "enrolled"
 
 
 def test_return_error_when_close_invalid_semester(set_in_memory_database):

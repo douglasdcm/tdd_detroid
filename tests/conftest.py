@@ -13,7 +13,7 @@ def set_in_memory_database():
     db.enrollment.populate("other", "123.456.789-10", "any")
     db.enrollment.populate("another", "123.456.789-10", "any")
 
-    db.course.populate("adm")
+    db.course.populate("adm", subjects="")
     db.course.populate("mat")
     db.course.populate("port")
     db.course.populate("any")
@@ -34,5 +34,16 @@ def set_in_memory_database():
 
     db.semester.populate("2023-2", "closed")
     db.semester.populate("2024-1", "open")
+    db.semester.populate("1234-1", "open")
+    db.semester.populate("1234-2", "open")
+    db.semester.populate("1234-3", "open")
+    db.semester.populate("1234-4", "open")
+    db.semester.populate("1234-5", "open")
+    db.semester.populate("1234-6", "open")
+    db.semester.populate("1234-7", "open")
+    db.semester.populate("1234-8", "open")
+    db.semester.populate("1234-9", "open")
+    db.semester.populate("1234-10", "open")
+    db.semester.populate("1234-11", "open")
 
     yield db

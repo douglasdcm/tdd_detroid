@@ -1,7 +1,6 @@
 import pytest
 from src.services.grade_calculator import GradeCalculator
 from src.services.student_handler import StudentHandler
-from src import utils
 
 
 @pytest.mark.parametrize(

@@ -19,7 +19,9 @@ def test_add_subject_to_new_course(set_in_memory_database):
 
     # post conditions
     course_handler.load_from_database(course)
-    assert subject in database.course.subjects
+    assert (
+        utils.generate_subject_identifier(course, subject) in database.course.subjects
+    )
     assert database.course.max_enrollment == max_enrollment
 
 

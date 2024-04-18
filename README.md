@@ -108,8 +108,8 @@ Same as requirement 6
 45. The students must be able to list the missing subjects.
 <!-- The course coordinator is not an entity yet. What are his/her properties? -->
 46. The administrator must be able to list all course coordinators with available information.
-47. The student has 10 semesters to graduate.
-48. If the student exceeds the 10 semesters, they are automatically failed.
+47. **DONE** The student has 10 semesters to graduate.
+48. **DONE** If the student exceeds the 10 semesters, they are automatically failed.
 <!-- Duplicated with requirement 24 -->
 49. ~~The coordinator can only coordinate a maximum of 3 courses~~.
 50. The general coordinator cannot be a coordinator of courses.

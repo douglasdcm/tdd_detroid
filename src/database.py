@@ -214,7 +214,10 @@ class Database:
         # TODO create a public funtion
         def populate(self, name, state="active", subjects="any1,any2,any3"):
             identifier = utils.generate_course_identifier(name)
-            subjects = subjects.split(",")
+            if len(subjects) == 0:
+                subjects = []
+            else:
+                subjects = subjects.split(",")
             list_of_subjects = []
             for subject in subjects:
                 subject_identifier = utils.generate_subject_identifier(name, subject)
@@ -346,9 +349,8 @@ class Database:
 
         def load(self, subject_identifier):
             try:
-                result = self.cur.execute(
-                    f"SELECT * FROM {self.TABLE} WHERE identifier = '{subject_identifier}'"
-                ).fetchone()
+                cmd = f"SELECT * FROM {self.TABLE} WHERE identifier = '{subject_identifier}'"
+                result = self.cur.execute(cmd).fetchone()
                 if not result:
                     raise NotFoundError(
                         f"Subject '{subject_identifier}' not found in table '{self.TABLE}'"
@@ -360,6 +362,24 @@ class Database:
                 self.enrolled_students = result[3].split(",")
                 self.max_enrollment = result[4]
                 self.course = result[5]
+            except Exception as e:
+                logging.error(str(e))
+                raise
+
+        def add(self):
+            try:
+                cmd = f"""
+                    INSERT INTO {self.TABLE} VALUES
+                        ('{self.name}', 
+                        '{self.state}', 
+                        '{self.identifier}',
+                        '{self.enrolled_students}',
+                        {self.max_enrollment},
+                        '{self.course}')
+                """
+                self.cur.execute(cmd)
+
+                self.con.commit()
             except Exception as e:
                 logging.error(str(e))
                 raise

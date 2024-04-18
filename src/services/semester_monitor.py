@@ -3,7 +3,11 @@ from src.database import Database, NotFoundError
 from src.services.student_handler import StudentHandler
 from src.services.course_handler import CourseHandler
 from src.services.grade_calculator import GradeCalculator
-from src.constants import STUDENT_APPROVED, STUDENT_FAILED
+from src.constants import (
+    STUDENT_APPROVED,
+    STUDENT_FAILED,
+    MAX_SEMESTERS_TO_FINISH_COURSE,
+)
 
 
 class SemesterMonitor:
@@ -14,6 +18,17 @@ class SemesterMonitor:
         self.__identifier = identifier  # TODO get next from database
         self.__state = self.__OPEN
         self.__database = database
+
+    def __check_identifier(self):
+        if not self.identifier:
+            raise NonValidSemester("Need to set the semester identifier.")
+
+    def __is_course_completed(self, student_handler, course_handler):
+        return (
+            set(student_handler.subjects).intersection(course_handler.subjects)
+            == set(student_handler.subjects)
+            and student_handler.semester_counter > MAX_SEMESTERS_TO_FINISH_COURSE
+        )
 
     @property
     def identifier(self):
@@ -50,8 +65,7 @@ class SemesterMonitor:
         return self.__state
 
     def close(self):
-        if not self.identifier:
-            raise NonValidSemester("Need to set the semester identifier.")
+        self.__check_identifier()
 
         self.__database.semester.identifier = self.identifier
         try:
@@ -85,11 +99,6 @@ class SemesterMonitor:
                     student_handler.state = STUDENT_FAILED
 
         return self.__state
-
-    def __is_course_completed(self, student_handler, course_handler):
-        return set(student_handler.subjects).intersection(
-            course_handler.subjects
-        ) == set(student_handler.subjects)
 
 
 class NonValidOperation(Exception):

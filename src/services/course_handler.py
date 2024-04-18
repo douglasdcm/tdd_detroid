@@ -3,6 +3,7 @@ import logging
 from src.constants import DUMMY_IDENTIFIER
 from src.services.grade_calculator import GradeCalculator
 from src.database import Database, NotFoundError
+from src.services.subject_handler import SubjectHandler
 from src import utils
 
 
@@ -34,6 +35,7 @@ class CourseHandler:
 
     @property
     def subjects(self):
+        self.__subjects = list(set(self.__subjects))
         return self.__subjects
 
     @property
@@ -42,12 +44,38 @@ class CourseHandler:
 
     @name.setter
     def name(self, value):
-        if len(value) > 10:
-            raise NonValidCourse(
-                f"The maximum number of characters to course's name is '10'. Set with '{len(value)}'."
-            )
+        self.__check_name_lenght(value)
         self.__identifier = utils.generate_course_identifier(value)
         self.__name = value
+
+    def __check_name_lenght(self, value):
+        if len(value) > 10:
+            raise NonValidCourse(
+                f"The maximum number of characters to course's "
+                "name is '10'. Set with '{len(value)}'."
+            )
+
+    def __check_name(self):
+        if not self.name:
+            raise NonValidCourse("Need to set the name.")
+
+    def __check_active(self):
+        if not self.state == self.ACTIVE:
+            raise NonValidCourse(f"Course '{self.name}' is not active.")
+
+    def __check_minimum_number_of_subjects(self):
+        MINIMUM = 3
+        if not len(self.subjects) >= MINIMUM:
+            raise NonMinimunSubjects(
+                f"Need '{MINIMUM}' subjects. Set '{len(self.subjects)}'"
+            )
+
+    def __check_maximum_enrollment(self):
+        if len(self.__database.course.subjects) > self.max_enrollment:
+            raise NonValidCourse(
+                f"Exceeded the maximum number of subjects."
+                f" Expected '{self.max_enrollment}. Set '{len(self.subjects)}'."
+            )
 
     @property
     def max_enrollment(self):
@@ -63,7 +91,8 @@ class CourseHandler:
         self.__database.course.identifier = self.identifier
         self.__database.course.enrolled_students = self.enrolled_students
         self.__database.course.max_enrollment = self.max_enrollment
-        self.__database.course.subjects.extend(self.subjects)
+        self.__database.course.subjects = self.subjects
+        self.__check_maximum_enrollment()
         self.__database.course.save()
 
     def load_from_database(self, name):
@@ -113,46 +142,42 @@ class CourseHandler:
         return all_details
 
     def enroll_student(self, student_identifier):
-        if not self.state == self.ACTIVE:
-            raise NonValidCourse(f"Course '{self.name}' is not active.")
+        self.__check_active()
         self.__enrolled_students.append(student_identifier)
         self.save()
         return True
 
     def add_subject(self, subject):
+        self.__check_name()
         self.load_from_database(self.name)
-        self.__subjects.append(subject)
+        subject_identifier = utils.generate_subject_identifier(self.name, subject)
+        self.__subjects.append(subject_identifier)
         self.save()
+
+        subject_handler = SubjectHandler(self.__database)
+        subject_handler.name = subject
+        subject_handler.course = self.name
+        subject_handler.add()
         return True
 
     def cancel(self):
-        if not self.name:
-            raise NonValidCourse("No name set to course.")
-
+        self.__check_name()
         self.load_from_database(self.name)
         self.__state = self.CANCELLED
         self.save()
         return self.__state
 
     def deactivate(self):
-        if not self.name:
-            raise NonValidCourse("No name set to course.")
-
+        self.__check_name()
         self.load_from_database(self.name)
         self.__state = self.INACTIVE
         self.save()
         return self.__state
 
     def activate(self):
-        if not self.name:
-            raise NonValidCourse("No name set to course.")
-
+        self.__check_name()
         self.load_from_database(self.name)
-        MINIMUM = 3
-        if not len(self.subjects) >= MINIMUM:
-            raise NonMinimunSubjects(
-                f"Need '{MINIMUM}' subjects. Set '{len(self.subjects)}'"
-            )
+        self.__check_minimum_number_of_subjects()
 
         self.__state = self.ACTIVE
         self.save()

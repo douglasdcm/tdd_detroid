@@ -12,6 +12,7 @@ from src.constants import (
     SUBJECT_IN_PROGRESS,
     STUDENT_APPROVED,
     STUDENT_FAILED,
+    MAX_SEMESTERS_TO_FINISH_COURSE,
 )
 
 
@@ -48,6 +49,7 @@ class StudentHandler:
 
     @property
     def semester_counter(self):
+        self.load_from_database(self.identifier)
         return self.__semester_counter
 
     @property
@@ -135,6 +137,8 @@ class StudentHandler:
     def increment_semester(self):
         self.load_from_database(self.identifier)
         self.__semester_counter += 1
+        if self.__semester_counter > MAX_SEMESTERS_TO_FINISH_COURSE:
+            self.__state = STUDENT_FAILED
         self.__save()
 
     def update_grade_to_subject(self, grade, subject_name):
@@ -228,7 +232,8 @@ class StudentHandler:
 
         if self.state == STUDENT_APPROVED or self.state == STUDENT_FAILED:
             raise NonValidStudent(
-                f"Can not perform the operation. The student is '{self.state}' in course '{self.course}'"
+                f"Can not perform the operation."
+                f" The student is '{self.state}' in course '{self.course}'"
             )
 
         self.load_from_database(self.identifier)
@@ -254,9 +259,14 @@ class StudentHandler:
                 f"The subject '{subject_handler.identifier}' is not part of course '{self.__course}'."
             )
 
-        if not subject_handler.is_available() or not subject_handler.is_active():
+        if not subject_handler.is_available():
             raise NonValidSubject(
-                f"Subject '{subject_handler.identifier}' is not available or is not active."
+                f"Subject '{subject_handler.identifier}' is not available."
+            )
+
+        if not subject_handler.is_active():
+            raise NonValidSubject(
+                f"Subject '{subject_handler.identifier}' is not active."
             )
 
         self.__subject_identifiers.append(subject_identifier)

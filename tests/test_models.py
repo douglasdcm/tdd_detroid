@@ -16,13 +16,14 @@ def test_subject_model(set_in_memory_database):
     database = set_in_memory_database
     subject_handler = SubjectHandler(database)
     subject_handler.name = "any_name"
+    subject_handler.course = "any"
 
     assert subject_handler.name == "any_name"
-    assert subject_handler.identifier is -1
+    assert subject_handler.identifier is not -1
     assert subject_handler.state == None
     assert subject_handler.enrolled_students == []
     assert subject_handler.max_enrollment == 0
-    assert subject_handler.course == None
+    assert subject_handler.course == "any"
 
 
 def test_course_model(set_in_memory_database):
