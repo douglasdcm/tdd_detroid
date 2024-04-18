@@ -90,9 +90,9 @@ def test_student_failed_by_maximum_semesters(set_in_memory_database):
     course = "adm"
     grade = 9
     situation = "failed"
-    subjects = __get_subjects()
     database = set_in_memory_database
 
+    subjects = __get_subjects()
     __add_all_subjects_to_course(course, subjects, database)
     student_handler = __enroll_student_to_course(course, database)
     __update_grade_of_3_subjects_only(grade, subjects, student_handler)
@@ -112,9 +112,9 @@ def test_student_failed_by_maximum_semesters(set_in_memory_database):
 )
 def test_student_finishes_course(set_in_memory_database, grade, situation):
     course = "adm"
-    subjects = __get_subjects()
     database = set_in_memory_database
 
+    subjects = __get_subjects()
     __add_all_subjects_to_course(course, subjects, database)
     student_handler = __enroll_student_to_course(course, database)
     __update_grade_of_all_subjects(grade, subjects, student_handler)
