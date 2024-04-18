@@ -7,6 +7,8 @@ from src.constants import (
     STUDENT_APPROVED,
     STUDENT_FAILED,
     MAX_SEMESTERS_TO_FINISH_COURSE,
+    SUBJECT_FAILED,
+    STUDENT_APPROVED,
 )
 
 
@@ -28,6 +30,25 @@ class SemesterMonitor:
             set(student_handler.subjects).intersection(course_handler.subjects)
             == set(student_handler.subjects)
             and student_handler.semester_counter > MAX_SEMESTERS_TO_FINISH_COURSE
+        )
+
+    def __is_approved(self, student_identifier):
+        self.__database.student.load(student_identifier)
+        self.__database.course.load_from_database(self.__database.student.course)
+
+        if not self.__is_student_finished_all_subjects():
+            return False
+
+        for row in self.__database.grade_calculator.load_all_by_student_identifier(
+            student_identifier
+        ):
+            if row.subject_situation == SUBJECT_FAILED:
+                return False
+        return True
+
+    def __is_student_finished_all_subjects(self):
+        return len(self.__database.student.subjects) == len(
+            self.__database.course.subjects
         )
 
     @property
@@ -92,8 +113,7 @@ class SemesterMonitor:
             course_handler.load_from_database(student_handler.course)
             course_handler.name = student_handler.course
             if self.__is_course_completed(student_handler, course_handler):
-                grade_calculator = GradeCalculator(self.__database)
-                if grade_calculator.is_approved(student_handler.identifier):
+                if self.__is_approved(student_handler.identifier):
                     student_handler.state = STUDENT_APPROVED
                 else:
                     student_handler.state = STUDENT_FAILED

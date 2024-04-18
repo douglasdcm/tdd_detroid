@@ -78,26 +78,6 @@ class GradeCalculator:
         self.__database.grade_calculator.subject_situation = self.subject_situation
         self.__database.grade_calculator.save()
 
-    def is_approved(self, student_identifier):
-        try:
-            self.__rows = (
-                self.__database.grade_calculator.load_all_by_student_identifier(
-                    student_identifier
-                )
-            )
-        except NotFoundError as e:
-            raise NonValidGradeOperation(
-                f"Student '{student_identifier}' not enrolled to any subject."
-            )
-        except Exception:
-            logging.error(str(e))
-            raise
-
-        for row in self.__rows:
-            if row.subject_situation == SUBJECT_FAILED:
-                return False
-        return True
-
     def calculate_gpa_for_student(self, student_identifier):
         try:
             self.__rows = (
