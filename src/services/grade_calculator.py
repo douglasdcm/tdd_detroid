@@ -86,9 +86,7 @@ class GradeCalculator:
                 )
             )
         except NotFoundError as e:
-            raise NonValidGradeOperation(
-                f"Student '{student_identifier}' not enrolled to any subject."
-            )
+            raise NonValidGradeOperation(f"Student not enrolled to any subject.")
         except Exception:
             logging.error(str(e))
             raise

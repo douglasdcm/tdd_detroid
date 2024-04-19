@@ -16,5 +16,4 @@ def generate_student_identifier(name, cpf, course_name):
 
 def generate_subject_identifier(course, name):
     logging.info(f"Generate identifier for subject '{name}'")
-    # return uuid.uuid5(uuid.NAMESPACE_URL, str(f"{name}{course}")).hex
-    return f"{course}_{name}"
+    return uuid.uuid5(uuid.NAMESPACE_URL, str(f"{name}{course}")).hex

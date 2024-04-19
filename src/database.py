@@ -27,7 +27,7 @@ class Database:
         self.semester = self.DbSemester(con, cur)
 
     class DbStudent:
-        TABLE = "student"
+        TABLE = "students"
         name = None
         state = None
         cpf = None
@@ -146,9 +146,7 @@ class Database:
                 cmd = f"SELECT * FROM {self.TABLE} WHERE identifier = '{identifier}'"
                 result = self.cur.execute(cmd).fetchone()
                 if not result:
-                    raise NotFoundError(
-                        f"Student '{self.identifier}' not found in table '{self.TABLE}'."
-                    )
+                    raise NotFoundError(f"Student not found in table '{self.TABLE}'.")
                 self.name = result[0]
                 self.state = result[1]
                 self.cpf = result[2]
@@ -162,7 +160,7 @@ class Database:
                 raise
 
     class DbEnrollment:
-        TABLE = "enrollment"
+        TABLE = "enrollments"
 
         def __init__(self, con, cur):
             self.cur = cur
@@ -189,7 +187,7 @@ class Database:
             return self.cur.execute(cmd).fetchone()
 
     class DbCourse:
-        TABLE = "course"
+        TABLE = "courses"
         name = None
         state = None
         identifier = None
@@ -312,7 +310,7 @@ class Database:
                 raise
 
     class DbSubject:
-        TABLE = "subject"
+        TABLE = "subjects"
         name = None
         state = None
         enrolled_students = None
@@ -400,6 +398,31 @@ class Database:
                 logging.error(str(e))
                 raise
 
+        def search_all_by_course(self, course_name):
+            result = self.cur.execute(
+                f"SELECT * FROM {self.TABLE} WHERE course = '{course_name}'"
+            ).fetchall()
+
+            class SubjectRow:
+                name = None
+                state = None
+                identifier = None
+                enrolled_students = None
+                max_enrollment = None
+                course = None
+
+            subjects = []
+            for row in result:
+                subject_row = SubjectRow()
+                subject_row.name = row[0]
+                subject_row.state = row[1]
+                subject_row.identifier = row[2]
+                subject_row.enrolled_students = convert_csv_to_list(the_csv=row[3])
+                subject_row.max_enrollment = row[4]
+                subject_row.course = row[5]
+                subjects.append(subject_row)
+            return subjects
+
     class DbGradeCalculator:
         class GradeCalculatorRow:
             student_identifier = None
@@ -407,7 +430,7 @@ class Database:
             grade = None
             subject_situation = None
 
-        TABLE = "grade_calculator"
+        TABLE = "grade_calculators"
         student_identifier = None
         subject_identifier = None
         grade = None
@@ -430,9 +453,7 @@ class Database:
                     """
                 result = self.cur.execute(cmd).fetchall()
                 if not result:
-                    raise NotFoundError(
-                        f"Student '{student_identifier}' not found in table '{self.TABLE}'"
-                    )
+                    raise NotFoundError(f"Student not found in table '{self.TABLE}'")
 
                 grade_calculators = []
                 for row in result:
@@ -499,7 +520,7 @@ class Database:
                 ).fetchone()
                 if not result:
                     raise NotFoundError(
-                        f"Student '{student_identifier}' and subject '{subject_identifier}'"
+                        f"Student and subject '{subject_identifier}'"
                         f" not found in table '{self.TABLE}'."
                     )
 
@@ -558,7 +579,7 @@ class Database:
                 raise
 
     class DbSemester:
-        TABLE = "semester"
+        TABLE = "semesters"
         identifier = None
         state = None
 

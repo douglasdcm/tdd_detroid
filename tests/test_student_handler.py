@@ -8,6 +8,7 @@ from src.services.student_handler import (
 from src import utils
 from src.services.grade_calculator import GradeCalculator
 from src.services.subject_handler import SubjectHandler
+from src.services.course_handler import CourseHandler
 
 
 @pytest.mark.parametrize(
@@ -159,12 +160,24 @@ def test_enroll_invalid_student_to_course_return_error(set_in_memory_database):
 
 
 def test_enroll_student_to_course(set_in_memory_database):
+    database = set_in_memory_database
     name = "any"
     cpf = "123.456.789-10"
-    student = StudentHandler(set_in_memory_database)
-    student.name = name
-    student.cpf = cpf
+    student_handler = StudentHandler(database)
+    student_handler.name = name
+    student_handler.cpf = cpf
     course_name = "any"
     identifier = utils.generate_student_identifier(name, cpf, course_name)
 
-    assert student.enroll_to_course(course_name) == identifier
+    assert student_handler.enroll_to_course(course_name) == identifier
+
+    # post condition
+    database.student.load(student_handler.identifier)
+    assert database.student.identifier == student_handler.identifier
+    assert database.student.state == "enrolled"
+    assert database.student.course == course_name
+    assert database.student.gpa == 0
+
+    course = CourseHandler(database)
+    course.load_from_database(course_name)
+    assert student_handler.identifier in course.enrolled_students

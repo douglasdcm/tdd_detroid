@@ -9,7 +9,7 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S",
     format="%(asctime)s - %(levelname)s: [%(filename)s:%(lineno)s - %(funcName)20s() ] %(message)s",
     filemode="a",
-    level="DEBUG",
+    level="ERROR",
 )
 
 
@@ -128,8 +128,9 @@ def enroll_student(name, cpf, course_name):
     "--student-identifier",
     prompt="Student identifier",
     help="Student identifier number.",
+    hide_input=True,
 )
-def calculate_student_gpa(student_identifier):
+def calculate_gpa(student_identifier):
     try:
         database = Database()
         cli_helper.calculate_student_gpa(database, student_identifier)
@@ -142,6 +143,7 @@ def calculate_student_gpa(student_identifier):
     "--student-identifier",
     prompt="Student identifier",
     help="Student identifier number.",
+    hide_input=True,
 )
 @click.option(
     "--subject-name",
@@ -150,7 +152,7 @@ def calculate_student_gpa(student_identifier):
 )
 @click.option(
     "--grade",
-    type=int,
+    type=float,
     prompt="Subject name",
     help="The name of the subject the student wants to take.",
 )
@@ -167,6 +169,7 @@ def update_grade(student_identifier, subject_name, grade):
     "--student-identifier",
     prompt="Student identifier",
     help="Student identifier number.",
+    hide_input=True,
 )
 @click.option(
     "--subject-name",
@@ -186,6 +189,7 @@ def take_subject(student_identifier, subject_name):
     "--student-identifier",
     prompt="Student identifier",
     help="Student identifier number.",
+    hide_input=True,
 )
 def lock_course(student_identifier):
     try:
@@ -200,6 +204,7 @@ def lock_course(student_identifier):
     "--student-identifier",
     prompt="Student identifier",
     help="Student identifier number.",
+    hide_input=True,
 )
 def unlock_course(student_identifier):
     try:
@@ -212,7 +217,7 @@ def unlock_course(student_identifier):
 cli.add_command(enroll_student)
 cli.add_command(take_subject)
 cli.add_command(update_grade)
-cli.add_command(calculate_student_gpa)
+cli.add_command(calculate_gpa)
 cli.add_command(lock_course)
 cli.add_command(unlock_course)
 

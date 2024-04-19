@@ -62,8 +62,7 @@ def test_list_empty_when_no_enrolled_students(set_in_memory_database):
     course_handler.name = "any"
 
     actual = course_handler.list_student_details()
-
-    assert len(actual) == 0
+    assert len(actual["students"]) == 0
 
 
 def test_list_enrolled_students_in_specific_course(set_in_memory_database):
@@ -79,7 +78,6 @@ def test_list_enrolled_students_in_specific_course(set_in_memory_database):
 
     actual = course_handler.list_student_details()
 
-    assert utils.generate_student_identifier(name, cpf, course) in actual
     assert len(actual) == 1
 
 

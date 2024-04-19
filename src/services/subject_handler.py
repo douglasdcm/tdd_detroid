@@ -118,7 +118,7 @@ class SubjectHandler:
         except Exception as e:
             logging.error(str(e))
             raise NonValidSubject(
-                f"Subject '{self.identifier}' not found in course '{self.course}'.'"
+                f"Subject '{self.__name}' not found in course '{self.course}'."
             )
 
         if not self.state == self.ACTIVE:
@@ -160,7 +160,10 @@ class SubjectHandler:
 
         except Exception as e:
             logging.error(str(e))
-            raise NonValidSubject("Subject not found.")
+            identifier = subject_identifier
+            if self.__name:
+                identifier = self.__name
+            raise NonValidSubject(f"Subject '{identifier}' not found.")
 
 
 class NonValidSubject(Exception):

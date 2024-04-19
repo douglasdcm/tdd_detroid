@@ -1,4 +1,4 @@
-import uuid
+import sqlite3
 import logging
 from src.constants import DUMMY_IDENTIFIER
 from src.services.grade_calculator import GradeCalculator
@@ -113,7 +113,7 @@ class CourseHandler:
 
         except NotFoundError as e:
             logging.error(str(e))
-            raise
+            raise NonValidCourse(f"Course '{name}' not found.")
         except Exception as e:
             logging.error(str(e))
             raise
@@ -122,22 +122,28 @@ class CourseHandler:
         self.load_from_database(self.name)
         enrolled_students = self.__database.course.enrolled_students
         result = {}
-        for student_identifier in enrolled_students:
-            self.__database.student.load(student_identifier)
-            result[self.__database.student.identifier] = {
-                "name": self.__database.student.name,
-                "gpa": self.__database.student.gpa,
-                "course": self.__database.student.course,
-            }
 
+        students_data = []
         for student_identifier in enrolled_students:
             self.__database.student.load(student_identifier)
+            subjects_data = []
+
             for subject_identifier in self.__database.student.subjects:
                 grade_calculator = GradeCalculator(self.__database)
                 grade_calculator.load_from_database(
                     student_identifier, subject_identifier
                 )
-                result[student_identifier][subject_identifier] = grade_calculator.grade
+                subjects_data.append({subject_identifier: grade_calculator.grade})
+
+            students_data.append(
+                {
+                    "name": self.__database.student.name,
+                    "gpa": self.__database.student.gpa,
+                    "grades": subjects_data,
+                }
+            )
+        result["students"] = students_data
+
         return result
 
     def list_all_courses_with_details(self):
@@ -145,6 +151,9 @@ class CourseHandler:
         for course in self.__database.course.search_all():
             self.name = course.name
             all_details[self.name] = self.list_student_details()
+            all_details[self.name]["subjects"] = [
+                s.name for s in self.__database.subject.search_all_by_course(self.name)
+            ]
         return all_details
 
     def enroll_student(self, student_identifier):
@@ -159,6 +168,10 @@ class CourseHandler:
         self.load_from_database(self.name)
         self.__check_cancelled()
         subject_identifier = utils.generate_subject_identifier(self.name, subject)
+        if subject_identifier in self.__subjects:
+            raise NonValidSubject(
+                f"Subject '{subject}' already exists in course '{self.__name}'"
+            )
         self.__subjects.append(subject_identifier)
         self.save()
 
@@ -192,15 +205,26 @@ class CourseHandler:
         return self.__state
 
     def create(self, course_name, max_enrollmet):
-        self.name = course_name
-        self.__max_enrollment = max_enrollmet
-        self.__database.course.identifier = self.identifier
-        self.__database.course.name = course_name
-        self.__database.course.state = self.state
-        self.__database.course.enrolled_students = self.enrolled_students
-        self.__database.course.max_enrollment = self.max_enrollment
-        self.__database.course.add()
-        return True
+        if max_enrollmet < 1:
+            raise NonValidCourse(
+                f"The max enrollment '{max_enrollmet}' is not valid. Need to set a number bigger than '0'."
+            )
+        try:
+            self.name = course_name
+            self.__max_enrollment = max_enrollmet
+            self.__database.course.identifier = self.identifier
+            self.__database.course.name = course_name
+            self.__database.course.state = self.state
+            self.__database.course.enrolled_students = self.enrolled_students
+            self.__database.course.max_enrollment = self.max_enrollment
+            self.__database.course.add()
+            return True
+        except sqlite3.IntegrityError as e:
+            raise NonValidCourse(f"Course '{course_name}' already exists.")
+        except Exception as e:
+            raise NonValidCourse(
+                f"Not able to create the course '{course_name}'. Check with system adminstrator."
+            )
 
 
 class NonValidCourse(Exception):
@@ -208,4 +232,8 @@ class NonValidCourse(Exception):
 
 
 class NonMinimunSubjects(Exception):
+    pass
+
+
+class NonValidSubject(Exception):
     pass
