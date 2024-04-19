@@ -1,9 +1,9 @@
 unit_test/
-venv/
+venv*/
 tdd_detroid/
 htmlcov/
 *.db
 *.pyc
+*.log
 .coverage
-*.whl
-*.tar.gz
+.~lock.architecture.odp#

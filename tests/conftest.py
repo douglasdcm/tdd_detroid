@@ -1,40 +1,49 @@
-from pytest import fixture
-from src.utils.utils import inicializa_tabelas
-from src.controllers import courses, students, disciplines
-from pytest import raises
+import pytest
+from src import database
 
 
-@fixture
-def popula_banco_dados(scope="function"):
-    """Combinacao de materia x course
-    m = materia, c = course
-    m1 c1
-    m2 c1
-    m3 c1
+@pytest.fixture(autouse=True, scope="function")
+def set_in_memory_database():
+    db = database.Database(":memory:")
+    # TODO need to check if the courses are available
+    db.enrollment.populate("douglas", "098.765.432.12", "adm")
+    db.enrollment.populate("maria", "028.745.462.18", "mat")
+    db.enrollment.populate("joana", "038.745.452.19", "port")
+    db.enrollment.populate("any", "123.456.789-10", "any")
+    db.enrollment.populate("other", "123.456.789-10", "any")
+    db.enrollment.populate("another", "123.456.789-10", "any")
 
-    m1 c2
-    m2 c2
-    m3 c2
+    db.course.populate("adm", subjects="")
+    db.course.populate("mat")
+    db.course.populate("port")
+    db.course.populate("any")
+    db.course.populate("noise")
+    db.course.populate("deact")
+    db.course.populate("act")
+    db.course.populate("nosubjects", state="", subjects="")
 
-    m7 c3
-    m8 c3
-    m9 c3
-    """
-    courses.create(name="any_1")
-    courses.create(name="any_2")
-    courses.create(name="any_3")
-    for i in range(3):
-        for j in range(3):
-            disciplines.create(name=f"any{j}", course_id=i + 1)
-    students.create(name="anyone")
-    students.subscribe_in_course(student_id=1, course_id=1)
-    with raises(Exception):
-        students.subscribe_in_discipline(student_id=1, discipline_id=1)
-    with raises(Exception):
-        students.subscribe_in_discipline(student_id=1, discipline_id=2)
-    students.subscribe_in_discipline(student_id=1, discipline_id=3)
+    db.subject.populate("any", "any1")  # e4c858cd917f518194c9d93c9d13def8
+    db.subject.populate("any", "any2")  # 283631d2292c54879b9aa72e27a1b4ff
+    db.subject.populate("any", "any3")  # 0eaaeb1a39ed5d04a62b31cd951f34ce
+    db.subject.populate(
+        "course1", "subject_full", 0
+    )  # ef15a071407953bd858cfca59ad99056
+    db.subject.populate(
+        "course1", "subject_removed", 0, "removed"
+    )  # ef15a071407953bd858cfca59ad99056
 
+    db.semester.populate("2023-2", "closed")
+    db.semester.populate("2024-1", "open")
+    db.semester.populate("1234-1", "open")
+    db.semester.populate("1234-2", "open")
+    db.semester.populate("1234-3", "open")
+    db.semester.populate("1234-4", "open")
+    db.semester.populate("1234-5", "open")
+    db.semester.populate("1234-6", "open")
+    db.semester.populate("1234-7", "open")
+    db.semester.populate("1234-8", "open")
+    db.semester.populate("1234-9", "open")
+    db.semester.populate("1234-10", "open")
+    db.semester.populate("1234-11", "open")
 
-@fixture(scope="function", autouse=True)
-def setup_bando_dados():
-    inicializa_tabelas()
+    yield db
