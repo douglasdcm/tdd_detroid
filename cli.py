@@ -29,8 +29,8 @@ def close_semester(identifier):
     try:
         database = Database()
         cli_helper.close_semester(database, identifier)
-    except Exception as e:
-        logging.error(str(e))
+    except Exception:
+        raise
 
 
 @click.command()
@@ -38,8 +38,8 @@ def list_courses():
     try:
         database = Database()
         cli_helper.list_all_course_details(database)
-    except Exception as e:
-        logging.error(str(e))
+    except Exception:
+        raise
 
 
 @click.command()
@@ -52,8 +52,8 @@ def list_students(course_name):
     try:
         database = Database()
         cli_helper.list_student_details(database, course_name)
-    except Exception as e:
-        logging.error(str(e))
+    except Exception:
+        raise
 
 
 @click.command()
@@ -119,8 +119,8 @@ def enroll_student(name, cpf, course_name):
     try:
         database = Database()
         cli_helper.enroll_student(database, name, cpf, course_name)
-    except Exception as e:
-        logging.error(str(e))
+    except Exception:
+        raise
 
 
 @click.command()
@@ -133,8 +133,8 @@ def calculate_student_gpa(student_identifier):
     try:
         database = Database()
         cli_helper.calculate_student_gpa(database, student_identifier)
-    except Exception as e:
-        logging.error(str(e))
+    except Exception:
+        raise
 
 
 @click.command()
@@ -158,8 +158,8 @@ def update_grade(student_identifier, subject_name, grade):
     try:
         database = Database()
         cli_helper.update_grade(database, student_identifier, subject_name, grade)
-    except Exception as e:
-        logging.error(str(e))
+    except Exception:
+        raise
 
 
 @click.command()
@@ -177,8 +177,8 @@ def take_subject(student_identifier, subject_name):
     try:
         database = Database()
         cli_helper.take_subject(database, student_identifier, subject_name)
-    except Exception as e:
-        logging.error(str(e))
+    except Exception:
+        raise
 
 
 @click.command()
@@ -191,8 +191,8 @@ def lock_course(student_identifier):
     try:
         database = Database()
         cli_helper.lock_course(database, student_identifier)
-    except Exception as e:
-        logging.error(str(e))
+    except Exception:
+        raise
 
 
 @click.command()
@@ -205,8 +205,8 @@ def unlock_course(student_identifier):
     try:
         database = Database()
         cli_helper.unlock_course(database, student_identifier)
-    except Exception as e:
-        logging.error(str(e))
+    except Exception:
+        raise
 
 
 cli.add_command(enroll_student)

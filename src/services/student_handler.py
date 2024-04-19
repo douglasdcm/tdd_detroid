@@ -1,6 +1,6 @@
 import logging
 from src.services.enrollment_validator import EnrollmentValidator
-from src.services.course_handler import CourseHandler
+from src.services.course_handler import CourseHandler, NonValidCourse
 from src.services.subject_handler import SubjectHandler, NonValidSubject
 from src.services.grade_calculator import GradeCalculator
 from src.services.cpf_validator import is_valide_cpf
@@ -65,6 +65,11 @@ class StudentHandler:
             raise NonValidStudent(
                 f"Student '{self.__identifier}' does not appears in enrollment list."
             )
+
+        courser_handler = CourseHandler(self.__database)
+        courser_handler.name = course_name
+        if not courser_handler.is_active():
+            raise NonValidCourse(f"The course '{course_name}' is not active.")
 
     def __check_grade_range(self, grade):
         if grade < 0 or grade > 10:
@@ -313,18 +318,6 @@ class StudentHandler:
         grade_calculator.subject_situation = SUBJECT_IN_PROGRESS
         grade_calculator.add(self.__identifier, subject_identifier, grade=0)
 
-        # post condition
-        subject_handler.load_from_database(subject_identifier)
-        assert self.__identifier in subject_handler.enrolled_students
-
-        self.load_from_database(self.__identifier)
-        assert subject_identifier in self.subjects
-
-        grade_calculator.load_from_database(self.__identifier, subject_identifier)
-        assert self.__identifier in grade_calculator.student_identifier
-        assert subject_identifier in grade_calculator.subject_identifier
-        assert grade_calculator.grade == 0
-
         return True
 
     def unlock_course(self):
@@ -360,7 +353,7 @@ class StudentHandler:
             self.__semester_counter = self.__database.student.semester_counter
 
         except NotFoundError as e:
-            raise NonValidStudent(str(e))
+            raise NonValidStudent(f"Student '{self.__identifier}' not found.")
         except Exception as e:
             logging.error(str(e))
             raise

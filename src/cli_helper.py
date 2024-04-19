@@ -33,7 +33,7 @@ def close_semester(database, identifier):
         print(str(e))
     except Exception as e:
         logging.error(str(e))
-        print(UNEXPECTED_ERROR)
+        raise CommandError(UNEXPECTED_ERROR)
     return False
 
 
@@ -49,7 +49,7 @@ def remove_subject(database, course_name, subject_name):
         print(str(e))
     except Exception as e:
         logging.error(str(e))
-        print(UNEXPECTED_ERROR)
+        raise CommandError(UNEXPECTED_ERROR)
     return False
 
 
@@ -65,7 +65,7 @@ def cancel_course(database, name):
         print(f"Course '{name}' is not valid.")
     except Exception as e:
         logging.error(str(e))
-        print(UNEXPECTED_ERROR)
+        raise CommandError(UNEXPECTED_ERROR)
     return False
 
 
@@ -81,7 +81,7 @@ def deactivate_course(database, name):
         print(f"Course '{name}' is not valid.")
     except Exception as e:
         logging.error(str(e))
-        print(UNEXPECTED_ERROR)
+        raise CommandError(UNEXPECTED_ERROR)
     return False
 
 
@@ -97,7 +97,7 @@ def activate_course(database, name):
         print(str(e))
     except Exception as e:
         logging.error(str(e))
-        print(UNEXPECTED_ERROR)
+        raise CommandError(UNEXPECTED_ERROR)
     return False
 
 
@@ -112,7 +112,7 @@ def create_course(database, name, max_enrollment):
         print(f"Course '{name}' is not valid.")
     except Exception as e:
         logging.error(str(e))
-        print(UNEXPECTED_ERROR)
+        raise CommandError(UNEXPECTED_ERROR)
     return False
 
 
@@ -128,7 +128,7 @@ def add_subject_to_course(database, course_name, subject_name):
         print(f"Course '{course_name}' is not valid.")
     except Exception as e:
         logging.error(str(e))
-        print(UNEXPECTED_ERROR)
+        raise CommandError(UNEXPECTED_ERROR)
     return False
 
 
@@ -143,7 +143,7 @@ def calculate_student_gpa(database, student_identifier):
         print(str(e))
     except Exception as e:
         logging.error(str(e))
-        print(UNEXPECTED_ERROR)
+        raise CommandError(UNEXPECTED_ERROR)
     return False
 
 
@@ -158,7 +158,8 @@ def take_subject(database, student_identifier, subject_name):
         print(str(e))
     except Exception as e:
         logging.error(str(e))
-        print(UNEXPECTED_ERROR)
+        raise CommandError(UNEXPECTED_ERROR)
+        raise
     return False
 
 
@@ -173,7 +174,7 @@ def lock_course(database, student_identifier):
         print(str(e))
     except Exception as e:
         logging.error(str(e))
-        print(UNEXPECTED_ERROR)
+        raise CommandError(UNEXPECTED_ERROR)
     return False
 
 
@@ -188,7 +189,7 @@ def unlock_course(database, student_identifier):
         print(str(e))
     except Exception as e:
         logging.error(str(e))
-        print(UNEXPECTED_ERROR)
+        raise CommandError(UNEXPECTED_ERROR)
     return False
 
 
@@ -205,7 +206,7 @@ def update_grade(database, student_identifier, subject_name, grade):
         print(str(e))
     except Exception as e:
         logging.error(str(e))
-        print(UNEXPECTED_ERROR)
+        raise CommandError(UNEXPECTED_ERROR)
     return False
 
 
@@ -224,7 +225,7 @@ def enroll_student(database, name, cpf, course_name):
         print(str(e))
     except Exception as e:
         logging.error(str(e))
-        print(UNEXPECTED_ERROR)
+        raise CommandError(UNEXPECTED_ERROR)
     return False
 
 
@@ -241,7 +242,7 @@ def list_student_details(database, course_name):
         print(str(e))
     except Exception as e:
         logging.error(str(e))
-        print(UNEXPECTED_ERROR)
+        raise CommandError(UNEXPECTED_ERROR)
     return False
 
 
@@ -257,5 +258,9 @@ def list_all_course_details(database):
         print(str(e))
     except Exception as e:
         logging.error(str(e))
-        print(UNEXPECTED_ERROR)
+        raise CommandError(UNEXPECTED_ERROR)
     return False
+
+
+class CommandError(Exception):
+    pass

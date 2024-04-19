@@ -186,7 +186,7 @@ class Database:
 
         def select(self, student_identifier):
             cmd = f"SELECT * FROM {self.TABLE} WHERE student_identifier = '{student_identifier}'"
-            return self.cur.execute(cmd).fetchone() is not None
+            return self.cur.execute(cmd).fetchone()
 
     class DbCourse:
         TABLE = "course"
