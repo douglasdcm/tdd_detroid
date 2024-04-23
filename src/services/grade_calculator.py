@@ -87,7 +87,7 @@ class GradeCalculator:
             )
         except NotFoundError as e:
             raise NonValidGradeOperation(f"Student not enrolled to any subject.")
-        except Exception:
+        except Exception as e:
             logging.error(str(e))
             raise
         total = 0

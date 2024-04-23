@@ -8,6 +8,13 @@ The application simulates the control of grades for university students.
 # Architecture
 [text](architecture.odp)
 
+## Exploration
+After a brief overview of the authetication systems listed in this [link](https://expertinsights.com/insights/top-10-user-authentication-and-access-management-solutions/) the two selected for exploration were [Duo Access](https://duo.com/docs/getting-started) and [Kinde](https://kinde.com/docs/developer-tools/python-sdk/) due the simplicity and the possibility to test them for free. Both provide a Python SDK. The only way to use the 2FA of Duo Access was by SMS. It is not clear if the service is charged or not. It works fine, but, when using the Demo App, at the end of the authenticaton process an error happened, so it was not possible to determine if the issue was in the configuration or in the system. Kinde also has a starter kit in GitHub. It worked fine too and the 2FA is provided by e-mail. Further investiation is going to be done with Kinde as it allows the 2FA by email.
+
+References:
+ - [Duo GitHub](https://github.com/duosecurity/duo_universal_python/tree/main/demo)
+ - [Kinde GitHub](https://github.com/kinde-starter-kits/python-starter-kit)
+
 # Setup and Test
 ```
 python3.11 -m venv venv
