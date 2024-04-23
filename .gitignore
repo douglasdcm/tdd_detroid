@@ -6,4 +6,9 @@ htmlcov/
 *.pyc
 *.log
 .coverage
+
+# Libre office file
 .~lock.architecture.odp#
+
+# Flask session
+flask_session
