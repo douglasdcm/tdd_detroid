@@ -86,7 +86,7 @@ def create_course(database, name, max_enrollment):
     except Exception as e:
         logging.error(str(e))
         print(str(e))
-        return False
+        return str(e)
 
 
 def add_subject_to_course(database, course_name, subject_name):
@@ -201,7 +201,7 @@ def list_all_course_details(database):
         courses = course_handler.list_all_courses_with_details()
         print(f"List of courses:")
         print(json.dumps(courses, sort_keys=True, indent=4))
-        return True
+        return courses
     except Exception as e:
         logging.error(str(e))
         print(str(e))

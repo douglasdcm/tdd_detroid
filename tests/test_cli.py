@@ -137,7 +137,7 @@ def test_list_student_details_by_cli(set_in_memory_database, course_name, expect
 
 
 def test_list_all_course_details_by_cli(set_in_memory_database):
-    assert cli_helper.list_all_course_details(set_in_memory_database) == True
+    assert cli_helper.list_all_course_details(set_in_memory_database) is not False
 
 
 @pytest.mark.parametrize(

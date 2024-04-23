@@ -1,3 +1,6 @@
 pytest
 pytest-random-order
 flake8
+flask
+kinde-python-sdk
+Flask-Session
