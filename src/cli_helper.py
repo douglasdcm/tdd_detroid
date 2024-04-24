@@ -86,7 +86,7 @@ def create_course(database, name, max_enrollment):
     except Exception as e:
         logging.error(str(e))
         print(str(e))
-        return str(e)
+        return False
 
 
 def add_subject_to_course(database, course_name, subject_name):

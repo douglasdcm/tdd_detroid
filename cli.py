@@ -1,7 +1,9 @@
 import logging
 import click
+import requests
 from src import cli_helper
 from src.database import Database
+import os
 
 
 logging.basicConfig(
@@ -11,6 +13,24 @@ logging.basicConfig(
     filemode="a",
     level="ERROR",
 )
+
+TOKEN_FILE = "token"
+
+
+class NonValidToken(Exception):
+    pass
+
+
+def __check_connection():
+    token = ""
+    with open(TOKEN_FILE) as f:
+        token = f.readline()
+    url = "https://testrock.kinde.com/oauth2/user_profile"
+    payload = {}
+    headers = {"Authorization": f"Bearer {token}"}
+    response = requests.request("GET", url, headers=headers, data=payload)
+    if response.status_code != 200:
+        raise NonValidToken("Token is not valid.")
 
 
 @click.group()
@@ -27,6 +47,7 @@ def cli():
 )
 def close_semester(identifier):
     try:
+        __check_connection()
         database = Database()
         cli_helper.close_semester(database, identifier)
     except Exception:
@@ -36,8 +57,8 @@ def close_semester(identifier):
 @click.command()
 def list_courses():
     try:
-        database = Database()
-        cli_helper.list_all_course_details(database)
+        __check_connection()
+        cli_helper.list_all_course_details(Database())
     except Exception:
         raise
 
@@ -50,6 +71,7 @@ def list_courses():
 )
 def list_students(course_name):
     try:
+        __check_connection()
         database = Database()
         cli_helper.list_student_details(database, course_name)
     except Exception:
@@ -60,22 +82,34 @@ def list_students(course_name):
 @click.option("--course-name", prompt="Course name", help="Name of the course.")
 @click.option("--subject-name", prompt="Subject name", help="Name of the subject.")
 def remove_subject(course_name, subject_name):
-    database = Database()
-    cli_helper.remove_subject(database, course_name, subject_name)
+    try:
+        __check_connection()
+        database = Database()
+        cli_helper.remove_subject(database, course_name, subject_name)
+    except Exception:
+        raise
 
 
 @click.command()
 @click.option("--name", prompt="Course name", help="Name of the course.")
 def cancel_course(name):
-    database = Database()
-    cli_helper.cancel_course(database, name)
+    try:
+        __check_connection()
+        database = Database()
+        cli_helper.cancel_course(database, name)
+    except Exception:
+        raise
 
 
 @click.command()
 @click.option("--name", prompt="Course name", help="Name of the course.")
 def deactivate_course(name):
-    database = Database()
-    cli_helper.deactivate_course(database, name)
+    try:
+        __check_connection()
+        database = Database()
+        cli_helper.deactivate_course(database, name)
+    except Exception:
+        raise
 
 
 @click.command()
@@ -83,6 +117,7 @@ def deactivate_course(name):
 @click.option(
     "--max-enrollment",
     prompt="Course maximum number of students",
+    type=int,
     help="The maximum number of students in a course.",
 )
 def create_course(name, max_enrollment):
@@ -94,15 +129,24 @@ def create_course(name, max_enrollment):
 @click.option("--course-name", prompt="Course name", help="Name of the course.")
 @click.option("--subject-name", prompt="Subject name", help="Name of the subject.")
 def add_subject(course_name, subject_name):
-    database = Database()
-    cli_helper.add_subject_to_course(database, course_name, subject_name)
+    try:
+        __check_connection()
+
+        database = Database()
+        cli_helper.add_subject_to_course(database, course_name, subject_name)
+    except Exception:
+        raise
 
 
 @click.command()
 @click.option("--name", prompt="Course name", help="Name of the course.")
 def activate_course(name):
-    database = Database()
-    cli_helper.activate_course(database, name)
+    try:
+        __check_connection()
+        database = Database()
+        cli_helper.activate_course(database, name)
+    except Exception:
+        raise
 
 
 @click.command()
@@ -117,6 +161,7 @@ def activate_course(name):
 )
 def enroll_student(name, cpf, course_name):
     try:
+        __check_connection()
         database = Database()
         cli_helper.enroll_student(database, name, cpf, course_name)
     except Exception:
@@ -132,6 +177,7 @@ def enroll_student(name, cpf, course_name):
 )
 def calculate_gpa(student_identifier):
     try:
+        __check_connection()
         database = Database()
         cli_helper.calculate_student_gpa(database, student_identifier)
     except Exception:
@@ -158,6 +204,7 @@ def calculate_gpa(student_identifier):
 )
 def update_grade(student_identifier, subject_name, grade):
     try:
+        __check_connection()
         database = Database()
         cli_helper.update_grade(database, student_identifier, subject_name, grade)
     except Exception:
@@ -178,6 +225,7 @@ def update_grade(student_identifier, subject_name, grade):
 )
 def take_subject(student_identifier, subject_name):
     try:
+        __check_connection()
         database = Database()
         cli_helper.take_subject(database, student_identifier, subject_name)
     except Exception:
@@ -193,6 +241,7 @@ def take_subject(student_identifier, subject_name):
 )
 def lock_course(student_identifier):
     try:
+        __check_connection()
         database = Database()
         cli_helper.lock_course(database, student_identifier)
     except Exception:
@@ -208,12 +257,29 @@ def lock_course(student_identifier):
 )
 def unlock_course(student_identifier):
     try:
+        __check_connection()
         database = Database()
         cli_helper.unlock_course(database, student_identifier)
     except Exception:
         raise
 
 
+@click.command()
+@click.option(
+    "--token",
+    prompt="Inform token",
+    help="Token to authenticate.",
+    hide_input=True,
+)
+def set_token(token):
+    try:
+        with open(TOKEN_FILE, "w") as f:
+            f.write(token)
+    except Exception:
+        raise
+
+
+cli.add_command(set_token)
 cli.add_command(enroll_student)
 cli.add_command(take_subject)
 cli.add_command(update_grade)
