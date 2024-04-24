@@ -9,6 +9,7 @@ from src.constants import (
     SUBJECT_FAILED,
     STUDENT_APPROVED,
 )
+from src.exceptions import NonValidOperation, NonValidSemester
 
 
 class SemesterMonitor:
@@ -125,11 +126,3 @@ class SemesterMonitor:
                 raise
 
         return self.__state
-
-
-class NonValidOperation(Exception):
-    pass
-
-
-class NonValidSemester(Exception):
-    pass

@@ -1,6 +1,7 @@
 from kinde_sdk.kinde_api_client import GrantType
 
 DOMAIN = "YOUR KINDE DOMAIN"
+ORGANIZATION_ID = "YOUR KINDE ORG ID"
 SITE_HOST = "localhost"
 SITE_PORT = "5000"
 SITE_URL = f"http://{SITE_HOST}:{SITE_PORT}"

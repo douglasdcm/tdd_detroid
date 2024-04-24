@@ -1,6 +1,7 @@
 import sqlite3
 import logging
 from src import utils
+from src.exceptions import NotFoundError
 
 
 def convert_csv_to_list(the_csv):
@@ -652,7 +653,3 @@ class Database:
             except Exception as e:
                 logging.error(str(e))
                 raise
-
-
-class NotFoundError(Exception):
-    pass

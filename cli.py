@@ -1,9 +1,11 @@
 import logging
 import click
-import requests
 from src import cli_helper
 from src.database import Database
-from config import DOMAIN
+from src.kinde.token import Token
+from src.kinde.user_profile import UserProfile
+from src.kinde.organization import Organization
+from src.exceptions import NonValidOperation, NonValidToken
 
 logging.basicConfig(
     filename="cli.log",
@@ -13,23 +15,46 @@ logging.basicConfig(
     level="ERROR",
 )
 
-TOKEN_FILE = "token"
+
+class Roles:
+    STUDENT = "student"
+    COORDINATOR = "coordinator"
 
 
-class NonValidToken(Exception):
-    pass
+TOKEN_FILE = ".token"
 
 
-def __check_connection():
+def __check_user_authentication():
     token = ""
     with open(TOKEN_FILE) as f:
         token = f.readline()
-    url = f"https://{DOMAIN}.kinde.com/oauth2/user_profile"
-    payload = {}
-    headers = {"Authorization": f"Bearer {token}"}
-    response = requests.request("GET", url, headers=headers, data=payload)
-    if response.status_code != 200:
+    user_profile = UserProfile(token)
+    response = user_profile.get()
+    if not response:
         raise NonValidToken("Token is not valid.")
+    return response.id
+
+
+def __check_coordenator_role(user_id):
+    token = Token().get()
+    token_text = token.access_token
+    organization = Organization(token_text)
+    roles = organization.get_user_roles(user_id)
+    for role in roles:
+        if role.key == Roles.COORDINATOR or role.name == Roles.COORDINATOR:
+            return
+    raise NonValidOperation(f"The user need to be a '{Roles.COORDINATOR}'.")
+
+
+def __check_student_role(user_id):
+    token = Token().get()
+    token_text = token.access_token
+    organization = Organization(token_text)
+    roles = organization.get_user_roles(user_id)
+    for role in roles:
+        if role.key == Roles.STUDENT or role.name == Roles.STUDENT:
+            return
+    raise NonValidOperation(f"The user need to be a '{Roles.STUDENT}'.")
 
 
 @click.group()
@@ -46,7 +71,8 @@ def cli():
 )
 def close_semester(identifier):
     try:
-        __check_connection()
+        user_id = __check_user_authentication()
+        __check_coordenator_role(user_id)
         database = Database()
         cli_helper.close_semester(database, identifier)
     except Exception:
@@ -56,7 +82,8 @@ def close_semester(identifier):
 @click.command()
 def list_courses():
     try:
-        __check_connection()
+        user_id = __check_user_authentication()
+        __check_coordenator_role(user_id)
         cli_helper.list_all_course_details(Database())
     except Exception:
         raise
@@ -70,9 +97,9 @@ def list_courses():
 )
 def list_students(course_name):
     try:
-        __check_connection()
-        database = Database()
-        cli_helper.list_student_details(database, course_name)
+        user_id = __check_user_authentication()
+        __check_coordenator_role(user_id)
+        cli_helper.list_student_details(Database(), course_name)
     except Exception:
         raise
 
@@ -82,9 +109,9 @@ def list_students(course_name):
 @click.option("--subject-name", prompt="Subject name", help="Name of the subject.")
 def remove_subject(course_name, subject_name):
     try:
-        __check_connection()
-        database = Database()
-        cli_helper.remove_subject(database, course_name, subject_name)
+        user_id = __check_user_authentication()
+        __check_coordenator_role(user_id)
+        cli_helper.remove_subject(Database(), course_name, subject_name)
     except Exception:
         raise
 
@@ -93,9 +120,9 @@ def remove_subject(course_name, subject_name):
 @click.option("--name", prompt="Course name", help="Name of the course.")
 def cancel_course(name):
     try:
-        __check_connection()
-        database = Database()
-        cli_helper.cancel_course(database, name)
+        user_id = __check_user_authentication()
+        __check_coordenator_role(user_id)
+        cli_helper.cancel_course(Database(), name)
     except Exception:
         raise
 
@@ -104,9 +131,9 @@ def cancel_course(name):
 @click.option("--name", prompt="Course name", help="Name of the course.")
 def deactivate_course(name):
     try:
-        __check_connection()
-        database = Database()
-        cli_helper.deactivate_course(database, name)
+        user_id = __check_user_authentication()
+        __check_coordenator_role(user_id)
+        cli_helper.deactivate_course(Database(), name)
     except Exception:
         raise
 
@@ -120,8 +147,12 @@ def deactivate_course(name):
     help="The maximum number of students in a course.",
 )
 def create_course(name, max_enrollment):
-    database = Database()
-    cli_helper.create_course(database, name, max_enrollment)
+    try:
+        user_id = __check_user_authentication()
+        __check_coordenator_role(user_id)
+        cli_helper.create_course(Database(), name, max_enrollment)
+    except Exception:
+        raise
 
 
 @click.command()
@@ -129,10 +160,9 @@ def create_course(name, max_enrollment):
 @click.option("--subject-name", prompt="Subject name", help="Name of the subject.")
 def add_subject(course_name, subject_name):
     try:
-        __check_connection()
-
-        database = Database()
-        cli_helper.add_subject_to_course(database, course_name, subject_name)
+        user_id = __check_user_authentication()
+        __check_coordenator_role(user_id)
+        cli_helper.add_subject_to_course(Database(), course_name, subject_name)
     except Exception:
         raise
 
@@ -141,9 +171,9 @@ def add_subject(course_name, subject_name):
 @click.option("--name", prompt="Course name", help="Name of the course.")
 def activate_course(name):
     try:
-        __check_connection()
-        database = Database()
-        cli_helper.activate_course(database, name)
+        user_id = __check_user_authentication()
+        __check_coordenator_role(user_id)
+        cli_helper.activate_course(Database(), name)
     except Exception:
         raise
 
@@ -158,11 +188,11 @@ def activate_course(name):
     prompt="Course number identifier",
     help="Course number identifier.",
 )
-def enroll_student(name, cpf, course_name):
+def enroll_to_course(name, cpf, course_name):
     try:
-        __check_connection()
-        database = Database()
-        cli_helper.enroll_student(database, name, cpf, course_name)
+        user_id = __check_user_authentication()
+        __check_student_role(user_id)
+        cli_helper.enroll_student(Database(), name, cpf, course_name)
     except Exception:
         raise
 
@@ -176,9 +206,9 @@ def enroll_student(name, cpf, course_name):
 )
 def calculate_gpa(student_identifier):
     try:
-        __check_connection()
-        database = Database()
-        cli_helper.calculate_student_gpa(database, student_identifier)
+        user_id = __check_user_authentication()
+        __check_student_role(user_id)
+        cli_helper.calculate_student_gpa(Database(), student_identifier)
     except Exception:
         raise
 
@@ -203,9 +233,9 @@ def calculate_gpa(student_identifier):
 )
 def update_grade(student_identifier, subject_name, grade):
     try:
-        __check_connection()
-        database = Database()
-        cli_helper.update_grade(database, student_identifier, subject_name, grade)
+        user_id = __check_user_authentication()
+        __check_student_role(user_id)
+        cli_helper.update_grade(Database(), student_identifier, subject_name, grade)
     except Exception:
         raise
 
@@ -224,9 +254,9 @@ def update_grade(student_identifier, subject_name, grade):
 )
 def take_subject(student_identifier, subject_name):
     try:
-        __check_connection()
-        database = Database()
-        cli_helper.take_subject(database, student_identifier, subject_name)
+        user_id = __check_user_authentication()
+        __check_student_role(user_id)
+        cli_helper.take_subject(Database(), student_identifier, subject_name)
     except Exception:
         raise
 
@@ -240,9 +270,9 @@ def take_subject(student_identifier, subject_name):
 )
 def lock_course(student_identifier):
     try:
-        __check_connection()
-        database = Database()
-        cli_helper.lock_course(database, student_identifier)
+        user_id = __check_user_authentication()
+        __check_student_role(user_id)
+        cli_helper.lock_course(Database(), student_identifier)
     except Exception:
         raise
 
@@ -256,9 +286,9 @@ def lock_course(student_identifier):
 )
 def unlock_course(student_identifier):
     try:
-        __check_connection()
-        database = Database()
-        cli_helper.unlock_course(database, student_identifier)
+        user_id = __check_user_authentication()
+        __check_student_role(user_id)
+        cli_helper.unlock_course(Database(), student_identifier)
     except Exception:
         raise
 
@@ -279,7 +309,7 @@ def set_token(token):
 
 
 cli.add_command(set_token)
-cli.add_command(enroll_student)
+cli.add_command(enroll_to_course)
 cli.add_command(take_subject)
 cli.add_command(update_grade)
 cli.add_command(calculate_gpa)

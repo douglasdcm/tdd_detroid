@@ -206,7 +206,3 @@ def list_all_course_details(database):
         logging.error(str(e))
         print(str(e))
         return False
-
-
-class CommandError(Exception):
-    pass

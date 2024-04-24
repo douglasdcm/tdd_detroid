@@ -5,6 +5,7 @@ from src.services.grade_calculator import GradeCalculator
 from src.database import Database, NotFoundError
 from src.services.subject_handler import SubjectHandler
 from src import utils
+from src.exceptions import NonMinimunSubjects, NonValidCourse, NonValidSubject
 
 
 class CourseHandler:
@@ -225,15 +226,3 @@ class CourseHandler:
             raise NonValidCourse(
                 f"Not able to create the course '{course_name}'. Check with system adminstrator."
             )
-
-
-class NonValidCourse(Exception):
-    pass
-
-
-class NonMinimunSubjects(Exception):
-    pass
-
-
-class NonValidSubject(Exception):
-    pass

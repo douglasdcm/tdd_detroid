@@ -2,6 +2,7 @@ import logging
 from src import utils
 from src.constants import DUMMY_IDENTIFIER
 from src.database import Database
+from src.exceptions import NonValidSubject
 
 
 class SubjectHandler:
@@ -164,7 +165,3 @@ class SubjectHandler:
             if self.__name:
                 identifier = self.__name
             raise NonValidSubject(f"Subject '{identifier}' not found.")
-
-
-class NonValidSubject(Exception):
-    pass

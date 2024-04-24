@@ -1,6 +1,7 @@
 import logging
 from src.database import Database, NotFoundError
-from src.constants import SUBJECT_IN_PROGRESS, SUBJECT_FAILED
+from src.constants import SUBJECT_IN_PROGRESS
+from src.exceptions import NonValidGradeOperation
 
 
 class GradeCalculator:
@@ -95,7 +96,3 @@ class GradeCalculator:
             total += row.grade
 
         return round(total / len(self.__rows), 1)
-
-
-class NonValidGradeOperation(Exception):
-    pass

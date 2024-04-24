@@ -14,6 +14,7 @@ from src.constants import (
     STUDENT_FAILED,
     MAX_SEMESTERS_TO_FINISH_COURSE,
 )
+from src.exceptions import NonValidStudent, NonValidGrade
 
 
 class StudentHandler:
@@ -350,11 +351,3 @@ class StudentHandler:
         except Exception as e:
             logging.error(str(e))
             raise
-
-
-class NonValidStudent(Exception):
-    pass
-
-
-class NonValidGrade(Exception):
-    pass

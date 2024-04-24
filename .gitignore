@@ -6,7 +6,7 @@ htmlcov/
 *.pyc
 *.log
 .coverage
-token
+.token
 config.py
 
 # Libre office file
