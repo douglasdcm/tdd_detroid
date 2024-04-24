@@ -3,8 +3,7 @@ import click
 import requests
 from src import cli_helper
 from src.database import Database
-import os
-
+from config import DOMAIN
 
 logging.basicConfig(
     filename="cli.log",
@@ -25,7 +24,7 @@ def __check_connection():
     token = ""
     with open(TOKEN_FILE) as f:
         token = f.readline()
-    url = "https://testrock.kinde.com/oauth2/user_profile"
+    url = f"https://{DOMAIN}.kinde.com/oauth2/user_profile"
     payload = {}
     headers = {"Authorization": f"Bearer {token}"}
     response = requests.request("GET", url, headers=headers, data=payload)

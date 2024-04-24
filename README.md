@@ -6,7 +6,7 @@ The code will be developed using the TDD technique in the Detroit style, hence t
 The application simulates the control of grades for university students.
 
 # Architecture
-[text](architecture.odp)
+[Slides with specifications (Libre Office file)](architecture.odp)
 
 ## Exploration
 [2024-04-22] After a brief overview of the authetication systems listed in this [link](https://expertinsights.com/insights/top-10-user-authentication-and-access-management-solutions/) the two selected for exploration were [Duo Access](https://duo.com/docs/getting-started) and [Kinde](https://kinde.com/docs/developer-tools/python-sdk/) due the simplicity and the possibility to test them for free. Both provide a Python SDK. The only way to use the 2FA of Duo Access was by SMS. It is not clear if the service is charged or not. It works fine, but, when using the Demo App, at the end of the authenticaton process an error happened, so it was not possible to determine if the issue was in the configuration or in the system. Kinde also has a starter kit in GitHub. It worked fine too and the 2FA is provided by e-mail. Further investiation is going to be done with Kinde as it allows the 2FA by email.
@@ -34,8 +34,21 @@ pytest --random-order
 ```
 
 # Installation
+ - Need to create a new account in [Kinde](https://app.kinde.com/auth/cx/_:nav&m:register&psid:57419340529d47048c155f939bfcce4c) to use it.
+ - Create a new Python application in Kinde, get the client_id, client_secret and domian (the name of the application)
+ - Rename the file `config_template.py` to `config.py` and replace the Kinde data
+ - Start the flask app
+
 ```
-# Need to populate the database with allowed students, the courses and subjects.
+flask run
+```
+ - Access the home page (http://localhost:5000) and Sing Up a new user informing the email
+ - Access to this email, copy the code sent by YOUR DOMAIN and fill the `Code` field in Sign Up page
+ - The login should work
+ - Click the button "User Details" in Login page to get the token. Copy it.
+ - Need to populate the database with allowed students, the courses and subjects.
+```
+python cli.py set-token # inform the token
 ./manual_smoke_test.sh
 ```
 
@@ -130,9 +143,8 @@ Same as requirement 6
 <!-- Duplicated with requirement 24 -->
 49. ~~The coordinator can only coordinate a maximum of 3 courses~~.
 50. The general coordinator cannot be a coordinator of courses.
-
-# Features add after architecture analisys
-These features were introduced after analysis in architecture and specifications. Some features does not make sense without them:
+<!-- # Features add after architecture analisys
+These features were introduced after analysis in architecture and specifications. Some features does not make sense without them: -->
 51. The teacher sets thes grade for all students of his/her subjects
 52. Each teacher may teach in 3 subjects at maximum
 53. The general coordinator is responsible to open and close the semesters
