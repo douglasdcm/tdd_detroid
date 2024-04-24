@@ -9,11 +9,21 @@ The application simulates the control of grades for university students.
 [text](architecture.odp)
 
 ## Exploration
-After a brief overview of the authetication systems listed in this [link](https://expertinsights.com/insights/top-10-user-authentication-and-access-management-solutions/) the two selected for exploration were [Duo Access](https://duo.com/docs/getting-started) and [Kinde](https://kinde.com/docs/developer-tools/python-sdk/) due the simplicity and the possibility to test them for free. Both provide a Python SDK. The only way to use the 2FA of Duo Access was by SMS. It is not clear if the service is charged or not. It works fine, but, when using the Demo App, at the end of the authenticaton process an error happened, so it was not possible to determine if the issue was in the configuration or in the system. Kinde also has a starter kit in GitHub. It worked fine too and the 2FA is provided by e-mail. Further investiation is going to be done with Kinde as it allows the 2FA by email.
+[2024-04-22] After a brief overview of the authetication systems listed in this [link](https://expertinsights.com/insights/top-10-user-authentication-and-access-management-solutions/) the two selected for exploration were [Duo Access](https://duo.com/docs/getting-started) and [Kinde](https://kinde.com/docs/developer-tools/python-sdk/) due the simplicity and the possibility to test them for free. Both provide a Python SDK. The only way to use the 2FA of Duo Access was by SMS. It is not clear if the service is charged or not. It works fine, but, when using the Demo App, at the end of the authenticaton process an error happened, so it was not possible to determine if the issue was in the configuration or in the system. Kinde also has a starter kit in GitHub. It worked fine too and the 2FA is provided by e-mail. Further investiation is going to be done with Kinde as it allows the 2FA by email.
 
 References:
  - [Duo GitHub](https://github.com/duosecurity/duo_universal_python/tree/main/demo)
  - [Kinde GitHub](https://github.com/kinde-starter-kits/python-starter-kit)
+
+[2024-04-24] The authnetication method chosen was Kinde. There is an [API documention](https://kinde.com/api/docs/?http#kinde-management-api-oauth) to it. We use the end-point "user_profile" and the token to check if the user is logged in. Other usefull links show how to test Kinde using Postman
+  - https://www.youtube.com/watch?v=xJCj0IeoB5g
+  - https://kinde.com/docs/build/get-access-token-for-connecting-securely-to-kindes-api/  
+
+While exploring it other options were found, but didn't fit the necessities of the project:
+ - https://stackoverflow.com/questions/29625003/how-to-handle-user-authentication-for-a-cli-in-python-using-click
+ - https://github.com/Zverik/cli-oauth2
+ - https://auth0.com/blog/securing-a-python-cli-application-with-auth0/
+
 
 # Setup and Test
 ```
@@ -25,9 +35,8 @@ pytest --random-order
 
 # Installation
 ```
-# create database
-sqlite3 university.db
-sqlite> .quit
+# Need to populate the database with allowed students, the courses and subjects.
+./manual_smoke_test.sh
 ```
 
 # CLI Usage
@@ -43,7 +52,7 @@ Options:
 
 
 # enroll student to course
-python cli.py --name any --cpf 123.456.789-10 --course-identifier any
+python cli.py --name douglas --cpf 098.765.432.12 --course-identifier mat
 
 ```
 

@@ -7,6 +7,7 @@ htmlcov/
 *.log
 .coverage
 token
+config.py
 
 # Libre office file
 .~lock.architecture.odp#
