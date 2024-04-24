@@ -45,7 +45,9 @@ flask run
  - Access the home page (http://localhost:5000) and Sing Up a new user informing the email
  - Access to this email, copy the code sent by YOUR DOMAIN and fill the `Code` field in Sign Up page
  - The login should work
- - Click the button "User Details" in Login page to get the token. Copy it.
+ - Go to Kinde and configure a role called "student" and other called "coordinator"
+ - Assig the created user to both roles. Ideally each user has just one the roles, but for a simple setup it is fine to set both for the same user
+ - Go back to Sign Up page and click the button "User Details" in Login page to get the token. Copy it.
  - Need to populate the database with allowed students, the courses and subjects.
 ```
 python cli.py set-token # inform the token
@@ -55,17 +57,31 @@ python cli.py set-token # inform the token
 # CLI Usage
 ```
 python cli.py --help
-Usage: cli.py [OPTIONS]
+Usage: cli.py [OPTIONS] COMMAND [ARGS]...
 
 Options:
-  --name TEXT               Name of the student.
-  --cpf TEXT                CPD of the student.
-  --course-identifier TEXT  Course number identifier.
-  --help                    Show this message and exit.
+  --help  Show this message and exit.
 
+Commands:
+  activate-course
+  add-subject
+  calculate-gpa
+  cancel-course
+  close-semester
+  create-course
+  deactivate-course
+  enroll-to-course
+  list-courses
+  list-students
+  lock-course
+  remove-subject
+  set-token
+  take-subject
+  unlock-course
+  update-grade
 
 # enroll student to course
-python cli.py --name douglas --cpf 098.765.432.12 --course-identifier mat
+python cli.py enroll-to-course --name douglas --cpf 098.765.432.12 --course-name mat
 
 ```
 
