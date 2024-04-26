@@ -17,7 +17,7 @@ References:
 
 [2024-04-24] The authnetication method chosen was Kinde. There is an [API documention](https://kinde.com/api/docs/?http#kinde-management-api-oauth) to it. We use the end-point "user_profile" and the token to check if the user is logged in. Other usefull links show how to test Kinde using Postman
   - https://www.youtube.com/watch?v=xJCj0IeoB5g
-  - https://kinde.com/docs/build/get-access-token-for-connecting-securely-to-kindes-api/  
+  - https://kinde.com/docs/build/get-access-token-for-connecting-securely-to-kindes-api/
 
 While exploring it other options were found, but didn't fit the necessities of the project:
  - https://stackoverflow.com/questions/29625003/how-to-handle-user-authentication-for-a-cli-in-python-using-click

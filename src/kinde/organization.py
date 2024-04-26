@@ -1,5 +1,7 @@
+import logging
 import requests
 from config import DOMAIN, ORGANIZATION_ID
+from src.exceptions import RequestError
 
 
 class ResponseRole:
@@ -37,4 +39,8 @@ class Organization:
             "Authorization": f"Bearer {self.__token}",
         }
         response = requests.request("GET", url, headers=headers, data=payload)
-        return ResponseOrganization(response.json()).roles
+        if 200 <= response.status_code <= 399:
+            return ResponseOrganization(response.json()).roles
+        message = "Couldn't return the user profile."
+        logging.error(message)
+        raise RequestError("Couldn't return the user profile.")

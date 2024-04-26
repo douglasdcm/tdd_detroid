@@ -1,5 +1,7 @@
+import logging
 import requests
 from config import DOMAIN
+from src.exceptions import RequestError
 
 
 class ResponseUserProfile:
@@ -20,4 +22,8 @@ class UserProfile:
         payload = {}
         headers = {"Authorization": f"Bearer {self.__token}"}
         response = requests.request("GET", url, headers=headers, data=payload)
-        return ResponseUserProfile(response.json())
+        if 200 <= response.status_code <= 399:
+            return ResponseUserProfile(response.json())
+        message = "Couldn't return the user profile."
+        logging.error(message)
+        raise RequestError("Couldn't return the user profile.")

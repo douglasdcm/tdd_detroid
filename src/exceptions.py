@@ -1,3 +1,7 @@
+class RequestError(Exception):
+    pass
+
+
 class NonValidToken(Exception):
     pass
 
