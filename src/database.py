@@ -2,7 +2,7 @@ import sqlite3
 import logging
 from src import utils
 from src.exceptions import NotFoundError
-from src.constants import DATABASE_FILE
+from src.constants import DATABASE_FILE, MAX_ENROLLMENT_TO_SUBJECT
 
 # from src.utils import check_function_execution_time
 
@@ -23,6 +23,14 @@ class Database:
     def __init__(self, database=DATABASE_FILE):
         con = sqlite3.connect(database)
         cur = con.cursor()
+        # performance improvements
+        # reference: https://developer.android.com/topic/performance/sqlite-performance-best-practices
+        cur.execute(
+            "PRAGMA journal_mode=WAL;"
+        )  # reference https://www.sqlite.org/wal.html
+        cur.execute(
+            "PRAGMA synchronous = NORMAL;"
+        )  # reference https://sqlite.org/pragma.html#pragma_synchronous
         self.student = self.DbStudent(con, cur)
         self.enrollment = self.DbEnrollment(con, cur)
         self.course = self.DbCourse(con, cur)
@@ -49,7 +57,7 @@ class Database:
                 f"CREATE TABLE IF NOT EXISTS {self.TABLE} (name,"
                 " state,"
                 " cpf,"
-                " identifier,"
+                " identifier PRIMARY KEY,"
                 " gpa,"
                 " subjects,"
                 " course,"
@@ -197,7 +205,7 @@ class Database:
             self.cur = cur
             self.con = con
             self.cur.execute(
-                f"CREATE TABLE IF NOT EXISTS {self.TABLE} (student_identifier TEXT NOT NULL UNIQUE)"
+                f"CREATE TABLE IF NOT EXISTS {self.TABLE} (student_identifier TEXT NOT NULL UNIQUE PRIMARY KEY)"
             )
 
         # Just for admin. The university has a predefined list of approved students to each course.
@@ -233,7 +241,7 @@ class Database:
                 f"CREATE TABLE IF NOT EXISTS {self.TABLE}"
                 " (name TEXT NOT NULL UNIQUE,"
                 " state TEXT NOT NULL,"
-                " identifier TEXT NOT NULL UNIQUE,"
+                " identifier TEXT NOT NULL UNIQUE PRIMARY KEY,"
                 " enrolled_students TEXT,"
                 " max_enrollment INTEGER NOT NULL,"
                 " subjects TEXT)"
@@ -363,14 +371,14 @@ class Database:
         max_enrollment = None
         identifier = None
         course = None
-        MAX_ENROLLMENT = 30
+        MAX_ENROLLMENT = MAX_ENROLLMENT_TO_SUBJECT
 
         def __init__(self, con, cur):
             self.cur = cur
             self.con = con
             cur.execute(
                 f"CREATE TABLE IF NOT EXISTS {self.TABLE}"
-                " (name, state, identifier, enrolled_students,"
+                " (name, state, identifier PRIMARY KEY, enrolled_students,"
                 f" max_enrollment CHECK (max_enrollment <= {self.MAX_ENROLLMENT}) , course)"
             )
 
@@ -456,6 +464,20 @@ class Database:
                 logging.error(str(e))
                 raise
 
+        def save_max_enrollment(self, max_enrollment):
+            try:
+                cmd = f"""
+                    UPDATE {self.TABLE}
+                    SET max_enrollment = {max_enrollment}
+                    WHERE identifier = '{self.identifier}';
+                    """
+                self.cur.execute(cmd)
+
+                self.con.commit()
+            except Exception as e:
+                logging.error(str(e))
+                raise
+
         def save(self):
             try:
                 cmd = f"""
@@ -517,7 +539,9 @@ class Database:
                 f"CREATE TABLE IF NOT EXISTS {self.TABLE} (student_identifier,"
                 " subject_identifier,"
                 " grade INTEGER,"
-                " subject_situation)"
+                " subject_situation,"
+                " PRIMARY KEY (student_identifier, subject_identifier)"
+                ")"
             )
 
         def load_all_by_student_identifier(self, student_identifier):
@@ -661,7 +685,9 @@ class Database:
         def __init__(self, con, cur):
             self.con = con
             self.cur = cur
-            cur.execute(f"CREATE TABLE IF NOT EXISTS {self.TABLE} (identifier, state)")
+            cur.execute(
+                f"CREATE TABLE IF NOT EXISTS {self.TABLE} (identifier PRIMARY KEY, state)"
+            )
 
         # Just for admin.
         # TODO create a public funtion

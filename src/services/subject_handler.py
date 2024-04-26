@@ -91,7 +91,7 @@ class SubjectHandler:
         self.__check_identifier()
         self.load_from_database(self.identifier)
         self.__max_enrollment = value
-        self.save()
+        self.__database.subject.save_max_enrollment(self.__max_enrollment)
 
     def is_available(self):
         return len(self.enrolled_students) < self.__max_enrollment

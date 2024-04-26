@@ -112,7 +112,7 @@ class StudentHandler:
     def __check_finished_course(self):
         if self.__state == STUDENT_APPROVED or self.__state == STUDENT_FAILED:
             raise NonValidStudent(
-                f"Can not perform the operation. The student is '{self.__state}' in course '{self.__course}'"
+                f"Can not perform the operation. The student '{self.__name}' is '{self.__state}' in course '{self.__course}'"
             )
 
     def __check_name(self):

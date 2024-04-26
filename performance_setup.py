@@ -1,7 +1,6 @@
 import os
-from tests.conftest import set_database_for_tests
 from src.database import Database
-from src.constants import DATABASE_FILE
+from src.constants import DATABASE_FILE, MAX_ENROLLMENT_TO_SUBJECT
 
 
 if __name__ == "__main__":
@@ -9,4 +8,9 @@ if __name__ == "__main__":
         os.remove(DATABASE_FILE)
     except Exception:
         pass
-    set_database_for_tests(Database())
+    db = Database()
+
+    for i in range(MAX_ENROLLMENT_TO_SUBJECT):
+        db.enrollment.populate(f"student{i}", "098.765.432.12", "adm")
+    db.course.populate("adm", subjects="")
+    db.semester.populate("1234-1", "open")
