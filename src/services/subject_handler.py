@@ -104,11 +104,7 @@ class SubjectHandler:
         self.load_from_database(self.identifier)
         self.__check_removed()
         self.__state = self.ACTIVE
-        self.__database.subject.state = self.__state
-        self.__database.subject.save_state()
-        # post condition
-        self.__database.subject.load(self.identifier)
-        assert self.__database.subject.state == self.ACTIVE
+        self.__database.subject.save_state(self.__state)
         return self.__state
 
     def remove(self):

@@ -174,8 +174,7 @@ class CourseHandler:
                 f"Subject '{subject}' already exists in course '{self.__name}'"
             )
         self.__subjects.append(subject_identifier)
-        self.__database.course.subjects = self.subjects
-        self.__database.course.save_subjects()
+        self.__database.course.save_subjects(self.subjects)
 
         subject_handler = SubjectHandler(self.__database)
         subject_handler.name = subject

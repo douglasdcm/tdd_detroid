@@ -264,12 +264,12 @@ class Database:
             )
             self.con.commit()
 
-        def save_subjects(self):
+        def save_subjects(self, subjects):
 
             try:
                 cmd = f"""
                     UPDATE {self.TABLE}
-                    SET subjects = '{convert_list_to_csv(self.subjects)}'
+                    SET subjects = '{convert_list_to_csv(subjects)}'
                     WHERE identifier = '{self.identifier}';
                     """
                 self.cur.execute(cmd)
@@ -442,11 +442,11 @@ class Database:
                 logging.error(str(e))
                 raise
 
-        def save_state(self):
+        def save_state(self, state):
             try:
                 cmd = f"""
                     UPDATE {self.TABLE}
-                    SET state = '{self.state}'
+                    SET state = '{state}'
                     WHERE identifier = '{self.identifier}';
                     """
                 self.cur.execute(cmd)
@@ -676,11 +676,11 @@ class Database:
             self.con.commit()
             self.cur.execute(f"select * from {self.TABLE}").fetchall()
 
-        def save_state(self):
+        def save_state(self, state):
             try:
                 cmd = f"""
                     UPDATE {self.TABLE}
-                    SET state = '{self.state}'
+                    SET state = '{state}'
                     WHERE identifier = '{self.identifier}';
                     """
                 result = self.cur.execute(cmd)

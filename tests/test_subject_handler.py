@@ -38,7 +38,12 @@ def test_activate_invalid_subject_return_error(set_in_memory_database):
 
 
 def test_activate(set_in_memory_database):
+    database = set_in_memory_database
     subject_identifier = utils.generate_subject_identifier("any", "any1")
-    subject_handler = SubjectHandler(set_in_memory_database, subject_identifier)
+    subject_handler = SubjectHandler(database, subject_identifier)
 
     assert subject_handler.activate() == "active"
+
+    # post condition
+    database.subject.load(subject_identifier)
+    assert database.subject.state == "active"

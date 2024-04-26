@@ -77,8 +77,7 @@ class SemesterMonitor:
             )
         self.__state = self.__OPEN
 
-        self.__database.semester.state = self.state
-        self.__database.semester.save_state()
+        self.__database.semester.save_state(self.state)
 
         # post condition
         assert self.__state == self.__database.semester.state
@@ -97,8 +96,7 @@ class SemesterMonitor:
             logging.error(str(e))
             raise
         self.__state = self.__CLOSED
-        self.__database.semester.state = self.state
-        self.__database.semester.save_state()
+        self.__database.semester.save_state(self.state)
 
         student_handler = StudentHandler(self.__database)
         student_rows = student_handler.search_all()
