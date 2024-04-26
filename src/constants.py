@@ -7,3 +7,4 @@ STUDENT_FAILED = "failed"
 MAX_SEMESTERS_TO_FINISH_COURSE = 10
 TOKEN_FILE = ".token"
 TESTING_FLAG = True
+DATABASE_FILE = "university.db"

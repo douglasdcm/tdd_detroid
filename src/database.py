@@ -2,6 +2,9 @@ import sqlite3
 import logging
 from src import utils
 from src.exceptions import NotFoundError
+from src.constants import DATABASE_FILE
+
+# from src.utils import check_function_execution_time
 
 
 def convert_csv_to_list(the_csv):
@@ -17,7 +20,7 @@ def convert_list_to_csv(the_list):
 # TODO test concurrency
 class Database:
 
-    def __init__(self, database="university.db"):
+    def __init__(self, database=DATABASE_FILE):
         con = sqlite3.connect(database)
         cur = con.cursor()
         self.student = self.DbStudent(con, cur)
@@ -72,6 +75,16 @@ class Database:
             except Exception as e:
                 logging.error(str(e))
                 raise
+
+        def save_subjects(self):
+            cmd = f"""
+                UPDATE {self.TABLE}
+                SET subjects = '{convert_list_to_csv(self.subjects)}'
+                WHERE identifier = '{self.identifier}';
+                """
+            self.cur.execute(cmd)
+
+            self.con.commit()
 
         def save(self):
             cmd = f"""
@@ -234,7 +247,22 @@ class Database:
             )
             self.con.commit()
 
+        def save_subjects(self):
+
+            try:
+                cmd = f"""
+                    UPDATE {self.TABLE}
+                    SET subjects = '{convert_list_to_csv(self.subjects)}'
+                    WHERE identifier = '{self.identifier}';
+                    """
+                self.cur.execute(cmd)
+                self.con.commit()
+            except Exception as e:
+                logging.error(str(e))
+                raise
+
         def save(self):
+
             try:
                 cmd = f"""
                     UPDATE {self.TABLE}
@@ -376,6 +404,34 @@ class Database:
                         {self.max_enrollment},
                         '{self.course}')
                 """
+                self.cur.execute(cmd)
+
+                self.con.commit()
+            except Exception as e:
+                logging.error(str(e))
+                raise
+
+        def save_students(self):
+            try:
+                cmd = f"""
+                    UPDATE {self.TABLE}
+                    SET enrolled_students = '{convert_list_to_csv(self.enrolled_students)}'
+                    WHERE identifier = '{self.identifier}';
+                    """
+                self.cur.execute(cmd)
+
+                self.con.commit()
+            except Exception as e:
+                logging.error(str(e))
+                raise
+
+        def save_state(self):
+            try:
+                cmd = f"""
+                    UPDATE {self.TABLE}
+                    SET state = '{self.state}'
+                    WHERE identifier = '{self.identifier}';
+                    """
                 self.cur.execute(cmd)
 
                 self.con.commit()
@@ -533,6 +589,7 @@ class Database:
                 logging.error(str(e))
                 raise
 
+        # @check_function_execution_time
         def add(self):
             try:
                 cmd = f"""

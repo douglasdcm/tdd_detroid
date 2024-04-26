@@ -5,6 +5,12 @@ from src import database
 @pytest.fixture(autouse=True, scope="function")
 def set_in_memory_database():
     db = database.Database(":memory:")
+    db = set_database_for_tests(db)
+    yield db
+
+
+def set_database_for_tests(db):
+
     # TODO need to check if the courses are available
     db.enrollment.populate("douglas", "098.765.432.12", "adm")
     db.enrollment.populate("maria", "028.745.462.18", "mat")
@@ -45,5 +51,4 @@ def set_in_memory_database():
     db.semester.populate("1234-9", "open")
     db.semester.populate("1234-10", "open")
     db.semester.populate("1234-11", "open")
-
-    yield db
+    return db

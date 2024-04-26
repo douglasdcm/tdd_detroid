@@ -8,6 +8,7 @@ htmlcov/
 .coverage
 .token
 config.py
+program.prof
 
 # Libre office file
 .~lock.architecture.odp#

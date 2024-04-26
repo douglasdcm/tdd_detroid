@@ -237,7 +237,6 @@ class StudentHandler:
         grade_calculator.student_identifier = self.__identifier
         grade_calculator.subject_identifier = subject_identifier
         grade_calculator.grade = grade
-
         subject_situation = self.__return_subject_situation(grade)
         grade_calculator.subject_situation = subject_situation
         grade_calculator.save()
@@ -302,10 +301,12 @@ class StudentHandler:
         self.__check_subject_activation(subject_handler)
 
         self.__subjects.append(subject_identifier)
-        self.__save()
+        self.__database.student.subjects.extend(self.__subjects)
+        self.__database.student.save_subjects()
 
         subject_handler.enrolled_students.append(self.__identifier)
-        subject_handler.save()
+        self.__database.subject.enrolled_students = subject_handler.enrolled_students
+        self.__database.subject.save_students()
 
         grade_calculator = GradeCalculator(self.__database)
         self.__remove_dummy_subject(grade_calculator)
