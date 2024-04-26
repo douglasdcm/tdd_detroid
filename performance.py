@@ -11,13 +11,13 @@ def __get_subjects():
         "mgmt",
         "people1",
         "people2",
-        # "people3",
-        # "strategy1",
-        # "strategy2",
-        # "strategy3",
-        # "business1",
-        # "business2",
-        # "business3",
+        "people3",
+        "strategy1",
+        "strategy2",
+        "strategy3",
+        "business1",
+        "business2",
+        "business3",
     ]
 
     return subjects
@@ -223,7 +223,7 @@ def student_finishes_course():
     __add_all_subjects_to_course(course, subjects, database)
     student_handler = __enroll_student_to_course(course, database)
     __update_grade_of_all_subjects(grade, subjects, student_handler)
-    # __close_maximum_semesters(database)
+    __close_maximum_semesters(database)
 
 
 if __name__ == "__main__":

@@ -76,14 +76,32 @@ class Database:
                 logging.error(str(e))
                 raise
 
-        def save_subjects(self):
+        def save_subjects(self, subjects):
             cmd = f"""
                 UPDATE {self.TABLE}
-                SET subjects = '{convert_list_to_csv(self.subjects)}'
+                SET subjects = '{convert_list_to_csv(subjects)}'
                 WHERE identifier = '{self.identifier}';
                 """
             self.cur.execute(cmd)
 
+            self.con.commit()
+
+        def save_semester_counter(self, semester_counter):
+            cmd = f"""
+                UPDATE {self.TABLE}
+                SET semester_counter = {semester_counter}
+                WHERE identifier = '{self.identifier}';
+                """
+            self.cur.execute(cmd)
+            self.con.commit()
+
+        def save_state(self, state):
+            cmd = f"""
+                UPDATE {self.TABLE}
+                SET state = '{state}'
+                WHERE identifier = '{self.identifier}';
+                """
+            self.cur.execute(cmd)
             self.con.commit()
 
         def save(self):
@@ -96,7 +114,6 @@ class Database:
                 WHERE identifier = '{self.identifier}';
                 """
             self.cur.execute(cmd)
-
             self.con.commit()
 
         # Just for admin.
@@ -411,11 +428,11 @@ class Database:
                 logging.error(str(e))
                 raise
 
-        def save_students(self):
+        def save_students(self, enrolled_students):
             try:
                 cmd = f"""
                     UPDATE {self.TABLE}
-                    SET enrolled_students = '{convert_list_to_csv(self.enrolled_students)}'
+                    SET enrolled_students = '{convert_list_to_csv(enrolled_students)}'
                     WHERE identifier = '{self.identifier}';
                     """
                 self.cur.execute(cmd)
@@ -659,7 +676,7 @@ class Database:
             self.con.commit()
             self.cur.execute(f"select * from {self.TABLE}").fetchall()
 
-        def save(self):
+        def save_state(self):
             try:
                 cmd = f"""
                     UPDATE {self.TABLE}

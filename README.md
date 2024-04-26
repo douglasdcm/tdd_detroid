@@ -30,7 +30,11 @@ While exploring it other options were found, but didn't fit the necessities of t
 python3.11 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
+# run unit tests
 pytest --random-order
+
+# run performance test
+python performance_setup.py; python -m cProfile -o program.prof performance.py ; snakeviz program.prof 
 ```
 
 # Installation

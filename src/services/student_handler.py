@@ -122,6 +122,7 @@ class StudentHandler:
     def __fail_course_if_exceed_max_semester(self):
         if self.__semester_counter > MAX_SEMESTERS_TO_FINISH_COURSE:
             self.__state = STUDENT_FAILED
+            self.__database.student.save_state(self.__state)
 
     def __save(self):
         if not self.__identifier:
@@ -219,7 +220,7 @@ class StudentHandler:
         self.__check_finished_course()
         self.__semester_counter += 1
         self.__fail_course_if_exceed_max_semester()
-        self.__save()
+        self.__database.student.save_semester_counter(self.__semester_counter)
 
     def update_grade_to_subject(self, grade, subject_name):
         self.__check_grade_range(grade)
@@ -301,12 +302,10 @@ class StudentHandler:
         self.__check_subject_activation(subject_handler)
 
         self.__subjects.append(subject_identifier)
-        self.__database.student.subjects.extend(self.__subjects)
-        self.__database.student.save_subjects()
+        self.__database.student.save_subjects(self.__subjects)
 
         subject_handler.enrolled_students.append(self.__identifier)
-        self.__database.subject.enrolled_students = subject_handler.enrolled_students
-        self.__database.subject.save_students()
+        self.__database.subject.save_students(subject_handler.enrolled_students)
 
         grade_calculator = GradeCalculator(self.__database)
         self.__remove_dummy_subject(grade_calculator)
