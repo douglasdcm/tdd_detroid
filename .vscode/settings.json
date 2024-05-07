@@ -1,6 +1,8 @@
 {
     "files.associations": {
         "unity.h": "c",
-        "main.h": "c"
+        "main.h": "c",
+        "student.h": "c",
+        "declarations.h": "c"
     }
 }

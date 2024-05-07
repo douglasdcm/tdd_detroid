@@ -10,12 +10,14 @@ The application simulates the control of grades for university students.
 
 # Setup and Test
 ```
-TBD
-```
+# to test functions in a file
+clear; gcc src/student_test.c src/student.c ../unity/src/unity.c -o TestRunner; ./TestRunner
 
-# Installation
-```
-TBD
+# to run the main
+# compile the code. include all files
+make
+# run it
+./main.out
 ```
 
 # CLI Usage
@@ -32,8 +34,8 @@ Definition of Done:
 3. Data is being saved in the database.
 # Deliverables
 Construction of the basic functions of the system
-1. Each student will have a grade control called "grade point average" (GPA).
-2. The GPA is the average of the student's grades in the ~~courses~~ subjects already taken.
+1. **DONE** Each student will have a grade control called "grade point average" (GPA).
+2. **DONE** The GPA is the average of the student's grades in the ~~courses~~ subjects already taken.
 3. The student is considered approved at the university if their GPA is above or equal to 7 (seven) at the end of the course.
 4. If a student takes the same subject more than once, the highest grade will be considered in the GPA calculation.
 <!-- Required setup to allow enrollments -->
