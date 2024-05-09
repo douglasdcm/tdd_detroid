@@ -13,11 +13,12 @@ This application has been used to exercise skills relates to Python, ORM, TDD, K
 - [kubernetes](https://github.com/douglasdcm/tdd_detroid/tree/kubernetes): more specialized exercises with Kubernetes, but not so different of `postgres_orm`.
 - [kubernetes-no-postgres](https://github.com/douglasdcm/tdd_detroid/tree/kubernetes-no-postgrest): exercise using Kubernetes and the database PostgreSQL. The other branches use SqLite.
 - [pyscript-postgrest](https://github.com/douglasdcm/tdd_detroid/tree/pyscript-postgrest): The implementation of a Web app using PyScript and Postgres as a REST API (PostgREST).
+- [architecture](https://github.com/douglasdcm/tdd_detroid/tree/architecture): In this branch I exercised my skills of architecture. I tried to do sufficient design up-front to ilustrate the relationship of the entities and features. I found some inconsistences in the requirements list that I fixed and replicated to this branch. I also implemented the authentication and authorization feature. This is the most complete app, as almost all of the requirements were implemented.
 - [c-implementation-1](https://github.com/douglasdcm/tdd_detroid/tree/c-implementation-1): First version of the App in C language. The other ones use Python. 
 
 # Application specification
 ## Architecture
-[Slides with specifications (Libre Office file)](https://github.com/douglasdcm/tdd_detroid/blob/architecture/architecture.odp)
+[Slides with specifications (Libre Office file)](architecture.odp)
 
 
 Below is the specification of the application:
