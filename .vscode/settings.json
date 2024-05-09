@@ -3,6 +3,7 @@
         "unity.h": "c",
         "main.h": "c",
         "student.h": "c",
-        "declarations.h": "c"
+        "declarations.h": "c",
+        "sqlite3.h": "c"
     }
 }
