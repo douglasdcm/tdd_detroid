@@ -1,5 +1,11 @@
 struct Student {
     float gpa;
+    char* name;
+    char* state;
+    char* cpf;
+    char* subject;
+    char* course;
+    int semester;
 };
 
 struct Subject {

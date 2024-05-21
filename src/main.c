@@ -8,8 +8,7 @@ const char* DATABASE = "university.db";
 
 int are_text_equal(char text1[], char text2[]);
 void show_help();
-int create_database(int argc, char *argv[]);
-int create_database_2(const char* database, char *statememt);
+int save_to_database(const char* database, char *statememt);
 
 
 /* main.c */
@@ -21,14 +20,14 @@ int main(int argc, char *argv[]) {
 
     if ( are_text_equal(argv[1], "test") )
     {
-        return create_database_2(DATABASE, "select * from students;");
+        return save_to_database(DATABASE, "select * from students;");
     }
 
     if ( are_text_equal(argv[1], "init") )
     {
         char* statement = "CREATE TABLE IF NOT EXISTS students"\
         " (name,state,cpf,identifier PRIMARY KEY,gpa,subjects,course,semester_counter);";
-        return create_database_2(DATABASE, statement);
+        return save_to_database(DATABASE, statement);
     }
 
     if ( are_text_equal(argv[1], "help") )
@@ -46,7 +45,7 @@ int main(int argc, char *argv[]) {
             }
         }
         char* statement = "INSERT INTO students VALUES ('name', 'state', 'cpf', 'identifier2', 3.4, 'subject', 'course', 1);";
-        create_database_2(DATABASE, statement);
+        save_to_database(DATABASE, statement);
 
         printf("Student gpa is %f\n", student.gpa);
         return 0;
@@ -77,7 +76,7 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName){
     return 0;
 }
 
-int create_database_2(const char* database, char *statememt){
+int save_to_database(const char* database, char *statememt){
     sqlite3 *db;
     char *zErrMsg = 0;
     int rc;
@@ -89,31 +88,6 @@ int create_database_2(const char* database, char *statememt){
         return(1);
     }
     rc = sqlite3_exec(db, statememt, callback, 0, &zErrMsg);
-    if( rc!=SQLITE_OK ){
-        fprintf(stderr, "SQL error: %s\n", zErrMsg);
-        sqlite3_free(zErrMsg);
-    }
-    sqlite3_close(db);
-    return 0;
-}
-
-
-int create_database(int argc, char *argv[]){
-    sqlite3 *db;
-    char *zErrMsg = 0;
-    int rc;
-
-    if( argc!=4 ){
-        fprintf(stderr, "Usage: %s DATABASE SQL-STATEMENT\n", argv[1]);
-        return(1);
-    }
-    rc = sqlite3_open(argv[2], &db);
-    if( rc ){
-        fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
-        sqlite3_close(db);
-        return(1);
-    }
-    rc = sqlite3_exec(db, argv[3], callback, 0, &zErrMsg);
     if( rc!=SQLITE_OK ){
         fprintf(stderr, "SQL error: %s\n", zErrMsg);
         sqlite3_free(zErrMsg);

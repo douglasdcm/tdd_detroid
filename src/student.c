@@ -17,9 +17,3 @@ struct Student initialize_student(){
     student.gpa = 0;
     return student;  
 }
-
-struct Subject initialize_subject(){
-    struct Subject subject;
-    subject.grade = 0;
-    return subject;  
-}
