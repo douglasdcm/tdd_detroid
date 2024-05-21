@@ -1,50 +1,9 @@
 #include "declarations.h"
 #include "../unity.h"
-
 #include <string.h>
-#include <stdio.h>
 
 void setUp(){}
 void tearDown(){}
-
-char* build_statement_insert_student(struct Student student, char* statement);
-
-char* build_statement_insert_student(struct Student student, char* statement){
-    strcpy(statement, "INSERT INTO students VALUES (");
-    strcat(statement, "'");
-    strcat(statement, student.name);
-    strcat(statement, "',");
-    
-    strcat(statement, "'");
-    strcat(statement, student.state);
-    strcat(statement, "',");
-
-    strcat(statement, "'");
-    strcat(statement, student.cpf);
-    strcat(statement, "',");
-
-    strcat(statement, "'any',");
-
-    char c[50];
-    sprintf(c, "%g", student.gpa);
-    strcat(statement, c);
-
-    strcat(statement, ",'");
-    strcat(statement, student.subject);
-    strcat(statement, "',");
-
-    strcat(statement, "'");
-    strcat(statement, student.course);
-    strcat(statement, "',");
-
-    char snum[5];
-    sprintf(c, "%i", student.semester);
-    strcat(statement, c);
-    strcat(statement, ");");
-
-    return statement;
-}
-
 // 1. Each student will have a grade control called "grade point average" (GPA).
 // 2. The GPA is the average of the student's grades in the ~~courses~~ subjects already taken.
 void testStudentCommandToSaveToDatabaseIsCorrect(void) {
@@ -61,11 +20,9 @@ void testStudentCommandToSaveToDatabaseIsCorrect(void) {
     student.semester = 1;
     char statement[1000] = "";
 
-    strcpy(statement, build_statement_insert_student(student, statement));
-
     TEST_ASSERT_EQUAL_STRING( 
         "INSERT INTO students VALUES ('name','state','12345678910','any',3.4,'subject','course',1);"
-        , statement );
+        , build_statement_insert_student(student, statement) );
 }
 
 void testStudentGpaCalculationReturnGradesAverage(void) {

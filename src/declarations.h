@@ -16,3 +16,5 @@ struct Student initialize_student();
 struct Subject initialize_subject();
 float calculate_student_gpa(
     struct Student student, struct Subject subjects[], int length);
+
+char* build_statement_insert_student(struct Student student, char* statement);
