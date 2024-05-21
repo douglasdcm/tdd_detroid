@@ -73,7 +73,7 @@ void testStudentGpaCalculationReturnGradesAverage(void) {
     int number_of_subjects = 6;
     struct Student student;
     student = initialize_student();
-    
+    float gpa;
     struct Subject subjects[number_of_subjects]; 
     for (int i=0; i<number_of_subjects; i++){
         struct Subject subject = initialize_subject();
@@ -82,9 +82,9 @@ void testStudentGpaCalculationReturnGradesAverage(void) {
     }
     int length = sizeof(subjects) / sizeof(subjects[0]);
     
-    student = calculate_student_gpa(student, subjects, length);
+    gpa = calculate_student_gpa(student, subjects, length);
 
-    TEST_ASSERT_EQUAL_FLOAT( expected, student.gpa );
+    TEST_ASSERT_EQUAL_FLOAT( expected, gpa );
 }
 
 
