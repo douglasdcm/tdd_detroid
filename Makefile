@@ -2,7 +2,10 @@
 SRC_FILES := $(wildcard src/*.c)
 EXCLUDE_FILES := $(wildcard src/*test*.c)
 SRC_FILES := $(filter-out $(EXCLUDE_FILES), $(SRC_FILES))
-TEST_FILES := src/unit_test.c src/student.c src/subject.c src/course.c src/university.c src/database.c src/sqlite3.c
+
+TEST_FILES := $(wildcard src/*.c)
+EXCLUDE_FROM_TEST := $(wildcard src/main.c)
+TEST_FILES := $(filter-out $(EXCLUDE_FROM_TEST), $(TEST_FILES))
 
 compile:
 	gcc $(SRC_FILES) -lpthread -ldl -o main.out
