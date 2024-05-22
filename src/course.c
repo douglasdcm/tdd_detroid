@@ -1,3 +1,4 @@
+#include <string.h>
 #include "declarations.h"
 
 struct Course initialize_course(char* name){
@@ -15,6 +16,14 @@ struct University add_course(struct University university, struct Course course)
     university.courses = ptr2;
     university.courses[lenght] = course.id;
     university.num_courses++;
+
+    char *tokens[] = {"INSERT INTO courses VALUES (NULL,'", course.name ,"');"};
+    char statement[100] = "";
+    for (int i = 0; i < 3; i++){
+        strcat(statement, tokens[i]);
+    }
+    save_to_database("university.db", statement);
+    
     if (university.num_courses >= MIN_COURSES){
         university.active = 1;
     }
