@@ -12,21 +12,25 @@ The application simulates the control of grades for university students.
 ```
 # prepare database
 sqlite3 university.db
-sqlite> CREATE TABLE IF NOT EXISTS students (name,state,cpf,identifier PRIMARY KEY,gpa,subjects,course,semester_counter);
 
-# to run the main
-# compile the code. include all files
+# to run the main compile the code. include all files
 make
+
 # run it
 ./main.out
 
 # to test functions in a file
-clear; gcc src/student_test.c src/student.c ../unity/src/unity.c -o TestRunner; ./TestRunner
+make test
 ```
 
 # CLI Usage
 ```
-TBD
+./main.out 
+
+help
+create-student [gpa int]
+create-subject [grade int]
+init-database
 ```
 
 # Application specification

@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <string.h>
-#include <stdio.h>
 #include "declarations.h"
 
 
@@ -20,8 +19,6 @@ struct Student initialize_student(){
     student.gpa = 0;
     return student;  
 }
-
-
 
 
 char* build_statement_insert_student(struct Student student, char* statement){
