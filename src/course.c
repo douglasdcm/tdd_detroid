@@ -9,7 +9,7 @@ struct Course initialize_course(char* name){
     return course;  
 }
 
-struct University add_course(struct University university, struct Course course) {
+struct University add_course(const char* database, struct University university, struct Course course) {
     const int MIN_COURSES = 3;
     int lenght = university.num_courses;
     int *ptr2 = realloc(university.courses, lenght + sizeof(university.courses[0]));
@@ -22,7 +22,7 @@ struct University add_course(struct University university, struct Course course)
     for (int i = 0; i < 3; i++){
         strcat(statement, tokens[i]);
     }
-    save_to_database("university.db", statement);
+    save_to_database(database, statement);
     
     if (university.num_courses >= MIN_COURSES){
         university.active = 1;

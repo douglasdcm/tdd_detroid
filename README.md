@@ -20,6 +20,8 @@ make
 ./main.out
 
 # to test functions in a file
+sqlite3 test.db
+./main.out init-database test
 make test
 ```
 

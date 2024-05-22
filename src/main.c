@@ -17,6 +17,10 @@ int main(int argc, char *argv[]) {
 
     if ( are_text_equal(argv[1], "init-database") )
     {
+        if ( are_text_equal(argv[2], "test") ) {
+            DATABASE = "test.db";
+        }
+
         char* statement = "CREATE TABLE IF NOT EXISTS students"\
         " (id INTEGER PRIMARY KEY,name,state,cpf,gpa,subjects,course,semester_counter);";
         save_to_database(DATABASE, statement);

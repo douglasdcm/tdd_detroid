@@ -32,4 +32,4 @@ struct University initialize_university();
 float calculate_student_gpa(
     struct Student student, struct Subject subjects[], int length);
 char* build_statement_insert_student(struct Student student, char* statement);
-struct University add_course(struct University university, struct Course course);
+struct University add_course(const char* database, struct University university, struct Course course);

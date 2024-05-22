@@ -1,7 +1,8 @@
 #include "../unity.h"
 #include <string.h>
-#include <stdlib.h>
 #include "declarations.h"
+
+const char* TEST_DATABASE = "test.db";
 
 void setUp(){}
 void tearDown(){}
@@ -19,9 +20,9 @@ void testInitializeUniversityWith3CourseAnd3SubjectsEach(void) {
     course1 = initialize_course("course1");
     course2 = initialize_course("course2");
     course3 = initialize_course("course3");
-    university = add_course(university, course1);
-    university = add_course(university, course2);
-    university = add_course(university, course3);
+    university = add_course(TEST_DATABASE, university, course1);
+    university = add_course(TEST_DATABASE, university, course2);
+    university = add_course(TEST_DATABASE, university, course3);
 
     TEST_ASSERT_EQUAL_INT( university.active, expected );
 }
