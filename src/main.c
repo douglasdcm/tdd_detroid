@@ -21,8 +21,13 @@ int main(int argc, char *argv[]) {
     if ( are_text_equal(argv[1], "init-database") )
     {
         char* statement = "CREATE TABLE IF NOT EXISTS students"\
-        " (name,state,cpf,identifier PRIMARY KEY,gpa,subjects,course,semester_counter);";
-        return save_to_database(DATABASE, statement);
+        " (id INTEGER PRIMARY KEY,name,state,cpf,gpa,subjects,course,semester_counter);";
+        save_to_database(DATABASE, statement);
+
+        statement = "CREATE TABLE IF NOT EXISTS courses"\
+        " (id INTEGER PRIMARY KEY, name);";
+        save_to_database(DATABASE, statement);
+        return 0;
     }
 
     if ( are_text_equal(argv[1], "help") )
@@ -43,6 +48,29 @@ int main(int argc, char *argv[]) {
         save_to_database(DATABASE, statement);
 
         printf("Student gpa is %f\n", student.gpa);
+        return 0;
+    }
+
+    if ( are_text_equal(argv[1], "create-course") )
+    {
+        if (argc != 4){
+            printf("Need to specify the name of the course.\n");
+            return 1;
+        }
+
+        struct Course course = initialize_course();
+        if ( are_text_equal(argv[2], "name") ) {
+            course.name = argv[3];
+        }
+
+        char *tokens[] = {"INSERT INTO courses VALUES (NULL,'", course.name ,"');"};
+        char statement[100] = "";
+        for (int i = 0; i < 3; i++){
+            strcat(statement, tokens[i]);
+        }
+        save_to_database(DATABASE, statement);
+
+        printf("Course name is %s\n", course.name);
         return 0;
     }
 
@@ -98,6 +126,7 @@ void show_help()
         "help\n"
         "create-student [gpa int]\n"
         "create-subject [grade int]\n"
+        "create-course name *char"
         "init-database\n"
     );
 }
