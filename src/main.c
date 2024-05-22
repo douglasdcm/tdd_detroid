@@ -64,12 +64,8 @@ int main(int argc, char *argv[]) {
             course.name = argv[3];
         }
 
-        char *tokens[] = {"INSERT INTO courses VALUES (NULL,'", course.name ,"');"};
-        char statement[100] = "";
-        for (int i = 0; i < 3; i++){
-            strcat(statement, tokens[i]);
-        }
-        save_to_database(DATABASE, statement);
+        struct University university = initialize_university();
+        add_course(DATABASE, university, course);
 
         printf("Course '%s' created.\n", course.name);
         return 0;
