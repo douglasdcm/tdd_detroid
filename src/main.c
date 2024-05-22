@@ -18,12 +18,7 @@ int main(int argc, char *argv[]) {
         return 0;
     }
 
-    if ( are_text_equal(argv[1], "test") )
-    {
-        return save_to_database(DATABASE, "select * from students;");
-    }
-
-    if ( are_text_equal(argv[1], "init") )
+    if ( are_text_equal(argv[1], "init-database") )
     {
         char* statement = "CREATE TABLE IF NOT EXISTS students"\
         " (name,state,cpf,identifier PRIMARY KEY,gpa,subjects,course,semester_counter);";
@@ -103,7 +98,7 @@ void show_help()
         "help\n"
         "create-student [gpa int]\n"
         "create-subject [grade int]\n"
-        "init [xx]\n"
+        "init-database\n"
     );
 }
 

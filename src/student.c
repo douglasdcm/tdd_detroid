@@ -52,7 +52,6 @@ char* build_statement_insert_student(struct Student student, char* statement){
     strcat(statement, student.course);
     strcat(statement, "',");
 
-    char snum[5];
     sprintf(c, "%i", student.semester);
     strcat(statement, c);
     strcat(statement, ");");
