@@ -36,9 +36,13 @@ void testInitializeUniversityWith3CourseAnd3SubjectsEach(void) {
     course3 = add_subject(TEST_DATABASE, course3, subject2);
     course3 = add_subject(TEST_DATABASE, course3, subject3);
     
+    run_on_database(TEST_DATABASE, "select subject from courses where name = 'course1';");
+
     university = add_course(TEST_DATABASE, university, course1);
     university = add_course(TEST_DATABASE, university, course2);
     university = add_course(TEST_DATABASE, university, course3);
+
+
 
     TEST_ASSERT_EQUAL_INT( university.active, expected );
 }
