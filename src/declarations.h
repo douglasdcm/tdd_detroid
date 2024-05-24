@@ -1,4 +1,5 @@
 #include <stdlib.h>
+
 struct Student {
     float gpa;
     char* name;
@@ -20,11 +21,12 @@ struct University {
 };
 
 struct Course {
-    char* name;
     int id;
+    char* name;
+    int num_subjects;
 };
 
-int save_to_database(const char* database, char *statememt);
+int run_on_database(const char* database, char *statememt);
 struct Student initialize_student();
 struct Subject initialize_subject();
 struct Course initialize_course();
@@ -33,3 +35,4 @@ float calculate_student_gpa(
     struct Student student, struct Subject subjects[], int length);
 char* build_statement_insert_student(struct Student student, char* statement);
 struct University add_course(const char* database, struct University university, struct Course course);
+struct Course add_subject(char* database, struct Course course, struct Subject subject);

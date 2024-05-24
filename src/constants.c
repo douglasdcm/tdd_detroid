@@ -1,0 +1,1 @@
+char* DATABASE = "university.db";

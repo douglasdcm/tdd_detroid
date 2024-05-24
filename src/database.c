@@ -11,7 +11,7 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName){
     return 0;
 }
 
-int save_to_database(const char* database, char *statememt){
+int run_on_database(char* database, char *statememt){
     sqlite3 *db;
     char *zErrMsg = 0;
     int rc;

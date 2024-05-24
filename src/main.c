@@ -3,7 +3,7 @@
 #include <string.h>
 #include "declarations.h"
 
-const char* DATABASE = "university.db";
+extern const char* DATABASE;
 
 int are_text_equal(char text1[], char text2[]);
 void show_help();
@@ -17,18 +17,30 @@ int main(int argc, char *argv[]) {
 
     if ( are_text_equal(argv[1], "init-database") )
     {
+        if (argc != 3){
+            printf("Specify the type of database: test or prod\n");
+            return 1;
+        }
+        int result = 0;
+
         if ( are_text_equal(argv[2], "test") ) {
             DATABASE = "test.db";
         }
 
-        char* statement = "CREATE TABLE IF NOT EXISTS students"\
-        " (id INTEGER PRIMARY KEY,name,state,cpf,gpa,subjects,course,semester_counter);";
-        save_to_database(DATABASE, statement);
+        char* create_students = "CREATE TABLE IF NOT EXISTS students"\
+        " (id INTEGER PRIMARY KEY,name VARCHAR(30) NOT NULL,state,cpf,gpa,subjects,course,semester_counter);";
+        result = run_on_database(DATABASE, create_students);
 
-        statement = "CREATE TABLE IF NOT EXISTS courses"\
-        " (id INTEGER PRIMARY KEY, name);";
-        save_to_database(DATABASE, statement);
-        return 0;
+        char* create_subjects = "CREATE TABLE IF NOT EXISTS subjects"\
+        " (id INTEGER PRIMARY KEY, name VARCHAR(30) NOT NULL);";
+        result = run_on_database(DATABASE, create_subjects);
+        
+        char* create_courses = "CREATE TABLE IF NOT EXISTS courses"\
+        " (id INTEGER PRIMARY KEY, name VARCHAR(30) NOT NULL,"\
+        " subject INTEGER, FOREIGN KEY(subject) REFERENCES subjects(id) );";
+        result = run_on_database(DATABASE, create_courses);
+        
+        return result;
     }
 
     if ( are_text_equal(argv[1], "help") )
@@ -45,8 +57,8 @@ int main(int argc, char *argv[]) {
                 student.gpa = atof(argv[j + 1]);
             }
         }
-        char* statement = "INSERT INTO students VALUES ('name', 'state', 'cpf', 'identifier2', 3.4, 'subject', 'course', 1);";
-        save_to_database(DATABASE, statement);
+        char* statement = "INSERT INTO students VALUES ('name', 'state', 'cpf', NULL, 3.4, 'subject', 'course', 1);";
+        run_on_database(DATABASE, statement);
 
         printf("Student gpa is %f\n", student.gpa);
         return 0;

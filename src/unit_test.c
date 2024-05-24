@@ -2,7 +2,7 @@
 #include <string.h>
 #include "declarations.h"
 
-const char* TEST_DATABASE = "test.db";
+char* TEST_DATABASE = "test.db";
 
 void setUp(){}
 void tearDown(){}
@@ -15,11 +15,27 @@ void testInitializeUniversityWith3CourseAnd3SubjectsEach(void) {
     struct Course course1;
     struct Course course2;
     struct Course course3;
+    struct Subject subject1;
+    struct Subject subject2;
+    struct Subject subject3;
 
     university = initialize_university();
     course1 = initialize_course("course1");
     course2 = initialize_course("course2");
     course3 = initialize_course("course3");
+    subject1 = initialize_subject();
+    subject2 = initialize_subject();
+    subject3 = initialize_subject();
+    course1 = add_subject(TEST_DATABASE, course1, subject1);
+    course1 = add_subject(TEST_DATABASE, course1, subject2);
+    course1 = add_subject(TEST_DATABASE, course1, subject3);
+    course2 = add_subject(TEST_DATABASE, course2, subject1);
+    course2 = add_subject(TEST_DATABASE, course2, subject2);
+    course2 = add_subject(TEST_DATABASE, course2, subject3);
+    course3 = add_subject(TEST_DATABASE, course3, subject1);
+    course3 = add_subject(TEST_DATABASE, course3, subject2);
+    course3 = add_subject(TEST_DATABASE, course3, subject3);
+    
     university = add_course(TEST_DATABASE, university, course1);
     university = add_course(TEST_DATABASE, university, course2);
     university = add_course(TEST_DATABASE, university, course3);
