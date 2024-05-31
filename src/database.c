@@ -1,6 +1,7 @@
 #include <sqlite3.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 
 static int callback(void *NotUsed, int argc, char **argv, char **azColName){
@@ -38,8 +39,8 @@ char** get_data_from_database(char* database, char* statement, char** result)
     sqlite3_stmt* stmt;
     char* errMesg = 0;
     // reference: https://stackoverflow.com/questions/12917727/resizing-an-array-in-c
-    result = (char**)malloc(0); // array of chars, samoe of char* result[0], but is dinamically allocated
-    char** ptr2 = (char**)malloc(0);
+    result = malloc(0); // array of chars, samoe of char* result[0], but is dinamically allocated
+    char** ptr2 = malloc(0);
 
     int ret = 0;
 
@@ -61,21 +62,22 @@ char** get_data_from_database(char* database, char* statement, char** result)
 
     while (sqlite3_step(stmt) == SQLITE_ROW) {
         int lenght = 0;
-        //  sqlite3_column_count() is used to know the number of columns 
+        // sqlite3_column_count() is used to know the number of columns
+        // sqlite3_column_bytes() used to return the lenght of the column in bytes
         // reference: https://www.sqlite.org/c3ref/column_blob.html
         for (int i = 0; i < sqlite3_column_count(stmt); i++){
-            lenght += sizeof(sqlite3_column_text(stmt, i));
-            ptr2 = (char**)realloc(result, lenght);
+            lenght += sqlite3_column_bytes(stmt, i);
+            ptr2 = realloc(result, lenght);
             result = ptr2;
-            result[i] = (char*)sqlite3_column_text(stmt, i);
-            printf("'%s'\n", result[i]);
+            ptr2[i] = malloc(sqlite3_column_bytes(stmt, i));
+            result[i] = ptr2[i];
+            memcpy(result[i], (char*)sqlite3_column_text(stmt, i), sqlite3_column_bytes(stmt, i));
+            // printf("'%s'\n", result[i]);
         }
     }
 
     sqlite3_finalize(stmt);
     sqlite3_close(db_ptr);
-    
-    printf("'%s'\n", result[0]);
 
     return result;
 }

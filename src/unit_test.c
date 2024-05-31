@@ -51,9 +51,10 @@ void testGetDataFromDatabase(void) {
     char** result;
     char** result2 = get_data_from_database(TEST_DATABASE, "SELECT * FROM courses;", result);
     
-    printf("'%s'\n", result2[0]);
+    // failing, need to get course1, geting course3
+    printf("'%s'\n", result2[1]);
 
-    TEST_ASSERT_EQUAL_INT( 0, 0 );
+    TEST_ASSERT_EQUAL_INT( 0, 1 );
 }
 
 // STUDENT
