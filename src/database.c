@@ -1,5 +1,6 @@
 #include <sqlite3.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 
 static int callback(void *NotUsed, int argc, char **argv, char **azColName){
@@ -29,4 +30,52 @@ int run_on_database(char* database, char *statememt){
     }
     sqlite3_close(db);
     return 0;
+}
+
+char** get_data_from_database(char* database, char* statement, char** result)
+{
+    sqlite3* db_ptr;
+    sqlite3_stmt* stmt;
+    char* errMesg = 0;
+    // reference: https://stackoverflow.com/questions/12917727/resizing-an-array-in-c
+    result = (char**)malloc(0); // array of chars, samoe of char* result[0], but is dinamically allocated
+    char** ptr2 = (char**)malloc(0);
+
+    int ret = 0;
+
+    ret = sqlite3_open(database, &db_ptr);
+
+    if (ret != SQLITE_OK) {
+        printf("Database opening error\n");
+    }
+
+    char* sql_stmt = statement;
+
+    ret = sqlite3_prepare_v2(db_ptr, sql_stmt, -1, &stmt, 0);
+
+    if (ret != SQLITE_OK) {
+        printf("\nUnable to fetch data");
+        sqlite3_close(db_ptr);
+        return result;
+    }
+
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+        int lenght = 0;
+        //  sqlite3_column_count() is used to know the number of columns 
+        // reference: https://www.sqlite.org/c3ref/column_blob.html
+        for (int i = 0; i < sqlite3_column_count(stmt); i++){
+            lenght += sizeof(sqlite3_column_text(stmt, i));
+            ptr2 = (char**)realloc(result, lenght);
+            result = ptr2;
+            result[i] = (char*)sqlite3_column_text(stmt, i);
+            printf("'%s'\n", result[i]);
+        }
+    }
+
+    sqlite3_finalize(stmt);
+    sqlite3_close(db_ptr);
+    
+    printf("'%s'\n", result[0]);
+
+    return result;
 }

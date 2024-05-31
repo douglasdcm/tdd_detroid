@@ -10,17 +10,11 @@ The application simulates the control of grades for university students.
 
 # Setup and Test
 ```
-# prepare database
-sqlite3 university.db
-
-# to run the main compile the code. include all files
+# to run the application
 make
-
-# run it
 ./main.out
 
-# to test functions in a file
-sqlite3 test.db
+# to test functions
 ./main.out init-database test
 make test
 ```

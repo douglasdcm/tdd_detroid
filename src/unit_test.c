@@ -9,6 +9,7 @@ void tearDown(){}
 
 // COURSE
 // 5. Initially, the university will have 3 courses with 3 subjects each.
+
 void testInitializeUniversityWith3CourseAnd3SubjectsEach(void) {
     int expected = 1;
     struct University university;
@@ -42,9 +43,17 @@ void testInitializeUniversityWith3CourseAnd3SubjectsEach(void) {
     university = add_course(TEST_DATABASE, university, course2);
     university = add_course(TEST_DATABASE, university, course3);
 
-
-
     TEST_ASSERT_EQUAL_INT( university.active, expected );
+}
+
+
+void testGetDataFromDatabase(void) {
+    char** result;
+    char** result2 = get_data_from_database(TEST_DATABASE, "SELECT * FROM courses;", result);
+    
+    printf("'%s'\n", result2[0]);
+
+    TEST_ASSERT_EQUAL_INT( 0, 0 );
 }
 
 // STUDENT
@@ -106,5 +115,6 @@ int main(void)
     RUN_TEST(testStudentGpaCalculationReturnGradesAverage);
     RUN_TEST(testStudentHasInitialGpaSetToZero);
     RUN_TEST(testStudentCommandToSaveToDatabaseIsCorrect);
+    RUN_TEST(testGetDataFromDatabase);
     return UNITY_END();
 }

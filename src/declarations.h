@@ -27,6 +27,7 @@ struct Course {
 };
 
 int run_on_database(const char* database, char *statememt);
+char** get_data_from_database(char* database, char* statement, char** result);
 struct Student initialize_student();
 struct Subject initialize_subject();
 struct Course initialize_course();
