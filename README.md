@@ -1,48 +1,21 @@
 # Control of grades of college students
+
 ## Introduction
-This project aims to exercise the "code smells" related to unit tests using an application that simulates a real business.
-The code will be developed with the Detroit-style TDD technique, hence the name of the repository.
-The application simulates the control of students' grades at a university. Below is the specification of the application:
-Definition of Done:
-1. Unit tests are covering the functionality
-2. The functionality is designed to be used via CLI
-3. Data is being saved to the database
-# How to use
+The application simulates the control of students' grades at a university. Check at the end the specification of the application:
+
+# How to use it
+
 ## Option 1: docker-compose
 Run the commnands and access "http://localhost:5000"
 ```
 chmod +x utils/build_container.sh
 ./utils/build_container.sh
+pip install build
 ./utils/build_dist.sh
 docker-compose up -d
 ```
-## Option 2: Kubernetes
-Cosidering the Minikube and Virtual Box are installed, [Push the image](#publish-image) to Docker Hub and run the commands
-```
-minikube start --driver=virtualbox
-```
-### Declarative way
-```
-kubectl create -f kubernetes/deployments.yaml
-kubectl create -f kubernetes/services.yaml
-```
 
-### Or Imperative way
-```
-kubectl create deployment tdd-detroid --image=douglasdcm/tdd-detroid
-kubectl get pods
-```
-Create services
-```
-kubectl expose deployment tdd-detroid --type=NodePort --port=5000
-kubectl get services
-```
-### Check access
-```
-curl $(minikube ip):<port>
-```
-and navigate to ```http://$(minikube ip):<port>```
-## Option 3: locally by Live Server
+## Option 2: locally by Live Server
 1. At the root of the project, run the commands below:
 ```
 python3.6 -m venv venv
@@ -56,50 +29,29 @@ cp -r dist/ src/ui/
 2. This project was developed using VSCode, so install [Live Server](https://github.com/ritwickdey/vscode-live-server-plus-plus) on VSCode
 3. Navigate to the index.html file and start the Live Server as per the documentation
 4. Fill in the form and confirm to see the records created
-## Option 4: locally by Flask
+
+## Option 3: locally by Flask
 1. Run the commands above to setup the application
 2. Start the aplication running the commnad bellow and access "http://localhost:5001"
 ```
 python app.py
 ```
-## Option 5: by CLI
+
+## Option 4: by CLI
 5. It is possible to interact with the application using the command line. See more details in the help menu.
 ```
 python cli. init-bd
 python cli.py --help
 ```
+
 # Technologies
-This project uses pure Python in the backend, html for the screens, sqlite to store the records, PyScript to create the elements of the screens, Liver Server, docker-compose or kubernetes as options to bring the application up.
+This project uses pure Python in the backend, html for the screens, sqlite to store the records, PyScript to create the elements of the screens, Liver Server, docker-compose to bring the application up.
+
 # Limitations
 When used by the graphical interface, the inserted records are lost every time the screen is rendered. Persistence is only possible when used from the command line
-# Publish image
-Run the commands
-```
-docker login -u someuser -p somepassword
-docker push douglasdcm/tdd-detroid:latest
-```
-# Notes about Kubernetes
-```
-app > docker/containerd > deployment() > k8s pod > k8s node > k8s cluster
 
-if app down > k8s creats a new
-
-if node down > k8s find other
-
-* Notes
-
-k8s pods: 1 or more containers
-
-    https://kubernetes.io/docs/concepts/workloads/pods/
-
-k8s node: virtual/phisical, has a container server to run pods
-
-    https://kubernetes.io/docs/concepts/architecture/nodes/
-
-k8s cluster: control plane/client [kubectl]
-```
-# Deliveries
-Construction of the basic functions of the system
+# Specification
+Construction of the basic functions of the system (The features scratched are the ones implemented)
 1. ~~Each student will have a grade control called "performance coefficient" (CR)~~
 2. ~~The CR is the average of the student's grades in the subjects already taken~~
 3. The student is considered approved at the university if his CR is above or equal to 7 (seven) at the end of the course
