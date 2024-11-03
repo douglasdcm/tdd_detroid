@@ -20,7 +20,7 @@ class Students:
     def inscreve_materia(self, aluno_id, materia_id):
         aluno = AlunoModelo(self._conn)
         aluno.id = aluno_id
-        aluno.inscreve_materia(materia_id)
+        return aluno.inscreve_materia(materia_id)
 
     def cria(self, nome):
         AlunoModelo(self._conn).cria(nome)

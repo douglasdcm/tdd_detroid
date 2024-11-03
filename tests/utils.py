@@ -25,10 +25,8 @@ def cria_aluno_completo(conn):
     aluno = AlunoModelo(conn)
     aluno.cria("test_manual")
     aluno.inscreve_curso(1)
-    with raises(Exception):
-        aluno.inscreve_materia(1)
-    with raises(Exception):
-        aluno.inscreve_materia(2)
+    aluno.inscreve_materia(1)
+    aluno.inscreve_materia(2)
     aluno.inscreve_materia(3)
 
 

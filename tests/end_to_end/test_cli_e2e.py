@@ -99,6 +99,7 @@ def test_alunos_deve_inscreve_3_materias_no_minimo(__popula_banco_dados):
         stdout=subprocess.PIPE,
     )
     output = str(temp.communicate())
+    print(output)
 
     # verifica pelo banco
     materia_aluno = conn.lista_tudo(MateriaAlunoBd)

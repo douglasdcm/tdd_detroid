@@ -91,7 +91,8 @@ class AlunoModelo:
                 qtde_materias += 1
             if qtde_materias >= 3:
                 return
-        raise ErroMateriaAluno("Aluno deve se inscrever em 3 materias no minimo")
+        # raise ErroMateriaAluno("Aluno deve se inscrever em 3 materias no minimo")
+        return "Aluno deve se inscrever em 3 materias no minimo"
 
     def __verifica_aluno_ja_inscrito_materia(self, aluno_id, materia_id):
         resultado = self._conn.lista_tudo(MateriaAlunoBd)
@@ -123,7 +124,7 @@ class AlunoModelo:
         self.__verifica_aluno_ja_inscrito_materia(self._aluno_id, materia_id)
         ma = MateriaAlunoBd(aluno_id=self._aluno_id, materia_id=materia_id)
         self._conn.cria(ma)
-        self.__verifica_minimo_3_materias(self._aluno_id)
+        return self.__verifica_minimo_3_materias(self._aluno_id)
 
     def inscreve_curso(self, curso_id):
         aluno = self.__pega_aluno()

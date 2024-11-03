@@ -32,10 +32,8 @@ def popula_banco_dados(scope="function"):
     aluno = AlunoModelo(conn)
     aluno.cria(nome="anyone")
     aluno.inscreve_curso(curso_id=1)
-    with raises(Exception):
-        aluno.inscreve_materia(materia_id=1)
-    with raises(Exception):
-        aluno.inscreve_materia(materia_id=2)
+    aluno.inscreve_materia(materia_id=1)
+    aluno.inscreve_materia(materia_id=2)
     aluno.inscreve_materia(materia_id=3)
 
 

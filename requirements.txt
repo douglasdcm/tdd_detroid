@@ -37,3 +37,4 @@ waitress==2.0.0
 watchdog==2.1.9
 Werkzeug==2.0.3
 zipp==3.6.0
+build

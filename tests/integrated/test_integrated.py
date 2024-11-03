@@ -27,16 +27,37 @@ def test_calcula_cr_aluno_de_materias_cursadas(popula_banco_dados):
     assert conn.lista(AlunoBd, aluno_id).coef_rend == 5
 
 
+def test_alunos_inscrito_em_3_materias(popula_banco_dados):
+
+    alunos = Students(conn)
+    alunos.cria("any")
+    aluno_id = len(alunos.lista_tudo())
+    alunos.inscreve_curso(aluno_id, curso_id=1)
+
+    from tests.utils import cria_materia
+
+    cria_materia(conn=conn, curso_id=1)
+    alunos.inscreve_materia(aluno_id, materia_id=1)
+    alunos.inscreve_materia(aluno_id, materia_id=2)
+    alunos.inscreve_materia(aluno_id, materia_id=3)
+    alunos.inscreve_materia(aluno_id, materia_id=10)
+
+    materia_aluno = conn.lista_tudo(MateriaAlunoBd)
+    result = 0
+    for item in materia_aluno:
+        if item.aluno_id == aluno_id:
+            result += 1
+    assert result > 3
+
+
 def test_alunos_deve_inscreve_em_3_materias(popula_banco_dados):
 
     alunos = Students(conn)
     alunos.cria("any")
     aluno_id = len(alunos.lista_tudo())
     alunos.inscreve_curso(aluno_id, curso_id=1)
-    with raises(
-        ErroMateriaAluno, match="Aluno deve se inscrever em 3 materias no minimo"
-    ):
-        alunos.inscreve_materia(aluno_id, 1)
+    actual = alunos.inscreve_materia(aluno_id, 1)
+    assert actual == "Aluno deve se inscrever em 3 materias no minimo"
 
     materia_aluno = conn.lista_tudo(MateriaAlunoBd)
     assert len(materia_aluno) > 1

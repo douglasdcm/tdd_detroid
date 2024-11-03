@@ -115,10 +115,8 @@ def test_mensagem_sobre_3_materias_para_apos_inscricao_em_3_materias(
     aluno = AlunoModelo(conn)
     aluno.cria("any")
     aluno.inscreve_curso(curso_id=1)
-    with raises(ErroMateriaAluno):
-        aluno.inscreve_materia(1)
-    with raises(ErroMateriaAluno):
-        aluno.inscreve_materia(2)
+    aluno.inscreve_materia(1)
+    aluno.inscreve_materia(2)
     aluno.inscreve_materia(3)
 
 
@@ -150,10 +148,8 @@ def test_inscreve_aluno_numa_materia(popula_banco_dados):
     aluno = AlunoModelo(conn)
     aluno.cria("any")
     aluno.inscreve_curso(curso_id=1)
-    with raises(
-        ErroMateriaAluno, match="Aluno deve se inscrever em 3 materias no minimo"
-    ):
-        aluno.inscreve_materia(1)
+    actual = aluno.inscreve_materia(1)
+    assert actual == "Aluno deve se inscrever em 3 materias no minimo"
 
 
 def test_aluno_cria():
