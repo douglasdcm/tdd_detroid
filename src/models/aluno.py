@@ -91,7 +91,6 @@ class AlunoModelo:
                 qtde_materias += 1
             if qtde_materias >= 3:
                 return
-        # raise ErroMateriaAluno("Aluno deve se inscrever em 3 materias no minimo")
         return "Aluno deve se inscrever em 3 materias no minimo"
 
     def __verifica_aluno_ja_inscrito_materia(self, aluno_id, materia_id):

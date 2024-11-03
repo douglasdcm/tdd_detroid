@@ -14,4 +14,5 @@ class Courses:
         return self._conn.lista_tudo(CursoBd)
 
     def lista(self, id_):
+        assert isinstance(id_, int), "id_ must be an integer"
         return self._conn.lista(CursoBd, id_)

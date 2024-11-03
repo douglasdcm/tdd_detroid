@@ -10,7 +10,6 @@ from src.utils.exceptions import (
     ErroAluno,
     ErroMateria,
     ErroCurso,
-    ErroMateriaAluno,
 )
 from tests.config import conn
 from tests.utils import cria_curso, cria_materia
@@ -34,20 +33,18 @@ def test_alunos_inscrito_em_3_materias(popula_banco_dados):
     aluno_id = len(alunos.lista_tudo())
     alunos.inscreve_curso(aluno_id, curso_id=1)
 
-    from tests.utils import cria_materia
-
     cria_materia(conn=conn, curso_id=1)
     alunos.inscreve_materia(aluno_id, materia_id=1)
     alunos.inscreve_materia(aluno_id, materia_id=2)
     alunos.inscreve_materia(aluno_id, materia_id=3)
-    alunos.inscreve_materia(aluno_id, materia_id=10)
+    assert alunos.inscreve_materia(aluno_id, materia_id=10) == None
 
     materia_aluno = conn.lista_tudo(MateriaAlunoBd)
     result = 0
     for item in materia_aluno:
         if item.aluno_id == aluno_id:
             result += 1
-    assert result > 3
+    assert result == 4
 
 
 def test_alunos_deve_inscreve_em_3_materias(popula_banco_dados):

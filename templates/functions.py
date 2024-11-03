@@ -11,25 +11,32 @@ inicializa_tabelas(conn)
 
 def subscribe_discipline():
     try:
-        aluno_id = Element("subscribe-student-id")
-        materia_id = Element("subscribe-discipline-id")
+        aluno_id = int(Element("subscribe-student-id").value)
+        materia_id = int(Element("subscribe-discipline-id").value)
         students = Students(conn)
-        students.inscreve_materia(aluno_id.value, materia_id.value)
-        qtde = len(students.lista_tudo())
-        text = f"#Student id {qtde}, Name {students.lista(qtde).nome}, Discipline id {Disciplines(conn).lista(qtde).id}"
+        output = students.inscreve_materia(aluno_id, materia_id)
+        text = (
+            f"Student id {aluno_id}, Name {students.lista(aluno_id).nome}"
+            f" subscribed to discipline id {Disciplines(conn).lista(materia_id).id}"
+        )
         __update_terminal(text, "INFO")
+        if isinstance(output, str):
+            __update_terminal(output, "WARN")
     except Exception as e:
         __update_terminal(e, "FAIL")
 
 
 def add_discipline():
     try:
-        discipline_nome = Element("discipline-nome")
-        curso_discipline_id = Element("course-discipline-id")
+        discipline_nome = Element("discipline-nome").value
+        curso_discipline_id = int(Element("course-discipline-id").value)
         disciplines = Disciplines(conn)
-        disciplines.cria(discipline_nome.value, curso_discipline_id.value)
+        disciplines.cria(discipline_nome, curso_discipline_id)
         qtde = len(disciplines.lista_tudo())
-        text = f"#Added discipline id: {qtde}, Name: {disciplines.lista(qtde).nome}, Course: {disciplines.lista(qtde).curso_id}"
+        text = (
+            f"Added discipline id: {qtde}, Name: {disciplines.lista(qtde).nome}"
+            f", Course: {disciplines.lista(qtde).curso_id}"
+        )
         __update_terminal(text, "INFO")
     except Exception as e:
         __update_terminal(e, "FAIL")
@@ -37,12 +44,14 @@ def add_discipline():
 
 def subscribe_course():
     try:
-        aluno_id = Element("student-id")
-        curso_id = Element("course-id")
+        aluno_id = int(Element("student-id").value)
+        curso_id = int(Element("course-id").value)
         students = Students(conn)
-        students.inscreve_curso(aluno_id.value, curso_id.value)
+        students.inscreve_curso(aluno_id, curso_id)
         qtde = len(students.lista_tudo())
-        text = f"#Student id {qtde} subscribed to course id {students.lista(qtde).curso_id}"
+        text = (
+            f"Student id {qtde} subscribed to course id {students.lista(qtde).curso_id}"
+        )
         __update_terminal(text, "INFO")
     except Exception as e:
         __update_terminal(e, "FAIL")
@@ -50,11 +59,11 @@ def subscribe_course():
 
 def add_course():
     try:
-        content = Element("course-nome")
+        course_name = Element("course-nome").value
         courses = Courses(conn)
-        courses.cria(content.value)
+        courses.cria(course_name)
         qtde = len(courses.lista_tudo())
-        text = f"#Course id: {qtde}, Nome: {courses.lista(qtde).nome}"
+        text = f"Added course id: {qtde}, Nome: {courses.lista(qtde).nome}"
         __update_terminal(text, "INFO")
     except Exception as e:
         __update_terminal(e, "FAIL")
@@ -62,11 +71,11 @@ def add_course():
 
 def add_student():
     try:
-        content = Element("student-nome")
+        student_name = Element("student-nome").value
         students = Students(conn)
-        students.cria(content.value)
+        students.cria(student_name)
         qtde = len(students.lista_tudo())
-        text = f"Added student. id: {qtde}, Name: {students.lista(qtde).nome}"
+        text = f"Added student id: {qtde}, Name: {students.lista(qtde).nome}"
         __update_terminal(text, "INFO")
     except Exception as e:
         __update_terminal(e, "FAIL")
