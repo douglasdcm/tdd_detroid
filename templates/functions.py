@@ -16,7 +16,7 @@ def subscribe_discipline():
         students = Students(conn)
         students.inscreve_materia(aluno_id.value, materia_id.value)
         qtde = len(students.lista_tudo())
-        text = f"#Student id {qtde}, Name {students.lista(qtde).nome}, Discipline id {Disciplines(conn).lista(qtde).materia_id}"
+        text = f"#Student id {qtde}, Name {students.lista(qtde).nome}, Discipline id {Disciplines(conn).lista(qtde).id}"
         __update_terminal(text, "INFO")
     except Exception as e:
         __update_terminal(e, "FAIL")
