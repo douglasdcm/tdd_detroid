@@ -17,9 +17,6 @@ This application has been used to exercise skills relates to Python, ORM, TDD, K
 - [c-implementation-1](https://github.com/douglasdcm/tdd_detroid/tree/c-implementation-1): First version of the App in C language. The other ones use Python. 
 
 # Application specification
-## Architecture
-[Slides with specifications (Libre Office file)](architecture.odp)
-
 
 Below is the specification of the application:
 Definition of Done:
