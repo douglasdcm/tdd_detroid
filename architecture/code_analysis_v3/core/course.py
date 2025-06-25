@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 from architecture.code_analysis_v3.core.base_object import AbstractCoreObject
 from architecture.code_analysis_v3.core.common import IState
+from architecture.code_analysis_v3.core.subject import NoneSubject
 
 if TYPE_CHECKING:
     from architecture.code_analysis_v3.core.student import IStudent
@@ -52,6 +53,9 @@ class ConcreteCourse(ICourse):
 
     def _has_minimum_subjects(self) -> bool:
         raise NotImplementedError
+
+    def list_all_subjects(self) -> list["ISubject"]:
+        return []
 
 
 class NoneCourse(ICourse):

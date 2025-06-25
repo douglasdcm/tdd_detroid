@@ -1,7 +1,9 @@
 from typing import TYPE_CHECKING
-from architecture.code_analysis_v3.core.base_object import AbstractCoreObject
+from architecture.code_analysis_v3.core.base_object import AbstractCoreObject, NoneCoreObject
 from architecture.code_analysis_v3.core.common import IState
+from architecture.code_analysis_v3.core.constants import MINIMUM_GRADE
 from architecture.code_analysis_v3.core.course import NoneCourse
+from architecture.code_analysis_v3.core.gss import GSSApproved
 
 if TYPE_CHECKING:
     from architecture.code_analysis_v3.core.gss import IGSS
@@ -10,6 +12,10 @@ if TYPE_CHECKING:
 
 
 class IStudent(AbstractCoreObject):
+    @property
+    def subjects_in_progress(self) -> list["ISubject"]:
+        raise NotImplementedError
+
     @property
     def missing_subjects(self) -> list["ISubject"]:
         raise NotImplementedError
@@ -81,7 +87,11 @@ class ConcretStudent(IStudent):
         self._state = self._state.get_next_state(self)
 
     def _has_missing_subjects(self) -> bool:
-        return False
+        return len(self._missing_subjects) == 0
+
+    @property
+    def subjects_in_progress(self) -> list["ISubject"]:
+        return self._subjects
 
     @property
     def missing_subjects(self) -> list["ISubject"]:
@@ -97,9 +107,9 @@ class ConcretStudent(IStudent):
 
     @course.setter
     def course(self, course: "ICourse") -> None:
-        if isinstance(self._course, NoneCourse):
-            self._course = course
-            self._calculate_state()
+        self._course = course
+        self._missing_subjects = course.list_all_subjects()
+        self._calculate_state()
 
     def subscribe_to_subject(self, subject):
         if subject.course != self._course:
@@ -108,8 +118,13 @@ class ConcretStudent(IStudent):
         self._calculate_state()
 
     def notify_me_about_gss(self, gss):
-        self._state = InProgress()
-        self._missing_subjects = ["", ""]
+        if gss.student != self:
+            raise InvalidStudent("Student reported is not the current one")
+        if gss.subject not in self._subjects:
+            raise InvalidSubject("Subject reported is not in student list")
+        if gss.state == GSSApproved:
+            self._missing_subjects.remove(gss.subject)
+        self._grade += int(gss.grade / len(self._subjects))
         self._calculate_state()
 
     def has_course(self):
@@ -119,13 +134,14 @@ class ConcretStudent(IStudent):
         return len(self._subjects) >= 3
 
     def calculate_missing_subjects(self) -> None:
-        pass
+        if isinstance(self._state, Approved):
+            self._missing_subjects = []
 
     def has_minimum_grade(self) -> bool:
-        return True
+        return self._grade >= MINIMUM_GRADE
 
     def are_all_subjects_approved(self) -> bool:
-        return True
+        return len(self._missing_subjects) == 0
 
 
 class NoneStudent(IStudent):
@@ -144,6 +160,10 @@ class InvalidSubject(Exception):
 
 
 class InvalidStateTransition(Exception):
+    pass
+
+
+class InvalidStudent(Exception):
     pass
 
 
