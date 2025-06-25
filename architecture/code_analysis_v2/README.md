@@ -1,0 +1,1 @@
+In this next version of the code analysis all fake implementation were delete and just the inteface of each class was defined. The rules to implement each method are set in the own method.

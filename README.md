@@ -57,7 +57,7 @@ Same as requirement 6
 23. The student can only enroll in one course.
 24. The coordinator can coordinate a maximum of three courses.
 25. The coordinator can list the students, subjects, grades, and GPAs of all their courses (coordinator of more than one course).
-<!-- this requirement wasn't informing the actor. Figured out while making the diagrams of use cases -->
+<!-- this requirement wasn't informing the actor. Figured out while making the architecture.of use cases -->
 <!-- 26. The course can be canceled. -->
 26. The course can be canceled by the general cordinator.
 27. Canceled courses cannot accept student enrollments.

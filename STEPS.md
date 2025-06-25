@@ -53,7 +53,7 @@
      - `POST /grades {studentId, disciplineId, value}`.  
      - `GET /students/{id}/status` (returns "Approved/Reproved").  
 
-2. **Data Flow Diagrams**  
+2. **Data Flow architecture.*  
    - How grades propagate: Teacher → Grade Service → Database → Student Dashboard.  
 
 3. **Database Schema**  
@@ -72,7 +72,7 @@
 ### **Phase 4: Low-Level Design (LLD)**  
 *(Audience: Developers)*  
 
-1. **Class Diagrams**  
+1. **Class architecture.*  
    - `Student` class: `calculateStatus()` method (business rule for approval).  
 
 2. **Algorithmic Logic**  
@@ -113,13 +113,13 @@
 
 3. **Documentation**  
    - HLA: C4 Model (Context, Containers, Components).  
-   - LLD: Swagger for APIs, ER diagrams for DB.  
+   - LLD: Swagger for APIs, ER architecture.for DB.  
 
 ---
 
 ### **Deliverables per Audience**  
-- **Product Owners**: HLA diagrams, feature priorities.  
-- **Developers**: API specs, database schema, class diagrams.  
-- **Testers**: Data flow diagrams, edge cases (e.g., grade > 100).  
+- **Product Owners**: HLA architecture. feature priorities.  
+- **Developers**: API specs, database schema, class architecture.  
+- **Testers**: Data flow architecture. edge cases (e.g., grade > 100).  
 
 This process ensures clarity at each level while allowing flexibility for design patterns to emerge from constraints.

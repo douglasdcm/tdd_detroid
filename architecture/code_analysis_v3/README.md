@@ -1,0 +1,1 @@
+In this next version of the code analysis all Python code was deleted and the UML architecture.generated in v2 was used to recreate the Python implementation.
