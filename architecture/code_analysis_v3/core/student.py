@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from architecture.code_analysis_v3.core.base_object import AbstractCoreObject
 from architecture.code_analysis_v3.core.common import IState
-from architecture.code_analysis_v3.core.course import Cancelled, NoneCourse
+from architecture.code_analysis_v3.core.course import NoneCourse
 
 if TYPE_CHECKING:
     from architecture.code_analysis_v3.core.gss import IGSS
@@ -102,6 +102,8 @@ class ConcretStudent(IStudent):
             self._calculate_state()
 
     def subscribe_to_subject(self, subject):
+        if subject.course != self._course:
+            raise InvalidSubject("Subject is not in student course")
         self._subjects.append(subject)
         self._calculate_state()
 
@@ -109,11 +111,6 @@ class ConcretStudent(IStudent):
         self._state = InProgress()
         self._missing_subjects = ["", ""]
         self._calculate_state()
-
-    def notify_me_about_course(self, course: "ICourse") -> None:
-        # Ignore the state transiton rules if Course Cancelled
-        if isinstance(course.state, Cancelled):
-            self._state = Locked()
 
     def has_course(self):
         return not isinstance(self._course, NoneCourse)
@@ -142,8 +139,17 @@ class BasicInformation:
         self._name: str
 
 
-class Approved(IState):
+class InvalidSubject(Exception):
     pass
+
+
+class InvalidStateTransition(Exception):
+    pass
+
+
+class Approved(IState):
+    def get_next_state(self, context: IStudent) -> IState:
+        raise InvalidStateTransition("Studend is already approved in the course")
 
 
 class InProgress(IState):
@@ -151,10 +157,6 @@ class InProgress(IState):
         if context.has_minimum_grade() and context.are_all_subjects_approved():
             return Approved()
         return self
-
-
-class Locked(IState):
-    pass
 
 
 class InitialState(IState):

@@ -45,8 +45,7 @@ class ConcreteCourse(ICourse):
 
     @state.setter
     def state(self, value: "IState") -> None:
-        if isinstance(value, Cancelled):
-            self._state = Cancelled()
+        pass
 
     def _has_minium_students(self) -> bool:
         raise NotImplementedError
@@ -58,10 +57,6 @@ class ConcreteCourse(ICourse):
 class NoneCourse(ICourse):
     def __init__(self, name=""):
         super().__init__(name)
-
-
-class Cancelled(IState):
-    pass
 
 
 class NotStarted(IState):

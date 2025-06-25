@@ -1,5 +1,5 @@
-from pytest import fixture
-from architecture.code_analysis_v3.core.course import Cancelled, ConcreteCourse, NoneCourse
+from pytest import fixture, raises
+from architecture.code_analysis_v3.core.course import ConcreteCourse
 from architecture.code_analysis_v3.core.gss import NoneGSS
 from architecture.code_analysis_v3.core.student import (
     Approved,
@@ -7,9 +7,10 @@ from architecture.code_analysis_v3.core.student import (
     ConcretStudent,
     InProgress,
     InitialState,
-    Locked,
+    InvalidStateTransition,
+    InvalidSubject,
 )
-from architecture.code_analysis_v3.core.subject import NoneSubject
+from architecture.code_analysis_v3.core.subject import ConcreteSubject
 
 ANY_NAME = "any"
 
@@ -17,6 +18,22 @@ ANY_NAME = "any"
 @fixture
 def student():
     yield ConcretStudent(ANY_NAME)
+
+
+@fixture
+def student_in_progress(student):
+    student.course = ConcreteCourse(ANY_NAME)
+    for _ in range(3):
+        subject = ConcreteSubject(ANY_NAME)
+        subject.course = student.course
+        student.subscribe_to_subject(subject)
+    yield student
+
+
+@fixture
+def student_approved(student_in_progress):
+    student_in_progress.notify_me_about_gss(NoneGSS())
+    yield student_in_progress
 
 
 class TestStudentMissingSubjects:
@@ -35,14 +52,6 @@ class TestStudentMissingSubjects:
 
 
 class TestStudentState:
-    @fixture
-    def student_in_progress(self, student):
-        student.course = ConcreteCourse("")
-        student.subscribe_to_subject(NoneSubject())
-        student.subscribe_to_subject(NoneSubject())
-        student.subscribe_to_subject(NoneSubject())
-        yield student
-
     def test_student_inprogress_when_has_course_and_minimum_subjects(
         self, student_in_progress: IStudent
     ):
@@ -52,21 +61,26 @@ class TestStudentState:
         student.course = ConcreteCourse("")
         assert isinstance(student.state, InitialState)
 
-    def test_student_has_initial_state_when_no_course_and_has_subjects(self, student: IStudent):
-        student.subscribe_to_subject(NoneSubject())
-        assert isinstance(student.state, InitialState)
-
     def test_student_has_initial_state_when_no_course_and_no_subjects(self, student: IStudent):
         assert isinstance(student.state, InitialState)
 
     def test_student_approved_when_minimum_grade_and_subjects_approved(
-        self, student_in_progress: IStudent
+        self, student_approved: IStudent
     ):
-        student_in_progress.notify_me_about_gss(NoneGSS())
-        assert isinstance(student_in_progress.state, Approved)
+        assert isinstance(student_approved.state, Approved)
 
-    def test_student_locked_when_couse_cancelled(self, student_in_progress: IStudent):
-        course = ConcreteCourse(ANY_NAME)
-        course.state = Cancelled()
-        student_in_progress.notify_me_about_course(course)
-        assert isinstance(student_in_progress.state, Locked)
+    def test_student_approved_does_not_change_state(self, student_approved: IStudent):
+        with raises(InvalidStateTransition):
+            subject = ConcreteSubject(ANY_NAME)
+            subject.course = student_approved.course
+            student_approved.subscribe_to_subject(subject)
+
+
+class TestSubscribeToSubject:
+    def test_student_can_subscribe_to_subjects_in_their_course_only(self, student: IStudent):
+        with raises(InvalidSubject):
+            student.subscribe_to_subject(ConcreteSubject(ANY_NAME))
+
+    def test_student_cannot_have_subject_when_no_course(self, student: IStudent):
+        with raises(InvalidSubject):
+            student.subscribe_to_subject(ConcreteSubject(ANY_NAME))
