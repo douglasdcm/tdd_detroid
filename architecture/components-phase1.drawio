@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="JFziE-8eGa_5T53b6teg" name="Main">
-        <mxGraphModel dx="552" dy="530" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="906" dy="530" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -147,14 +147,14 @@
         </mxGraphModel>
     </diagram>
     <diagram id="9N7FdPNcl1j3F9wMc1n4" name="CLI">
-        <mxGraphModel dx="1756" dy="530" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="1402" dy="530" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
                 <mxCell id="UhtjkVIeoqjzc2xnru7J-4" value="CLI &lt;strike&gt;(REPL)&lt;/strike&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
                     <mxGeometry x="80" y="251" width="120" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="UhtjkVIeoqjzc2xnru7J-33" value="+ add basic information&lt;div&gt;&lt;strike&gt;+ subscribe to course&lt;/strike&gt;&lt;/div&gt;&lt;div&gt;+ subscribe to subject&lt;/div&gt;&lt;div&gt;+ list subjects&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;align=left;verticalAlign=top;" parent="1" vertex="1">
+                <mxCell id="UhtjkVIeoqjzc2xnru7J-33" value="+ add basic information&lt;div&gt;&lt;strike&gt;+ subscribe to course&lt;/strike&gt;&lt;/div&gt;&lt;div&gt;+ subscribe to subject&lt;/div&gt;&lt;div&gt;+ list subjects&lt;/div&gt;&lt;div&gt;+ list information&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;align=left;verticalAlign=top;" parent="1" vertex="1">
                     <mxGeometry x="210" y="451" width="190" height="80" as="geometry"/>
                 </mxCell>
                 <mxCell id="UhtjkVIeoqjzc2xnru7J-34" value="Student" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" parent="1" vertex="1">

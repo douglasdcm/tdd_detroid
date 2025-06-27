@@ -84,6 +84,9 @@ class ConcretStudent(IStudent):
         self._grades_subjects_approved: list[int] = []
         self._state: IState = InitialState()
 
+    def __str__(self):
+        return f"Name: '{self.name}', Age: {self.age}"
+
     def _calculate_gpa(self) -> None:
         self._gpa = int(mean(self._grades_subjects_approved))
 

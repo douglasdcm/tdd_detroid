@@ -11,6 +11,13 @@ class AbstractCoreObject:
     def name(self) -> str:
         return self._name
 
+    @property
+    def nui(self) -> int:
+        return self._nui
+
+    def __str__(self):
+        return "Not found"
+
 
 class NoneCoreObject(AbstractCoreObject):
     def __init__(self, name=""):
