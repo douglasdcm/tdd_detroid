@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="JFziE-8eGa_5T53b6teg" name="Main">
-        <mxGraphModel dx="906" dy="530" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="552" dy="530" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -147,7 +147,7 @@
         </mxGraphModel>
     </diagram>
     <diagram id="9N7FdPNcl1j3F9wMc1n4" name="CLI">
-        <mxGraphModel dx="906" dy="530" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="1756" dy="530" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -180,16 +180,16 @@
                 <mxCell id="UhtjkVIeoqjzc2xnru7J-40" style="edgeStyle=none;html=1;entryX=1;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;endArrow=none;endFill=0;" parent="1" source="UhtjkVIeoqjzc2xnru7J-37" target="UhtjkVIeoqjzc2xnru7J-38" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="iYw6yXYciSSA1Y6HJOFZ-2" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;" edge="1" parent="1" source="iYw6yXYciSSA1Y6HJOFZ-1" target="UhtjkVIeoqjzc2xnru7J-4">
+                <mxCell id="iYw6yXYciSSA1Y6HJOFZ-2" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;" parent="1" source="iYw6yXYciSSA1Y6HJOFZ-1" target="UhtjkVIeoqjzc2xnru7J-4" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="iYw6yXYciSSA1Y6HJOFZ-1" value="&lt;div&gt;The CLI is the only expected interface of the system. The user sends the desired command with the arguments. For example, consider the command is called tdd, the following command subscribes the Student to a Subject of nui 1234:&lt;/div&gt;&lt;div&gt;&lt;i&gt;$ tdd student subscribe 1234&lt;/i&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;The rule of thumb is let the commdns simple to write and remmember&lt;/div&gt;" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;align=left;verticalAlign=top;" vertex="1" parent="1">
-                    <mxGeometry x="180" y="30" width="290" height="150" as="geometry"/>
+                <mxCell id="iYw6yXYciSSA1Y6HJOFZ-1" value="&lt;div&gt;The CLI is the only expected interface of the system. The user sends the desired command with the arguments. For example, consider the command is called tdd, the following command subscribes the Student to a Subject of nui 1234:&lt;/div&gt;&lt;div&gt;&lt;i&gt;$ tdd student subscribe 1234&lt;/i&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;The rule of thumb is let the commdns simple to write and remmember&lt;/div&gt;" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;align=left;verticalAlign=top;" parent="1" vertex="1">
+                    <mxGeometry x="-10" y="10" width="290" height="150" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>
     </diagram>
-    <diagram id="7DkJ7XCjsEl_rFjUD7MR" name="CoreComponentes">
+    <diagram id="7DkJ7XCjsEl_rFjUD7MR" name="CoreBusinessLogic">
         <mxGraphModel dx="906" dy="1630" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
@@ -286,7 +286,7 @@
         </mxGraphModel>
     </diagram>
     <diagram id="wco7yTjYJ_ZVrlrPbnzi" name="StudentState">
-        <mxGraphModel dx="906" dy="530" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="552" dy="530" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -345,16 +345,16 @@
                 <mxCell id="__G-mBBsmkvsEaAkqxSC-1" value="&lt;div&gt;&lt;ul&gt;&lt;li&gt;Initial: no course or no minimun subjets&lt;/li&gt;&lt;li&gt;Approved: grade &amp;gt;= minimum and all subjects approved and less them maximum semesters (future feature)&lt;/li&gt;&lt;li&gt;Fail: more them maximum semesters (future) or&amp;nbsp;&lt;span style=&quot;color: rgb(63, 63, 63); background-color: transparent;&quot;&gt;course cancelled (future)&lt;/span&gt;&lt;/li&gt;&lt;li&gt;In progress: has course and minimum subjects&lt;/li&gt;&lt;li&gt;Locked: no minimum subjects until the start of the semester (future), or course cancelled (future), or all subjects &lt;strike&gt;locked&lt;/strike&gt; cancelled (future)&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
                     <mxGeometry x="12" y="280" width="700" height="260" as="geometry"/>
                 </mxCell>
-                <mxCell id="oQXOT-sdjEDBBMI5ljss-5" value="" style="edgeStyle=none;html=1;" edge="1" parent="1" source="oQXOT-sdjEDBBMI5ljss-1" target="W1b2c0kzc49jASj1hPzO-2">
+                <mxCell id="oQXOT-sdjEDBBMI5ljss-5" value="" style="edgeStyle=none;html=1;" parent="1" source="oQXOT-sdjEDBBMI5ljss-1" target="W1b2c0kzc49jASj1hPzO-2" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="oQXOT-sdjEDBBMI5ljss-1" value="Initial" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                <mxCell id="oQXOT-sdjEDBBMI5ljss-1" value="Initial" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
                     <mxGeometry x="240" y="5" width="120" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="sJVNZbjHQQf8RdD-iCSN-2" style="edgeStyle=none;html=1;entryX=1;entryY=0.75;entryDx=0;entryDy=0;endArrow=none;endFill=0;dashed=1;" edge="1" parent="1" source="sJVNZbjHQQf8RdD-iCSN-1" target="W1b2c0kzc49jASj1hPzO-3">
+                <mxCell id="sJVNZbjHQQf8RdD-iCSN-2" style="edgeStyle=none;html=1;entryX=1;entryY=0.75;entryDx=0;entryDy=0;endArrow=none;endFill=0;dashed=1;" parent="1" source="sJVNZbjHQQf8RdD-iCSN-1" target="W1b2c0kzc49jASj1hPzO-3" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="sJVNZbjHQQf8RdD-iCSN-1" value="If the Student asks the Locking then all restrictions are ignored and the Course Coordinator can lock the Studet&amp;nbsp;" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;align=left;verticalAlign=top;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+                <mxCell id="sJVNZbjHQQf8RdD-iCSN-1" value="If the Student asks the Locking then all restrictions are ignored and the Course Coordinator can lock the Studet&amp;nbsp;" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;align=left;verticalAlign=top;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
                     <mxGeometry x="490" y="195" width="140" height="100" as="geometry"/>
                 </mxCell>
             </root>
@@ -520,8 +520,8 @@
             </root>
         </mxGraphModel>
     </diagram>
-    <diagram id="QKhb9wM3Lv87lrTooebn" name="CoreSequence">
-        <mxGraphModel dx="1082" dy="859" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <diagram id="QKhb9wM3Lv87lrTooebn" name="CoreBusinessLogicSequence">
+        <mxGraphModel dx="906" dy="530" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>

@@ -3,6 +3,7 @@ from architecture.code_analysis_v3.core.course import ConcreteCourse
 from architecture.code_analysis_v3.core.gss import ConcreteGSS, NoneGSS
 from architecture.code_analysis_v3.core.student import (
     Approved,
+    BasicInformation,
     IStudent,
     ConcretStudent,
     InProgress,
@@ -13,6 +14,7 @@ from architecture.code_analysis_v3.core.student import (
 from architecture.code_analysis_v3.core.subject import ConcreteSubject
 
 ANY_NAME = "any"
+OTHER_NAME = "any"
 
 
 @fixture
@@ -23,8 +25,9 @@ def student():
 @fixture
 def student_in_progress(student: IStudent):
     student.course = ConcreteCourse(ANY_NAME)
-    for _ in range(3):
-        subject = ConcreteSubject(ANY_NAME)
+    for i in range(3):
+
+        subject = ConcreteSubject(f"{ANY_NAME}{i}")
         subject.course = student.course
         student.subscribe_to_subject(subject)
     yield student
@@ -38,20 +41,6 @@ def student_approved(student_in_progress: IStudent):
         gss.set_(9, subject, student_in_progress)
         student_in_progress.notify_me_about_gss(gss)
     yield student_in_progress
-
-
-class TestStudentMissingSubjects:
-    def test_student_calculate_missing_subjects_return_empty_list_when_state_approved(
-        self, student_approved: IStudent
-    ):
-        student_approved.calculate_missing_subjects()
-        assert student_approved.missing_subjects == []
-
-    def test_student_calculate_missing_subjects_return_full_list_when_state_in_progress(
-        self, student_in_progress: IStudent
-    ):
-        student_in_progress.calculate_missing_subjects()
-        assert len(student_in_progress.missing_subjects) > 0
 
 
 class TestStudentState:
@@ -100,6 +89,48 @@ class TestNotifyGSS:
     ):
         first_subject = student_in_progress.subjects_in_progress[0]
         gss = ConcreteGSS()
+        # grade < 7 is failed
         gss.set_(3, first_subject, student_in_progress)
         student_in_progress.notify_me_about_gss(gss)
         assert isinstance(student_in_progress.state, InProgress)
+
+
+class TestAddBasicInformation:
+    def test_add_basic_information(self, student: IStudent):
+        AGE = 42
+        information = BasicInformation(ANY_NAME, 42)
+        student.add_basic_information(information)
+        assert student.name == ANY_NAME
+        assert student.age == AGE
+
+    def test_change_basic_information(self, student: IStudent):
+        AGE = 42
+        OTHER_AGE = 24
+        information = BasicInformation(ANY_NAME, AGE)
+        student.add_basic_information(information)
+        information = BasicInformation(OTHER_NAME, OTHER_AGE)
+        student.add_basic_information(information)
+        assert student.name == OTHER_NAME
+        assert student.age == OTHER_AGE
+
+
+class TestListMissingSubjects:
+    def test_list_empty_missing_subjects_when_student_approved(self, student_approved: IStudent):
+        assert len(student_approved.missing_subjects) == 0
+
+    def test_list_full_missing_subjects_when_student_inprogress(
+        self, student_in_progress: IStudent
+    ):
+        assert len(student_in_progress.missing_subjects) > 0
+
+
+class TestListSubjectsInProgress:
+    def test_list_empty_subjects_in_progress_when_student_approved(
+        self, student_approved: IStudent
+    ):
+        assert len(student_approved.subjects_in_progress) == 0
+
+    def test_list_full_missing_subjects_when_student_inprogress(
+        self, student_in_progress: IStudent
+    ):
+        assert len(student_in_progress.subjects_in_progress) > 0

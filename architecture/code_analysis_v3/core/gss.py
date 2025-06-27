@@ -41,9 +41,12 @@ class ConcreteGSS(IGSS):
     def _notify_subject(self, student: "IStudent") -> None:
         pass
 
+    def _calculate_state(self):
+        self._state = self._state.get_next_state(self)
+
     @property
     def state(self) -> "IState":
-        return self._state.get_next_state(self)
+        return self._state
 
     @property
     def student(self) -> "AbstractCoreObject":
@@ -61,6 +64,7 @@ class ConcreteGSS(IGSS):
         self._grade = grade
         self._subject = subject
         self._student = student
+        self._calculate_state()
 
 
 class NoneGSS(IGSS):
