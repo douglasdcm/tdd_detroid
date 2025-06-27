@@ -18,7 +18,10 @@ class AbstractCoreObject:
     def __str__(self):
         return "Not found"
 
+    def __repr__(self):
+        return self._name
+
 
 class NoneCoreObject(AbstractCoreObject):
-    def __init__(self, name=""):
+    def __init__(self, name="None"):
         super().__init__(name)

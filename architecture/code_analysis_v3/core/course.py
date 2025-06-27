@@ -59,7 +59,7 @@ class ConcreteCourse(ICourse):
 
 
 class NoneCourse(ICourse):
-    def __init__(self, name=""):
+    def __init__(self, name="None"):
         super().__init__(name)
 
 

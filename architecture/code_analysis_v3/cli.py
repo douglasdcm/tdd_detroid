@@ -33,7 +33,7 @@ def student_add_info(name, age):
     type=int,
 )
 def student_list_info(nui):
-    print(StudentController().list_information(nui))
+    print(vars(StudentController().list_information(nui)))
 
 
 cli.add_command(student_add_info)
