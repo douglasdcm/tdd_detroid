@@ -90,11 +90,10 @@ class TestSubscribeToSubject:
 
 
 class TestNotifyGSS:
-    def test_student_gss_notification_set_state_to_approved_when_all_subject_approved(
-        self, student_in_progress: IStudent
+    def test_student_gss_notification_set_state_to_approved_when_all_subjects_approved(
+        self, student_approved: IStudent
     ):
-        student_in_progress.notify_me_about_gss(NoneGSS())
-        assert isinstance(student_in_progress.state, Approved)
+        assert isinstance(student_approved.state, Approved)
 
     def test_student_gss_notification_keep_state_inprogress_when_any_subject_failed(
         self, student_in_progress: IStudent

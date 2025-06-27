@@ -1,9 +1,11 @@
+from statistics import mean
 from typing import TYPE_CHECKING
 from architecture.code_analysis_v3.core.base_object import AbstractCoreObject, NoneCoreObject
 from architecture.code_analysis_v3.core.common import IState
 from architecture.code_analysis_v3.core.constants import MINIMUM_GRADE
 from architecture.code_analysis_v3.core.course import NoneCourse
 from architecture.code_analysis_v3.core.gss import GSSApproved
+from architecture.code_analysis_v3.core.subject import NoneSubject
 
 if TYPE_CHECKING:
     from architecture.code_analysis_v3.core.gss import IGSS
@@ -62,7 +64,7 @@ class IStudent(AbstractCoreObject):
     def subscribe_to_subject(self, subject: "ISubject") -> None:
         raise NotImplementedError
 
-    def has_minimum_grade(self) -> bool:
+    def has_minimum_gpa(self) -> bool:
         raise NotImplementedError
 
     def are_all_subjects_approved(self) -> bool:
@@ -74,10 +76,10 @@ class ConcretStudent(IStudent):
         super().__init__(name)
         self._course: "ICourse" = NoneCourse()
         self._gpa: int = 0
-        self._grade: int = 0
         self._grades: list[int] = []
         self._missing_subjects: list["ISubject"] = []
-        self._subjects: list["ISubject"] = []
+        self._subjects_in_progress: list["ISubject"] = []
+        self._grades_subjects_approved: list["ISubject"] = []
         self._state: IState = InitialState()
 
     def _calculate_gpa(self) -> None:
@@ -91,7 +93,7 @@ class ConcretStudent(IStudent):
 
     @property
     def subjects_in_progress(self) -> list["ISubject"]:
-        return self._subjects
+        return self._subjects_in_progress
 
     @property
     def missing_subjects(self) -> list["ISubject"]:
@@ -114,31 +116,34 @@ class ConcretStudent(IStudent):
     def subscribe_to_subject(self, subject):
         if subject.course != self._course:
             raise InvalidSubject("Subject is not in student course")
-        self._subjects.append(subject)
+        self._subjects_in_progress.append(subject)
+        self._missing_subjects.append(subject)
         self._calculate_state()
 
     def notify_me_about_gss(self, gss):
         if gss.student != self:
             raise InvalidStudent("Student reported is not the current one")
-        if gss.subject not in self._subjects:
+        if gss.subject not in self._subjects_in_progress:
             raise InvalidSubject("Subject reported is not in student list")
-        if gss.state == GSSApproved:
+        if isinstance(gss.state, GSSApproved):
             self._missing_subjects.remove(gss.subject)
-        self._grade += int(gss.grade / len(self._subjects))
+            self._grades_subjects_approved.append(gss.grade)
+            self._gpa = int(mean(self._grades_subjects_approved))
         self._calculate_state()
 
     def has_course(self):
         return not isinstance(self._course, NoneCourse)
 
     def has_minimum_subjects(self):
-        return len(self._subjects) >= 3
+        return len(self._subjects_in_progress) >= 3
 
     def calculate_missing_subjects(self) -> None:
         if isinstance(self._state, Approved):
             self._missing_subjects = []
+        return self._missing_subjects
 
-    def has_minimum_grade(self) -> bool:
-        return self._grade >= MINIMUM_GRADE
+    def has_minimum_gpa(self) -> bool:
+        return self._gpa >= MINIMUM_GRADE
 
     def are_all_subjects_approved(self) -> bool:
         return len(self._missing_subjects) == 0
@@ -174,7 +179,7 @@ class Approved(IState):
 
 class InProgress(IState):
     def get_next_state(self, context: IStudent) -> IState:
-        if context.has_minimum_grade() and context.are_all_subjects_approved():
+        if context.has_minimum_gpa() and context.are_all_subjects_approved():
             return Approved()
         return self
 
