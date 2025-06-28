@@ -1,51 +1,56 @@
 from typing import TYPE_CHECKING
 from architecture.code_analysis_v3.core.base_object import AbstractCoreObject
-from architecture.code_analysis_v3.core.common import IState
-from architecture.code_analysis_v3.core.subject import NoneSubject
+from architecture.code_analysis_v3.core.common import AbstractState, NoneState
 
 if TYPE_CHECKING:
-    from architecture.code_analysis_v3.core.student import IStudent
-    from architecture.code_analysis_v3.core.subject import ISubject
+    from architecture.code_analysis_v3.core.student import AbstractStudent
+    from architecture.code_analysis_v3.core.subject import AbstractSubject
 
 
-class ICourse(AbstractCoreObject):
+MESSAGE = "=== No valid course ==="
+
+
+class AbstractCourse(AbstractCoreObject):
     def __init__(self, name) -> None:
         super().__init__(name)
 
     @property
-    def state(self) -> "IState":
-        raise NotImplementedError
+    def state(self) -> "AbstractState":
+        return NoneState()
 
     @state.setter
-    def state(self, value: "IState") -> None:
-        raise NotImplementedError
+    def state(self, value: "AbstractState") -> None:
+        print(MESSAGE)
 
-    def accept_student(self, student: "IStudent") -> None:
-        raise NotImplementedError
+    def accept_student(self, student: "AbstractStudent") -> None:
+        print(MESSAGE)
 
-    def list_all_subjects(self) -> list["ISubject"]:
-        raise NotImplementedError
+    def list_all_subjects(self) -> list["AbstractSubject"]:
+        return []
 
-    def list_all_subjects_by(self, student: "IStudent") -> list["IStudent"]:
-        raise NotImplementedError
+    def list_all_subjects_by(self, student: "AbstractStudent") -> list["AbstractStudent"]:
+        return []
 
-    def subject_notify_me_minimun_students(self, subject: "ISubject") -> None:
-        raise NotImplementedError
+    def subject_notify_me_minimun_students(self, subject: "AbstractSubject") -> None:
+        print(MESSAGE)
+
+    def notify_me_about_subject(self, subject: "AbstractSubject") -> None:
+        print(MESSAGE)
 
 
-class ConcreteCourse(ICourse):
+class Course(AbstractCourse):
     def __init__(self, name) -> None:
         super().__init__(name)
-        self._students: list["IStudent"]
-        self._subject: list["ISubject"]
-        self._state: "IState" = NotStarted()
+        self._students: list["AbstractStudent"]
+        self._subject: list["AbstractSubject"]
+        self._state: "AbstractState" = NotStarted()
 
     @property
-    def state(self) -> "IState":
+    def state(self) -> "AbstractState":
         return self._state
 
     @state.setter
-    def state(self, value: "IState") -> None:
+    def state(self, value: "AbstractState") -> None:
         pass
 
     def _has_minium_students(self) -> bool:
@@ -54,18 +59,21 @@ class ConcreteCourse(ICourse):
     def _has_minimum_subjects(self) -> bool:
         raise NotImplementedError
 
-    def list_all_subjects(self) -> list["ISubject"]:
+    def notify_me_about_subject(self, subject: "AbstractSubject") -> None:
+        raise NotImplementedError
+
+    def list_all_subjects(self) -> list["AbstractSubject"]:
         return []
 
 
-class NoneCourse(ICourse):
+class NoneCourse(AbstractCourse):
     def __init__(self, name="None"):
         super().__init__(name)
 
 
-class NotStarted(IState):
+class NotStarted(AbstractState):
     pass
 
 
-class InProgress(IState):
+class CourseInProgress(AbstractState):
     pass

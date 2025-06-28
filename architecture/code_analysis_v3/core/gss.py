@@ -1,16 +1,16 @@
 from typing import TYPE_CHECKING
 from architecture.code_analysis_v3.core.base_object import AbstractCoreObject, NoneCoreObject
-from architecture.code_analysis_v3.core.common import IState
-from architecture.code_analysis_v3.core.constants import MINIMUM_GRADE
+from architecture.code_analysis_v3.core.common import AbstractState
+from architecture.code_analysis_v3.core.constants import MINIMUM_STUDENT_GRADE
 
 if TYPE_CHECKING:
-    from architecture.code_analysis_v3.core.student import IStudent
-    from architecture.code_analysis_v3.core.subject import ISubject
+    from architecture.code_analysis_v3.core.student import AbstractStudent
+    from architecture.code_analysis_v3.core.subject import AbstractSubject
 
 
 class IGSS(AbstractCoreObject):
     @property
-    def state(self) -> "IState":
+    def state(self) -> "AbstractState":
         raise NotImplementedError
 
     @property
@@ -25,27 +25,27 @@ class IGSS(AbstractCoreObject):
     def grade(self) -> int:
         raise NotImplementedError
 
-    def set_(self, grade: int, subject: "ISubject", student: "IStudent") -> None:
+    def set_(self, grade: int, subject: "AbstractSubject", student: "AbstractStudent") -> None:
         raise NotImplementedError
 
 
-class ConcreteGSS(IGSS):
+class GSS(IGSS):
     def __init__(self, name="") -> None:
         self._grade: int = 0
         self._subject: "AbstractCoreObject" = NoneCoreObject()
         self._student: "AbstractCoreObject" = NoneCoreObject()
-        self._state: "IState" = InitialState()
+        self._state: "AbstractState" = InitialState()
         name = f"{self._subject.name}_{self._student.name}_{str(self._grade)}"
         super().__init__(name)
 
-    def _notify_subject(self, student: "IStudent") -> None:
+    def _notify_subject(self, student: "AbstractStudent") -> None:
         pass
 
     def _calculate_state(self):
         self._state = self._state.get_next_state(self)
 
     @property
-    def state(self) -> "IState":
+    def state(self) -> "AbstractState":
         return self._state
 
     @property
@@ -72,16 +72,18 @@ class NoneGSS(IGSS):
         super().__init__(name)
 
 
-class GSSApproved(IState):
-    pass
+class GSSApproved(AbstractState):
+    def get_next_state(self, context: GSS):
+        return self
 
 
-class GSSFailed(IState):
-    pass
+class GSSFailed(AbstractState):
+    def get_next_state(self, context: GSS):
+        return self
 
 
-class InitialState(IState):
+class InitialState(AbstractState):
     def get_next_state(self, context: IGSS):
-        if context.grade >= MINIMUM_GRADE:
+        if context.grade >= MINIMUM_STUDENT_GRADE:
             return GSSApproved()
         return GSSFailed()

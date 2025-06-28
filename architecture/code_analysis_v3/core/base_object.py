@@ -1,10 +1,10 @@
-from architecture.code_analysis_v3.core.common import IState
+from architecture.code_analysis_v3.core.common import AbstractState
 
 
 class AbstractCoreObject:
     def __init__(self, name: str) -> None:
         self._nui: int = self.__hash__()
-        self._state: IState
+        self._state: AbstractState
         self._name = name
 
     @property
@@ -16,7 +16,7 @@ class AbstractCoreObject:
         return self._nui
 
     def __str__(self):
-        return "Not found"
+        return f"{self.__class__.__name__}. Empty or not found"
 
     def __repr__(self):
         return self._name

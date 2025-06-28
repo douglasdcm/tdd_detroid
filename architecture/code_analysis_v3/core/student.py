@@ -1,62 +1,70 @@
 from statistics import mean
 from typing import TYPE_CHECKING
-from architecture.code_analysis_v3.core.base_object import AbstractCoreObject, NoneCoreObject
-from architecture.code_analysis_v3.core.common import IState
-from architecture.code_analysis_v3.core.constants import MINIMUM_GRADE, MINIMUN_SUBJECTS
+from architecture.code_analysis_v3.core.base_object import AbstractCoreObject
+from architecture.code_analysis_v3.core.common import AbstractState
+from architecture.code_analysis_v3.core.constants import (
+    MINIMUM_STUDENT_GRADE,
+    MINIMUN_STUDENT_SUBJECTS,
+)
 from architecture.code_analysis_v3.core.course import NoneCourse
 from architecture.code_analysis_v3.core.gss import GSSApproved
-from architecture.code_analysis_v3.core.subject import NoneSubject
 
 if TYPE_CHECKING:
     from architecture.code_analysis_v3.core.gss import IGSS
-    from architecture.code_analysis_v3.core.course import ICourse
-    from architecture.code_analysis_v3.core.subject import ISubject
+    from architecture.code_analysis_v3.core.course import AbstractCourse
+    from architecture.code_analysis_v3.core.subject import AbstractSubject
+
+MESSAGE = "=== No valid student ==="
 
 
-class IStudent(AbstractCoreObject):
+class AbstractStudent(AbstractCoreObject):
     @property
-    def subjects_in_progress(self) -> list["ISubject"]:
+    def subjects_in_progress(self) -> list["AbstractSubject"]:
         raise NotImplementedError
 
     @property
-    def missing_subjects(self) -> list["ISubject"]:
+    def missing_subjects(self) -> list["AbstractSubject"]:
         raise NotImplementedError
 
     @property
-    def state(self) -> IState:
+    def state(self) -> AbstractState:
         raise NotImplementedError
 
     @property
-    def course(self) -> "ICourse":
+    def course(self) -> "AbstractCourse":
         raise NotImplementedError
 
     @course.setter
-    def course(self, course: "ICourse") -> None:
+    def course(self, course: "AbstractCourse") -> None:
         raise NotImplementedError
 
     @property
     def age(self) -> int:
         raise NotImplementedError
 
+    @property
+    def gpa(self) -> int:
+        raise NotImplementedError
+
     def add_basic_information(self, basic_information: "BasicInformation") -> None:
+        print(MESSAGE)
+
+    def list_all_subscribed_subjects(self) -> list["AbstractSubject"]:
         raise NotImplementedError
 
-    def list_all_subscribed_subjects(self) -> list["ISubject"]:
+    def list_all_subjects_from_course(self) -> list["AbstractSubject"]:
         raise NotImplementedError
 
-    def list_all_their_subjects_by_course(self) -> list["ISubject"]:
-        raise NotImplementedError
-
-    def list_missing_subjects(self) -> list["ISubject"]:
+    def list_missing_subjects(self) -> list["AbstractSubject"]:
         raise NotImplementedError
 
     def notify_me_about_gss(self, gss: "IGSS") -> None:
         raise NotImplementedError
 
-    def notify_me_about_course(self, course: "ICourse") -> None:
+    def notify_me_about_course(self, course: "AbstractCourse") -> None:
         raise NotImplementedError
 
-    def subscribe_to_subject(self, subject: "ISubject") -> None:
+    def subscribe_to_subject(self, subject: "AbstractSubject") -> None:
         raise NotImplementedError
 
     def has_minimum_gpa(self) -> bool:
@@ -72,33 +80,34 @@ class IStudent(AbstractCoreObject):
         raise NotImplementedError
 
 
-class ConcretStudent(IStudent):
+class Student(AbstractStudent):
     def __init__(self, name) -> None:
         super().__init__(name)
-        self._course: "ICourse" = NoneCourse()
+        self._course: "AbstractCourse" = NoneCourse()
         self._gpa: int = 0
         self._grades: list[int] = []
-        self._missing_subjects: list["ISubject"] = []
-        self._subjects_in_progress: list["ISubject"] = []
-        self._subjects_in_progress_internal_copy: list["ISubject"] = []
-        self._grades_subjects_approved: list[int] = []
-        self._state: IState = InitialState()
+        self._missing_subjects: list["AbstractSubject"] = []
+        self._subjects_in_progress: list["AbstractSubject"] = []
+        self._subjects_in_progress_internal_copy: list["AbstractSubject"] = []
+        self._grades_subjects: list[int] = []
+        self._state: AbstractState = StudentInitialState()
+        self._age: int = -1
 
     def __str__(self):
         return f"Name: '{self.name}', Age: {self.age}"
 
     def _calculate_gpa(self) -> None:
-        self._gpa = int(mean(self._grades_subjects_approved))
+        self._gpa = int(mean(self._grades_subjects))
 
     def _calculate_state(self) -> None:
         self._state = self._state.get_next_state(self)
 
-    def _add_to_subject_lists(self, subject: "ISubject") -> None:
+    def _add_to_subject_lists(self, subject: "AbstractSubject") -> None:
         self._subjects_in_progress.append(subject)
         self._subjects_in_progress_internal_copy.append(subject)
         self._missing_subjects.append(subject)
 
-    def _remove_from_subject_lists(self, subject: "ISubject") -> None:
+    def _remove_from_subject_lists(self, subject: "AbstractSubject") -> None:
         self._subjects_in_progress_internal_copy.remove(subject)
         self._missing_subjects.remove(subject)
         # Clear the list of subjects in progress when all subject's
@@ -109,39 +118,47 @@ class ConcretStudent(IStudent):
             self._subjects_in_progress.clear()
 
     @property
-    def subjects_in_progress(self) -> list["ISubject"]:
+    def subjects_in_progress(self) -> list["AbstractSubject"]:
         return self._subjects_in_progress
 
     @property
-    def missing_subjects(self) -> list["ISubject"]:
+    def missing_subjects(self) -> list["AbstractSubject"]:
         return self._missing_subjects
 
     @property
-    def state(self) -> IState:
+    def state(self) -> AbstractState:
         return self._state
+
+    @property
+    def gpa(self) -> int:
+        return self._gpa
 
     @property
     def age(self) -> int:
         return self._age
 
     @property
-    def course(self) -> "ICourse":
+    def course(self) -> "AbstractCourse":
         return self._course
 
     @course.setter
-    def course(self, course: "ICourse") -> None:
+    def course(self, course: "AbstractCourse") -> None:
         self._course = course
         self._missing_subjects = course.list_all_subjects()
         self._calculate_state()
+
+    @property
+    def grades(self) -> list[int]:
+        return self._grades
 
     def has_course(self):
         return not isinstance(self._course, NoneCourse)
 
     def has_minimum_subjects(self):
-        return len(self._subjects_in_progress) >= MINIMUN_SUBJECTS
+        return len(self._subjects_in_progress) >= MINIMUN_STUDENT_SUBJECTS
 
     def has_minimum_gpa(self) -> bool:
-        return self._gpa >= MINIMUM_GRADE
+        return self._gpa >= MINIMUM_STUDENT_GRADE
 
     def are_all_subjects_approved(self) -> bool:
         return len(self._missing_subjects) == 0
@@ -159,16 +176,23 @@ class ConcretStudent(IStudent):
             raise InvalidSubject("Subject reported is not in student list")
         if isinstance(gss.state, GSSApproved):
             self._remove_from_subject_lists(gss.subject)
-            self._grades_subjects_approved.append(gss.grade)
-            self._calculate_gpa()
+        self._grades_subjects.append(gss.grade)
+        self._grades.append(gss.grade)
+        self._calculate_gpa()
         self._calculate_state()
 
     def add_basic_information(self, basic_information: "BasicInformation") -> None:
         self._name = basic_information.name
         self._age = basic_information.age
 
+    def list_all_subjects_from_course(self) -> list["AbstractSubject"]:
+        result = []
+        result.extend(self.missing_subjects)
+        result.extend(self.subjects_in_progress)
+        return result
 
-class NoneStudent(IStudent):
+
+class NoneStudent(AbstractStudent):
     def __init__(self, name=""):
         super().__init__(name)
 
@@ -199,20 +223,20 @@ class InvalidStudent(Exception):
     pass
 
 
-class Approved(IState):
-    def get_next_state(self, context: IStudent) -> IState:
+class StudentApproved(AbstractState):
+    def get_next_state(self, context: AbstractStudent) -> AbstractState:
         raise InvalidStateTransition("Studend is already approved in the course")
 
 
-class InProgress(IState):
-    def get_next_state(self, context: IStudent) -> IState:
+class StudentInProgress(AbstractState):
+    def get_next_state(self, context: AbstractStudent) -> AbstractState:
         if context.has_minimum_gpa() and context.are_all_subjects_approved():
-            return Approved()
+            return StudentApproved()
         return self
 
 
-class InitialState(IState):
-    def get_next_state(self, context: IStudent) -> IState:
+class StudentInitialState(AbstractState):
+    def get_next_state(self, context: AbstractStudent) -> AbstractState:
         if context.has_course() and context.has_minimum_subjects():
-            return InProgress()
+            return StudentInProgress()
         return self
