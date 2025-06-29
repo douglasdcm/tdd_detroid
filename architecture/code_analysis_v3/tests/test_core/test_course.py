@@ -1,9 +1,10 @@
-from pytest import fixture
+from pytest import fixture, raises
 from architecture.code_analysis_v3.core.course import (
     AbstractCourse,
     CourseInProgress,
     CourseNotStarted,
 )
+from architecture.code_analysis_v3.core.exceptions import InvalidStudent, InvalidSubject
 from architecture.code_analysis_v3.core.student import Student
 from architecture.code_analysis_v3.core.subject import Subject
 from architecture.code_analysis_v3.tests.test_core.test_constants import ANY_NAME
@@ -64,17 +65,12 @@ class TestCourseAcceptSubject:
         course.accept_subject(Subject(ANY_NAME))
         assert len(course.list_all_subjects()) == 1
 
-    def test_course_does_not_accept_subject_when_full_of_subjects(self, course: AbstractCourse):
-        student = Subject(ANY_NAME)
-        course.accept_subject(student)
-        subjects = course.list_all_subjects()
-        course.accept_subject(student)
-        assert subjects == course.list_all_subjects()
+    def test_course_does_not_accept_subject_when_full_of_subjects(self, course: ValidatorCourse):
+        course.force_is_full_of_subjects()
+        with raises(InvalidSubject):
+            course.accept_subject(Subject(ANY_NAME))
 
-    # def test_course_does_not_accept_students_when_full_of_students(
-    #     self, course: AbstractCourse
-    # ):
-    #     student = Subject(ANY_NAME)
-    #     course.accept_subject(student)
-    #     with raises(InvalidStudent):
-    #         course.accept_subject(student)
+    def test_course_does_not_accept_students_when_full_of_students(self, course: ValidatorCourse):
+        course.force_is_full_of_students()
+        with raises(InvalidStudent):
+            course.accept_student(Subject(ANY_NAME))

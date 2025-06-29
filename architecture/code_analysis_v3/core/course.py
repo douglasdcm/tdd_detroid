@@ -7,7 +7,7 @@ from architecture.code_analysis_v3.core.constants import (
     MINIMUM_STUDENTS_IN_COURSE,
     MINIMUN_SUBJECTS_IN_COURSE,
 )
-from architecture.code_analysis_v3.core.exceptions import InvalidStudent
+from architecture.code_analysis_v3.core.exceptions import InvalidStudent, InvalidSubject
 
 if TYPE_CHECKING:
     from architecture.code_analysis_v3.core.student import AbstractStudent
@@ -63,7 +63,7 @@ class Course(AbstractCourse):
         return self._state
 
     def accept_student(self, student):
-        if len(self._students) >= MAXIMUM_STUDENTS_IN_COURSE:
+        if self.is_full_of_student():
             raise InvalidStudent("Course already full of students")
         if student not in self._students:
             self._students.append(student)
@@ -71,14 +71,20 @@ class Course(AbstractCourse):
         if self != student.course:
             student.course = self
 
+    def is_full_of_student(self):
+        return len(self._students) >= MAXIMUM_STUDENTS_IN_COURSE
+
     def accept_subject(self, subject):
-        if len(self._subjects) >= MAXIMUM_SUBJECTS_IN_COURSE:
-            raise InvalidStudent("Course already full of subjects")
+        if self.is_full_of_subjects():
+            raise InvalidSubject("Course already full of subjects")
         if subject not in self._subjects:
             self._subjects.append(subject)
             self._calculate_state()
         if self != subject.course:
             subject.course = self
+
+    def is_full_of_subjects(self):
+        return len(self._subjects) >= MAXIMUM_SUBJECTS_IN_COURSE
 
     def has_minimum_inprogress_students(self):
         inprogress = [s for s in self._students if s.is_inprogress()]
