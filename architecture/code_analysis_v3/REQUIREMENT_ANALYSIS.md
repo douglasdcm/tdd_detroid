@@ -15,14 +15,18 @@ It is necessary to install `draw.io` extension to edit the files
 - The Student can not change its Course once it is set. Found during the build of the Controller
 - The details of the Controller was not defined in the architecture. While building the interface of the Controllers, it was convenient to use the `nui` of each Component and not the instances. The user can search the desired `nui`s and use them
 - It was not defined the feature to let the Teacher to search of the Subjects of its Course. Found during building the interface of the Controlllers
-- When the Student is not able to conclud the Course, for exampe, if they give up, the Student shouldn't be removed from the history, but should be incativated (end of lifecycle in the system). If they are incative, they can not start the Course. It is necessary a new approval in the exame (the whole cycle) and the Student receives a new `nui`. Found it while reviewing the state machine architecture.
-- When the Teacher give up the Course, they has to be stated as Inactive (end of lifecycle in the system). If they are inactive, they ned to do a new exame and receive a new `nui`. Found while reviewing the State Diagrams
+- When the Student is not able to conclude the Course, for exampe, if they give up, the Student shouldn't be removed from the history, but should be incativated (end of lifecycle in the system). If they are incative, they can not start the Course. It is necessary a new approval in the exame (the whole cycle) and the Student receives a new `nui`. Found it while reviewing the state machine architecture.
+- Whent the Teacher give up the Course, they has to be stated as Inactive (end of lifecycle in the system). If they are inactive, they ned to do a new exame and receive a new `nui`. Found while reviewing the State Diagrams
 - Each Subject should have a final state like Finished to indicate it was finished in a given Semester. Found it while reviewing the State Machines
 - On each Semester, the Subject should have a new `nui` to differentiate the new and old (finished) Subjects. Found while reviewing the State Machines
 - Student transition state to InProgress: the Student need to be set with a dummy initial state when it is not enrolled to any course or subscribed to a minimum subjects
-- Delimitation of state changes considering the Semesters: the state of the Student, Course, Teacher and Subject has to be calculated in the beginning and at the end of the Semester. For example, it the Student does not have the minimum Sbjects per Semeters, but the Semester does not started yet, then the Student still have time to add more Subjects to the their list. Found it while implementing the Student State Machine and reviewinf the State Digrams
+- Delimitation of state changes considering the Semesters: the state of the Student, Course, Teacher and Subject has to be calculated in the beginning and at the end of the Semester. For example, if the Student does not have the minimum Subjects per Semeters, but the Semester does not started yet, then the Student still have time to add more Subjects to the their list. Found it while implementing the Student State Machine and reviewing the State Digrams
 - The Cancell and Lock status can be set on-demand: The Student can ask the Locking of its Course at any time, the Course can be Cancelled by many reasons as the Subject. Found it while reviewing the State Machine
-- Students cannot create its self. Found while developing the commands of the CLI. The one able to create Students should be the Adimistrator or the Coordinators (not sure which one yet)
+- The Course is 'in progress' when has minimum 'in progress' Students and Subjects: found while reviewing the Cource State machine and implementing the class
+- The Subject is 'in progress' when has minimum 'in progress' Students: found while reviewing the Cource State machine and implementing the Course class
+- Courses does not have maximum students: The universisty has a limit of Students for Course given to phisical constraints (not applicable for virtual Courses). Set the value to 900 ((maximum subjects in a course) * (maximum students in a subject)). Found while build test cases to `Course.accept_subject` methood
+- Courses does not have maximum subjects: The course has a limit of Subjects given the total number of Semesters and the limiations of available time of Students. Set the value to 30. For example, if the Course has 10 Semesters (5 years) it is fair to have an average of 5 or 6 Subjects by Semester. Found while build test cases to `Course.accept_subject` methood
+
 
 ## Core Entities
 ### Administrator
@@ -72,13 +76,14 @@ It is necessary to install `draw.io` extension to edit the files
 - do not accept Student-
 - add Subject to their Course
 
-### ~~Course Unique Identifier~~ Note: not necessary to be a separated entity
+### Course Unique Identifier
 ### External CPF validation Sytem (Government System)
 ### Enrollment List
 ### General Coordinator
 #### State
 - is coordinator of Course (forbiden)
 - is not Coordinator of Course
+
 #### Actions
 - list all Courses
 - list Students
@@ -92,7 +97,7 @@ It is necessary to install `draw.io` extension to edit the files
 - analise Student Documentation?
 - add Course to University
 
-### ~~Grade Control (GPA) (Grade?)~~ Note: Not necessary to be a separate entity
+### Grade Control (GPA) (Grade?)
 #### State
 - under minimum value
 - between minimum and maximum values
@@ -117,14 +122,14 @@ It is necessary to install `draw.io` extension to edit the files
 - lock the Course
 - update Grades
 - enroll in Course
-- ~~create Student~~
+- create Student
 - list all their Subjects by Course
 - list all taken Subjects
 - (do not) take Subject?
 - list missing Subjects
 - authenticate
 
-### ~~Student Grade~~ Note necessary to be a separated entity
+### Student Grade
 ### Student Credential
 ### Student History
 
@@ -138,8 +143,8 @@ It is necessary to install `draw.io` extension to edit the files
 - locked
 - unlocked
 
-### ~~Subject Unique Identifier~~Not necessary to be an entity
-### ~~Student's Situation~~Not necessary to be an entity
+### Subject Unique Identifier
+### Student's Situation
 ### Student Documentation
 ### System
 ### Units
@@ -189,7 +194,7 @@ The core modules (Student, Teaching) are going to be developed first
 30. The student must enroll in a minimum of 3 subjects.
 31. If the number of subjects missing for a student is less than 3, they can enroll in 1 subject.
 35. The students are only approved if they achieve the minimum grade in all course subjects, even if their GPA is above the minimum.
-36. The student (person) must be able to ~~create students with~~ add basic information.
+36. The student (person) must be able to create students with basic information.
 43. The students must be able to list all subjects only from their course.
 44. The students must be able to list all subjects they have taken.
 45. The students must be able to list the missing subjects.

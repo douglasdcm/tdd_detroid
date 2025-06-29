@@ -109,6 +109,8 @@ class Student(AbstractStudent):
         self._subjects_in_progress.append(subject)
         self._subjects_in_progress_internal_copy.append(subject)
         self._missing_subjects.append(subject)
+        if self not in subject.list_all_students():
+            subject.accept_student(self)
 
     def _remove_from_subject_lists(self, subject: "AbstractSubject") -> None:
         self._subjects_in_progress_internal_copy.remove(subject)
@@ -116,7 +118,7 @@ class Student(AbstractStudent):
         # Clear the list of subjects in progress when all subject's
         # state (Approved, Failed) set
         # It is necessary because the user indireclty  uses the variable
-        # _subjects_in_progress_internal_copy, so it can not be update on the fly
+        # _subjects_in_progress_internal_copy, so it can not be updated on the fly
         if not self._subjects_in_progress_internal_copy:
             self._subjects_in_progress.clear()
 
@@ -130,6 +132,7 @@ class Student(AbstractStudent):
 
     @property
     def state(self) -> AbstractState:
+        self._calculate_state()
         return self._state
 
     @property
@@ -147,7 +150,8 @@ class Student(AbstractStudent):
     @course.setter
     def course(self, course: "AbstractCourse") -> None:
         self._course = course
-        course.notify_me_about_student(self)
+        if self not in course.list_all_students():
+            course.accept_student(self)
         self._missing_subjects = course.list_all_subjects()
         self._calculate_state()
 

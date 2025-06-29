@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="JFziE-8eGa_5T53b6teg" name="Main">
-        <mxGraphModel dx="552" dy="530" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="691" dy="530" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -147,7 +147,7 @@
         </mxGraphModel>
     </diagram>
     <diagram id="9N7FdPNcl1j3F9wMc1n4" name="CLI">
-        <mxGraphModel dx="1402" dy="530" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="1541" dy="530" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -190,7 +190,7 @@
         </mxGraphModel>
     </diagram>
     <diagram id="7DkJ7XCjsEl_rFjUD7MR" name="CoreBusinessLogic">
-        <mxGraphModel dx="906" dy="1630" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="691" dy="1630" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -286,7 +286,7 @@
         </mxGraphModel>
     </diagram>
     <diagram id="wco7yTjYJ_ZVrlrPbnzi" name="StudentState">
-        <mxGraphModel dx="552" dy="530" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="691" dy="530" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -361,11 +361,11 @@
         </mxGraphModel>
     </diagram>
     <diagram id="hbxWYbVXxZGp1UbNUqze" name="SubjectState">
-        <mxGraphModel dx="552" dy="530" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="691" dy="530" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
-                <mxCell id="4JROuijiZTU8Lh9glWxM-1" value="&lt;div&gt;&lt;ul&gt;&lt;li&gt;&lt;strike&gt;Locked: no teacher, no student&lt;/strike&gt;&lt;/li&gt;&lt;li&gt;In progress: in a course, has teacher, has minimun inprogress students&lt;/li&gt;&lt;li&gt;Cancelled: no student or no teacher&lt;/li&gt;&lt;li&gt;Full: not accepting new students&lt;/li&gt;&lt;li&gt;Not full: accept new students&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                <mxCell id="4JROuijiZTU8Lh9glWxM-1" value="&lt;div&gt;&lt;ul&gt;&lt;li&gt;&lt;strike&gt;Locked: no teacher, no student &lt;/strike&gt;(duplicated with Cacelled)&lt;/li&gt;&lt;li&gt;In progress: in a course, has teacher, has minimun inprogress students&lt;/li&gt;&lt;li&gt;Cancelled: no student or no teacher&lt;/li&gt;&lt;li&gt;Full: not accepting new students&lt;/li&gt;&lt;li&gt;Not full: accept new students&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
                     <mxGeometry x="12" y="280" width="700" height="260" as="geometry"/>
                 </mxCell>
                 <mxCell id="Gc46z40UQrs6KcQGY5Lb-1" style="edgeStyle=none;html=1;entryX=0.25;entryY=0;entryDx=0;entryDy=0;exitX=0.781;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" target="Gc46z40UQrs6KcQGY5Lb-4" edge="1">
@@ -525,7 +525,7 @@
         </mxGraphModel>
     </diagram>
     <diagram id="QKhb9wM3Lv87lrTooebn" name="CoreBusinessLogicSequence">
-        <mxGraphModel dx="906" dy="530" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="691" dy="530" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -690,7 +690,7 @@
         </mxGraphModel>
     </diagram>
     <diagram id="mKY_t3dU002eUl8qaujz" name="SubjectGradeSequence">
-        <mxGraphModel dx="552" dy="530" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="691" dy="530" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -838,12 +838,12 @@
                         <mxPoint as="offset"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="7B_Tflxw9sYzibRqrQEg-2" style="edgeStyle=none;html=1;endArrow=none;endFill=0;dashed=1;" edge="1" parent="1" source="7B_Tflxw9sYzibRqrQEg-1">
+                <mxCell id="7B_Tflxw9sYzibRqrQEg-2" style="edgeStyle=none;html=1;endArrow=none;endFill=0;dashed=1;" parent="1" source="7B_Tflxw9sYzibRqrQEg-1" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <mxPoint x="440" y="260" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="7B_Tflxw9sYzibRqrQEg-1" value="Approved if grade &amp;gt;= 7,&lt;div&gt;otherwise Failed (Reproved)&lt;/div&gt;" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;" vertex="1" parent="1">
+                <mxCell id="7B_Tflxw9sYzibRqrQEg-1" value="Approved if grade &amp;gt;= 7,&lt;div&gt;otherwise Failed (Reproved)&lt;/div&gt;" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;" parent="1" vertex="1">
                     <mxGeometry x="680" y="330" width="230" height="60" as="geometry"/>
                 </mxCell>
             </root>

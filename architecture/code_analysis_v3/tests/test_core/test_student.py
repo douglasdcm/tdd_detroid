@@ -5,7 +5,6 @@ from architecture.code_analysis_v3.core.student import (
     StudentApproved,
     BasicInformation,
     AbstractStudent,
-    Student,
     StudentInProgress,
     StudentInitialState,
     InvalidStateTransition,
@@ -13,21 +12,24 @@ from architecture.code_analysis_v3.core.student import (
 )
 from architecture.code_analysis_v3.core.subject import Subject
 from architecture.code_analysis_v3.tests.test_core.test_constants import ANY_NAME, OTHER_NAME
+from architecture.code_analysis_v3.tests.test_core.validator_classes import ValidatorStudent
 
 
 @fixture
 def student():
-    yield Student(ANY_NAME)
+    yield ValidatorStudent(ANY_NAME)
 
 
 @fixture
-def student_approved(student_in_progress: AbstractStudent):
-    subjects = student_in_progress.subjects_in_progress
-    for subject in subjects:
-        gss = GSS()
-        gss.set_(9, subject, student_in_progress)
-        student_in_progress.notify_me_about_gss(gss)
-    yield student_in_progress
+def student_inprogress(student: ValidatorStudent):
+    student.force_state(StudentInProgress())
+    yield student
+
+
+@fixture
+def student_approved(student: ValidatorStudent):
+    student.force_state(StudentApproved())
+    yield student
 
 
 class TestStudentState:
@@ -48,15 +50,14 @@ class TestStudentState:
         assert isinstance(student.state, StudentInitialState)
 
     def test_student_approved_when_minimum_grade_and_subjects_approved(
-        self, student_approved: AbstractStudent
+        self, student_inprogress: ValidatorStudent
     ):
-        assert isinstance(student_approved.state, StudentApproved)
+        student_inprogress.force_gpa(7)
+        assert isinstance(student_inprogress.state, StudentApproved)
 
-    def test_student_approved_does_not_change_state(self, student_approved: AbstractStudent):
+    def test_student_approved_does_not_change_state(self, student_approved: ValidatorStudent):
         with raises(InvalidStateTransition):
-            subject = Subject(ANY_NAME)
-            subject.course = student_approved.course
-            student_approved.subscribe_to_subject(subject)
+            student_approved.state
 
 
 class TestSubscribeToSubject:
@@ -67,24 +68,6 @@ class TestSubscribeToSubject:
     def test_student_cannot_have_subject_when_no_course(self, student: AbstractStudent):
         with raises(InvalidSubject):
             student.subscribe_to_subject(Subject(ANY_NAME))
-
-
-class TestNotifyGSS:
-    def test_student_gss_notification_set_state_to_approved_when_all_subjects_approved(
-        self, student_approved: AbstractStudent
-    ):
-        assert isinstance(student_approved.state, StudentApproved)
-        assert student_approved.gpa == 9
-
-    def test_student_gss_notification_keep_state_inprogress_when_any_subject_failed(
-        self, student_in_progress: AbstractStudent
-    ):
-        first_subject = student_in_progress.subjects_in_progress[0]
-        gss = GSS()
-        # grade < 7 is failed
-        gss.set_(3, first_subject, student_in_progress)
-        student_in_progress.notify_me_about_gss(gss)
-        assert isinstance(student_in_progress.state, StudentInProgress)
 
 
 class TestGpaCalculation:

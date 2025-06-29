@@ -48,6 +48,9 @@ class GSS(IGSS):
     def state(self) -> "AbstractState":
         return self._state
 
+    def force_object_for_testing(self, state: "AbstractState"):
+        self._state = state
+
     @property
     def student(self) -> "AbstractCoreObject":
         return self._student

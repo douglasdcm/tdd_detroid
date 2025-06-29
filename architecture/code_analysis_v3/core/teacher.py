@@ -4,7 +4,7 @@ from architecture.code_analysis_v3.core.gss import GSS
 from architecture.code_analysis_v3.core.subject import AbstractSubject, SubjectInProgress
 from architecture.code_analysis_v3.core.common import AbstractState, NoneState
 from architecture.code_analysis_v3.core.base_object import AbstractCoreObject
-from architecture.code_analysis_v3.core.constants import MAXIMUM_TEACHER_SUBJECTS
+from architecture.code_analysis_v3.core.constants import MAXIMUM_SUBJECTS_IN_TEACHER
 
 MESSAGE = "=== No valid teacher ==="
 
@@ -76,7 +76,7 @@ class Teacher(AbstractTeacher):
         return False
 
     def has_maximum_subjects(self):
-        return len(self._subjects) >= MAXIMUM_TEACHER_SUBJECTS
+        return len(self._subjects) >= MAXIMUM_SUBJECTS_IN_TEACHER
 
     def set_gss(self, grade: int, student: "AbstractStudent", subject: "AbstractSubject") -> None:
         gss = GSS()

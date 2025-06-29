@@ -7,6 +7,12 @@ class AbstractCoreObject:
         self._state: AbstractState
         self._name = name
 
+    def __str__(self):
+        return f"{self.__class__.__name__}. Empty or not found"
+
+    def __repr__(self):
+        return self._name
+
     @property
     def name(self) -> str:
         return self._name
@@ -14,12 +20,6 @@ class AbstractCoreObject:
     @property
     def nui(self) -> int:
         return self._nui
-
-    def __str__(self):
-        return f"{self.__class__.__name__}. Empty or not found"
-
-    def __repr__(self):
-        return self._name
 
 
 class NoneCoreObject(AbstractCoreObject):

@@ -24,6 +24,9 @@ It is necessary to install `draw.io` extension to edit the files
 - The Cancell and Lock status can be set on-demand: The Student can ask the Locking of its Course at any time, the Course can be Cancelled by many reasons as the Subject. Found it while reviewing the State Machine
 - The Course is 'in progress' when has minimum 'in progress' Students and Subjects: found while reviewing the Cource State machine and implementing the class
 - The Subject is 'in progress' when has minimum 'in progress' Students: found while reviewing the Cource State machine and implementing the Course class
+- Courses does not have maximum students: The universisty has a limit of Students for Course given to phisical constraints (not applicable for virtual Courses). Found while build test cases to `Course.accept_subject` methood
+- Courses does not have maximum subjects: The course has a limit of Subjects given the total number of Semesters and the limiations of available time of Students. For example, if the Course has 10 Semesters (5 years) it is fair to have an average of 5 or 6 Subjects by Semester. Found while build test cases to `Course.accept_subject` methood
+
 
 ## Core Entities
 ### Administrator

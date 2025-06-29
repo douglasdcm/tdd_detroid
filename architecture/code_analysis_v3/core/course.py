@@ -2,9 +2,12 @@ from typing import TYPE_CHECKING
 from architecture.code_analysis_v3.core.base_object import AbstractCoreObject
 from architecture.code_analysis_v3.core.common import AbstractState, NoneState
 from architecture.code_analysis_v3.core.constants import (
+    MAXIMUM_STUDENTS_IN_COURSE,
+    MAXIMUM_SUBJECTS_IN_COURSE,
     MINIMUM_STUDENTS_IN_COURSE,
     MINIMUN_SUBJECTS_IN_COURSE,
 )
+from architecture.code_analysis_v3.core.exceptions import InvalidStudent
 
 if TYPE_CHECKING:
     from architecture.code_analysis_v3.core.student import AbstractStudent
@@ -31,13 +34,10 @@ class AbstractCourse(AbstractCoreObject):
     def list_all_subjects_by(self, student: "AbstractStudent") -> list["AbstractStudent"]:
         raise NotImplementedError
 
+    def list_all_students(self) -> list["AbstractStudent"]:
+        raise NotImplementedError
+
     def subject_notify_me_minimun_students(self, subject: "AbstractSubject") -> None:
-        raise NotImplementedError
-
-    def notify_me_about_subject(self, subject: "AbstractSubject") -> None:
-        raise NotImplementedError
-
-    def notify_me_about_student(self, student: "AbstractStudent") -> None:
         raise NotImplementedError
 
     def has_minimum_inprogress_students(self) -> bool:
@@ -54,23 +54,31 @@ class Course(AbstractCourse):
         self._subjects: list["AbstractSubject"] = []
         self._state: "AbstractState" = CourseNotStarted()
 
+    def _calculate_state(self) -> None:
+        self._state = self._state.get_next_state(self)
+
     @property
     def state(self) -> "AbstractState":
         self._calculate_state()
         return self._state
 
-    def _calculate_state(self) -> None:
-        self._state = self._state.get_next_state(self)
-
     def accept_student(self, student):
-        student.course = self
-        self._students.append(student)
-        self._calculate_state()
+        if len(self._students) >= MAXIMUM_STUDENTS_IN_COURSE:
+            raise InvalidStudent("Course already full of students")
+        if student not in self._students:
+            self._students.append(student)
+            self._calculate_state()
+        if self != student.course:
+            student.course = self
 
     def accept_subject(self, subject):
-        subject.course = self
-        self._subjects.append(subject)
-        self._calculate_state()
+        if len(self._subjects) >= MAXIMUM_SUBJECTS_IN_COURSE:
+            raise InvalidStudent("Course already full of subjects")
+        if subject not in self._subjects:
+            self._subjects.append(subject)
+            self._calculate_state()
+        if self != subject.course:
+            subject.course = self
 
     def has_minimum_inprogress_students(self):
         inprogress = [s for s in self._students if s.is_inprogress()]
@@ -79,14 +87,11 @@ class Course(AbstractCourse):
     def has_minimum_inprogress_subjects(self):
         return len(self._subjects) >= MINIMUN_SUBJECTS_IN_COURSE
 
-    def notify_me_about_subject(self, subject):
-        self._subjects.append(subject)
-
-    def notify_me_about_student(self, student):
-        self._students.append(student)
-
     def list_all_subjects(self) -> list["AbstractSubject"]:
-        return []
+        return self._subjects
+
+    def list_all_students(self) -> list["AbstractStudent"]:
+        return self._students
 
 
 class NoneCourse(AbstractCourse):
@@ -111,9 +116,6 @@ class NoneCourse(AbstractCourse):
         return []
 
     def subject_notify_me_minimun_students(self, subject: "AbstractSubject") -> None:
-        print(MESSAGE)
-
-    def notify_me_about_subject(self, subject: "AbstractSubject") -> None:
         print(MESSAGE)
 
 
