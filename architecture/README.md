@@ -15,14 +15,15 @@ It is necessary to install `draw.io` extension to edit the files
 - The Student can not change its Course once it is set. Found during the build of the Controller
 - The details of the Controller was not defined in the architecture. While building the interface of the Controllers, it was convenient to use the `nui` of each Component and not the instances. The user can search the desired `nui`s and use them
 - It was not defined the feature to let the Teacher to search of the Subjects of its Course. Found during building the interface of the Controlllers
-- When the Student is not able to conclud the Course, for exampe, if they give up, the Student shouldn't be removed from the history, but should be incativated (end of lifecycle in the system). If they are incative, they can not start the Course. It is necessary a new approval in the exame (the whole cycle) and the Student receives a new `nui`. Found it while reviewing the state machine architecture.
+- When the Student is not able to conclude the Course, for exampe, if they give up, the Student shouldn't be removed from the history, but should be incativated (end of lifecycle in the system). If they are incative, they can not start the Course. It is necessary a new approval in the exame (the whole cycle) and the Student receives a new `nui`. Found it while reviewing the state machine architecture.
 - Whent the Teacher give up the Course, they has to be stated as Inactive (end of lifecycle in the system). If they are inactive, they ned to do a new exame and receive a new `nui`. Found while reviewing the State Diagrams
 - Each Subject should have a final state like Finished to indicate it was finished in a given Semester. Found it while reviewing the State Machines
 - On each Semester, the Subject should have a new `nui` to differentiate the new and old (finished) Subjects. Found while reviewing the State Machines
 - Student transition state to InProgress: the Student need to be set with a dummy initial state when it is not enrolled to any course or subscribed to a minimum subjects
-- Delimitation of state changes considering the Semesters: the state of the Student, Course, Teacher and Subject has to be calculated in the beginning and at the end of the Semester. For example, it the Student does not have the minimum Sbjects per Semeters, but the Semester does not started yet, then the Student still have time to add more Subjects to the their list. Found it while implementing the Student State Machine and reviewinf the State Digrams
+- Delimitation of state changes considering the Semesters: the state of the Student, Course, Teacher and Subject has to be calculated in the beginning and at the end of the Semester. For example, if the Student does not have the minimum Subjects per Semeters, but the Semester does not started yet, then the Student still have time to add more Subjects to the their list. Found it while implementing the Student State Machine and reviewing the State Digrams
 - The Cancell and Lock status can be set on-demand: The Student can ask the Locking of its Course at any time, the Course can be Cancelled by many reasons as the Subject. Found it while reviewing the State Machine
-- 
+- The Course is 'in progress' when has minimum 'in progress' Students and Subjects: found while reviewing the Cource State machine and implementing the class
+- The Subject is 'in progress' when has minimum 'in progress' Students: found while reviewing the Cource State machine and implementing the Course class
 
 ## Core Entities
 ### Administrator

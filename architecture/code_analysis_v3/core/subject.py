@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from architecture.code_analysis_v3.core.base_object import AbstractCoreObject, NoneCoreObject
+from architecture.code_analysis_v3.core.base_object import AbstractCoreObject
 from architecture.code_analysis_v3.core.common import AbstractState, NoneState
 from architecture.code_analysis_v3.core.course import NoneCourse
 
@@ -13,11 +13,11 @@ MESSAGE = "=== No valid subject ==="
 
 class AbstractSubject(AbstractCoreObject):
     @property
-    def course(self) -> "AbstractCoreObject":
+    def course(self) -> "AbstractCourse":
         raise NotImplementedError
 
     @course.setter
-    def course(self, value: "AbstractCoreObject") -> None:
+    def course(self, value: "AbstractCourse") -> None:
         raise NotImplementedError
 
     @property
@@ -47,7 +47,7 @@ class AbstractSubject(AbstractCoreObject):
 class Subject(AbstractSubject):
     def __init__(self, name) -> None:
         super().__init__(name)
-        self._course: "AbstractCoreObject" = NoneCoreObject()
+        self._course: "AbstractCourse" = NoneCourse()
         self._students: list["AbstractStudent"]
         self._teacher: "AbstractTeacher"
 
@@ -58,12 +58,13 @@ class Subject(AbstractSubject):
         return f"{self.__class__.__name__} '{self._name}'"
 
     @property
-    def course(self) -> "AbstractCoreObject":
+    def course(self) -> "AbstractCourse":
         return self._course
 
     @course.setter
-    def course(self, value: "AbstractCoreObject") -> None:
+    def course(self, value: "AbstractCourse") -> None:
         self._course = value
+        value.notify_me_about_subject(self)
 
     @property
     def state(self) -> "AbstractState":
@@ -84,11 +85,11 @@ class NoneSubject(AbstractSubject):
         super().__init__(name)
 
     @property
-    def course(self) -> "AbstractCoreObject":
+    def course(self) -> "AbstractCourse":
         return NoneCourse()
 
     @course.setter
-    def course(self, value: "AbstractCoreObject") -> None:
+    def course(self, value: "AbstractCourse") -> None:
         print(MESSAGE)
 
     @property

@@ -23,4 +23,4 @@ class StudentController:
 
     def list_subjects(self, nui) -> list:
         student: AbstractStudent = StudentDataManager().load_by_nui(nui)
-        return student.list_all_subjects_from_course()
+        return student.list_all_subjects()

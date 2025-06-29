@@ -1,6 +1,6 @@
 from architecture.code_analysis_v3.core.student import AbstractStudent
-from architecture.code_analysis_v3.core.course import AbstractCourse, CourseInProgress, NoneCourse
-from architecture.code_analysis_v3.core.gss import IGSS, GSS, NoneGSS
+from architecture.code_analysis_v3.core.course import AbstractCourse, NoneCourse
+from architecture.code_analysis_v3.core.gss import GSS
 from architecture.code_analysis_v3.core.subject import AbstractSubject, SubjectInProgress
 from architecture.code_analysis_v3.core.common import AbstractState, NoneState
 from architecture.code_analysis_v3.core.base_object import AbstractCoreObject
@@ -14,9 +14,6 @@ class MaximumSubjectsReached(Exception):
 
 
 class AbstractTeacher(AbstractCoreObject):
-    def __init__(self, name) -> None:
-        super().__init__(name)
-
     @property
     def state(self):
         raise NotImplementedError

@@ -1,15 +1,7 @@
 from pytest import fixture, raises
 from architecture.code_analysis_v3.core.course import Course
-from architecture.code_analysis_v3.core.gss import GSS, NoneGSS
 from architecture.code_analysis_v3.core.student import (
-    StudentApproved,
-    BasicInformation,
-    AbstractStudent,
     Student,
-    StudentInProgress,
-    StudentInitialState,
-    InvalidStateTransition,
-    InvalidSubject,
 )
 from architecture.code_analysis_v3.core.subject import Subject
 from architecture.code_analysis_v3.core.teacher import (

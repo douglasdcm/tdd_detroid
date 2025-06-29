@@ -1,6 +1,6 @@
 from pytest import fixture, raises, mark
 from architecture.code_analysis_v3.core.course import Course
-from architecture.code_analysis_v3.core.gss import GSS, NoneGSS
+from architecture.code_analysis_v3.core.gss import GSS
 from architecture.code_analysis_v3.core.student import (
     StudentApproved,
     BasicInformation,
@@ -18,16 +18,6 @@ from architecture.code_analysis_v3.tests.test_core.test_constants import ANY_NAM
 @fixture
 def student():
     yield Student(ANY_NAME)
-
-
-@fixture
-def student_in_progress(student: AbstractStudent):
-    student.course = Course(ANY_NAME)
-    for i in range(3):
-        subject = Subject(f"{ANY_NAME}{i}")
-        subject.course = student.course
-        student.subscribe_to_subject(subject)
-    yield student
 
 
 @fixture

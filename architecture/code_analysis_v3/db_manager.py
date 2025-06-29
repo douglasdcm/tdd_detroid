@@ -19,7 +19,7 @@ class BaseCoreDataManager:
         raise NotImplementedError("To be implemented by sub-classes")
 
     def clear(self):
-        with open(self.DATA_FILE, "wb") as outp:
+        with open(self.DATA_FILE, "wb"):
             pass
 
     def save_objects(self, app_objects: list[AbstractCoreObject]):

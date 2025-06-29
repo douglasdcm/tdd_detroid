@@ -4,7 +4,7 @@ from architecture.code_analysis_v3.core.base_object import AbstractCoreObject
 from architecture.code_analysis_v3.core.common import AbstractState
 from architecture.code_analysis_v3.core.constants import (
     MINIMUM_STUDENT_GRADE,
-    MINIMUN_STUDENT_SUBJECTS,
+    MINIMUN_SUBJECTS_IN_STUDENT,
 )
 from architecture.code_analysis_v3.core.course import NoneCourse
 from architecture.code_analysis_v3.core.gss import GSSApproved
@@ -52,10 +52,10 @@ class AbstractStudent(AbstractCoreObject):
     def list_all_subscribed_subjects(self) -> list["AbstractSubject"]:
         raise NotImplementedError
 
-    def list_all_subjects_from_course(self) -> list["AbstractSubject"]:
+    def list_missing_subjects(self) -> list["AbstractSubject"]:
         raise NotImplementedError
 
-    def list_missing_subjects(self) -> list["AbstractSubject"]:
+    def list_all_subjects(self) -> list["AbstractSubject"]:
         raise NotImplementedError
 
     def notify_me_about_gss(self, gss: "IGSS") -> None:
@@ -77,6 +77,9 @@ class AbstractStudent(AbstractCoreObject):
         raise NotImplementedError
 
     def has_minimum_subjects(self):
+        raise NotImplementedError
+
+    def is_inprogress(self) -> bool:
         raise NotImplementedError
 
 
@@ -144,6 +147,7 @@ class Student(AbstractStudent):
     @course.setter
     def course(self, course: "AbstractCourse") -> None:
         self._course = course
+        course.notify_me_about_student(self)
         self._missing_subjects = course.list_all_subjects()
         self._calculate_state()
 
@@ -151,11 +155,14 @@ class Student(AbstractStudent):
     def grades(self) -> list[int]:
         return self._grades
 
+    def is_inprogress(self) -> bool:
+        return isinstance(self._state, StudentInProgress)
+
     def has_course(self):
         return not isinstance(self._course, NoneCourse)
 
     def has_minimum_subjects(self):
-        return len(self._subjects_in_progress) >= MINIMUN_STUDENT_SUBJECTS
+        return len(self._subjects_in_progress) >= MINIMUN_SUBJECTS_IN_STUDENT
 
     def has_minimum_gpa(self) -> bool:
         return self._gpa >= MINIMUM_STUDENT_GRADE
@@ -185,7 +192,7 @@ class Student(AbstractStudent):
         self._name = basic_information.name
         self._age = basic_information.age
 
-    def list_all_subjects_from_course(self) -> list["AbstractSubject"]:
+    def list_all_subjects(self) -> list["AbstractSubject"]:
         result = []
         result.extend(self.missing_subjects)
         result.extend(self.subjects_in_progress)

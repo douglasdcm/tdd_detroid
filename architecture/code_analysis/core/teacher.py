@@ -1,8 +1,6 @@
 import logging
 from typing import TYPE_CHECKING
-
 from architecture.code_analysis.core.common import IState
-
 if TYPE_CHECKING:
     from architecture.code_analysis.core.course import Course
     from architecture.code_analysis.core.student import Student

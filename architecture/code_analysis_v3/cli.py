@@ -20,7 +20,7 @@ def cli():
     pass
 
 
-### while does not have admins ititialize the database with some basic data
+# while does not have admins ititialize the database with some basic data
 def _list_db(data_manager: BaseCoreDataManager):
     click.echo(f"==== {data_manager.__class__.__name__} NUIs ====")
     for obj in data_manager.loadall():
