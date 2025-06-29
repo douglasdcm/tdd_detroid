@@ -31,10 +31,10 @@ class AbstractSubject(AbstractCoreObject):
     def _has_enrolled_students_over_the_maximum_value(self) -> bool:
         raise NotImplementedError
 
-    def _has_minimum_students(self) -> bool:
+    def has_minimum_students(self) -> bool:
         raise NotImplementedError
 
-    def _has_teacher(self) -> bool:
+    def has_teacher(self) -> bool:
         raise NotImplementedError
 
     def is_inprogress(self) -> bool:
@@ -77,10 +77,10 @@ class Subject(AbstractSubject):
     def _has_enrolled_students_over_the_maximum_value(self) -> bool:
         return False
 
-    def _has_minimum_students(self) -> bool:
+    def has_minimum_students(self) -> bool:
         return False
 
-    def _has_teacher(self) -> bool:
+    def has_teacher(self) -> bool:
         return False
 
     @property
@@ -103,7 +103,7 @@ class Subject(AbstractSubject):
         return not isinstance(self.course, NoneCourse)
 
     def is_inprogress(self) -> bool:
-        return True
+        return isinstance(self.state, SubjectInProgress)
 
     def list_all_students(self) -> list["AbstractSubject"]:
         return self._subjects
@@ -140,10 +140,12 @@ class NoneSubject(AbstractSubject):
 
 
 class SubjectInitialState(AbstractState):
-    def get_next_state(self, context: AbstractState):
-        return SubjectInProgress()
+    def get_next_state(self, context: AbstractSubject):
+        if context.has_course() and context.has_teacher() and context.has_minimum_students():
+            return SubjectInProgress()
+        return self
 
 
 class SubjectInProgress(AbstractState):
-    def get_next_state(self, context: AbstractState):
+    def get_next_state(self, context: AbstractSubject):
         return self

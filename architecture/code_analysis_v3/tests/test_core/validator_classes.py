@@ -3,9 +3,13 @@ from architecture.code_analysis_v3.core.student import (
     Student,
 )
 from architecture.code_analysis_v3.core.subject import Subject
+from architecture.code_analysis_v3.core.teacher import Teacher
 
 
 class ValidatorCourse(Course):
+    def __init__(self, name=""):
+        super().__init__(name)
+
     def force_state(self, value):
         self._state = value
 
@@ -29,6 +33,9 @@ class ValidatorCourse(Course):
 
 
 class ValidatorStudent(Student):
+    def __init__(self, name=""):
+        super().__init__(name)
+
     def force_state(self, value):
         self._state = value
 
@@ -46,5 +53,19 @@ class ValidatorStudent(Student):
 
 
 class ValidatorSubject(Subject):
+    def __init__(self, name=""):
+        super().__init__(name)
+
     def force_course(self, value):
         self._course = value
+
+    def force_state(self, value):
+        self._state = value
+
+
+class ValidatorTeacher(Teacher):
+    def __init__(self, name=""):
+        super().__init__(name)
+
+    def force_has_maximum_subjects(self):
+        self.has_maximum_subjects = lambda: True

@@ -97,7 +97,8 @@ class Course(AbstractCourse):
         return len(inprogress) >= MINIMUM_STUDENTS_IN_COURSE
 
     def has_minimum_inprogress_subjects(self):
-        return len(self._subjects) >= MINIMUN_SUBJECTS_IN_COURSE
+        inprogress = [s for s in self._subjects if s.is_inprogress()]
+        return len(inprogress) >= MINIMUN_SUBJECTS_IN_COURSE
 
     def list_all_subjects(self) -> list["AbstractSubject"]:
         return self._subjects

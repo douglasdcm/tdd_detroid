@@ -76,7 +76,8 @@ class Teacher(AbstractTeacher):
         return False
 
     def has_maximum_subjects(self):
-        return len(self._subjects) >= MAXIMUM_SUBJECTS_IN_TEACHER
+        inprogress = [s for s in self._subjects if s.is_inprogress()]
+        return len(inprogress) >= MAXIMUM_SUBJECTS_IN_TEACHER
 
     def set_gss(self, grade: int, student: "AbstractStudent", subject: "AbstractSubject") -> None:
         gss = GSS()
@@ -128,8 +129,7 @@ class TeacherNotFull(AbstractState):
 
 class TeacherNotWorking(AbstractState):
     def get_next_state(self, context: AbstractTeacher):
-        # breakpoint()
-        if context.has_inprogress_subject():
+        if context.has_inprogress_subject() or context.has_maximum_subjects():
             return TeacherWorking()
         return self
 
