@@ -33,10 +33,10 @@ def _get_course_in_progress(course):
     return course
 
 
-@fixture
-def student_in_progress():
-    course = Course(ANY_NAME)
-    yield _get_student_inprogress(course)
+# @fixture
+# def student_in_progress():
+#     course = Course(ANY_NAME)
+#     yield _get_student_inprogress(course)
 
 
 @fixture

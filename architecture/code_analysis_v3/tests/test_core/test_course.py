@@ -8,7 +8,10 @@ from architecture.code_analysis_v3.core.exceptions import InvalidStudent, Invali
 from architecture.code_analysis_v3.core.student import Student
 from architecture.code_analysis_v3.core.subject import Subject
 from architecture.code_analysis_v3.tests.test_core.test_constants import ANY_NAME
-from architecture.code_analysis_v3.tests.test_core.validator_classes import ValidatorCourse
+from architecture.code_analysis_v3.tests.test_core.validator_classes import (
+    ValidatorCourse,
+    ValidatorSubject,
+)
 
 
 @fixture
@@ -40,6 +43,11 @@ class TestCourseAcceptStudent:
         course.accept_student(Student(ANY_NAME))
         assert len(course.list_all_students()) == 1
 
+    def test_course_does_not_accept_students_when_full_of_students(self, course: ValidatorCourse):
+        course.force_is_full_of_students()
+        with raises(InvalidStudent):
+            course.accept_student(Student(ANY_NAME))
+
     def test_course_does_not_accept_student_when_student_already_in_course(
         self, course: ValidatorCourse
     ):
@@ -51,14 +59,14 @@ class TestCourseAcceptStudent:
     def test_course_does_not_accept_student_when_student_in_other_course(
         self, course: ValidatorCourse
     ):
-        subject = Subject(ANY_NAME)
-        course.force_students(subject)
-        course.accept_subject(subject)
-        assert len(course.list_all_subjects()) == 1
+        student = Student(ANY_NAME)
+        student.course = ValidatorCourse(ANY_NAME)
+        with raises(InvalidStudent):
+            course.accept_student(student)
 
 
 class TestCourseAcceptSubject:
-    def test_course_has_no_subject_when_created(self, course: AbstractCourse):
+    def test_course_has_no_subjects_when_created(self, course: AbstractCourse):
         assert len(course.list_all_subjects()) == 0
 
     def test_course_has_one_subject_when_subject_accepted(self, course: AbstractCourse):
@@ -70,7 +78,18 @@ class TestCourseAcceptSubject:
         with raises(InvalidSubject):
             course.accept_subject(Subject(ANY_NAME))
 
-    def test_course_does_not_accept_students_when_full_of_students(self, course: ValidatorCourse):
-        course.force_is_full_of_students()
-        with raises(InvalidStudent):
-            course.accept_student(Subject(ANY_NAME))
+    def test_course_does_not_accept_subject_when_subject_already_in_course(
+        self, course: ValidatorCourse
+    ):
+        subject = ValidatorSubject(ANY_NAME)
+        course.force_subject(subject)
+        with raises(InvalidSubject):
+            course.accept_subject(subject)
+
+    def test_course_does_not_accept_subject_when_subject_in_other_course(
+        self, course: ValidatorCourse
+    ):
+        subject = ValidatorSubject(ANY_NAME)
+        course.force_subject(subject)
+        with raises(InvalidSubject):
+            course.accept_subject(subject)

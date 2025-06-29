@@ -63,6 +63,8 @@ class Course(AbstractCourse):
         return self._state
 
     def accept_student(self, student):
+        if student.has_course() and self != student.course:
+            raise InvalidStudent("Student in other course")
         if self.is_full_of_student():
             raise InvalidStudent("Course already full of students")
         if student not in self._students:
@@ -75,6 +77,10 @@ class Course(AbstractCourse):
         return len(self._students) >= MAXIMUM_STUDENTS_IN_COURSE
 
     def accept_subject(self, subject):
+        if subject in self._subjects:
+            raise InvalidSubject("Subject already in course")
+        if subject.has_course() and self != subject.course:
+            raise InvalidSubject("Subject in other course")
         if self.is_full_of_subjects():
             raise InvalidSubject("Course already full of subjects")
         if subject not in self._subjects:

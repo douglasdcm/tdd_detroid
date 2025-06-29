@@ -52,6 +52,9 @@ class AbstractSubject(AbstractCoreObject):
     def accept_student(self, student: "AbstractStudent") -> None:
         raise NotImplementedError
 
+    def has_course(self) -> bool:
+        raise NotImplementedError
+
 
 class Subject(AbstractSubject):
     def __init__(self, name) -> None:
@@ -85,16 +88,19 @@ class Subject(AbstractSubject):
         return self._course
 
     @course.setter
-    def course(self, value: "AbstractCourse") -> None:
-        self._course = value
+    def course(self, course: "AbstractCourse") -> None:
+        self._course = course
         self._calculate_state()
-        if self not in value.list_all_subjects():
-            value.accept_subject(self)
+        if self not in course.list_all_subjects():
+            course.accept_subject(self)
 
     @property
     def state(self) -> "AbstractState":
         self._calculate_state()
         return self._state
+
+    def has_course(self) -> bool:
+        return not isinstance(self.course, NoneCourse)
 
     def is_inprogress(self) -> bool:
         return True

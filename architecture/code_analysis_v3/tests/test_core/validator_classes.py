@@ -2,6 +2,7 @@ from architecture.code_analysis_v3.core.course import Course
 from architecture.code_analysis_v3.core.student import (
     Student,
 )
+from architecture.code_analysis_v3.core.subject import Subject
 
 
 class ValidatorCourse(Course):
@@ -12,7 +13,7 @@ class ValidatorCourse(Course):
         self._students.append(value)
 
     def force_subject(self, value):
-        self._subjects.append(value)
+        value.course = self
 
     def force_has_minimum_students(self):
         self.has_minimum_inprogress_students = lambda: True
@@ -33,3 +34,17 @@ class ValidatorStudent(Student):
 
     def force_gpa(self, value):
         self._gpa = value
+
+    def force_has_course(self):
+        self.has_course = lambda: True
+
+    def force_has_minimun_subjects(self):
+        self.has_minimum_subjects = lambda: True
+
+    def force_grades(self, grades):
+        self._grades_subjects = grades
+
+
+class ValidatorSubject(Subject):
+    def force_course(self, value):
+        self._course = value

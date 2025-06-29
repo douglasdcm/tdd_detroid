@@ -21,7 +21,7 @@ def student():
 
 
 @fixture
-def student_inprogress(student: ValidatorStudent):
+def student_in_progress(student: ValidatorStudent):
     student.force_state(StudentInProgress())
     yield student
 
@@ -33,9 +33,11 @@ def student_approved(student: ValidatorStudent):
 
 
 class TestStudentState:
-    def test_student_inprogress_when_has_course_and_minimum_subjects(
-        self, student_in_progress: AbstractStudent
+    def test_student_in_progress_when_has_course_and_minimum_subjects(
+        self, student_in_progress: ValidatorStudent
     ):
+        student_in_progress.force_has_course()
+        student_in_progress.force_has_minimun_subjects()
         assert isinstance(student_in_progress.state, StudentInProgress)
 
     def test_student_has_initial_state_when_has_course_and_no_subjects(
@@ -50,10 +52,10 @@ class TestStudentState:
         assert isinstance(student.state, StudentInitialState)
 
     def test_student_approved_when_minimum_grade_and_subjects_approved(
-        self, student_inprogress: ValidatorStudent
+        self, student_in_progress: ValidatorStudent
     ):
-        student_inprogress.force_gpa(7)
-        assert isinstance(student_inprogress.state, StudentApproved)
+        student_in_progress.force_gpa(7)
+        assert isinstance(student_in_progress.state, StudentApproved)
 
     def test_student_approved_does_not_change_state(self, student_approved: ValidatorStudent):
         with raises(InvalidStateTransition):
@@ -80,20 +82,9 @@ class TestGpaCalculation:
         ],
     )
     def test_student_grade_calculation_when_all_subjects_graded(
-        self, grade1, grade2, grade3, expected, student_in_progress: AbstractStudent
+        self, grade1, grade2, grade3, expected, student_in_progress: ValidatorStudent
     ):
-        subjects = student_in_progress.subjects_in_progress
-        assert len(subjects) == 3
-        gss1 = GSS()
-        gss1.set_(grade1, subjects[0], student_in_progress)
-        gss2 = GSS()
-        gss2.set_(grade2, subjects[1], student_in_progress)
-        gss3 = GSS()
-        gss3.set_(grade3, subjects[2], student_in_progress)
-
-        student_in_progress.notify_me_about_gss(gss1)
-        student_in_progress.notify_me_about_gss(gss2)
-        student_in_progress.notify_me_about_gss(gss3)
+        student_in_progress.force_grades([grade1, grade2, grade3])
         assert student_in_progress.gpa == expected
 
     @mark.parametrize(
@@ -105,13 +96,9 @@ class TestGpaCalculation:
         ],
     )
     def test_student_grade_calculation_when_one_subject_graded(
-        self, grade, expected, student_in_progress: AbstractStudent
+        self, grade, expected, student_in_progress: ValidatorStudent
     ):
-        subjects = student_in_progress.subjects_in_progress
-        assert len(subjects) == 3
-        gss = GSS()
-        gss.set_(grade, subjects[0], student_in_progress)
-        student_in_progress.notify_me_about_gss(gss)
+        student_in_progress.force_grades([grade])
         assert student_in_progress.gpa == expected
 
 
@@ -140,10 +127,13 @@ class TestListMissingSubjects:
     ):
         assert len(student_approved.missing_subjects) == 0
 
-    def test_list_full_missing_subjects_when_student_inprogress(
-        self, student_in_progress: AbstractStudent
-    ):
-        assert len(student_in_progress.missing_subjects) > 0
+    def test_list_full_missing_subjects_when_student_in_progress(self, student: ValidatorStudent):
+        course = Course(ANY_NAME)
+        course.accept_subject(Subject(ANY_NAME))
+        student.course = course
+        student.force_has_minimun_subjects()
+        assert isinstance(student.state, StudentInProgress)
+        assert len(student.missing_subjects) > 0
 
 
 class TestListSubjectsInProgress:
@@ -151,8 +141,3 @@ class TestListSubjectsInProgress:
         self, student_approved: AbstractStudent
     ):
         assert len(student_approved.subjects_in_progress) == 0
-
-    def test_list_full_missing_subjects_when_student_inprogress(
-        self, student_in_progress: AbstractStudent
-    ):
-        assert len(student_in_progress.subjects_in_progress) > 0

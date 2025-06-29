@@ -52,7 +52,7 @@ class TestTeacherMaximuSubjects:
 
 
 class TestTeacherSetGSS:
-    def test_notify_student_when_teacher_set_gss(self, teacher: AbstractTeacher):
+    def test_notify_student_when_teacher_sets_gss(self, teacher: AbstractTeacher):
         course = Course(ANY_NAME)
         subject = Subject(ANY_NAME)
         subject.course = course
@@ -61,4 +61,4 @@ class TestTeacherSetGSS:
         student.subscribe_to_subject(subject)
         teacher.subscribe_to(subject)
         teacher.set_gss(8, student, subject)
-        assert len(student._grades) == 1
+        assert len(student.grades) == 1

@@ -88,7 +88,6 @@ class Student(AbstractStudent):
         super().__init__(name)
         self._course: "AbstractCourse" = NoneCourse()
         self._gpa: int = 0
-        self._grades: list[int] = []
         self._missing_subjects: list["AbstractSubject"] = []
         self._subjects_in_progress: list["AbstractSubject"] = []
         self._subjects_in_progress_internal_copy: list["AbstractSubject"] = []
@@ -137,6 +136,7 @@ class Student(AbstractStudent):
 
     @property
     def gpa(self) -> int:
+        self._calculate_gpa()
         return self._gpa
 
     @property
@@ -157,7 +157,7 @@ class Student(AbstractStudent):
 
     @property
     def grades(self) -> list[int]:
-        return self._grades
+        return self._grades_subjects
 
     def is_inprogress(self) -> bool:
         return isinstance(self._state, StudentInProgress)
@@ -188,7 +188,6 @@ class Student(AbstractStudent):
         if isinstance(gss.state, GSSApproved):
             self._remove_from_subject_lists(gss.subject)
         self._grades_subjects.append(gss.grade)
-        self._grades.append(gss.grade)
         self._calculate_gpa()
         self._calculate_state()
 
