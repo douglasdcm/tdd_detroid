@@ -62,14 +62,15 @@ class Course(AbstractCourse):
         self._calculate_state()
         return self._state
 
-    def accept_student(self, student):
+    def accept_student(self, student: "AbstractStudent"):
+        if student in self._students:
+            raise InvalidStudent("Student already in course")
         if student.has_course() and self != student.course:
             raise InvalidStudent("Student in other course")
         if self.is_full_of_student():
             raise InvalidStudent("Course already full of students")
-        if student not in self._students:
-            self._students.append(student)
-            self._calculate_state()
+        self._students.append(student)
+        self._calculate_state()
         if self != student.course:
             student.course = self
 
@@ -83,9 +84,8 @@ class Course(AbstractCourse):
             raise InvalidSubject("Subject in other course")
         if self.is_full_of_subjects():
             raise InvalidSubject("Course already full of subjects")
-        if subject not in self._subjects:
-            self._subjects.append(subject)
-            self._calculate_state()
+        self._subjects.append(subject)
+        self._calculate_state()
         if self != subject.course:
             subject.course = self
 

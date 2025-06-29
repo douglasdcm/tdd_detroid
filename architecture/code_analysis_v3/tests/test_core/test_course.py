@@ -53,8 +53,8 @@ class TestCourseAcceptStudent:
     ):
         student = Student(ANY_NAME)
         course.force_students(student)
-        course.accept_student(student)
-        assert len(course.list_all_students()) == 1
+        with raises(InvalidStudent):
+            course.accept_student(student)
 
     def test_course_does_not_accept_student_when_student_in_other_course(
         self, course: ValidatorCourse
@@ -93,3 +93,19 @@ class TestCourseAcceptSubject:
         course.force_subject(subject)
         with raises(InvalidSubject):
             course.accept_subject(subject)
+
+
+class TestIsFullOfSubjects:
+    def test_course_is_full_of_subjects_when_maximum_subjects_added(self, course: ValidatorCourse):
+        for _ in range(30):
+            course.accept_subject(Subject(ANY_NAME))
+        with raises(InvalidSubject):
+            course.accept_subject(Subject(ANY_NAME))
+
+
+class TestIsFullOfStudents:
+    def test_course_is_full_of_students_when_maximum_students_added(self, course: ValidatorCourse):
+        for _ in range(900):
+            course.accept_student(Student(ANY_NAME))
+        with raises(InvalidStudent):
+            course.accept_student(Student(ANY_NAME))

@@ -150,10 +150,10 @@ class Student(AbstractStudent):
     @course.setter
     def course(self, course: "AbstractCourse") -> None:
         self._course = course
-        if self not in course.list_all_students():
-            course.accept_student(self)
         self._missing_subjects = course.list_all_subjects()
         self._calculate_state()
+        if self not in course.list_all_students():
+            course.accept_student(self)
 
     @property
     def grades(self) -> list[int]:

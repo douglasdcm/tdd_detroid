@@ -1,6 +1,5 @@
 from pytest import fixture, raises, mark
 from architecture.code_analysis_v3.core.course import Course
-from architecture.code_analysis_v3.core.gss import GSS
 from architecture.code_analysis_v3.core.student import (
     StudentApproved,
     BasicInformation,
