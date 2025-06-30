@@ -46,8 +46,11 @@ class AbstractStudent(AbstractCoreObject):
     def gpa(self) -> int:
         raise NotImplementedError
 
+    def is_student(self):
+        return True
+
     def add_basic_information(self, basic_information: "BasicInformation") -> None:
-        print(MESSAGE)
+        raise NotImplementedError
 
     def list_all_subscribed_subjects(self) -> list["AbstractSubject"]:
         raise NotImplementedError
@@ -175,6 +178,7 @@ class Student(AbstractStudent):
         return len(self._missing_subjects) == 0
 
     def subscribe_to_subject(self, subject):
+        subject.is_subject()
         if subject.course != self._course:
             raise InvalidSubject("Subject is not in student course")
         self._add_to_subject_lists(subject)

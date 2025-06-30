@@ -286,7 +286,7 @@
         </mxGraphModel>
     </diagram>
     <diagram id="wco7yTjYJ_ZVrlrPbnzi" name="StudentState">
-        <mxGraphModel dx="691" dy="530" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="906" dy="530" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -342,7 +342,7 @@
                 <mxCell id="W1b2c0kzc49jASj1hPzO-13" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#000000;" parent="1" vertex="1">
                     <mxGeometry x="570" y="110" width="20" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="__G-mBBsmkvsEaAkqxSC-1" value="&lt;div&gt;&lt;ul&gt;&lt;li&gt;Initial: no course or no minimun subjets&lt;/li&gt;&lt;li&gt;Approved: grade &amp;gt;= minimum and all subjects approved and less them maximum semesters (future feature)&lt;/li&gt;&lt;li&gt;Fail: more them maximum semesters (future) or&amp;nbsp;&lt;span style=&quot;color: rgb(63, 63, 63); background-color: transparent;&quot;&gt;course cancelled (future)&lt;/span&gt;&lt;/li&gt;&lt;li&gt;In progress: has course and minimum subjects&lt;/li&gt;&lt;li&gt;Locked: no minimum subjects until the start of the semester (future), or course cancelled (future), or all subjects &lt;strike&gt;locked&lt;/strike&gt; cancelled (future)&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                <mxCell id="__G-mBBsmkvsEaAkqxSC-1" value="&lt;div&gt;&lt;ul&gt;&lt;li&gt;Initial: (default) no course or no minimun subjets&lt;/li&gt;&lt;ul&gt;&lt;li&gt;can be enrolled to course&lt;/li&gt;&lt;li&gt;can subscribe to subjects&lt;/li&gt;&lt;/ul&gt;&lt;li&gt;Approved: grade &amp;gt;= minimum and all subjects approved and less them maximum semesters (future feature)&lt;/li&gt;&lt;li&gt;Fail: more them maximum semesters (future) or&amp;nbsp;&lt;span style=&quot;color: rgb(63, 63, 63); background-color: transparent;&quot;&gt;course cancelled (future)&lt;/span&gt;&lt;/li&gt;&lt;li&gt;In progress: has course and minimum subjects&lt;/li&gt;&lt;ul&gt;&lt;li&gt;can not be enrolled to new course&lt;/li&gt;&lt;li&gt;can subscribe to subjects&lt;/li&gt;&lt;/ul&gt;&lt;li&gt;Locked: no minimum subjects until the start of the semester (future), or course cancelled (future), or all subjects &lt;strike&gt;locked&lt;/strike&gt; cancelled (future)&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
                     <mxGeometry x="12" y="280" width="700" height="260" as="geometry"/>
                 </mxCell>
                 <mxCell id="oQXOT-sdjEDBBMI5ljss-5" value="" style="edgeStyle=none;html=1;" parent="1" source="oQXOT-sdjEDBBMI5ljss-1" target="W1b2c0kzc49jASj1hPzO-2" edge="1">
@@ -356,101 +356,6 @@
                 </mxCell>
                 <mxCell id="sJVNZbjHQQf8RdD-iCSN-1" value="If the Student asks the Locking then all restrictions are ignored and the Course Coordinator can lock the Studet&amp;nbsp;" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;align=left;verticalAlign=top;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
                     <mxGeometry x="490" y="195" width="140" height="100" as="geometry"/>
-                </mxCell>
-            </root>
-        </mxGraphModel>
-    </diagram>
-    <diagram id="hbxWYbVXxZGp1UbNUqze" name="SubjectState">
-        <mxGraphModel dx="691" dy="530" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
-            <root>
-                <mxCell id="0"/>
-                <mxCell id="1" parent="0"/>
-                <mxCell id="4JROuijiZTU8Lh9glWxM-1" value="&lt;div&gt;&lt;ul&gt;&lt;li&gt;&lt;strike&gt;Locked: no teacher, no student &lt;/strike&gt;(duplicated with Cacelled)&lt;/li&gt;&lt;li&gt;In progress: in a course, has teacher, has minimun inprogress students&lt;/li&gt;&lt;li&gt;Cancelled: no student or no teacher&lt;/li&gt;&lt;li&gt;Full: not accepting new students&lt;/li&gt;&lt;li&gt;Not full: accept new students&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
-                    <mxGeometry x="12" y="280" width="700" height="260" as="geometry"/>
-                </mxCell>
-                <mxCell id="Gc46z40UQrs6KcQGY5Lb-1" style="edgeStyle=none;html=1;entryX=0.25;entryY=0;entryDx=0;entryDy=0;exitX=0.781;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" target="Gc46z40UQrs6KcQGY5Lb-4" edge="1">
-                    <mxGeometry relative="1" as="geometry">
-                        <mxPoint x="466.8299999999999" y="260" as="sourcePoint"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="Gc46z40UQrs6KcQGY5Lb-2" value="" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;" parent="1" vertex="1">
-                    <mxGeometry x="120" y="20" width="430" height="240" as="geometry"/>
-                </mxCell>
-                <mxCell id="Gc46z40UQrs6KcQGY5Lb-3" style="html=1;entryX=0.875;entryY=1;entryDx=0;entryDy=0;exitX=0.75;exitY=0;exitDx=0;exitDy=0;entryPerimeter=0;" parent="1" source="Gc46z40UQrs6KcQGY5Lb-4" edge="1">
-                    <mxGeometry relative="1" as="geometry">
-                        <mxPoint x="526" y="150" as="targetPoint"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="Gc46z40UQrs6KcQGY5Lb-4" value="Cancelled" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
-                    <mxGeometry x="436" y="290" width="120" height="60" as="geometry"/>
-                </mxCell>
-                <mxCell id="Gc46z40UQrs6KcQGY5Lb-5" value="" style="edgeStyle=none;html=1;startArrow=classic;startFill=1;endArrow=none;endFill=0;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" source="Gc46z40UQrs6KcQGY5Lb-6" target="Gc46z40UQrs6KcQGY5Lb-7" edge="1">
-                    <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="Gc46z40UQrs6KcQGY5Lb-6" value="Locked" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
-                    <mxGeometry x="240" y="90" width="120" height="60" as="geometry"/>
-                </mxCell>
-                <mxCell id="hZJUbTzIwRGdIpeqlxQr-5" style="edgeStyle=orthogonalEdgeStyle;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;elbow=vertical;exitX=0.617;exitY=1.017;exitDx=0;exitDy=0;exitPerimeter=0;endArrow=none;endFill=0;" parent="1" source="Gc46z40UQrs6KcQGY5Lb-7" target="hZJUbTzIwRGdIpeqlxQr-1" edge="1">
-                    <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="Gc46z40UQrs6KcQGY5Lb-7" value="In Progress" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-                    <mxGeometry x="410" y="90" width="120" height="60" as="geometry"/>
-                </mxCell>
-                <mxCell id="Gc46z40UQrs6KcQGY5Lb-8" value="" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="Gc46z40UQrs6KcQGY5Lb-9" target="Gc46z40UQrs6KcQGY5Lb-7" edge="1">
-                    <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="Gc46z40UQrs6KcQGY5Lb-9" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" parent="1" vertex="1">
-                    <mxGeometry x="460" y="40" width="20" height="20" as="geometry"/>
-                </mxCell>
-                <mxCell id="hZJUbTzIwRGdIpeqlxQr-1" value="" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;" parent="1" vertex="1">
-                    <mxGeometry x="151" y="160" width="319" height="90" as="geometry"/>
-                </mxCell>
-                <mxCell id="hZJUbTzIwRGdIpeqlxQr-2" value="Full" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-                    <mxGeometry x="160" y="180" width="120" height="60" as="geometry"/>
-                </mxCell>
-                <mxCell id="hZJUbTzIwRGdIpeqlxQr-3" style="html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;elbow=vertical;startArrow=classic;startFill=1;" parent="1" source="hZJUbTzIwRGdIpeqlxQr-4" target="hZJUbTzIwRGdIpeqlxQr-2" edge="1">
-                    <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="hZJUbTzIwRGdIpeqlxQr-4" value="Not full" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-                    <mxGeometry x="330" y="180" width="120" height="60" as="geometry"/>
-                </mxCell>
-            </root>
-        </mxGraphModel>
-    </diagram>
-    <diagram id="kYZ8Qf0C7OvT8ptZabCd" name="CourseState">
-        <mxGraphModel dx="552" dy="530" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
-            <root>
-                <mxCell id="0"/>
-                <mxCell id="1" parent="0"/>
-                <mxCell id="ml3hCVn_NrMmKzSwrOkT-1" value="&lt;ul&gt;&lt;li&gt;Not started: no minimum inprogress subjects, no minimum inprogress students, semester not started (future)&lt;/li&gt;&lt;li&gt;In progress: minimum student, minumin subject, semester started (future)&lt;/li&gt;&lt;li&gt;Cancelled: all subjects cancelled (future) or no coordinator (future) or no students when the semester starts (future)&lt;/li&gt;&lt;li&gt;Finished (future): closed when the semester ends (future)&amp;nbsp;&amp;nbsp;&lt;/li&gt;&lt;/ul&gt;" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
-                    <mxGeometry x="12" y="280" width="700" height="260" as="geometry"/>
-                </mxCell>
-                <mxCell id="qeceOs8C4AzsbRRomicQ-19" style="edgeStyle=none;html=1;entryX=0.25;entryY=0;entryDx=0;entryDy=0;exitX=0.718;exitY=0.991;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="qeceOs8C4AzsbRRomicQ-18" target="qeceOs8C4AzsbRRomicQ-3" edge="1">
-                    <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="qeceOs8C4AzsbRRomicQ-18" value="" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;" parent="1" vertex="1">
-                    <mxGeometry x="210" y="20" width="340" height="150" as="geometry"/>
-                </mxCell>
-                <mxCell id="qeceOs8C4AzsbRRomicQ-15" style="html=1;entryX=0.875;entryY=1;entryDx=0;entryDy=0;exitX=0.75;exitY=0;exitDx=0;exitDy=0;entryPerimeter=0;" parent="1" source="qeceOs8C4AzsbRRomicQ-3" target="qeceOs8C4AzsbRRomicQ-9" edge="1">
-                    <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="qeceOs8C4AzsbRRomicQ-3" value="Cancelled" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
-                    <mxGeometry x="425" y="200" width="120" height="60" as="geometry"/>
-                </mxCell>
-                <mxCell id="qeceOs8C4AzsbRRomicQ-5" value="" style="edgeStyle=none;html=1;startArrow=classic;startFill=1;endArrow=none;endFill=0;" parent="1" source="qeceOs8C4AzsbRRomicQ-6" target="qeceOs8C4AzsbRRomicQ-9" edge="1">
-                    <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="qeceOs8C4AzsbRRomicQ-6" value="In Progress" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-                    <mxGeometry x="240" y="90" width="120" height="60" as="geometry"/>
-                </mxCell>
-                <mxCell id="qeceOs8C4AzsbRRomicQ-9" value="Not started" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-                    <mxGeometry x="410" y="90" width="120" height="60" as="geometry"/>
-                </mxCell>
-                <mxCell id="qeceOs8C4AzsbRRomicQ-11" value="" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="qeceOs8C4AzsbRRomicQ-12" target="qeceOs8C4AzsbRRomicQ-9" edge="1">
-                    <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="qeceOs8C4AzsbRRomicQ-12" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" parent="1" vertex="1">
-                    <mxGeometry x="460" y="40" width="20" height="20" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>
@@ -483,7 +388,7 @@
                 <mxCell id="msbRGEF4yf1S1ADYf4cC-9" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" parent="1" vertex="1">
                     <mxGeometry x="460" y="19" width="20" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="msbRGEF4yf1S1ADYf4cC-10" value="&lt;ul&gt;&lt;li&gt;Not working: no minimum &#39;in progress&#39; subject or course cancelled (future)&lt;/li&gt;&lt;li&gt;Working: has &#39;in progress&#39; subject&lt;/li&gt;&lt;li&gt;Full: reached the maximum subjects&lt;/li&gt;&lt;li&gt;Not full: not reached the maximum subjects&lt;/li&gt;&lt;/ul&gt;" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                <mxCell id="msbRGEF4yf1S1ADYf4cC-10" value="&lt;ul&gt;&lt;li&gt;Not working: no minimum &#39;in progress&#39; subject or course cancelled (future)&lt;/li&gt;&lt;ul&gt;&lt;li&gt;can not set GSS&lt;/li&gt;&lt;/ul&gt;&lt;li&gt;Working: has &#39;in progress&#39; subject&lt;/li&gt;&lt;ul&gt;&lt;li&gt;can set gss&lt;/li&gt;&lt;/ul&gt;&lt;li&gt;Full: reached the maximum subjects&lt;/li&gt;&lt;ul&gt;&lt;li&gt;can not subscribe to new subjects&lt;/li&gt;&lt;/ul&gt;&lt;li&gt;Not full: not reached the maximum subjects&lt;/li&gt;&lt;ul&gt;&lt;li&gt;can subscribe to new subjects&lt;/li&gt;&lt;/ul&gt;&lt;/ul&gt;" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
                     <mxGeometry x="12" y="280" width="700" height="260" as="geometry"/>
                 </mxCell>
                 <mxCell id="msbRGEF4yf1S1ADYf4cC-11" value="Full" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
@@ -498,6 +403,77 @@
             </root>
         </mxGraphModel>
     </diagram>
+    <diagram id="hbxWYbVXxZGp1UbNUqze" name="SubjectState">
+        <mxGraphModel dx="906" dy="530" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="4JROuijiZTU8Lh9glWxM-1" value="&lt;div&gt;&lt;ul&gt;&lt;li&gt;InitialState: default state&lt;/li&gt;&lt;ul&gt;&lt;li&gt;can receive new students&lt;/li&gt;&lt;li&gt;can receive new teacher&lt;/li&gt;&lt;li&gt;can not be approved/failed&lt;/li&gt;&lt;/ul&gt;&lt;li&gt;&lt;strike&gt;Locked: no teacher, no student &lt;/strike&gt;(duplicated with Cacelled)&lt;/li&gt;&lt;li&gt;In progress: in a course, has teacher, has minimun inprogress students&lt;/li&gt;&lt;ul&gt;&lt;li&gt;can be approved/failed&lt;/li&gt;&lt;li&gt;can recive new teacher&lt;/li&gt;&lt;li&gt;can not receive new students&lt;/li&gt;&lt;/ul&gt;&lt;li&gt;Cancelled: no student or no teacher&lt;/li&gt;&lt;li&gt;Full: reached the maximum number of students&lt;/li&gt;&lt;ul&gt;&lt;li&gt;can not accept new students&lt;/li&gt;&lt;/ul&gt;&lt;li&gt;Not full: not reached the maximum of students&lt;/li&gt;&lt;ul&gt;&lt;li&gt;&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;can accept new students&lt;/span&gt;&lt;/li&gt;&lt;/ul&gt;&lt;li&gt;Finished (future): semester ended&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="12" y="280" width="700" height="260" as="geometry"/>
+                </mxCell>
+                <mxCell id="Gc46z40UQrs6KcQGY5Lb-1" style="edgeStyle=none;html=1;entryX=0.25;entryY=0;entryDx=0;entryDy=0;exitX=0.781;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" target="Gc46z40UQrs6KcQGY5Lb-4" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="436.8299999999999" y="260" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="Gc46z40UQrs6KcQGY5Lb-2" value="" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;" parent="1" vertex="1">
+                    <mxGeometry x="90" y="20" width="430" height="240" as="geometry"/>
+                </mxCell>
+                <mxCell id="Gc46z40UQrs6KcQGY5Lb-3" style="html=1;entryX=0.875;entryY=1;entryDx=0;entryDy=0;exitX=0.75;exitY=0;exitDx=0;exitDy=0;entryPerimeter=0;" parent="1" source="Gc46z40UQrs6KcQGY5Lb-4" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="496" y="150" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="Gc46z40UQrs6KcQGY5Lb-4" value="Cancelled" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
+                    <mxGeometry x="406" y="290" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="Gc46z40UQrs6KcQGY5Lb-5" value="" style="edgeStyle=none;html=1;startArrow=classic;startFill=1;endArrow=none;endFill=0;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" source="Gc46z40UQrs6KcQGY5Lb-6" target="Gc46z40UQrs6KcQGY5Lb-7" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="Gc46z40UQrs6KcQGY5Lb-6" value="Locked" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
+                    <mxGeometry x="210" y="90" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="hZJUbTzIwRGdIpeqlxQr-5" style="edgeStyle=orthogonalEdgeStyle;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;elbow=vertical;exitX=0.617;exitY=1.017;exitDx=0;exitDy=0;exitPerimeter=0;endArrow=none;endFill=0;" parent="1" source="Gc46z40UQrs6KcQGY5Lb-7" target="hZJUbTzIwRGdIpeqlxQr-1" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="Gc46z40UQrs6KcQGY5Lb-7" value="In Progress" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="380" y="90" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="Gc46z40UQrs6KcQGY5Lb-8" value="" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="Gc46z40UQrs6KcQGY5Lb-9" target="Gc46z40UQrs6KcQGY5Lb-7" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="Gc46z40UQrs6KcQGY5Lb-9" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" parent="1" vertex="1">
+                    <mxGeometry x="430" y="40" width="20" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="hZJUbTzIwRGdIpeqlxQr-1" value="" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;" parent="1" vertex="1">
+                    <mxGeometry x="121" y="160" width="319" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="hZJUbTzIwRGdIpeqlxQr-2" value="Full" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="130" y="180" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="hZJUbTzIwRGdIpeqlxQr-3" style="html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;elbow=vertical;startArrow=classic;startFill=1;" parent="1" source="hZJUbTzIwRGdIpeqlxQr-4" target="hZJUbTzIwRGdIpeqlxQr-2" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="hZJUbTzIwRGdIpeqlxQr-4" value="Not full" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="300" y="180" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="ATl0I5r09xsLP8_pSJxu-1" value="Finished" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+                    <mxGeometry x="590" y="80" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="ATl0I5r09xsLP8_pSJxu-2" style="edgeStyle=none;html=1;entryX=0.025;entryY=0.65;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="Gc46z40UQrs6KcQGY5Lb-7" target="ATl0I5r09xsLP8_pSJxu-1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="CfhejeqOKLYrQoLQuKMF-2" value="" style="edgeStyle=none;html=1;exitX=0.425;exitY=0.983;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" target="CfhejeqOKLYrQoLQuKMF-3" source="ATl0I5r09xsLP8_pSJxu-1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="110" y="150" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="CfhejeqOKLYrQoLQuKMF-3" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillStyle=auto;fillColor=#000000;" vertex="1" parent="1">
+                    <mxGeometry x="630" y="195" width="20" height="20" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
     <diagram id="BPYBr0xceHKu3UYjZ23A" name="GSSState">
         <mxGraphModel dx="906" dy="530" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
@@ -505,6 +481,9 @@
                 <mxCell id="1" parent="0"/>
                 <mxCell id="9oOQK9pTymgsxK3-unb1-4" value="Approved" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
                     <mxGeometry x="30" y="89" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="G0nkK7nN8OS11EGb8UYZ-4" style="edgeStyle=none;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="9oOQK9pTymgsxK3-unb1-5" target="G0nkK7nN8OS11EGb8UYZ-2">
+                    <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="9oOQK9pTymgsxK3-unb1-5" value="Failed" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
                     <mxGeometry x="200" y="89" width="120" height="60" as="geometry"/>
@@ -520,6 +499,66 @@
                 </mxCell>
                 <mxCell id="9oOQK9pTymgsxK3-unb1-13" style="edgeStyle=none;html=1;entryX=0.892;entryY=-0.017;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="9oOQK9pTymgsxK3-unb1-7" target="9oOQK9pTymgsxK3-unb1-4" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="G0nkK7nN8OS11EGb8UYZ-1" value="" style="edgeStyle=none;html=1;" edge="1" parent="1" target="G0nkK7nN8OS11EGb8UYZ-2">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="110" y="150" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="G0nkK7nN8OS11EGb8UYZ-2" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillStyle=auto;fillColor=#000000;" vertex="1" parent="1">
+                    <mxGeometry x="150" y="200" width="20" height="20" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram id="kYZ8Qf0C7OvT8ptZabCd" name="CourseState">
+        <mxGraphModel dx="906" dy="530" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="ml3hCVn_NrMmKzSwrOkT-1" value="&lt;ul&gt;&lt;li&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;Not started: no minimum inprogress subjects, no minimum inprogress students, semester not started (future)&lt;/span&gt;&lt;/li&gt;&lt;ul&gt;&lt;li&gt;can receive new students&lt;/li&gt;&lt;li&gt;can receive new subjects&lt;/li&gt;&lt;li&gt;can receive new teachers&lt;/li&gt;&lt;/ul&gt;&lt;li&gt;In progress: minimum student, minumin subject, semester started (future)&lt;/li&gt;&lt;ul&gt;&lt;li&gt;can not do the things when Not Started&lt;/li&gt;&lt;/ul&gt;&lt;li&gt;Cancelled: all subjects cancelled (future) or no coordinator (future) or no students when the semester starts (future)&lt;/li&gt;&lt;li&gt;Finished (future): closed when the semester ends (future)&amp;nbsp;&amp;nbsp;&lt;/li&gt;&lt;/ul&gt;" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="12" y="280" width="700" height="260" as="geometry"/>
+                </mxCell>
+                <mxCell id="qeceOs8C4AzsbRRomicQ-19" style="edgeStyle=none;html=1;entryX=0.25;entryY=0;entryDx=0;entryDy=0;exitX=0.718;exitY=0.991;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="qeceOs8C4AzsbRRomicQ-18" target="qeceOs8C4AzsbRRomicQ-3" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="qeceOs8C4AzsbRRomicQ-18" value="" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;" parent="1" vertex="1">
+                    <mxGeometry x="210" y="20" width="340" height="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="qeceOs8C4AzsbRRomicQ-15" style="html=1;entryX=0.875;entryY=1;entryDx=0;entryDy=0;exitX=0.75;exitY=0;exitDx=0;exitDy=0;entryPerimeter=0;" parent="1" source="qeceOs8C4AzsbRRomicQ-3" target="qeceOs8C4AzsbRRomicQ-9" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="qeceOs8C4AzsbRRomicQ-3" value="Cancelled" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
+                    <mxGeometry x="425" y="200" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="qeceOs8C4AzsbRRomicQ-5" value="" style="edgeStyle=none;html=1;startArrow=classic;startFill=1;endArrow=none;endFill=0;" parent="1" source="qeceOs8C4AzsbRRomicQ-6" target="qeceOs8C4AzsbRRomicQ-9" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="mZlZcGWMgiTtA9maPwre-2" style="edgeStyle=none;html=1;" edge="1" parent="1" source="qeceOs8C4AzsbRRomicQ-6" target="mZlZcGWMgiTtA9maPwre-1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="qeceOs8C4AzsbRRomicQ-6" value="In Progress" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="240" y="90" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="qeceOs8C4AzsbRRomicQ-9" value="Not started" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="410" y="90" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="qeceOs8C4AzsbRRomicQ-11" value="" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="qeceOs8C4AzsbRRomicQ-12" target="qeceOs8C4AzsbRRomicQ-9" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="qeceOs8C4AzsbRRomicQ-12" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" parent="1" vertex="1">
+                    <mxGeometry x="460" y="40" width="20" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="mZlZcGWMgiTtA9maPwre-1" value="Finished" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+                    <mxGeometry x="240" y="200" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="o-JBQIW-l-vkUg85OQVC-1" value="" style="edgeStyle=none;html=1;exitX=0;exitY=0.25;exitDx=0;exitDy=0;" edge="1" parent="1" target="o-JBQIW-l-vkUg85OQVC-2" source="mZlZcGWMgiTtA9maPwre-1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="260" y="225" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="o-JBQIW-l-vkUg85OQVC-2" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillStyle=auto;fillColor=#000000;" vertex="1" parent="1">
+                    <mxGeometry x="170" y="205" width="20" height="20" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>

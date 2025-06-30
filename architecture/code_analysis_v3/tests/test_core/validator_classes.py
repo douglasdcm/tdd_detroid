@@ -8,7 +8,7 @@ from architecture.code_analysis_v3.core.teacher import Teacher
 
 class ValidatorCourse(Course):
     def __init__(self, name=""):
-        super().__init__(name)
+        super().__init__(f"{self.__hash__()}")
 
     def force_state(self, value):
         self._state = value
@@ -34,7 +34,7 @@ class ValidatorCourse(Course):
 
 class ValidatorStudent(Student):
     def __init__(self, name=""):
-        super().__init__(name)
+        super().__init__(f"{self.__hash__()}")
 
     def force_state(self, value):
         self._state = value
@@ -54,7 +54,7 @@ class ValidatorStudent(Student):
 
 class ValidatorSubject(Subject):
     def __init__(self, name=""):
-        super().__init__(name)
+        super().__init__(f"{self.__hash__()}")
 
     def force_course(self, value):
         self._course = value
@@ -62,10 +62,19 @@ class ValidatorSubject(Subject):
     def force_state(self, value):
         self._state = value
 
+    def force_has_course(self):
+        self.has_course = lambda: True
+
+    def force_has_teacher(self):
+        self.has_teacher = lambda: True
+
+    def force_has_minimum_in_progress_students(self):
+        self.has_minimum_inprogress_students = lambda: True
+
 
 class ValidatorTeacher(Teacher):
     def __init__(self, name=""):
-        super().__init__(name)
+        super().__init__(f"{self.__hash__()}")
 
     def force_has_maximum_subjects(self):
         self.has_maximum_subjects = lambda: True

@@ -22,6 +22,9 @@ class AbstractCourse(AbstractCoreObject):
     def state(self) -> "AbstractState":
         raise NotImplementedError
 
+    def is_course(self):
+        return True
+
     def accept_student(self, student: "AbstractStudent") -> None:
         raise NotImplementedError
 
@@ -37,7 +40,7 @@ class AbstractCourse(AbstractCoreObject):
     def list_all_students(self) -> list["AbstractStudent"]:
         raise NotImplementedError
 
-    def subject_notify_me_minimun_students(self, subject: "AbstractSubject") -> None:
+    def notify_me_minimun_students_in_subject(self, subject: "AbstractSubject") -> None:
         raise NotImplementedError
 
     def has_minimum_inprogress_students(self) -> bool:
@@ -128,7 +131,7 @@ class NoneCourse(AbstractCourse):
     def list_all_subjects_by(self, student: "AbstractStudent") -> list["AbstractStudent"]:
         return []
 
-    def subject_notify_me_minimun_students(self, subject: "AbstractSubject") -> None:
+    def notify_me_minimun_students_in_subject(self, subject: "AbstractSubject") -> None:
         print(MESSAGE)
 
 

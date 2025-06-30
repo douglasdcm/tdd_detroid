@@ -1,41 +1,149 @@
-from pytest import fixture
-from architecture.code_analysis_v3.core.course import Course
-from architecture.code_analysis_v3.core.gss import GSS
+from pytest import raises
+from architecture.code_analysis_v3.core.course import NoneCourse
+from architecture.code_analysis_v3.core.exceptions import InvalidCourse
 from architecture.code_analysis_v3.core.student import (
-    AbstractStudent,
-    Student,
+    StudentInProgress,
 )
-from architecture.code_analysis_v3.core.subject import Subject
-from architecture.code_analysis_v3.tests.test_core.test_constants import ANY_NAME
+from architecture.code_analysis_v3.core.subject import SubjectInProgress, SubjectInitialState
+from architecture.code_analysis_v3.tests.test_core.validator_classes import (
+    ValidatorCourse,
+    ValidatorStudent,
+    ValidatorSubject,
+    ValidatorTeacher,
+)
 
 
-@fixture
-def student():
-    yield Student(ANY_NAME)
+class TestSubjectStateTransition:
+    def test_subject_in_initial_state_when_created(self):
+        subject = ValidatorSubject()
+        assert isinstance(subject.state, SubjectInitialState)
+
+    def test_subject_in_initial_State_when_has_course_teacher_and_no_minimum_inprogress_students(
+        self,
+    ):
+        subject = ValidatorSubject()
+        subject.force_has_course()
+        subject.force_has_teacher()
+        assert isinstance(subject.state, SubjectInitialState)
+
+    def test_subject_inprogress_when_has_course_no_teacher_and_no_minimum_inprogress_students(self):
+        subject = ValidatorSubject()
+        subject.force_has_course()
+        assert isinstance(subject.state, SubjectInitialState)
+
+    def test_subject_inprogress_when_has_course_teacher_and_minimum_inprogress_students(self):
+        subject = ValidatorSubject()
+        subject.force_has_course()
+        subject.force_has_teacher()
+        subject.force_has_minimum_in_progress_students()
+        assert isinstance(subject.state, SubjectInProgress)
+
+    def test_subject_state_not_change_when_inprogress(self):
+        subject = ValidatorSubject()
+        subject.force_has_course()
+        subject.force_has_teacher()
+        subject.force_has_minimum_in_progress_students()
+        assert isinstance(subject.state, SubjectInProgress)
+        assert isinstance(subject.state, SubjectInProgress)
 
 
-@fixture
-def student_in_progress(student: AbstractStudent):
-    student.course = Course(ANY_NAME)
-    for i in range(3):
+class TestSubjectHasCourse:
+    def test_subject_has_no_course_when_created(self):
+        subject = ValidatorSubject()
+        assert subject.has_course() is False
 
-        subject = Subject(f"{ANY_NAME}{i}")
-        subject.course = student.course
-        student.subscribe_to_subject(subject)
-    yield student
-
-
-@fixture
-def student_approved(student_in_progress: AbstractStudent):
-    subjects = student_in_progress.subjects_in_progress
-    for subject in subjects:
-        gss = GSS()
-        gss.set_(9, subject, student_in_progress)
-        student_in_progress.notify_me_about_gss(gss)
-    yield student_in_progress
+    def test_subject_has_course_when_course_added(self):
+        subject = ValidatorSubject()
+        subject.course = ValidatorCourse()
+        assert subject.has_course() is True
 
 
-# class TestSubjectStateTransition:
-#     def test_subject_notworking_when_created(self):
-#         subject = ConcreteSubject(ANY_NAME)
-#         assert isinstance(subject.state, NotWorking)
+class TestSubjectCourse:
+    def test_subject_course_not_defined_when_created(self):
+        subject = ValidatorSubject()
+        assert isinstance(subject.course, NoneCourse)
+
+    def test_subject_course_no_change_when_defined(self):
+        subject = ValidatorSubject()
+        course = ValidatorCourse()
+        subject.course = course
+        assert subject.course == course
+        course2 = ValidatorCourse()
+        with raises(InvalidCourse):
+            subject.course = course2
+
+
+class TestSubjectHasTeacher:
+    def test_subject_has_no_teacher_when_created(self):
+        subject = ValidatorSubject()
+        assert subject.has_teacher() is False
+
+    def test_subject_has_teacher_when_teacher_added(self):
+        subject = ValidatorSubject()
+        subject.subscribe_teacher(ValidatorTeacher())
+        assert subject.has_teacher() is True
+
+
+class TestSubjectMinimumInProgressStudents:
+    def __init__(self):
+        self._inprogress = ValidatorStudent()
+        self._inprogress.force_state(StudentInProgress())
+
+    def test_subject_has_no_minimum_students_when_created(self):
+        subject = ValidatorSubject()
+        assert subject.has_minimum_inprogress_students() is False
+
+    def test_subject_has_no_minimum_students_when_minimum_not_added(self):
+        subject = ValidatorSubject()
+        for _ in range(2):
+            subject.accept_student(self._inprogress)
+        assert subject.has_minimum_inprogress_students() is False
+
+    def test_subject_has_minimum_students_when_minimum_added(self):
+        subject = ValidatorSubject()
+        for _ in range(3):
+            subject.accept_student(self._inprogress)
+        assert subject.has_minimum_inprogress_students() is True
+
+
+class TestSubjectMaximumInProgressStudents:
+    def __init__(self):
+        self._inprogress = ValidatorStudent()
+        self._inprogress.force_state(StudentInProgress())
+
+    def test_subject_has_no_maximum_students_when_created(self):
+        subject = ValidatorSubject()
+        assert subject.has_maximum_students() is False
+
+    def test_subject_has_no_maximimum_students_when_maximum_not_added(self):
+        subject = ValidatorSubject()
+        for _ in range(2):
+            subject.accept_student(self._inprogress)
+        assert subject.has_maximum_students() is False
+
+    def test_subject_has_maximum_students_when_maximum_added(self):
+        subject = ValidatorSubject()
+        for _ in range(30):
+            subject.accept_student(self._inprogress)
+        assert subject.has_maximum_students() is True
+
+
+class TestSubjectAcceptedStudents:
+    def test_subject_has_no_students_when_created(self):
+        subject = ValidatorSubject()
+        assert len(subject.list_all_students()) == 0
+
+    def test_subject_has_one_student_when_one_added(self):
+        subject = ValidatorSubject()
+        subject.accept_student(ValidatorStudent())
+        assert len(subject.list_all_students()) == 1
+
+    def test_subject_has_one_inprogress_student_when_one_added(self):
+        subject = ValidatorSubject()
+        student = ValidatorStudent()
+        student2 = ValidatorStudent()
+        student2.force_state(StudentInProgress())
+        subject.accept_student(student2)
+        subject.accept_student(student)
+        assert len(subject.list_all_inprogress_students()) == 1
+        assert len(subject.list_all_students()) == 2

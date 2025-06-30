@@ -26,7 +26,7 @@ It is necessary to install `draw.io` extension to edit the files
 - The Subject is 'in progress' when has minimum 'in progress' Students: found while reviewing the Cource State machine and implementing the Course class
 - Courses does not have maximum students: The universisty has a limit of Students for Course given to phisical constraints (not applicable for virtual Courses). Set the value to 900 ((maximum subjects in a course) * (maximum students in a subject)). Found while build test cases to `Course.accept_subject` methood
 - Courses does not have maximum subjects: The course has a limit of Subjects given the total number of Semesters and the limiations of available time of Students. Set the value to 30. For example, if the Course has 10 Semesters (5 years) it is fair to have an average of 5 or 6 Subjects by Semester. Found while build test cases to `Course.accept_subject` methood
-
+- Allowed Actions for each object state not efined in the diagrams: found while implementing the tests to `Teacher.set_gss`. For each State it is imporant to defined the allowed and not allowed actions. For example, Teacher can set GSS only when working 
 
 ## Core Entities
 ### Administrator

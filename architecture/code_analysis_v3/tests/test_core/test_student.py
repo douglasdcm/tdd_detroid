@@ -1,5 +1,4 @@
-from pytest import fixture, raises, mark
-from architecture.code_analysis_v3.core.course import Course
+from pytest import raises, mark
 from architecture.code_analysis_v3.core.student import (
     StudentApproved,
     BasicInformation,
@@ -9,26 +8,14 @@ from architecture.code_analysis_v3.core.student import (
     InvalidStateTransition,
     InvalidSubject,
 )
-from architecture.code_analysis_v3.core.subject import Subject
-from architecture.code_analysis_v3.tests.test_core.test_constants import ANY_NAME, OTHER_NAME
-from architecture.code_analysis_v3.tests.test_core.validator_classes import ValidatorStudent
+from architecture.code_analysis_v3.tests.test_core.validator_classes import (
+    ValidatorCourse,
+    ValidatorStudent,
+    ValidatorSubject,
+)
 
-
-@fixture
-def student():
-    yield ValidatorStudent(ANY_NAME)
-
-
-@fixture
-def student_in_progress(student: ValidatorStudent):
-    student.force_state(StudentInProgress())
-    yield student
-
-
-@fixture
-def student_approved(student: ValidatorStudent):
-    student.force_state(StudentApproved())
-    yield student
+ANY_NAME = "any"
+OTHER_NAME = "other"
 
 
 class TestStudentState:
@@ -42,7 +29,7 @@ class TestStudentState:
     def test_student_has_initial_state_when_has_course_and_no_subjects(
         self, student: AbstractStudent
     ):
-        student.course = Course("")
+        student.course = ValidatorCourse("")
         assert isinstance(student.state, StudentInitialState)
 
     def test_student_has_initial_state_when_no_course_and_no_subjects(
@@ -64,11 +51,11 @@ class TestStudentState:
 class TestSubscribeToSubject:
     def test_student_can_subscribe_to_subjects_in_their_course_only(self, student: AbstractStudent):
         with raises(InvalidSubject):
-            student.subscribe_to_subject(Subject(ANY_NAME))
+            student.subscribe_to_subject(ValidatorSubject())
 
     def test_student_cannot_have_subject_when_no_course(self, student: AbstractStudent):
         with raises(InvalidSubject):
-            student.subscribe_to_subject(Subject(ANY_NAME))
+            student.subscribe_to_subject(ValidatorSubject())
 
 
 class TestGpaCalculation:
@@ -127,8 +114,8 @@ class TestListMissingSubjects:
         assert len(student_approved.missing_subjects) == 0
 
     def test_list_full_missing_subjects_when_student_in_progress(self, student: ValidatorStudent):
-        course = Course(ANY_NAME)
-        course.accept_subject(Subject(ANY_NAME))
+        course = ValidatorCourse()
+        course.accept_subject(ValidatorSubject())
         student.course = course
         student.force_has_minimun_subjects()
         assert isinstance(student.state, StudentInProgress)

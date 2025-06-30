@@ -1,3 +1,4 @@
+from architecture.code_analysis_v3.core.exceptions import InvalidCourse
 from architecture.code_analysis_v3.core.student import AbstractStudent
 from architecture.code_analysis_v3.core.course import AbstractCourse, NoneCourse
 from architecture.code_analysis_v3.core.gss import GSS
@@ -22,6 +23,17 @@ class AbstractTeacher(AbstractCoreObject):
     def sub_state(self):
         raise NotImplementedError
 
+    @property
+    def course(self):
+        raise NotImplementedError
+
+    @course.setter
+    def course(self, value: "AbstractCourse") -> "AbstractCourse":
+        raise NotImplementedError
+
+    def is_teacher(self):
+        return True
+
     def has_maximum_subjects(self) -> bool:
         raise NotImplementedError
 
@@ -32,6 +44,15 @@ class AbstractTeacher(AbstractCoreObject):
         raise NotImplementedError
 
     def has_inprogress_subject(self) -> bool:
+        raise NotImplementedError
+
+    def has_course(self) -> bool:
+        raise NotImplementedError
+
+    def list_all_subjects(self) -> list["AbstractSubject"]:
+        raise NotImplementedError
+
+    def list_all_subjects_inprogress(self) -> list["AbstractSubject"]:
         raise NotImplementedError
 
 
@@ -54,6 +75,16 @@ class Teacher(AbstractTeacher):
         self._sub_state = self._sub_state.get_next_state(self)
 
     @property
+    def course(self):
+        return self._course
+
+    @course.setter
+    def course(self, value):
+        if self.has_course():
+            raise InvalidCourse("Teacher already in other course")
+        self._course = value
+
+    @property
     def state(self):
         self._calculate_states()
         return self._state
@@ -64,6 +95,7 @@ class Teacher(AbstractTeacher):
         return self._sub_state
 
     def subscribe_to(self, subject: "AbstractSubject") -> None:
+        subject.is_subject()
         if self.has_maximum_subjects():
             raise MaximumSubjectsReached("Teacher reached maximum subjects")
         self._subjects.append(subject)
@@ -79,10 +111,20 @@ class Teacher(AbstractTeacher):
         inprogress = [s for s in self._subjects if s.is_inprogress()]
         return len(inprogress) >= MAXIMUM_SUBJECTS_IN_TEACHER
 
+    def has_course(self):
+        return not isinstance(self._course, NoneCourse)
+
     def set_gss(self, grade: int, student: "AbstractStudent", subject: "AbstractSubject") -> None:
+        student.is_student()
+        subject.is_subject()
         gss = GSS()
         gss.set_(grade, subject, student)
-        student.notify_me_about_gss(gss)
+
+    def list_all_subjects(self) -> list["AbstractSubject"]:
+        return self._subjects
+
+    def list_all_subjects_inprogress(self) -> list["AbstractSubject"]:
+        return [s for s in self._subjects if s.is_inprogress()]
 
 
 class NoneTeacher(AbstractTeacher):

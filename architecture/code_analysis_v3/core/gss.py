@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING
 from architecture.code_analysis_v3.core.base_object import AbstractCoreObject, NoneCoreObject
 from architecture.code_analysis_v3.core.common import AbstractState
 from architecture.code_analysis_v3.core.constants import MINIMUM_STUDENT_GRADE
+from architecture.code_analysis_v3.core.exceptions import InvalidStateTransition
 
 if TYPE_CHECKING:
     from architecture.code_analysis_v3.core.student import AbstractStudent
@@ -34,7 +35,7 @@ class GSS(IGSS):
         self._grade: int = 0
         self._subject: "AbstractCoreObject" = NoneCoreObject()
         self._student: "AbstractCoreObject" = NoneCoreObject()
-        self._state: "AbstractState" = InitialState()
+        self._state: "AbstractState" = GSSInitialState()
         name = f"{self._subject.name}_{self._student.name}_{str(self._grade)}"
         super().__init__(name)
 
@@ -48,9 +49,6 @@ class GSS(IGSS):
     def state(self) -> "AbstractState":
         return self._state
 
-    def force_object_for_testing(self, state: "AbstractState"):
-        self._state = state
-
     @property
     def student(self) -> "AbstractCoreObject":
         return self._student
@@ -63,11 +61,17 @@ class GSS(IGSS):
     def grade(self) -> int:
         return self._grade
 
+    def is_gss(self):
+        return True
+
     def set_(self, grade, subject, student):
+        student.is_student()
+        subject.is_subject()
         self._grade = grade
         self._subject = subject
         self._student = student
         self._calculate_state()
+        # student.notify_me_about_gss(self)
 
 
 class NoneGSS(IGSS):
@@ -77,15 +81,15 @@ class NoneGSS(IGSS):
 
 class GSSApproved(AbstractState):
     def get_next_state(self, context: GSS):
-        return self
+        raise InvalidStateTransition("GSS already approved")
 
 
 class GSSFailed(AbstractState):
     def get_next_state(self, context: GSS):
-        return self
+        raise InvalidStateTransition("GSS already approved")
 
 
-class InitialState(AbstractState):
+class GSSInitialState(AbstractState):
     def get_next_state(self, context: IGSS):
         if context.grade >= MINIMUM_STUDENT_GRADE:
             return GSSApproved()
