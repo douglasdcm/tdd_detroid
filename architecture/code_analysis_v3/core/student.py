@@ -99,9 +99,6 @@ class Student(AbstractStudent):
         self._state: AbstractState = StudentInitialState()
         self._age: int = -1
 
-    def __str__(self):
-        return f"Name: '{self.name}', Age: {self.age}"
-
     def _calculate_gpa(self) -> None:
         if self._grades_subjects:
             self._gpa = int(mean(self._grades_subjects))
@@ -188,6 +185,8 @@ class Student(AbstractStudent):
     @spy_logger
     def subscribe_to_subject(self, subject):
         subject.is_subject()
+        if subject in self.list_all_subjects():
+            raise InvalidSubject("Student alredy subscribed to subject")
         if subject.course.nui != self._course.nui:
             raise InvalidSubject("Subject is not in student course")
         self._add_to_subject_lists(subject)

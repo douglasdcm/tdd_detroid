@@ -50,11 +50,6 @@ class TestStudentCli:
     def test_student_subscribe(self, nui, snui):
         student = self._student_dm.load_by_nui(nui)
         subject = self._subject_dm.load_by_nui(snui)
-
-        course = ValidatorCourse()
-        student.course = course
-        subject.course = course
-        assert student.list_all_subscribed_subjects() == []
         assert student.course.nui == subject.course.nui
 
         self._student_dm.update_object(student)

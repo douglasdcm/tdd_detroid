@@ -7,7 +7,7 @@ def spy_logger(func):
     def wrapper(*args, **kwargs):
         LOGGER.info(f"Running: '{func.__name__}', args '{args}', kwargs '{kwargs}'.")
         result = func(*args, **kwargs)
-        if result:
+        if result is not None:
             LOGGER.info(f"Result: {result}")
         return result
 

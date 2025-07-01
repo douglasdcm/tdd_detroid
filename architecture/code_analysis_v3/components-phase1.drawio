@@ -147,7 +147,7 @@
         </mxGraphModel>
     </diagram>
     <diagram id="9N7FdPNcl1j3F9wMc1n4" name="CLI">
-        <mxGraphModel dx="1756" dy="530" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="1391" dy="530" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -186,76 +186,76 @@
                 <mxCell id="iYw6yXYciSSA1Y6HJOFZ-1" value="&lt;div&gt;The CLI is the only expected interface of the system. The user sends the desired command with the arguments. For example, consider the command is called tdd, the following command subscribes the Student to a Subject of nui 1234:&lt;/div&gt;&lt;div&gt;&lt;i&gt;$ tdd student subscribe 1234&lt;/i&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;The rule of thumb is let the commands simple to write and remmember&lt;/div&gt;" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;align=left;verticalAlign=top;" parent="1" vertex="1">
                     <mxGeometry x="-20" y="40" width="320" height="130" as="geometry"/>
                 </mxCell>
-                <mxCell id="5w0kf97u21KMcoVkLH16-3" style="edgeStyle=none;html=1;" edge="1" parent="1" source="-ezzSZNoyz5PLMm4ysqI-1" target="UhtjkVIeoqjzc2xnru7J-4">
+                <mxCell id="5w0kf97u21KMcoVkLH16-3" style="edgeStyle=none;html=1;" parent="1" source="-ezzSZNoyz5PLMm4ysqI-1" target="UhtjkVIeoqjzc2xnru7J-4" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="-ezzSZNoyz5PLMm4ysqI-1" value="Administrator" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+                <mxCell id="-ezzSZNoyz5PLMm4ysqI-1" value="Administrator" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
                     <mxGeometry x="330" y="150" width="30" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="5w0kf97u21KMcoVkLH16-1" value="&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ list all Students&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ list all Courses&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ list Student per Course&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ list Subjects per Student&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ list all Course Coordinator&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ Create Student&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ Set Student Course&amp;nbsp;&lt;/font&gt;&lt;/div&gt;" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;align=left;verticalAlign=top;" vertex="1" parent="1">
+                <mxCell id="5w0kf97u21KMcoVkLH16-1" value="&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ list all Students&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ list all Courses&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ list Student per Course&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ list Subjects per Student&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ list all Course Coordinator&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ Create Student&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ Set Student Course&amp;nbsp;&lt;/font&gt;&lt;/div&gt;" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;align=left;verticalAlign=top;" parent="1" vertex="1">
                     <mxGeometry x="380" y="70" width="200" height="120" as="geometry"/>
                 </mxCell>
-                <mxCell id="5w0kf97u21KMcoVkLH16-2" style="edgeStyle=none;html=1;endArrow=none;endFill=0;entryX=0;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;exitX=1;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="-ezzSZNoyz5PLMm4ysqI-1" target="5w0kf97u21KMcoVkLH16-1">
+                <mxCell id="5w0kf97u21KMcoVkLH16-2" style="edgeStyle=none;html=1;endArrow=none;endFill=0;entryX=0;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;exitX=1;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="-ezzSZNoyz5PLMm4ysqI-1" target="5w0kf97u21KMcoVkLH16-1" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <mxPoint x="313" y="485" as="sourcePoint"/>
                         <mxPoint x="328" y="421" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="5w0kf97u21KMcoVkLH16-4" style="edgeStyle=none;html=1;entryX=1;entryY=0.25;entryDx=0;entryDy=0;" edge="1" parent="1" source="5w0kf97u21KMcoVkLH16-5" target="UhtjkVIeoqjzc2xnru7J-4">
+                <mxCell id="5w0kf97u21KMcoVkLH16-4" style="edgeStyle=none;html=1;entryX=1;entryY=0.25;entryDx=0;entryDy=0;" parent="1" source="5w0kf97u21KMcoVkLH16-5" target="UhtjkVIeoqjzc2xnru7J-4" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <mxPoint x="290" y="390" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="5w0kf97u21KMcoVkLH16-5" value="Coordinator" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+                <mxCell id="5w0kf97u21KMcoVkLH16-5" value="Coordinator" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
                     <mxGeometry x="395" y="240" width="30" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="5w0kf97u21KMcoVkLH16-6" value="&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ list students of their Courses&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ list subjects of their Courses&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ list grades of their Courses&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ list GPA of their Courses&lt;/font&gt;&lt;/div&gt;" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;align=left;verticalAlign=top;" vertex="1" parent="1">
+                <mxCell id="5w0kf97u21KMcoVkLH16-6" value="&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ list students of their Courses&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ list subjects of their Courses&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ list grades of their Courses&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ list GPA of their Courses&lt;/font&gt;&lt;/div&gt;" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;align=left;verticalAlign=top;" parent="1" vertex="1">
                     <mxGeometry x="620" y="110" width="200" height="70" as="geometry"/>
                 </mxCell>
-                <mxCell id="5w0kf97u21KMcoVkLH16-7" style="edgeStyle=none;html=1;endArrow=none;endFill=0;entryX=0;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;exitX=1;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="5w0kf97u21KMcoVkLH16-5" target="5w0kf97u21KMcoVkLH16-6">
+                <mxCell id="5w0kf97u21KMcoVkLH16-7" style="edgeStyle=none;html=1;endArrow=none;endFill=0;entryX=0;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;exitX=1;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="5w0kf97u21KMcoVkLH16-5" target="5w0kf97u21KMcoVkLH16-6" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <mxPoint x="335" y="595" as="sourcePoint"/>
                         <mxPoint x="350" y="531" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="5w0kf97u21KMcoVkLH16-12" style="edgeStyle=none;html=1;entryX=1;entryY=0.75;entryDx=0;entryDy=0;" edge="1" parent="1" source="5w0kf97u21KMcoVkLH16-13" target="UhtjkVIeoqjzc2xnru7J-4">
+                <mxCell id="5w0kf97u21KMcoVkLH16-12" style="edgeStyle=none;html=1;entryX=1;entryY=0.75;entryDx=0;entryDy=0;" parent="1" source="5w0kf97u21KMcoVkLH16-13" target="UhtjkVIeoqjzc2xnru7J-4" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <mxPoint x="320" y="426" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="5w0kf97u21KMcoVkLH16-13" value="Course Coordinator" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+                <mxCell id="5w0kf97u21KMcoVkLH16-13" value="Course Coordinator" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
                     <mxGeometry x="435" y="371" width="30" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="5w0kf97u21KMcoVkLH16-14" value="&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ list students&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ list grades of Subjects&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ list GPA of Students&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ remove Subjects&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ accept Student&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ do not accept Student-&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ add Subject to their Course&lt;/font&gt;&lt;/div&gt;" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;align=left;verticalAlign=top;" vertex="1" parent="1">
+                <mxCell id="5w0kf97u21KMcoVkLH16-14" value="&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ list students&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ list grades of Subjects&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ list GPA of Students&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ remove Subjects&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ accept Student&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ do not accept Student-&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ add Subject to their Course&lt;/font&gt;&lt;/div&gt;" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;align=left;verticalAlign=top;" parent="1" vertex="1">
                     <mxGeometry x="560" y="230" width="180" height="120" as="geometry"/>
                 </mxCell>
-                <mxCell id="5w0kf97u21KMcoVkLH16-15" style="edgeStyle=none;html=1;endArrow=none;endFill=0;entryX=0;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;exitX=1;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="5w0kf97u21KMcoVkLH16-13" target="5w0kf97u21KMcoVkLH16-14">
+                <mxCell id="5w0kf97u21KMcoVkLH16-15" style="edgeStyle=none;html=1;endArrow=none;endFill=0;entryX=0;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;exitX=1;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="5w0kf97u21KMcoVkLH16-13" target="5w0kf97u21KMcoVkLH16-14" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <mxPoint x="375" y="726" as="sourcePoint"/>
                         <mxPoint x="390" y="662" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="5w0kf97u21KMcoVkLH16-20" style="edgeStyle=none;html=1;entryX=0.817;entryY=1.067;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="5w0kf97u21KMcoVkLH16-21" target="UhtjkVIeoqjzc2xnru7J-4">
+                <mxCell id="5w0kf97u21KMcoVkLH16-20" style="edgeStyle=none;html=1;entryX=0.817;entryY=1.067;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="5w0kf97u21KMcoVkLH16-21" target="UhtjkVIeoqjzc2xnru7J-4" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <mxPoint x="310.00000000000006" y="360" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="5w0kf97u21KMcoVkLH16-21" value="General Coordinator" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+                <mxCell id="5w0kf97u21KMcoVkLH16-21" value="General Coordinator" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
                     <mxGeometry x="442.04" y="490" width="30" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="5w0kf97u21KMcoVkLH16-22" value="&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ list all Courses&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ list Students&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ list Grades of Subjects&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ list GPA of Students&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ cancel Course&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ create Course&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ open Semester&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ close Semester&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ add Student to Enrollment List&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ analise Student Documentation?&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ add Course to University&lt;/font&gt;&lt;/div&gt;" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;align=left;verticalAlign=top;" vertex="1" parent="1">
+                <mxCell id="5w0kf97u21KMcoVkLH16-22" value="&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ list all Courses&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ list Students&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ list Grades of Subjects&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ list GPA of Students&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ cancel Course&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ create Course&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ open Semester&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ close Semester&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ add Student to Enrollment List&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ analise Student Documentation?&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;+ add Course to University&lt;/font&gt;&lt;/div&gt;" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;align=left;verticalAlign=top;" parent="1" vertex="1">
                     <mxGeometry x="550" y="380" width="250" height="170" as="geometry"/>
                 </mxCell>
-                <mxCell id="5w0kf97u21KMcoVkLH16-23" style="edgeStyle=none;html=1;endArrow=none;endFill=0;entryX=0;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;exitX=1;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="5w0kf97u21KMcoVkLH16-21" target="5w0kf97u21KMcoVkLH16-22">
+                <mxCell id="5w0kf97u21KMcoVkLH16-23" style="edgeStyle=none;html=1;endArrow=none;endFill=0;entryX=0;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;exitX=1;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="5w0kf97u21KMcoVkLH16-21" target="5w0kf97u21KMcoVkLH16-22" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <mxPoint x="382.04" y="845" as="sourcePoint"/>
                         <mxPoint x="397.04" y="781" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="5w0kf97u21KMcoVkLH16-25" style="edgeStyle=none;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;endArrow=none;endFill=0;dashed=1;" edge="1" parent="1" source="5w0kf97u21KMcoVkLH16-24" target="UhtjkVIeoqjzc2xnru7J-4">
+                <mxCell id="5w0kf97u21KMcoVkLH16-25" style="edgeStyle=none;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;endArrow=none;endFill=0;dashed=1;" parent="1" source="5w0kf97u21KMcoVkLH16-24" target="UhtjkVIeoqjzc2xnru7J-4" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="5w0kf97u21KMcoVkLH16-24" value="&lt;div&gt;Every need to be authenticated&lt;/div&gt;" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;align=left;verticalAlign=top;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+                <mxCell id="5w0kf97u21KMcoVkLH16-24" value="&lt;div&gt;Every need to be authenticated&lt;/div&gt;" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;align=left;verticalAlign=top;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
                     <mxGeometry x="160" y="460" width="210" height="40" as="geometry"/>
                 </mxCell>
             </root>

@@ -37,17 +37,28 @@ def _list_db(data_manager: BaseCoreDataManager):
 
 @cli.command()
 def init_db():
-    _populate(CourseDataManager(), Course)
-    _populate(StudentDataManager(), Student)
-    _populate(SubjectDataManager(), Subject)
+    courses = _populate(Course)
+    students = _populate(Student)
+    for student in students:
+        student.course = courses[0]
+    subjects = _populate(Subject)
+    for subject in subjects:
+        subject.course = courses[0]
+    save_all(CourseDataManager(), courses)
+    save_all(StudentDataManager(), students)
+    save_all(SubjectDataManager(), subjects)
 
 
-def _populate(data_manager: BaseCoreDataManager, obj_type: type[AbstractCoreObject]):
-    data_manager.clear()
+def _populate(obj_type: type[AbstractCoreObject]):
     objs = []
     for _ in RANGE:
         objs.append(obj_type(""))
-    data_manager.save_objects(objs)
+    return objs
+
+
+def save_all(data_manager: BaseCoreDataManager, obj_type: type[AbstractCoreObject]):
+    data_manager.clear()
+    data_manager.save_objects(obj_type)
 
 
 @cli.command()

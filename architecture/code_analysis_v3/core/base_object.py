@@ -14,7 +14,7 @@ class AbstractCoreObject:
         return f"Name {name}, NUI {self._nui}"
 
     def __repr__(self):
-        return f"{self.__class__.__name__} {vars(self)}"
+        return f"{self.__class__.__name__}, NUI {self._nui}, NAME '{self._name}'"
 
     @property
     def name(self) -> str:
