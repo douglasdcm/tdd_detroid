@@ -1,3 +1,4 @@
+import logging
 from pytest import fixture, raises
 from core.course import (
     CourseInProgress,
@@ -95,7 +96,10 @@ class TestCourseAcceptSubject:
 
 
 class TestIsFullOfSubjects:
-    def test_course_is_full_of_subjects_when_maximum_subjects_added(self, course: ValidatorCourse):
+    def test_course_is_full_of_subjects_when_maximum_subjects_added(
+        self, caplog, course: ValidatorCourse
+    ):
+        caplog.set_level(logging.ERROR)
         for _ in range(30):
             course.accept_subject(ValidatorSubject())
         with raises(InvalidSubject):
@@ -103,17 +107,18 @@ class TestIsFullOfSubjects:
 
 
 class TestIsFullOfStudents:
-    def test_course_is_full_of_students_when_maximum_students_added(self, course: ValidatorCourse):
-        for _ in range(900):
-            course.accept_student(ValidatorStudent())
+    def test_course_is_full_of_students_when_maximum_students_added(
+        self, caplog, course: ValidatorCourse
+    ):
+        caplog.set_level(logging.ERROR)
+        course.force_is_full_of_students()
         with raises(InvalidStudent):
             course.accept_student(ValidatorStudent())
 
     def test_course_is_not_full_of_students_when_maximum_students_not_added(
-        self, course: ValidatorCourse
+        self, caplog, course: ValidatorCourse
     ):
-        for _ in range(899):
-            course.accept_student(ValidatorStudent())
+        caplog.set_level(logging.ERROR)
         assert course.is_full_of_student() is False
 
 

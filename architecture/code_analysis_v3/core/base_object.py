@@ -8,10 +8,13 @@ class AbstractCoreObject:
         self._name = name
 
     def __str__(self):
-        return f"{self.__class__.__name__}. Empty or not found"
+        name = self.__class__.__name__
+        if not name:
+            return "Empty or not found"
+        return f"Name {name}, NUI {self._nui}"
 
     def __repr__(self):
-        return self._name
+        return f"{self.__class__.__name__} {vars(self)}"
 
     @property
     def name(self) -> str:

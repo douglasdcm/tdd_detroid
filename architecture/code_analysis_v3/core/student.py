@@ -7,6 +7,7 @@ from core.constants import (
     MINIMUN_SUBJECTS_IN_STUDENT,
 )
 from core.course import NoneCourse
+from core.spy_logger import none_logger, spy_logger
 from core.gss import GSSApproved
 
 if TYPE_CHECKING:
@@ -27,7 +28,7 @@ class AbstractStudent(AbstractCoreObject):
         raise NotImplementedError
 
     @property
-    def state(self) -> AbstractState:
+    def state(self) -> "AbstractState":
         raise NotImplementedError
 
     @property
@@ -134,7 +135,7 @@ class Student(AbstractStudent):
         return self._missing_subjects
 
     @property
-    def state(self) -> AbstractState:
+    def state(self) -> "AbstractState":
         self._calculate_state()
         return self._state
 
@@ -153,7 +154,8 @@ class Student(AbstractStudent):
 
     @course.setter
     def course(self, course: "AbstractCourse") -> None:
-        self._course = course
+        if isinstance(self._course, NoneCourse):
+            self._course = course
         self._missing_subjects = course.list_all_subjects()
         self._calculate_state()
         if self not in course.list_all_students():
@@ -163,28 +165,35 @@ class Student(AbstractStudent):
     def grades(self) -> list[int]:
         return self._grades_subjects
 
+    @spy_logger
     def is_inprogress(self) -> bool:
         return isinstance(self._state, StudentInProgress)
 
+    @spy_logger
     def has_course(self):
         return not isinstance(self._course, NoneCourse)
 
+    @spy_logger
     def has_minimum_subjects(self):
         return len(self._subjects_in_progress) >= MINIMUN_SUBJECTS_IN_STUDENT
 
+    @spy_logger
     def has_minimum_gpa(self) -> bool:
         return self._gpa >= MINIMUM_STUDENT_GRADE
 
+    @spy_logger
     def are_all_subjects_approved(self) -> bool:
         return len(self._missing_subjects) == 0
 
+    @spy_logger
     def subscribe_to_subject(self, subject):
         subject.is_subject()
-        if subject.course != self._course:
+        if subject.course.nui != self._course.nui:
             raise InvalidSubject("Subject is not in student course")
         self._add_to_subject_lists(subject)
         self._calculate_state()
 
+    @spy_logger
     def notify_me_about_gss(self, gss):
         gss.is_gss()
         if isinstance(gss.state, GSSApproved):
@@ -193,26 +202,52 @@ class Student(AbstractStudent):
         self._calculate_gpa()
         self._calculate_state()
 
+    @spy_logger
     def add_basic_information(self, basic_information: "BasicInformation") -> None:
         self._name = basic_information.name
         self._age = basic_information.age
 
+    @spy_logger
     def list_all_subjects(self) -> list["AbstractSubject"]:
         result = []
-        result.extend(self.missing_subjects)
-        result.extend(self.subjects_in_progress)
+        result.extend(self._missing_subjects)
+        result.extend(self._subjects_in_progress)
         return result
+
+    @spy_logger
+    def list_all_subscribed_subjects(self) -> list["AbstractSubject"]:
+        return self._subjects_in_progress
 
 
 class NoneStudent(AbstractStudent):
     def __init__(self, name=""):
         super().__init__(name)
+        print(self)
+
+    @property
+    def course(self):
+        pass
+
+    @course.setter
+    def course(self, value):
+        pass
+
+    @none_logger
+    def add_basic_information(self, basic_information: "BasicInformation") -> None:
+        pass
+
+    @none_logger
+    def subscribe_to_subject(self, subject):
+        pass
 
 
 class BasicInformation:
     def __init__(self, name, age) -> None:
         self._name: str = name
         self._age: int = age
+
+    def __repr__(self):
+        return f"{self.__class__.__name__} {vars(self)}"
 
     @property
     def name(self):

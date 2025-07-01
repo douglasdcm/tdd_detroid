@@ -7,6 +7,7 @@ from core.constants import (
     MINIMUM_STUDENTS_IN_COURSE,
     MINIMUN_SUBJECTS_IN_COURSE,
 )
+from core.spy_logger import spy_logger
 from core.exceptions import InvalidStudent, InvalidSubject
 
 if TYPE_CHECKING:
@@ -65,6 +66,7 @@ class Course(AbstractCourse):
         self._calculate_state()
         return self._state
 
+    @spy_logger
     def accept_student(self, student: "AbstractStudent"):
         if student in self._students:
             raise InvalidStudent("Student already in course")
@@ -77,9 +79,11 @@ class Course(AbstractCourse):
         if self != student.course:
             student.course = self
 
+    @spy_logger
     def is_full_of_student(self):
         return len(self._students) >= MAXIMUM_STUDENTS_IN_COURSE
 
+    @spy_logger
     def accept_subject(self, subject):
         if subject in self._subjects:
             raise InvalidSubject("Subject already in course")
@@ -92,20 +96,25 @@ class Course(AbstractCourse):
         if self != subject.course:
             subject.course = self
 
+    @spy_logger
     def is_full_of_subjects(self):
         return len(self._subjects) >= MAXIMUM_SUBJECTS_IN_COURSE
 
+    @spy_logger
     def has_minimum_inprogress_students(self):
         inprogress = [s for s in self._students if s.is_inprogress()]
         return len(inprogress) >= MINIMUM_STUDENTS_IN_COURSE
 
+    @spy_logger
     def has_minimum_inprogress_subjects(self):
         inprogress = [s for s in self._subjects if s.is_inprogress()]
         return len(inprogress) >= MINIMUN_SUBJECTS_IN_COURSE
 
+    @spy_logger
     def list_all_subjects(self) -> list["AbstractSubject"]:
         return self._subjects
 
+    @spy_logger
     def list_all_students(self) -> list["AbstractStudent"]:
         return self._students
 

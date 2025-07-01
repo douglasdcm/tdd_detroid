@@ -7,7 +7,6 @@ from core.gss import (
     GSSFailed,
     GSSInitialState,
 )
-from core.subject import SubjectInProgress
 from tests.test_core.validator_classes import (
     ValidatorCourse,
     ValidatorStudent,

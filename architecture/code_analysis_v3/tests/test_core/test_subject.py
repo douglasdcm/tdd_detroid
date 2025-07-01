@@ -1,3 +1,4 @@
+import logging
 from pytest import raises
 from core.course import NoneCourse
 from core.exceptions import InvalidCourse
@@ -85,9 +86,8 @@ class TestSubjectHasTeacher:
 
 
 class TestSubjectMinimumInProgressStudents:
-    def __init__(self):
-        self._inprogress = ValidatorStudent()
-        self._inprogress.force_state(StudentInProgress())
+    _inprogress = ValidatorStudent()
+    _inprogress.force_state(StudentInProgress())
 
     def test_subject_has_no_minimum_students_when_created(self):
         subject = ValidatorSubject()
@@ -107,9 +107,8 @@ class TestSubjectMinimumInProgressStudents:
 
 
 class TestSubjectMaximumInProgressStudents:
-    def __init__(self):
-        self._inprogress = ValidatorStudent()
-        self._inprogress.force_state(StudentInProgress())
+    _inprogress = ValidatorStudent()
+    _inprogress.force_state(StudentInProgress())
 
     def test_subject_has_no_maximum_students_when_created(self):
         subject = ValidatorSubject()
@@ -121,7 +120,8 @@ class TestSubjectMaximumInProgressStudents:
             subject.accept_student(self._inprogress)
         assert subject.has_maximum_students() is False
 
-    def test_subject_has_maximum_students_when_maximum_added(self):
+    def test_subject_has_maximum_students_when_maximum_added(self, caplog):
+        caplog.set_level(logging.ERROR)
         subject = ValidatorSubject()
         for _ in range(30):
             subject.accept_student(self._inprogress)

@@ -6,6 +6,7 @@ from core.constants import (
     MINIMUM_STUDENTS_IN_SUBJECT,
 )
 from core.course import NoneCourse
+from core.spy_logger import spy_logger
 from core.exceptions import InvalidCourse
 
 if TYPE_CHECKING:
@@ -27,10 +28,6 @@ class AbstractSubject(AbstractCoreObject):
 
     @property
     def state(self) -> "AbstractState":
-        raise NotImplementedError
-
-    @state.setter
-    def state(self, value: "AbstractState") -> None:
         raise NotImplementedError
 
     def is_subject(self):
@@ -76,12 +73,6 @@ class Subject(AbstractSubject):
         self._teacher: "AbstractCoreObject" = NoneCoreObject()
         self._state: "AbstractState" = SubjectInitialState()
 
-    def __str__(self):
-        return f"{self.__class__.__name__} '{self._name}'"
-
-    def __repr__(self):
-        return f"{self.__class__.__name__} '{self._name}'"
-
     def _calculate_state(self) -> None:
         self._state = self._state.get_next_state(self)
 
@@ -105,30 +96,39 @@ class Subject(AbstractSubject):
         self._calculate_state()
         return self._state
 
+    @spy_logger
     def subscribe_teacher(self, teacher: "AbstractTeacher") -> None:
         self._teacher = teacher
 
+    @spy_logger
     def has_minimum_inprogress_students(self) -> bool:
         return len(self._students) >= MINIMUM_STUDENTS_IN_SUBJECT
 
+    @spy_logger
     def has_maximum_students(self) -> bool:
         return len(self._students) >= MAXIMUM_STUDENTS_IN_SUBJECT
 
+    @spy_logger
     def has_teacher(self) -> bool:
         return not isinstance(self._teacher, NoneCoreObject)
 
+    @spy_logger
     def has_course(self) -> bool:
         return not isinstance(self.course, NoneCourse)
 
+    @spy_logger
     def is_inprogress(self) -> bool:
         return isinstance(self.state, SubjectInProgress)
 
+    @spy_logger
     def list_all_students(self) -> list["AbstractStudent"]:
         return self._students
 
+    @spy_logger
     def list_all_inprogress_students(self) -> list["AbstractStudent"]:
         return [s for s in self._students if s.is_inprogress()]
 
+    @spy_logger
     def accept_student(self, student: "AbstractStudent") -> None:
         self._students.append(student)
 

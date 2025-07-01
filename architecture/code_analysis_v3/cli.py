@@ -1,4 +1,5 @@
 import click
+import logging
 from commands.student import student_cmd
 from core.base_object import AbstractCoreObject
 from core.course import Course
@@ -9,6 +10,13 @@ from db_manager import (
     CourseDataManager,
     StudentDataManager,
     SubjectDataManager,
+)
+
+# Configure the root logger to capture INFO messages and above
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
 )
 
 RANGE = range(10)
@@ -27,19 +35,11 @@ def _list_db(data_manager: BaseCoreDataManager):
         click.echo(obj)
 
 
-def _associate(course_dm: BaseCoreDataManager, subject_dm: BaseCoreDataManager):
-    return
-    for course in course_dm.loadall():
-        for subject in subject_dm.loadall():
-            course
-
-
 @cli.command()
 def init_db():
     _populate(CourseDataManager(), Course)
     _populate(StudentDataManager(), Student)
     _populate(SubjectDataManager(), Subject)
-    _associate(CourseDataManager, SubjectDataManager)
 
 
 def _populate(data_manager: BaseCoreDataManager, obj_type: type[AbstractCoreObject]):
@@ -48,7 +48,6 @@ def _populate(data_manager: BaseCoreDataManager, obj_type: type[AbstractCoreObje
     for _ in RANGE:
         objs.append(obj_type(""))
     data_manager.save_objects(objs)
-    _list_db(data_manager)
 
 
 @cli.command()

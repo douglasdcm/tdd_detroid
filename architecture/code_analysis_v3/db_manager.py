@@ -1,4 +1,5 @@
 import pickle
+from core.spy_logger import spy_logger
 from core.student import NoneStudent
 from core.subject import NoneSubject
 from core.course import NoneCourse
@@ -10,6 +11,9 @@ FILE_EXTENSION = ".pickle"
 
 class BaseCoreDataManager:
     DATA_FILE: str = ""
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}"
 
     def _dump_data(self, app_object, outp):
         data = {f"{app_object.nui}": app_object}
@@ -31,6 +35,7 @@ class BaseCoreDataManager:
         with open(self.DATA_FILE, "ab") as outp:
             self._dump_data(app_object, outp)
 
+    @spy_logger
     def update_object(self, app_object: AbstractCoreObject):
         result = []
         for obj in self.loadall():
@@ -57,6 +62,7 @@ class BaseCoreDataManager:
                 except EOFError:
                     break
 
+    @spy_logger
     def load_by_nui(self, nui):
         for obj in self.loadall():
             # All AbstractCoreObjects has a `nui`

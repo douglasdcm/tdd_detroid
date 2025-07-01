@@ -67,9 +67,6 @@ class Teacher(AbstractTeacher):
     def __str__(self):
         return f"{self._name}"
 
-    def __repr__(self):
-        return f"{self._name}"
-
     def _calculate_states(self):
         self._state = self._state.get_next_state(self)
         self._sub_state = self._sub_state.get_next_state(self)
