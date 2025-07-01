@@ -1,4 +1,4 @@
-from architecture.code_analysis_v3.core.common import AbstractState
+from core.common import AbstractState
 
 
 class AbstractCoreObject:

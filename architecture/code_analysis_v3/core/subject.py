@@ -1,17 +1,17 @@
 from typing import TYPE_CHECKING
-from architecture.code_analysis_v3.core.base_object import AbstractCoreObject, NoneCoreObject
-from architecture.code_analysis_v3.core.common import AbstractState, NoneState
-from architecture.code_analysis_v3.core.constants import (
+from core.base_object import AbstractCoreObject, NoneCoreObject
+from core.common import AbstractState, NoneState
+from core.constants import (
     MAXIMUM_STUDENTS_IN_SUBJECT,
     MINIMUM_STUDENTS_IN_SUBJECT,
 )
-from architecture.code_analysis_v3.core.course import NoneCourse
-from architecture.code_analysis_v3.core.exceptions import InvalidCourse
+from core.course import NoneCourse
+from core.exceptions import InvalidCourse
 
 if TYPE_CHECKING:
-    from architecture.code_analysis_v3.core.student import AbstractStudent
-    from architecture.code_analysis_v3.core.teacher import AbstractTeacher
-    from architecture.code_analysis_v3.core.course import AbstractCourse
+    from core.student import AbstractStudent
+    from core.teacher import AbstractTeacher
+    from core.course import AbstractCourse
 
 MESSAGE = "=== No valid subject ==="
 

@@ -1,9 +1,9 @@
-from architecture.code_analysis_v3.core.subject import AbstractSubject
-from architecture.code_analysis_v3.core.student import (
+from core.subject import AbstractSubject
+from core.student import (
     BasicInformation,
     AbstractStudent,
 )
-from architecture.code_analysis_v3.db_manager import StudentDataManager, SubjectDataManager
+from db_manager import StudentDataManager, SubjectDataManager
 
 
 class StudentController:

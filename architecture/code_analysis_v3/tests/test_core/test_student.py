@@ -1,5 +1,5 @@
 from pytest import raises, mark
-from architecture.code_analysis_v3.core.student import (
+from core.student import (
     StudentApproved,
     BasicInformation,
     AbstractStudent,
@@ -8,7 +8,7 @@ from architecture.code_analysis_v3.core.student import (
     InvalidStateTransition,
     InvalidSubject,
 )
-from architecture.code_analysis_v3.tests.test_core.validator_classes import (
+from tests.test_core.validator_classes import (
     ValidatorCourse,
     ValidatorStudent,
     ValidatorSubject,

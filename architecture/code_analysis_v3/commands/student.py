@@ -1,5 +1,5 @@
 import click
-from architecture.code_analysis_v3.core.controller import StudentController
+from core.controller import StudentController
 
 CONTROLLER = StudentController()
 

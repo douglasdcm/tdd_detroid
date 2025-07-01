@@ -1,13 +1,15 @@
 from pytest import fixture, raises
-from architecture.code_analysis_v3.core.exceptions import InvalidStateTransition
-from architecture.code_analysis_v3.core.gss import (
+from core.exceptions import InvalidStateTransition
+from core.gss import (
     GSS,
     IGSS,
     GSSApproved,
     GSSFailed,
     GSSInitialState,
 )
-from architecture.code_analysis_v3.tests.test_core.validator_classes import (
+from core.subject import SubjectInProgress
+from tests.test_core.validator_classes import (
+    ValidatorCourse,
     ValidatorStudent,
     ValidatorSubject,
 )
@@ -48,12 +50,17 @@ class TestGSSStateTransition:
 
 
 class TestGSSNotifyStudent:
-    def test_student_gss_notify_student_when_approved(self, gss: IGSS):
+    def test_student_gss_notify_student_when_student_and_subject_related(self, gss: IGSS):
         grade = 9
+        course = ValidatorCourse()
+        subject = ValidatorSubject()
+        subject.force_course(course)
         student = ValidatorStudent()
+        student.course = course
+        student.subscribe_to_subject(subject)
         gss.set_(
             grade,
-            ValidatorSubject(),
-            ValidatorStudent(),
+            subject,
+            student,
         )
         assert student.gpa == grade

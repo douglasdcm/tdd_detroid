@@ -1,10 +1,10 @@
 import click
-from architecture.code_analysis_v3.commands.student import student_cmd
-from architecture.code_analysis_v3.core.base_object import AbstractCoreObject
-from architecture.code_analysis_v3.core.course import Course
-from architecture.code_analysis_v3.core.student import Student
-from architecture.code_analysis_v3.core.subject import Subject
-from architecture.code_analysis_v3.db_manager import (
+from commands.student import student_cmd
+from core.base_object import AbstractCoreObject
+from core.course import Course
+from core.student import Student
+from core.subject import Subject
+from db_manager import (
     BaseCoreDataManager,
     CourseDataManager,
     StudentDataManager,

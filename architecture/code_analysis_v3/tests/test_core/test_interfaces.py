@@ -1,8 +1,8 @@
-from architecture.code_analysis_v3.core.course import AbstractCourse
-from architecture.code_analysis_v3.core.gss import IGSS
-from architecture.code_analysis_v3.core.student import AbstractStudent
-from architecture.code_analysis_v3.core.subject import AbstractSubject
-from architecture.code_analysis_v3.core.teacher import AbstractTeacher
+from core.course import AbstractCourse
+from core.gss import IGSS
+from core.student import AbstractStudent
+from core.subject import AbstractSubject
+from core.teacher import AbstractTeacher
 
 EMPTY_NAME = ""
 

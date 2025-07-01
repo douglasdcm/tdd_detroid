@@ -1,12 +1,12 @@
 from typing import TYPE_CHECKING
-from architecture.code_analysis_v3.core.base_object import AbstractCoreObject, NoneCoreObject
-from architecture.code_analysis_v3.core.common import AbstractState
-from architecture.code_analysis_v3.core.constants import MINIMUM_STUDENT_GRADE
-from architecture.code_analysis_v3.core.exceptions import InvalidStateTransition
+from core.base_object import AbstractCoreObject, NoneCoreObject
+from core.common import AbstractState
+from core.constants import MINIMUM_STUDENT_GRADE
+from core.exceptions import InvalidStateTransition
 
 if TYPE_CHECKING:
-    from architecture.code_analysis_v3.core.student import AbstractStudent
-    from architecture.code_analysis_v3.core.subject import AbstractSubject
+    from core.student import AbstractStudent
+    from core.subject import AbstractSubject
 
 
 class IGSS(AbstractCoreObject):
@@ -27,6 +27,9 @@ class IGSS(AbstractCoreObject):
         raise NotImplementedError
 
     def set_(self, grade: int, subject: "AbstractSubject", student: "AbstractStudent") -> None:
+        raise NotImplementedError
+
+    def is_gss(self) -> bool:
         raise NotImplementedError
 
 
@@ -71,7 +74,8 @@ class GSS(IGSS):
         self._subject = subject
         self._student = student
         self._calculate_state()
-        # student.notify_me_about_gss(self)
+        if self._student == student and self._subject in student.subjects_in_progress:
+            student.notify_me_about_gss(self)
 
 
 class NoneGSS(IGSS):

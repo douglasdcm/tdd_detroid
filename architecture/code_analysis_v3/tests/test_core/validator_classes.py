@@ -1,9 +1,9 @@
-from architecture.code_analysis_v3.core.course import Course
-from architecture.code_analysis_v3.core.student import (
+from core.course import Course
+from core.student import (
     Student,
 )
-from architecture.code_analysis_v3.core.subject import Subject
-from architecture.code_analysis_v3.core.teacher import Teacher
+from core.subject import Subject
+from core.teacher import Teacher
 
 
 class ValidatorCourse(Course):

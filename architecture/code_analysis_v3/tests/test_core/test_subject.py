@@ -1,11 +1,11 @@
 from pytest import raises
-from architecture.code_analysis_v3.core.course import NoneCourse
-from architecture.code_analysis_v3.core.exceptions import InvalidCourse
-from architecture.code_analysis_v3.core.student import (
+from core.course import NoneCourse
+from core.exceptions import InvalidCourse
+from core.student import (
     StudentInProgress,
 )
-from architecture.code_analysis_v3.core.subject import SubjectInProgress, SubjectInitialState
-from architecture.code_analysis_v3.tests.test_core.validator_classes import (
+from core.subject import SubjectInProgress, SubjectInitialState
+from tests.test_core.validator_classes import (
     ValidatorCourse,
     ValidatorStudent,
     ValidatorSubject,

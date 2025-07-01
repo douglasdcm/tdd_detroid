@@ -1,18 +1,18 @@
 from statistics import mean
 from typing import TYPE_CHECKING
-from architecture.code_analysis_v3.core.base_object import AbstractCoreObject
-from architecture.code_analysis_v3.core.common import AbstractState
-from architecture.code_analysis_v3.core.constants import (
+from core.base_object import AbstractCoreObject
+from core.common import AbstractState
+from core.constants import (
     MINIMUM_STUDENT_GRADE,
     MINIMUN_SUBJECTS_IN_STUDENT,
 )
-from architecture.code_analysis_v3.core.course import NoneCourse
-from architecture.code_analysis_v3.core.gss import GSSApproved
+from core.course import NoneCourse
+from core.gss import GSSApproved
 
 if TYPE_CHECKING:
-    from architecture.code_analysis_v3.core.gss import IGSS
-    from architecture.code_analysis_v3.core.course import AbstractCourse
-    from architecture.code_analysis_v3.core.subject import AbstractSubject
+    from core.gss import IGSS
+    from core.course import AbstractCourse
+    from core.subject import AbstractSubject
 
 MESSAGE = "=== No valid student ==="
 
@@ -102,7 +102,8 @@ class Student(AbstractStudent):
         return f"Name: '{self.name}', Age: {self.age}"
 
     def _calculate_gpa(self) -> None:
-        self._gpa = int(mean(self._grades_subjects))
+        if self._grades_subjects:
+            self._gpa = int(mean(self._grades_subjects))
 
     def _calculate_state(self) -> None:
         self._state = self._state.get_next_state(self)
@@ -185,10 +186,7 @@ class Student(AbstractStudent):
         self._calculate_state()
 
     def notify_me_about_gss(self, gss):
-        if gss.student != self:
-            raise InvalidStudent("Student reported is not the current one")
-        if gss.subject not in self._subjects_in_progress:
-            raise InvalidSubject("Subject reported is not in student list")
+        gss.is_gss()
         if isinstance(gss.state, GSSApproved):
             self._remove_from_subject_lists(gss.subject)
         self._grades_subjects.append(gss.grade)

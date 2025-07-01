@@ -1,11 +1,11 @@
-from architecture.code_analysis_v3.core.exceptions import InvalidCourse
-from architecture.code_analysis_v3.core.student import AbstractStudent
-from architecture.code_analysis_v3.core.course import AbstractCourse, NoneCourse
-from architecture.code_analysis_v3.core.gss import GSS
-from architecture.code_analysis_v3.core.subject import AbstractSubject, SubjectInProgress
-from architecture.code_analysis_v3.core.common import AbstractState, NoneState
-from architecture.code_analysis_v3.core.base_object import AbstractCoreObject
-from architecture.code_analysis_v3.core.constants import MAXIMUM_SUBJECTS_IN_TEACHER
+from core.exceptions import InvalidCourse
+from core.student import AbstractStudent
+from core.course import AbstractCourse, NoneCourse
+from core.gss import GSS
+from core.subject import AbstractSubject, SubjectInProgress
+from core.common import AbstractState, NoneState
+from core.base_object import AbstractCoreObject
+from core.constants import MAXIMUM_SUBJECTS_IN_TEACHER
 
 MESSAGE = "=== No valid teacher ==="
 

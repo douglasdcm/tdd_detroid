@@ -1,8 +1,8 @@
 import pickle
-from architecture.code_analysis_v3.core.student import NoneStudent
-from architecture.code_analysis_v3.core.subject import NoneSubject
-from architecture.code_analysis_v3.core.course import NoneCourse
-from architecture.code_analysis_v3.core.base_object import AbstractCoreObject
+from core.student import NoneStudent
+from core.subject import NoneSubject
+from core.course import NoneCourse
+from core.base_object import AbstractCoreObject
 
 DB_FOLDER = "db/"
 FILE_EXTENSION = ".pickle"

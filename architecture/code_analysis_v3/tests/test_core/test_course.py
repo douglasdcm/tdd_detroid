@@ -1,12 +1,12 @@
 from pytest import fixture, raises
-from architecture.code_analysis_v3.core.course import (
+from core.course import (
     CourseInProgress,
     CourseNotStarted,
 )
-from architecture.code_analysis_v3.core.exceptions import InvalidStudent, InvalidSubject
-from architecture.code_analysis_v3.core.student import StudentInProgress
-from architecture.code_analysis_v3.core.subject import SubjectInProgress
-from architecture.code_analysis_v3.tests.test_core.validator_classes import (
+from core.exceptions import InvalidStudent, InvalidSubject
+from core.student import StudentInProgress
+from core.subject import SubjectInProgress
+from tests.test_core.validator_classes import (
     ValidatorCourse,
     ValidatorStudent,
     ValidatorSubject,

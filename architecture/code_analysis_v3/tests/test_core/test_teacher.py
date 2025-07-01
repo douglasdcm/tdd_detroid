@@ -1,14 +1,14 @@
 from pytest import fixture, raises
-from architecture.code_analysis_v3.core.exceptions import InvalidCourse
-from architecture.code_analysis_v3.core.subject import SubjectInProgress
-from architecture.code_analysis_v3.core.teacher import (
+from core.exceptions import InvalidCourse
+from core.subject import SubjectInProgress
+from core.teacher import (
     MaximumSubjectsReached,
     TeacherFull,
     TeacherNotFull,
     TeacherNotWorking,
     TeacherWorking,
 )
-from architecture.code_analysis_v3.tests.test_core.validator_classes import (
+from tests.test_core.validator_classes import (
     ValidatorCourse,
     ValidatorSubject,
     ValidatorTeacher,
