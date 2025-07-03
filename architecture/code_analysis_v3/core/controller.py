@@ -3,7 +3,8 @@ from core.student import (
     BasicInformation,
     AbstractStudent,
 )
-from db_manager import StudentDataManager, SubjectDataManager
+from core.teacher import AbstractTeacher
+from db_manager import StudentDataManager, SubjectDataManager, TeacherDataManager
 
 
 class StudentController:
@@ -28,3 +29,27 @@ class StudentController:
     def list_subjects(self, nui) -> list:
         student: AbstractStudent = StudentDataManager().load_by_nui(nui)
         return student.list_all_subjects()
+
+
+class TeacherController:
+    def add_basic_information(self, nui, name, age) -> None:
+        information = BasicInformation(name, age)
+        teacher: AbstractTeacher = TeacherDataManager().load_by_nui(nui)
+        teacher.add_basic_information(information)
+        TeacherDataManager().update_object(teacher)
+
+    def subscribe_to_subject(self, nui, subject_nui) -> None:
+        teacher_dm = TeacherDataManager()
+        subject_dm = SubjectDataManager()
+        teacher: AbstractTeacher = teacher_dm.load_by_nui(nui)
+        subject: AbstractSubject = subject_dm.load_by_nui(subject_nui)
+        teacher.subscribe_to(subject)
+        teacher_dm.update_object(teacher)
+        subject_dm.update_object(subject)
+
+    def list_information(self, nui) -> BasicInformation:
+        return TeacherDataManager().load_by_nui(nui)
+
+    def list_subjects(self, nui) -> list[AbstractSubject]:
+        teacher: AbstractTeacher = TeacherDataManager().load_by_nui(nui)
+        return teacher.list_all_subjects()

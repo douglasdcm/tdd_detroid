@@ -1,21 +1,20 @@
 from statistics import mean
 from typing import TYPE_CHECKING
-from core.base_object import AbstractCoreObject
+from core.base_object import AbstractCoreObject, BasicInformation
 from core.common import AbstractState
 from core.constants import (
     MINIMUM_STUDENT_GRADE,
     MINIMUN_SUBJECTS_IN_STUDENT,
 )
 from core.course import NoneCourse
-from core.spy_logger import none_logger, spy_logger
+from core.custom_logger import none_logger, spy_logger
+from core.exceptions import InvalidStateTransition, InvalidSubject
 from core.gss import GSSApproved
 
 if TYPE_CHECKING:
     from core.gss import IGSS
     from core.course import AbstractCourse
     from core.subject import AbstractSubject
-
-MESSAGE = "=== No valid student ==="
 
 
 class AbstractStudent(AbstractCoreObject):
@@ -95,6 +94,7 @@ class Student(AbstractStudent):
         self._missing_subjects: list["AbstractSubject"] = []
         self._subjects_in_progress: list["AbstractSubject"] = []
         self._subjects_in_progress_internal_copy: list["AbstractSubject"] = []
+        self._subjects_approved: list["AbstractSubject"] = []
         self._grades_subjects: list[int] = []
         self._state: AbstractState = StudentInitialState()
         self._age: int = -1
@@ -113,15 +113,16 @@ class Student(AbstractStudent):
         if self not in subject.list_all_students():
             subject.accept_student(self)
 
-    def _remove_from_subject_lists(self, subject: "AbstractSubject") -> None:
+    def _update_subject_lists(self, subject: "AbstractSubject") -> None:
         self._subjects_in_progress_internal_copy.remove(subject)
         self._missing_subjects.remove(subject)
-        # Clear the list of subjects in progress when all subject's
-        # state (Approved, Failed) set
-        # It is necessary because the user indireclty  uses the variable
+        # Clear the list of 'subjects in progress' when all subject's are in
+        # state Approved or Failed
+        # It is necessary because the user indireclty uses the variable
         # _subjects_in_progress_internal_copy, so it can not be updated on the fly
         if not self._subjects_in_progress_internal_copy:
             self._subjects_in_progress.clear()
+        self._subjects_approved.append(subject)
 
     @property
     def subjects_in_progress(self) -> list["AbstractSubject"]:
@@ -185,7 +186,7 @@ class Student(AbstractStudent):
     @spy_logger
     def subscribe_to_subject(self, subject):
         subject.is_subject()
-        if subject in self.list_all_subjects():
+        if subject.nui in [s.nui for s in self._subjects_in_progress or self._subjects_approved]:
             raise InvalidSubject("Student alredy subscribed to subject")
         if subject.course.nui != self._course.nui:
             raise InvalidSubject("Subject is not in student course")
@@ -196,7 +197,7 @@ class Student(AbstractStudent):
     def notify_me_about_gss(self, gss):
         gss.is_gss()
         if isinstance(gss.state, GSSApproved):
-            self._remove_from_subject_lists(gss.subject)
+            self._update_subject_lists(gss.subject)
         self._grades_subjects.append(gss.grade)
         self._calculate_gpa()
         self._calculate_state()
@@ -221,7 +222,6 @@ class Student(AbstractStudent):
 class NoneStudent(AbstractStudent):
     def __init__(self, name=""):
         super().__init__(name)
-        print(self)
 
     @property
     def course(self):
@@ -238,35 +238,6 @@ class NoneStudent(AbstractStudent):
     @none_logger
     def subscribe_to_subject(self, subject):
         pass
-
-
-class BasicInformation:
-    def __init__(self, name, age) -> None:
-        self._name: str = name
-        self._age: int = age
-
-    def __repr__(self):
-        return f"{self.__class__.__name__} {vars(self)}"
-
-    @property
-    def name(self):
-        return self._name
-
-    @property
-    def age(self):
-        return self._age
-
-
-class InvalidSubject(Exception):
-    pass
-
-
-class InvalidStateTransition(Exception):
-    pass
-
-
-class InvalidStudent(Exception):
-    pass
 
 
 class StudentApproved(AbstractState):

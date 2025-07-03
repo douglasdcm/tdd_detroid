@@ -1,9 +1,10 @@
 import pickle
-from core.spy_logger import spy_logger
+from core.custom_logger import spy_logger
 from core.student import NoneStudent
 from core.subject import NoneSubject
 from core.course import NoneCourse
 from core.base_object import AbstractCoreObject
+from core.teacher import NoneTeacher
 
 DB_FOLDER = "db/"
 FILE_EXTENSION = ".pickle"
@@ -77,6 +78,13 @@ class StudentDataManager(BaseCoreDataManager):
 
     def _get_none_object(self):
         return NoneStudent()
+
+
+class TeacherDataManager(BaseCoreDataManager):
+    DATA_FILE = f"{DB_FOLDER}teacher{FILE_EXTENSION}"
+
+    def _get_none_object(self):
+        return NoneTeacher()
 
 
 class SubjectDataManager(BaseCoreDataManager):

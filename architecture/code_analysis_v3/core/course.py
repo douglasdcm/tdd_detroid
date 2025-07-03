@@ -7,15 +7,12 @@ from core.constants import (
     MINIMUM_STUDENTS_IN_COURSE,
     MINIMUN_SUBJECTS_IN_COURSE,
 )
-from core.spy_logger import spy_logger
+from core.custom_logger import spy_logger, none_logger
 from core.exceptions import InvalidStudent, InvalidSubject
 
 if TYPE_CHECKING:
     from core.student import AbstractStudent
     from core.subject import AbstractSubject
-
-
-MESSAGE = "=== No valid course ==="
 
 
 class AbstractCourse(AbstractCoreObject):
@@ -129,19 +126,23 @@ class NoneCourse(AbstractCourse):
 
     @state.setter
     def state(self, value: "AbstractState") -> None:
-        print(MESSAGE)
+        pass
 
+    @none_logger
     def accept_student(self, student: "AbstractStudent") -> None:
-        print(MESSAGE)
+        pass
 
+    @none_logger
     def list_all_subjects(self) -> list["AbstractSubject"]:
         return []
 
+    @none_logger
     def list_all_subjects_by(self, student: "AbstractStudent") -> list["AbstractStudent"]:
         return []
 
+    @none_logger
     def notify_me_minimun_students_in_subject(self, subject: "AbstractSubject") -> None:
-        print(MESSAGE)
+        pass
 
 
 class CourseNotStarted(AbstractState):

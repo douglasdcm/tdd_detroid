@@ -6,7 +6,7 @@ from core.constants import (
     MINIMUM_STUDENTS_IN_SUBJECT,
 )
 from core.course import NoneCourse
-from core.spy_logger import spy_logger
+from core.custom_logger import none_logger, spy_logger
 from core.exceptions import InvalidCourse
 
 if TYPE_CHECKING:
@@ -14,10 +14,12 @@ if TYPE_CHECKING:
     from core.teacher import AbstractTeacher
     from core.course import AbstractCourse
 
-MESSAGE = "=== No valid subject ==="
-
 
 class AbstractSubject(AbstractCoreObject):
+    @property
+    def teacher(self) -> "AbstractCoreObject":
+        raise NotImplementedError
+
     @property
     def course(self) -> "AbstractCourse":
         raise NotImplementedError
@@ -77,6 +79,10 @@ class Subject(AbstractSubject):
         self._state = self._state.get_next_state(self)
 
     @property
+    def teacher(self) -> "AbstractCoreObject":
+        return self._teacher
+
+    @property
     def course(self) -> "AbstractCourse":
         return self._course
 
@@ -98,6 +104,8 @@ class Subject(AbstractSubject):
 
     @spy_logger
     def subscribe_teacher(self, teacher: "AbstractTeacher") -> None:
+        if self._teacher.nui == teacher.nui:
+            return
         self._teacher = teacher
 
     @spy_logger
@@ -143,7 +151,7 @@ class NoneSubject(AbstractSubject):
 
     @course.setter
     def course(self, value: "AbstractCourse") -> None:
-        print(MESSAGE)
+        pass
 
     @property
     def state(self) -> "AbstractState":
@@ -151,13 +159,15 @@ class NoneSubject(AbstractSubject):
 
     @state.setter
     def state(self, value: "AbstractState") -> None:
-        print(MESSAGE)
+        pass
 
+    @none_logger
     def subscribe_teacher(self, teacher: "AbstractTeacher") -> None:
-        print(MESSAGE)
+        pass
 
+    @none_logger
     def subscribe_student(self, student: "AbstractStudent") -> None:
-        print(MESSAGE)
+        pass
 
 
 class SubjectInitialState(AbstractState):
