@@ -73,6 +73,25 @@ def list_db():
     _list_db(TeacherDataManager())
 
 
+@cli.command()
+@click.option(
+    "--nui",
+    prompt="Inform NUI",
+    help="NUI.",
+)
+def info(nui):
+    result = "Not found"
+    dms = [StudentDataManager, SubjectDataManager, CourseDataManager, TeacherDataManager]
+    for dm in dms:
+        try:
+            result = dm().load_by_nui(nui)
+            click.echo(f"{result.__class__.__name__} {vars(result)}")
+            return
+        except Exception:
+            pass
+    click.echo(result)
+
+
 ###
 
 # NUI 7727150366633

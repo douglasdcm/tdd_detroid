@@ -10,6 +10,10 @@ DB_FOLDER = "db/"
 FILE_EXTENSION = ".pickle"
 
 
+class DataNotFound(Exception):
+    pass
+
+
 class BaseCoreDataManager:
     DATA_FILE: str = ""
 
@@ -70,32 +74,21 @@ class BaseCoreDataManager:
             result = obj.get(str(nui))
             if result:
                 return result
-        return self._get_none_object()
+        # return self._get_none_object()
+        raise DataNotFound(nui)
 
 
 class StudentDataManager(BaseCoreDataManager):
     DATA_FILE = f"{DB_FOLDER}student{FILE_EXTENSION}"
 
-    def _get_none_object(self):
-        return NoneStudent()
-
 
 class TeacherDataManager(BaseCoreDataManager):
     DATA_FILE = f"{DB_FOLDER}teacher{FILE_EXTENSION}"
-
-    def _get_none_object(self):
-        return NoneTeacher()
 
 
 class SubjectDataManager(BaseCoreDataManager):
     DATA_FILE = f"{DB_FOLDER}subject{FILE_EXTENSION}"
 
-    def _get_none_object(self):
-        return NoneSubject()
-
 
 class CourseDataManager(BaseCoreDataManager):
     DATA_FILE = f"{DB_FOLDER}course{FILE_EXTENSION}"
-
-    def _get_none_object(self):
-        return NoneCourse()
