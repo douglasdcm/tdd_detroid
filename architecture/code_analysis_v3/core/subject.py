@@ -177,6 +177,9 @@ class SubjectInitialState(AbstractState):
             and context.has_teacher()
             and context.has_minimum_inprogress_students()
         ):
+            students = context.list_all_students()
+            for student in students:
+                student.state
             return SubjectInProgress()
         return self
 
