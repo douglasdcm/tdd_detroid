@@ -25,6 +25,7 @@ LOGGER = logging.getLogger(__name__)
 
 DEBUG = True
 
+
 def spy_logger(func):
     def wrapper(*args, **kwargs):
         if DEBUG:

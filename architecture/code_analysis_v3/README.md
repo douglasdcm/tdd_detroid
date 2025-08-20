@@ -1,4 +1,31 @@
+# Notes
+In this next version of the code analysis all Python code was deleted and the UML architecture.generated in v2 was used to recreate the Python implementation.
+
+# Execution of the CLI
+```
+# python3.11
+export PYTHONPATH=~/repo/tmp/tdd_detroid; python cli.py --help
+
+Usage: cli.py [OPTIONS]
+
+Options:
+  --help  Show this message and exit.
+
+```
+
 It is necessary to install `draw.io` extension to edit the files
+
+# Operation
+
+It is necessary to initialize the database with some data
+```bash
+python cli.py init-db
+```
+Then list the NUIs
+```bash
+python cli.py list-db
+```
+Use the NUIs to interact with the objects
 
 # **Phase 1: Requirements Analysis & Scope Definition**  
 1. **Elicit Functional Requirements**  
