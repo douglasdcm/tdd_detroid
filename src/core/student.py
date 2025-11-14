@@ -1,0 +1,259 @@
+from statistics import mean
+from typing import TYPE_CHECKING
+from src.core.base_object import AbstractCoreObject, BasicInformation
+from src.core.common import AbstractState
+from src.core.constants import (
+    MINIMUM_STUDENT_GRADE,
+    MINIMUN_SUBJECTS_IN_STUDENT,
+)
+from src.core.course import NoneCourse
+from src.core.custom_logger import none_logger, spy_logger
+from src.core.exceptions import InvalidStateTransition, InvalidSubject
+from src.core.gss import GSSApproved
+
+if TYPE_CHECKING:
+    from src.core.gss import IGSS
+    from src.core.course import AbstractCourse
+    from src.core.subject import AbstractSubject
+
+
+class AbstractStudent(AbstractCoreObject):
+    @property
+    def subjects_in_progress(self) -> list["AbstractSubject"]:
+        raise NotImplementedError
+
+    @property
+    def missing_subjects(self) -> list["AbstractSubject"]:
+        raise NotImplementedError
+
+    @property
+    def state(self) -> "AbstractState":
+        raise NotImplementedError
+
+    @property
+    def course(self) -> "AbstractCourse":
+        raise NotImplementedError
+
+    @course.setter
+    def course(self, course: "AbstractCourse") -> None:
+        raise NotImplementedError
+
+    @property
+    def age(self) -> int:
+        raise NotImplementedError
+
+    @property
+    def gpa(self) -> int:
+        raise NotImplementedError
+
+    def is_student(self):
+        return True
+
+    def add_basic_information(self, basic_information: "BasicInformation") -> None:
+        raise NotImplementedError
+
+    def list_all_subscribed_subjects(self) -> list["AbstractSubject"]:
+        raise NotImplementedError
+
+    def list_missing_subjects(self) -> list["AbstractSubject"]:
+        raise NotImplementedError
+
+    def list_all_subjects(self) -> list["AbstractSubject"]:
+        raise NotImplementedError
+
+    def notify_me_about_gss(self, gss: "IGSS") -> None:
+        raise NotImplementedError
+
+    def notify_me_about_course(self, course: "AbstractCourse") -> None:
+        raise NotImplementedError
+
+    def subscribe_to_subject(self, subject: "AbstractSubject") -> None:
+        raise NotImplementedError
+
+    def has_minimum_gpa(self) -> bool:
+        raise NotImplementedError
+
+    def are_all_subjects_approved(self) -> bool:
+        raise NotImplementedError
+
+    def has_course(self):
+        raise NotImplementedError
+
+    def has_minimum_subjects(self):
+        raise NotImplementedError
+
+    def is_inprogress(self) -> bool:
+        raise NotImplementedError
+
+
+class Student(AbstractStudent):
+    def __init__(self, name) -> None:
+        super().__init__(name)
+        self._course: "AbstractCourse" = NoneCourse()
+        self._gpa: int = 0
+        self._missing_subjects: list["AbstractSubject"] = []
+        self._subjects_in_progress: list["AbstractSubject"] = []
+        self._subjects_in_progress_internal_copy: list["AbstractSubject"] = []
+        self._subjects_approved: list["AbstractSubject"] = []
+        self._grades_subjects: list[int] = []
+        self._state: AbstractState = StudentInitialState()
+        self._age: int = -1
+
+    def _calculate_gpa(self) -> None:
+        if self._grades_subjects:
+            self._gpa = int(mean(self._grades_subjects))
+
+    def _calculate_state(self) -> None:
+        self._state = self._state.get_next_state(self)
+
+    def _add_to_subject_lists(self, subject: "AbstractSubject") -> None:
+        self._subjects_in_progress.append(subject)
+        self._subjects_in_progress_internal_copy.append(subject)
+        self._missing_subjects.append(subject)
+        if self not in subject.list_all_students():
+            subject.accept_student(self)
+
+    def _update_subject_lists(self, subject: "AbstractSubject") -> None:
+        self._subjects_in_progress_internal_copy.remove(subject)
+        self._missing_subjects.remove(subject)
+        # Clear the list of 'subjects in progress' when all subject's are in
+        # state Approved or Failed
+        # It is necessary because the user indireclty uses the variable
+        # _subjects_in_progress_internal_copy, so it can not be updated on the fly
+        if not self._subjects_in_progress_internal_copy:
+            self._subjects_in_progress.clear()
+        self._subjects_approved.append(subject)
+
+    @property
+    def subjects_in_progress(self) -> list["AbstractSubject"]:
+        return self._subjects_in_progress
+
+    @property
+    def missing_subjects(self) -> list["AbstractSubject"]:
+        return self._missing_subjects
+
+    @property
+    def state(self) -> "AbstractState":
+        self._calculate_state()
+        return self._state
+
+    @property
+    def gpa(self) -> int:
+        self._calculate_gpa()
+        return self._gpa
+
+    @property
+    def age(self) -> int:
+        return self._age
+
+    @property
+    def course(self) -> "AbstractCourse":
+        return self._course
+
+    @course.setter
+    def course(self, course: "AbstractCourse") -> None:
+        if isinstance(self._course, NoneCourse):
+            self._course = course
+        self._missing_subjects = course.list_all_subjects()
+        self._calculate_state()
+        if self not in course.list_all_students():
+            course.accept_student(self)
+
+    @property
+    def grades(self) -> list[int]:
+        return self._grades_subjects
+
+    @spy_logger
+    def is_inprogress(self) -> bool:
+        return isinstance(self._state, StudentInProgress)
+
+    @spy_logger
+    def has_course(self):
+        return not isinstance(self._course, NoneCourse)
+
+    @spy_logger
+    def has_minimum_subjects(self):
+        return len(self._subjects_in_progress) >= MINIMUN_SUBJECTS_IN_STUDENT
+
+    @spy_logger
+    def has_minimum_gpa(self) -> bool:
+        return self._gpa >= MINIMUM_STUDENT_GRADE
+
+    @spy_logger
+    def are_all_subjects_approved(self) -> bool:
+        return len(self._missing_subjects) == 0
+
+    @spy_logger
+    def subscribe_to_subject(self, subject):
+        subject.is_subject()
+        if subject.nui in [s.nui for s in self._subjects_in_progress or self._subjects_approved]:
+            raise InvalidSubject("Student alredy subscribed to subject")
+        if subject.course.nui != self._course.nui:
+            raise InvalidSubject("Subject is not in student course")
+        self._add_to_subject_lists(subject)
+        self._calculate_state()
+
+    @spy_logger
+    def notify_me_about_gss(self, gss):
+        gss.is_gss()
+        if isinstance(gss.state, GSSApproved):
+            self._update_subject_lists(gss.subject)
+        self._grades_subjects.append(gss.grade)
+        self._calculate_gpa()
+        self._calculate_state()
+
+    @spy_logger
+    def add_basic_information(self, basic_information: "BasicInformation") -> None:
+        self._name = basic_information.name
+        self._age = basic_information.age
+
+    @spy_logger
+    def list_all_subjects(self) -> list["AbstractSubject"]:
+        result = []
+        result.extend(self._missing_subjects)
+        result.extend(self._subjects_in_progress)
+        return result
+
+    @spy_logger
+    def list_all_subscribed_subjects(self) -> list["AbstractSubject"]:
+        return self._subjects_in_progress
+
+
+class NoneStudent(AbstractStudent):
+    def __init__(self, name=""):
+        super().__init__(name)
+
+    @property
+    def course(self):
+        pass
+
+    @course.setter
+    def course(self, value):
+        pass
+
+    @none_logger
+    def add_basic_information(self, basic_information: "BasicInformation") -> None:
+        pass
+
+    @none_logger
+    def subscribe_to_subject(self, subject):
+        pass
+
+
+class StudentApproved(AbstractState):
+    def get_next_state(self, context: AbstractStudent) -> AbstractState:
+        raise InvalidStateTransition("Studend is already approved in the course")
+
+
+class StudentInProgress(AbstractState):
+    def get_next_state(self, context: AbstractStudent) -> AbstractState:
+        if context.has_minimum_gpa() and context.are_all_subjects_approved():
+            return StudentApproved()
+        return self
+
+
+class StudentInitialState(AbstractState):
+    def get_next_state(self, context: AbstractStudent) -> AbstractState:
+        if context.has_course() and context.has_minimum_subjects():
+            return StudentInProgress()
+        return self

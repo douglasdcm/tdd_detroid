@@ -1,6 +1,0 @@
-pylint
-mypy
-pytest
-click
-flake8
-colorlog
