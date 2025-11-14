@@ -7,7 +7,7 @@ from src.core.course import (
 from src.core.exceptions import InvalidStudent, InvalidSubject
 from src.core.student import StudentInProgress
 from src.core.subject import SubjectInProgress
-from src.tests.test_core.test_business_logic.validator_classes import (
+from tests.test_core.test_business_logic.validator_classes import (
     ValidatorCourse,
     ValidatorStudent,
     ValidatorSubject,

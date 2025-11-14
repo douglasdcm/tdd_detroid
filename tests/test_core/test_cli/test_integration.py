@@ -2,8 +2,8 @@ from pytest import fixture
 from src.core.student import StudentInProgress, StudentInitialState
 from src.core.subject import SubjectInProgress, SubjectInitialState
 from src.core.teacher import TeacherNotWorking
-from src.tests.test_core.test_cli.cli_wrapper import StudentCli, TeacherCli
-from src.tests.test_core.test_cli.linux_terminal import LinuxTerminal
+from tests.test_core.test_cli.cli_wrapper import StudentCli, TeacherCli
+from tests.test_core.test_cli.linux_terminal import LinuxTerminal
 from src.db_manager import StudentDataManager, SubjectDataManager, TeacherDataManager
 
 

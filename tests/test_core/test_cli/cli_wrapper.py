@@ -1,5 +1,5 @@
 from src.core.custom_logger import spy_logger
-from src.tests.test_core.test_cli.linux_terminal import LinuxTerminal
+from tests.test_core.test_cli.linux_terminal import LinuxTerminal
 
 
 class StudentCli(LinuxTerminal):

@@ -8,7 +8,7 @@ from src.core.student import (
     InvalidStateTransition,
     InvalidSubject,
 )
-from src.tests.test_core.test_business_logic.validator_classes import (
+from tests.test_core.test_business_logic.validator_classes import (
     ValidatorCourse,
     ValidatorStudent,
     ValidatorSubject,

@@ -8,7 +8,7 @@ from src.core.teacher import (
     TeacherNotWorking,
     TeacherWorking,
 )
-from src.tests.test_core.test_business_logic.validator_classes import (
+from tests.test_core.test_business_logic.validator_classes import (
     ValidatorCourse,
     ValidatorSubject,
     ValidatorTeacher,

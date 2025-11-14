@@ -1,6 +1,6 @@
 from pytest import fixture
-from src.tests.test_core.test_cli.cli_wrapper import TeacherCli
-from src.tests.test_core.test_cli.linux_terminal import LinuxTerminal
+from tests.test_core.test_cli.cli_wrapper import TeacherCli
+from tests.test_core.test_cli.linux_terminal import LinuxTerminal
 from src.db_manager import TeacherDataManager, SubjectDataManager
 
 

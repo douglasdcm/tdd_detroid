@@ -1,7 +1,7 @@
 from pytest import fixture
 from src.core.controller import TeacherController
 from src.db_manager import SubjectDataManager, TeacherDataManager
-from src.tests.test_core.test_cli.linux_terminal import LinuxTerminal
+from tests.test_core.test_cli.linux_terminal import LinuxTerminal
 
 
 class TestTeacherController:
