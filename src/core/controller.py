@@ -4,7 +4,14 @@ from src.core.student import (
     AbstractStudent,
 )
 from src.core.teacher import AbstractTeacher
-from src.db_manager import StudentDataManager, SubjectDataManager, TeacherDataManager
+from src.db_manager import DataNotFound, StudentDataManager, SubjectDataManager, TeacherDataManager
+
+
+class StudentNotFound(Exception):
+    pass
+
+class SubjectNotFound(Exception):
+    pass
 
 
 class StudentController:
@@ -17,8 +24,14 @@ class StudentController:
     def subscribe_to_subject(self, nui, subject_nui) -> None:
         student_dm = StudentDataManager()
         subject_dm = SubjectDataManager()
-        student: AbstractStudent = student_dm.load_by_nui(nui)
-        subject: AbstractSubject = subject_dm.load_by_nui(subject_nui)
+        try:
+            student: AbstractStudent = student_dm.load_by_nui(nui)
+        except DataNotFound:
+            raise StudentNotFound
+        try:            
+            subject: AbstractSubject = subject_dm.load_by_nui(subject_nui)
+        except DataNotFound:
+            raise SubjectNotFound
         student.subscribe_to_subject(subject)
         student_dm.update_object(student)
         subject_dm.update_object(subject)

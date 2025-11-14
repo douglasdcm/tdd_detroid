@@ -1,11 +1,83 @@
-from fastapi import FastAPI, Query, Path, Body
+from fastapi import FastAPI, Query, Path, Body, HTTPException
 from pydantic import BaseModel
 from typing import Annotated, Literal
 from pydantic import AfterValidator, Field, HttpUrl
+from src.core.controller import StudentController, StudentNotFound, SubjectNotFound
+from src.core.student import Student
+from src.core.subject import Subject
+from src.db_manager import DataNotFound
+
+CONTROLLER = StudentController()
+UNEXPECTED_ERROR = "ERROR"
+STUDENT_NOT_FOUND = "Student not found"
+SUBJECT_NOT_FOUND = "Subject not found"
+DEFAULT_RESPONSE = {"message": "OK"}
+
 
 app = FastAPI()
 
 
+class SubjectModel(BaseModel):
+    nui: int
+    name: str
+
+
+class InformationModel(BaseModel):
+    nui: int
+    name: str
+    age: int
+
+
+@app.post("/students/information/", status_code=201)
+async def add_basic_information(info: InformationModel) -> InformationModel:
+    try:
+        CONTROLLER.add_basic_information(info.nui, info.name, info.age)
+    except DataNotFound:
+        raise HTTPException(status_code=404, detail=STUDENT_NOT_FOUND)
+    except Exception:
+        raise HTTPException(status_code=500, detail=UNEXPECTED_ERROR)
+    return info
+
+
+@app.post("/students/{student_nui}/subscribe/{subject_nui}")
+async def sudscribe_to_subject(student_nui: int, subject_nui: int):
+    try:
+        CONTROLLER.subscribe_to_subject(student_nui, subject_nui)
+    except StudentNotFound:
+        raise HTTPException(status_code=404, detail=STUDENT_NOT_FOUND)
+    except SubjectNotFound:
+        raise HTTPException(status_code=404, detail=SUBJECT_NOT_FOUND)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"{UNEXPECTED_ERROR} {str(e)}")
+    return DEFAULT_RESPONSE
+
+
+@app.get("/students/{student_nui}/subjects/")
+async def list_subjects(student_nui: int) -> list[SubjectModel]:
+    try:
+        result: list[Subject] = CONTROLLER.list_subjects(student_nui)
+        response = []
+        for r in result:
+            response.append({"name": r.name, "nui": r.nui})
+        return response
+    except DataNotFound:
+        raise HTTPException(status_code=404, detail=STUDENT_NOT_FOUND)
+    except Exception:
+        raise HTTPException(status_code=500, detail=UNEXPECTED_ERROR)
+
+
+@app.get("/students/{student_nui}/information/")
+async def list_information(student_nui: int) -> InformationModel:
+    try:
+        result: Student = CONTROLLER.list_information(student_nui)
+        return {"name": result.name, "age": result.age, "nui": result.nui}
+    except DataNotFound:
+        raise HTTPException(status_code=404, detail=STUDENT_NOT_FOUND)
+    except Exception:
+        raise HTTPException(status_code=500, detail=UNEXPECTED_ERROR)
+
+
+######
 fake_items_db = [{"item_name": "Foo"}, {"item_name": "Bar"}, {"item_name": "Baz"}]
 
 

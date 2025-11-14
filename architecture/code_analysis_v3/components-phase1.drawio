@@ -159,12 +159,12 @@
         </mxGraphModel>
     </diagram>
     <diagram id="9N7FdPNcl1j3F9wMc1n4" name="CLI">
-        <mxGraphModel dx="1391" dy="530" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="1682" dy="483" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
-                <mxCell id="UhtjkVIeoqjzc2xnru7J-4" value="CLI &lt;strike&gt;(REPL)&lt;/strike&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-                    <mxGeometry x="160" y="280" width="120" height="60" as="geometry"/>
+                <mxCell id="UhtjkVIeoqjzc2xnru7J-4" value="Interfaces" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;dashed=1;" parent="1" vertex="1">
+                    <mxGeometry x="180" y="260" width="100" height="130" as="geometry"/>
                 </mxCell>
                 <mxCell id="UhtjkVIeoqjzc2xnru7J-33" value="+ add basic information&lt;div&gt;&lt;strike&gt;+ subscribe to course&lt;/strike&gt;&lt;/div&gt;&lt;div&gt;+ subscribe to subject&lt;/div&gt;&lt;div&gt;+ list subjects&lt;/div&gt;&lt;div&gt;+ list information&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;align=left;verticalAlign=top;" parent="1" vertex="1">
                     <mxGeometry x="-30" y="190" width="170" height="80" as="geometry"/>
@@ -192,10 +192,10 @@
                 <mxCell id="UhtjkVIeoqjzc2xnru7J-40" style="edgeStyle=none;html=1;endArrow=none;endFill=0;" parent="1" source="UhtjkVIeoqjzc2xnru7J-37" target="UhtjkVIeoqjzc2xnru7J-38" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="iYw6yXYciSSA1Y6HJOFZ-2" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;" parent="1" source="iYw6yXYciSSA1Y6HJOFZ-1" target="UhtjkVIeoqjzc2xnru7J-4" edge="1">
+                <mxCell id="iYw6yXYciSSA1Y6HJOFZ-2" style="edgeStyle=none;html=1;entryX=0.25;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;" parent="1" source="iYw6yXYciSSA1Y6HJOFZ-1" target="Bno3HABzlxImHUQpt42i-1" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="iYw6yXYciSSA1Y6HJOFZ-1" value="&lt;div&gt;The CLI is the only expected interface of the system. The user sends the desired command with the arguments. For example, consider the command is called tdd, the following command subscribes the Student to a Subject of nui 1234:&lt;/div&gt;&lt;div&gt;&lt;i&gt;$ tdd student subscribe 1234&lt;/i&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;The rule of thumb is let the commands simple to write and remmember&lt;/div&gt;" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;align=left;verticalAlign=top;" parent="1" vertex="1">
+                <mxCell id="iYw6yXYciSSA1Y6HJOFZ-1" value="&lt;div&gt;The user sends the desired command with the arguments. For example, consider the command is called tdd, the following command subscribes the Student to a Subject of nui 1234:&lt;/div&gt;&lt;div&gt;&lt;i&gt;$ tdd student subscribe 1234&lt;/i&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;The rule of thumb is let the commands simple to write and remmember&lt;/div&gt;" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;align=left;verticalAlign=top;" parent="1" vertex="1">
                     <mxGeometry x="-20" y="40" width="320" height="130" as="geometry"/>
                 </mxCell>
                 <mxCell id="5w0kf97u21KMcoVkLH16-3" style="edgeStyle=none;html=1;" parent="1" source="-ezzSZNoyz5PLMm4ysqI-1" target="UhtjkVIeoqjzc2xnru7J-4" edge="1">
@@ -269,6 +269,12 @@
                 </mxCell>
                 <mxCell id="5w0kf97u21KMcoVkLH16-24" value="&lt;div&gt;Everyone need to be authenticated&lt;/div&gt;" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;align=left;verticalAlign=top;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
                     <mxGeometry x="160" y="460" width="210" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="Bno3HABzlxImHUQpt42i-1" value="CLI" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="200" y="300" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="Bno3HABzlxImHUQpt42i-2" value="REST API" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="200" y="341" width="60" height="30" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>

@@ -140,6 +140,7 @@ class Subject(AbstractSubject):
     def accept_student(self, student: "AbstractStudent") -> None:
         self._students.append(student)
 
+
 class NoneSubject(AbstractSubject):
     def __init__(self, name="") -> None:
         super().__init__(name)
