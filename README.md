@@ -1,34 +1,25 @@
-{Translated from Portuguese to English using AI}
 # College Student Grade Control
-## Introduction
-This project aims to practice development skills using an application that simulates a real business scenario.
-The code will be developed using the TDD technique in the Detroit style, hence the name of the repository.
-The application simulates the control of grades for university students.
+The application simulates the control of grades for university students. It us used ChatGPT to build the code following the article of [ubiquitous language](https://guara.readthedocs.io/en/latest/UBIQUITOUS_LANGUAGE.html).
 
-# Experimentation
-This application has been used to exercise skills relates to Python, ORM, TDD, Kubernetes and other tools. Each exercise is hosted in specific branches. This is the list of them:
-- [first_version](https://github.com/douglasdcm/tdd_detroid/tree/first_version): was the first attempt to build the application in Python using TDD. It almost does not use any 3rd-party library, just built-in and personal code. The code is in Portuguese.
-- [postgres_orm](https://github.com/douglasdcm/tdd_detroid/tree/postgres_orm): A similar implementation of the 1st version, but using SqlAlchemy as a ORM and Alembic to handle database migrations. It also uses Docker, Kubernetes, VSCode Live Server for debug, Flask and PyScript. Ti is the most complete and complex architecture.
-- [calico](https://github.com/douglasdcm/tdd_detroid/tree/calico): The attempt to integrate Calico K8s Network and Kubernetes Cluster to allow the communication of containers in different Pods. It is incomplete.
-- [kubernetes](https://github.com/douglasdcm/tdd_detroid/tree/kubernetes): more specialized exercises with Kubernetes, but not so different of `postgres_orm`.
-- [kubernetes-no-postgres](https://github.com/douglasdcm/tdd_detroid/tree/kubernetes-no-postgrest): exercise using Kubernetes and the database PostgreSQL. The other branches use SqLite.
-- [pyscript-postgrest](https://github.com/douglasdcm/tdd_detroid/tree/pyscript-postgrest): The implementation of a Web app using PyScript and Postgres as a REST API (PostgREST). PyScript web pages does not connects to Postgres as the ones created with Javascript do.
-- [architecture](https://github.com/douglasdcm/tdd_detroid/tree/architecture): In this branch I exercised my skills of sofware architecture. I tried to do sufficient design up-front to ilustrate the relationship of the entities and features. I found some inconsistences in the app requirements list that I fixed and replicated to this branch. I also implemented the authentication and authorization features.
-- [architecture-design](https://github.com/douglasdcm/tdd_detroid/tree/architecture-design): In this branch I exercised my skills of sofware architecture using DrawIO, PyReverse to check the code in UML and make many versions of the same code in different approaches. I noticed many issues in the requirements while drawing the diagrams like State Machines, Sequence Diagram and UMLs.
-- [c-implementation-1](https://github.com/douglasdcm/tdd_detroid/tree/c-implementation-1): First version of the App in C language. The other ones use Python. 
+# Setup
 
-# Application specification
-## Architecture
-[Slides with specifications (Libre Office file)](architecture.odp)
+```
+# activat env
+python3.12 -m venv venv
+source venv/bin/activate
+
+# format
+black -l 100 .
+
+# run test
+python -m pytest
+
+# run main
+python main.py
+```
 
 
-Below is the specification of the application:
-Definition of Done:
-1. Unit tests cover the functionality.
-2. The functionality is developed to be used via CLI (Command Line Interface).
-3. Data is being saved in the database.
-## Deliverables
-Construction of the basic functions of the system
+# Below is the specification of the application:
 1. Each student will have a grade control called "grade point average" (GPA).
 2. The GPA is the average of the student's grades in the ~~courses~~ subjects already taken.
 3. The student is considered approved at the university if their GPA is above or equal to 7 (seven) at the end of the course.
